@@ -1,0 +1,8 @@
+Para instalar as dependencias primeiro instale o CacoaPods:
+> sudo gem install cocoapods
+
+Em seguida, instale as dependencias:
+> pod install
+
+Para abrir o projeto corretamente sempre utilize o arquivo riobus.xcworkspace:
+> open riobus.xcworkspace
