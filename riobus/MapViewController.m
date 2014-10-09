@@ -78,15 +78,12 @@
 
 - (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve {
     switch (curve) {
-        case UIViewAnimationCurveEaseInOut:
-            return UIViewAnimationOptionCurveEaseInOut;
-        case UIViewAnimationCurveEaseIn:
-            return UIViewAnimationOptionCurveEaseIn;
-        case UIViewAnimationCurveEaseOut:
-            return UIViewAnimationOptionCurveEaseOut;
-        case UIViewAnimationCurveLinear:
-            return UIViewAnimationOptionCurveLinear;
+        case UIViewAnimationCurveEaseInOut: return UIViewAnimationOptionCurveEaseInOut;
+        case UIViewAnimationCurveEaseIn:    return UIViewAnimationOptionCurveEaseIn;
+        case UIViewAnimationCurveEaseOut:   return UIViewAnimationOptionCurveEaseOut;
+        case UIViewAnimationCurveLinear:    return UIViewAnimationOptionCurveLinear;
     }
+    return UIViewAnimationOptionCurveEaseInOut;
 }
 
 - (void) setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info {
