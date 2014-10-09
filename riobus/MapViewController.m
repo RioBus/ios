@@ -71,14 +71,8 @@
 - (void) updateMapOptions
 {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSInteger myInt = [prefs integerForKey:@"Tipo"];
-    if (myInt == 0){
-        self.mapView.mapType = kGMSTypeNormal;
-    }else{
-        self.mapView.mapType = kGMSTypeHybrid;
-    }
-    BOOL trafego = [prefs boolForKey:@"Transito"];
-    self.mapView.trafficEnabled = trafego;
+    self.mapView.mapType = [prefs integerForKey:@"Tipo"]?kGMSTypeHybrid:kGMSTypeNormal;
+    self.mapView.trafficEnabled = [prefs boolForKey:@"Transito"];
 }
 
 - (CLLocationManager *)locationManager
