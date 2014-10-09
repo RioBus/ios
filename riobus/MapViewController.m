@@ -64,13 +64,13 @@
 
 }
 
-- (void) updateMapOptions {
+- (void)updateMapOptions {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     self.mapView.mapType = [prefs integerForKey:@"Tipo"]?kGMSTypeHybrid:kGMSTypeNormal;
     self.mapView.trafficEnabled = [prefs boolForKey:@"Transito"];
 }
 
-- (CLLocationManager *)locationManager {
+- (CLLocationManager*)locationManager {
     // Se variável não existe, a mesma é criada no momento da chamada
     if (!_locationManager) _locationManager = [[CLLocationManager alloc] init];
     return _locationManager ;
@@ -86,7 +86,7 @@
     return UIViewAnimationOptionCurveEaseInOut;
 }
 
-- (void) setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info {
+- (void)setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info {
     // Obtém dados da animação
     UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
     UIViewAnimationOptions animationOptions = UIViewAnimationOptionBeginFromCurrentState;
@@ -117,12 +117,12 @@
     }
 }
 
-- (void)keyboardWillShow:(NSNotification *)notification {
+- (void)keyboardWillShow:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
     [self setOverlayMapVisible:YES withKeyboardInfo:userInfo];
 }
 
-- (void)keyboardWillHide:(NSNotification *)notification {
+- (void)keyboardWillHide:(NSNotification*)notification {
     NSDictionary *userInfo = [notification userInfo];
     [self setOverlayMapVisible:NO withKeyboardInfo:userInfo];
 }
@@ -131,11 +131,11 @@
     [self.searchInput resignFirstResponder];
 }
 
--(void)aTime {
+- (void)aTime {
     if(![self.searchInput isFirstResponder])
         [self atualizar:self];
 }
-- (IBAction)changeKeyboardType:(UISegmentedControl *)sender {
+- (IBAction)changeKeyboardType:(UISegmentedControl*)sender {
     self.searchInput.keyboardType = sender.selectedSegmentIndex?UIKeyboardTypeDefault:UIKeyboardTypeNumberPad;
     //Se sender.selectedSegmentIndex == 0, o valor é númerico, senão é alfabético
 
@@ -187,7 +187,7 @@
     }
 }
 
-- (void)setBusesData:(NSArray *)busesData {
+- (void)setBusesData:(NSArray*)busesData {
     _busesData = busesData ;
     [self updateMarkers];
 }
