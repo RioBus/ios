@@ -8,17 +8,15 @@
 
 #import "BusData.h"
 
-#define MINUTES_IN_HOUR     60
+#define MINUTES_IN_HOUR 60
 
 @implementation BusData
 
-- (NSInteger)delayInMinutes
-{
-    return [self delayInSeconds] / MINUTES_IN_HOUR ;
+- (NSInteger)delayInMinutes {
+    return [self delayInSeconds]/MINUTES_IN_HOUR;
 }
 
-- (NSInteger)delayInSeconds
-{
+- (NSInteger)delayInSeconds {
     return [[NSDate date] timeIntervalSinceDate:self.lastUpdate];
 }
 
