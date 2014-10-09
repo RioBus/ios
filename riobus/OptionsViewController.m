@@ -10,7 +10,6 @@
 
 @interface OptionsViewController ()
 @property (strong, nonatomic) IBOutlet UIButton *buttonClose;
-
 @property (strong, nonatomic) IBOutlet UISegmentedControl *tupo;
 @property (strong, nonatomic) IBOutlet UISwitch *traf;
 @property (strong, nonatomic) IBOutlet UIButton *fbbutton;
@@ -23,6 +22,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     self.tupo.selectedSegmentIndex = [prefs integerForKey:@"Tipo"];
     self.traf.on = [prefs boolForKey:@"Transito"];
@@ -59,14 +59,8 @@
     [super viewWillDisappear:animated];
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    
     [prefs setInteger:[self.tupo selectedSegmentIndex] forKey:@"Tipo"];
-    
     [prefs setBool:self.traf.on forKey:@"Transito"];
-    // – setBool:forKey:
-    // – setFloat:forKey:
-    // in your case
-
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [self.delegate doneOptionsView];
