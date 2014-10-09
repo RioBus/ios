@@ -17,12 +17,12 @@
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet GMSMapView *mapView;
-@property (strong, nonatomic) CLLocationManager *locationManager ;
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
-@property (weak, nonatomic) NSOperation *lastRequest ;
-@property (strong, nonatomic) NSArray *busesData ;
+@property (weak, nonatomic) NSOperation *lastRequest;
+@property (strong, nonatomic) NSArray *busesData;
 @property (weak, nonatomic) IBOutlet UITextField *searchInput;
-@property (strong, nonatomic) NSTimer *updateTimer ;
+@property (strong, nonatomic) NSTimer *updateTimer;
 @property (weak, nonatomic) IBOutlet UIToolbar *accessoryView;
 @property (weak, nonatomic) IBOutlet UIView *overlayMap;
 
@@ -30,16 +30,14 @@
 
 @implementation MapViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
 
-    self.locationManager.delegate = self ;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters ;
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
     [self.locationManager startUpdatingLocation];
     
     [self updateMapOptions];
@@ -54,7 +52,7 @@
     [newAccesoryViewItems insertObject:labelItem atIndex:0];
     [self.accessoryView setItems:newAccesoryViewItems animated:NO];
     
-    self.searchInput.inputAccessoryView = self.accessoryView ;
+    self.searchInput.inputAccessoryView = self.accessoryView;
     
     // Monitora teclado
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -68,22 +66,19 @@
 
 }
 
-- (void) updateMapOptions
-{
+- (void) updateMapOptions {
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     self.mapView.mapType = [prefs integerForKey:@"Tipo"]?kGMSTypeHybrid:kGMSTypeNormal;
     self.mapView.trafficEnabled = [prefs boolForKey:@"Transito"];
 }
 
-- (CLLocationManager *)locationManager
-{
-    // Lazy initialization
+- (CLLocationManager *)locationManager {
+    // Se variável não existe, a mesma é criada no momento da chamada
     if (!_locationManager) _locationManager = [[CLLocationManager alloc] init];
     return _locationManager ;
 }
 
-- (void) setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info
-{
+- (void) setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info {
     // Obtém dados da animação
     UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
     UIViewAnimationOptions animationOptions = UIViewAnimationOptionBeginFromCurrentState;
@@ -135,23 +130,17 @@
     [self setOverlayMapVisible:NO withKeyboardInfo:userInfo];
 }
 
-- (IBAction)onTapOverlay:(id)sender
-{
+- (IBAction)onTapOverlay:(id)sender {
     [self.searchInput resignFirstResponder];
 }
 
--(void)aTime{
-    
+-(void)aTime {
     if(![self.searchInput isFirstResponder])
         [self atualizar:self];
-    
 }
 - (IBAction)changeKeyboardType:(UISegmentedControl *)sender {
-    if ( sender.selectedSegmentIndex == 0 ) {   // 0 == "0-9"
-        self.searchInput.keyboardType = UIKeyboardTypeNumberPad ;
-    } else {    // "A-Z"
-        self.searchInput.keyboardType = UIKeyboardTypeDefault ;
-    }
+    self.searchInput.keyboardType = sender.selectedSegmentIndex?UIKeyboardTypeDefault:UIKeyboardTypeNumberPad;
+    //Se sender.selectedSegmentIndex == 0, o valor é númerico, senão é alfabético
 
     [self.searchInput reloadInputViews];
 }
@@ -201,14 +190,12 @@
     }
 }
 
-- (void)setBusesData:(NSArray *)busesData
-{
+- (void)setBusesData:(NSArray *)busesData {
     _busesData = busesData ;
     [self updateMarkers];
 }
 
-- (void)updateMarkers
-{
+- (void)updateMarkers {
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
         
@@ -244,24 +231,21 @@
     }    
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     [self.locationManager stopUpdatingLocation];
     
     CLLocation *location = [locations lastObject];
     self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:11];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ( [segue.identifier isEqualToString:@"viewOptions"] ) {
         OptionsViewController *optionsVC = segue.destinationViewController ;
         optionsVC.delegate = self ;
     }
 }
 
-- (void)doneOptionsView
-{
+- (void)doneOptionsView {
     // Atualiza opções do mapa
     [self updateMapOptions];
 }
