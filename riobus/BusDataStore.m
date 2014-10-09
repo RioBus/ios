@@ -18,15 +18,12 @@
 #define BUSDATA_IDX_VELOCITY        5
 
 @interface BusDataStore ()
-
-@property (strong, nonatomic) NSDateFormatter *jsonDateFormat ;
-
+@property (strong, nonatomic) NSDateFormatter *jsonDateFormat;
 @end
 
 @implementation BusDataStore
 
-+ (BusDataStore *)sharedInstance
-{
++ (BusDataStore *)sharedInstance {
     static BusDataStore *__instance ;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -35,9 +32,8 @@
     return __instance ;
 }
 
-- (NSDateFormatter *)jsonDateFormat
-{
-    // Lazy initialization
+- (NSDateFormatter *)jsonDateFormat {
+    // Se jsonDateFormat não existe, é instanciado em tempo de chamada
     if (! _jsonDateFormat ) {
         _jsonDateFormat = [[NSDateFormatter alloc] init];
         [_jsonDateFormat setDateFormat: @"MM-dd-yyyy HH:mm:ss"];
@@ -46,8 +42,7 @@
     return _jsonDateFormat ;
 }
 
-- (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler
-{
+- (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {
     // Previne URL injection
     NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
@@ -94,7 +89,7 @@
     // 5
     [operation start];
     
-    return operation ;
+    return operation;
 }
 
 @end
