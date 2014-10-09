@@ -14,13 +14,11 @@
 @property (strong, nonatomic) IBOutlet UISwitch *traf;
 @property (strong, nonatomic) IBOutlet UIButton *fbbutton;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
-
 @end
 
 @implementation OptionsViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
@@ -32,16 +30,14 @@
     // Do any additional setup after loading the view.
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     [self.textView flashScrollIndicators];
 }
 
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -54,8 +50,7 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
