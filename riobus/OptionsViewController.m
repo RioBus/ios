@@ -23,18 +23,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-   NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-   NSInteger myInt = [prefs integerForKey:@"Tipo"];
-    if (myInt == 0){
-        self.tupo.selectedSegmentIndex = 0;
-    }else{
-        self.tupo.selectedSegmentIndex = 1;
-    }
-    
-        
-    BOOL trafego = [prefs boolForKey:@"Transito"];
-    self.traf.on = trafego;
-    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    self.tupo.selectedSegmentIndex = [prefs integerForKey:@"Tipo"];
+    self.traf.on = [prefs boolForKey:@"Transito"];
 
     self.buttonClose.layer.cornerRadius = 10;
     self.fbbutton.layer.cornerRadius = 10;
@@ -69,12 +60,7 @@
     
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
-    if([self.tupo selectedSegmentIndex] == 0){
-      [prefs setInteger:0 forKey:@"Tipo"];
-    }
-    else if([self.tupo selectedSegmentIndex] == 1){
-      [prefs setInteger:1 forKey:@"Tipo"];
-    }
+    [prefs setInteger:[self.tupo selectedSegmentIndex] forKey:@"Tipo"];
     
     [prefs setBool:self.traf.on forKey:@"Transito"];
     // – setBool:forKey:
