@@ -13,7 +13,7 @@
 @property (strong, nonatomic) IBOutlet UISegmentedControl *tupo;
 @property (strong, nonatomic) IBOutlet UISwitch *traf;
 @property (strong, nonatomic) IBOutlet UIButton *fbbutton;
-@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak,   nonatomic) IBOutlet UITextView *textView;
 @end
 
 @implementation OptionsViewController
