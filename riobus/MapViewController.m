@@ -76,22 +76,24 @@
     return _locationManager ;
 }
 
+- (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve {
+    switch (curve) {
+        case UIViewAnimationCurveEaseInOut:
+            return UIViewAnimationOptionCurveEaseInOut;
+        case UIViewAnimationCurveEaseIn:
+            return UIViewAnimationOptionCurveEaseIn;
+        case UIViewAnimationCurveEaseOut:
+            return UIViewAnimationOptionCurveEaseOut;
+        case UIViewAnimationCurveLinear:
+            return UIViewAnimationOptionCurveLinear;
+    }
+}
+
 - (void) setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info {
     // Obtém dados da animação
     UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
     UIViewAnimationOptions animationOptions = UIViewAnimationOptionBeginFromCurrentState;
-    if (animationCurve == UIViewAnimationCurveEaseIn) {
-        animationOptions |= UIViewAnimationOptionCurveEaseIn;
-    }
-    else if (animationCurve == UIViewAnimationCurveEaseInOut) {
-        animationOptions |= UIViewAnimationOptionCurveEaseInOut;
-    }
-    else if (animationCurve == UIViewAnimationCurveEaseOut) {
-        animationOptions |= UIViewAnimationOptionCurveEaseOut;
-    }
-    else if (animationCurve == UIViewAnimationCurveLinear) {
-        animationOptions |= UIViewAnimationOptionCurveLinear;
-    }
+    animationOptions |= [self animationOptionsWithCurve:animationCurve];
 
     NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
