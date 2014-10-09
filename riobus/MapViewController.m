@@ -15,13 +15,13 @@
 #import "OptionsViewController.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate>
-@property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
-@property (weak,   nonatomic) NSOperation *lastRequest;
 @property (strong, nonatomic) NSArray *busesData;
-@property (weak,   nonatomic) IBOutlet UITextField *searchInput;
 @property (strong, nonatomic) NSTimer *updateTimer;
+@property (weak,   nonatomic) NSOperation *lastRequest;
+@property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
+@property (weak,   nonatomic) IBOutlet UITextField *searchInput;
 @property (weak,   nonatomic) IBOutlet UIToolbar *accessoryView;
 @property (weak,   nonatomic) IBOutlet UIView *overlayMap;
 @end
