@@ -12,20 +12,24 @@
 	<dict>
 		<key>BFCF8E2A-E94C-47BC-8461-ED585041C3CE</key>
 		<string>ssh://git.rootshell.privatedns.org/brunoamaral/riobus-ios.git</string>
+		<key>E97FCC62D3DA6FCE25266A92BDEF0D7767CD78FE</key>
+		<string>https://github.com/vitor251093/riobus-ios.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>riobus.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>BFCF8E2A-E94C-47BC-8461-ED585041C3CE</key>
+		<string>../../riobus</string>
+		<key>E97FCC62D3DA6FCE25266A92BDEF0D7767CD78FE</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://git.rootshell.privatedns.org/brunoamaral/riobus-ios.git</string>
+	<string>https://github.com/vitor251093/riobus-ios.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>BFCF8E2A-E94C-47BC-8461-ED585041C3CE</string>
+	<string>E97FCC62D3DA6FCE25266A92BDEF0D7767CD78FE</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -35,6 +39,14 @@
 			<string>BFCF8E2A-E94C-47BC-8461-ED585041C3CE</string>
 			<key>IDESourceControlWCCName</key>
 			<string>riobus</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E97FCC62D3DA6FCE25266A92BDEF0D7767CD78FE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>riobus-ios</string>
 		</dict>
 	</array>
 </dict>

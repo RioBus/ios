@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <deployment defaultVersion="1808" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Map View Controller-->
@@ -18,7 +20,6 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lfw-bq-mSB" customClass="GMSMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <userDefinedRuntimeAttributes>
@@ -29,56 +30,79 @@
                             </view>
                             <view hidden="YES" opaque="NO" alpha="0.29999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rdR-J6-ubo" userLabel="Overlay">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="ilN-NR-9Rp" appends="YES" id="ECy-m2-YLQ"/>
                                 </connections>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBl-c9-bVI">
+                                <rect key="frame" x="269" y="435" width="37" height="37"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="37" id="4qO-Cj-B5Y"/>
+                                    <constraint firstAttribute="width" constant="37" id="OAF-WC-ycE"/>
+                                </constraints>
+                                <state key="normal" image="about.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="TAr-9s-PmU" kind="push" id="VXR-7H-voA"/>
+                                </connections>
+                            </button>
+                            <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="7Gl-dC-szk">
+                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
+                                <connections>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="hSM-yE-dcJ"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="qBl-c9-bVI" secondAttribute="trailing" constant="-2" id="3yK-fx-9tm"/>
                             <constraint firstAttribute="trailing" secondItem="Lfw-bq-mSB" secondAttribute="trailing" id="4Pz-St-5qA"/>
                             <constraint firstItem="Lfw-bq-mSB" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="BfG-tf-jBp"/>
                             <constraint firstItem="rdR-J6-ubo" firstAttribute="bottom" secondItem="Lfw-bq-mSB" secondAttribute="bottom" id="Sd7-3X-8Ip"/>
                             <constraint firstItem="rdR-J6-ubo" firstAttribute="top" secondItem="Lfw-bq-mSB" secondAttribute="top" id="dJO-nI-pky"/>
+                            <constraint firstItem="7Gl-dC-szk" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="fFI-Pa-ZUD"/>
                             <constraint firstItem="rdR-J6-ubo" firstAttribute="leading" secondItem="Lfw-bq-mSB" secondAttribute="leading" id="g4x-NL-P7Q"/>
                             <constraint firstItem="Lfw-bq-mSB" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="kGz-O1-zpg"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="qBl-c9-bVI" secondAttribute="bottom" constant="8" id="mQE-c4-SpF"/>
                             <constraint firstAttribute="bottom" secondItem="Lfw-bq-mSB" secondAttribute="bottom" id="q1H-50-wFW"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="7Gl-dC-szk" secondAttribute="trailing" constant="-16" id="tgm-GR-ilC"/>
+                            <constraint firstItem="7Gl-dC-szk" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="x6m-9A-Obm"/>
                             <constraint firstItem="rdR-J6-ubo" firstAttribute="trailing" secondItem="Lfw-bq-mSB" secondAttribute="trailing" id="yUv-AG-qQD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="fyO-ox-e98">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" image="icon-bus-toolbar.png" id="Vgx-bq-oQj">
-                            <connections>
-                                <segue destination="5Av-an-b8f" kind="push" identifier="viewOptions" id="eBl-EJ-Hlf"/>
-                            </connections>
-                        </barButtonItem>
-                        <textField key="titleView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Número da linha" minimumFontSize="17" clearButtonMode="always" id="tLM-sk-JXc">
-                            <rect key="frame" x="90" y="7" width="141" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                            <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="search"/>
-                            <connections>
-                                <action selector="searchClick:" destination="vXZ-lx-hvc" eventType="editingDidEndOnExit" id="wix-dv-o0q"/>
-                            </connections>
-                        </textField>
-                        <barButtonItem key="rightBarButtonItem" title="Buscar" style="done" id="3fT-Jn-jXP">
-                            <connections>
-                                <action selector="searchClick:" destination="vXZ-lx-hvc" id="CoW-0d-31b"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="accessoryView" destination="wWi-WK-oeK" id="DyX-uy-Fjm"/>
                         <outlet property="mapView" destination="Lfw-bq-mSB" id="IVe-WC-4Ar"/>
                         <outlet property="overlayMap" destination="rdR-J6-ubo" id="ltn-e8-8G9"/>
-                        <outlet property="searchInput" destination="tLM-sk-JXc" id="LJS-N4-aIW"/>
+                        <outlet property="searchDisplayController" destination="SXP-NW-eBt" id="1of-vD-bwM"/>
+                        <outlet property="searchInput" destination="7Gl-dC-szk" id="SUm-y6-ddu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="ilN-NR-9Rp">
+                    <connections>
+                        <action selector="onTapOverlay:" destination="vXZ-lx-hvc" id="adU-Xv-ZMn"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <searchDisplayController id="SXP-NW-eBt">
+                    <connections>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="VKc-Jx-7mf"/>
+                        <outlet property="searchContentsController" destination="vXZ-lx-hvc" id="4yZ-Lk-Qld"/>
+                        <outlet property="searchResultsDataSource" destination="vXZ-lx-hvc" id="9w0-Dx-IrI"/>
+                        <outlet property="searchResultsDelegate" destination="vXZ-lx-hvc" id="6dQ-WP-pYF"/>
+                    </connections>
+                </searchDisplayController>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="wWi-WK-oeK" userLabel="AccesoryToolbar">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -99,18 +123,14 @@
                         </barButtonItem>
                     </items>
                 </toolbar>
-                <tapGestureRecognizer id="ilN-NR-9Rp">
-                    <connections>
-                        <action selector="onTapOverlay:" destination="vXZ-lx-hvc" id="adU-Xv-ZMn"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="69" y="-46"/>
+            <point key="canvasLocation" x="136" y="-46"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="MsF-Ft-6bt">
             <objects>
-                <navigationController definesPresentationContext="YES" id="8Yh-BV-TBK" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="8Yh-BV-TBK" sceneMemberID="viewController">
+                    <nil key="simulatedTopBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="t8b-Y1-f6V">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -122,66 +142,20 @@
             </objects>
             <point key="canvasLocation" x="-376" y="-46"/>
         </scene>
-        <!--Options View Controller - Opções-->
-        <scene sceneID="0qr-2v-ae4">
+        <!--Options View Controller-->
+        <scene sceneID="uLg-Wb-IE0">
             <objects>
-                <viewController id="5Av-an-b8f" customClass="OptionsViewController" sceneMemberID="viewController">
+                <viewController id="TAr-9s-PmU" customClass="OptionsViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="F4d-pD-fP4"/>
-                        <viewControllerLayoutGuide type="bottom" id="rqL-55-SrU"/>
+                        <viewControllerLayoutGuide type="top" id="kB7-cd-FK6"/>
+                        <viewControllerLayoutGuide type="bottom" id="CKf-uL-pEv"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="RU0-Uc-W9I">
+                    <view key="view" contentMode="scaleToFill" id="3m3-QU-KYY">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tipo de Mapa:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="naR-1e-Qpn">
-                                <rect key="frame" x="33" y="138" width="111" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exibir informações de trânsito" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2uK-2R-NAB">
-                                <rect key="frame" x="33" y="174" width="229" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Nwg-q2-kg6">
-                                <rect key="frame" x="166" y="135" width="123" height="29"/>
-                                <segments>
-                                    <segment title="Padrão"/>
-                                    <segment title="Satélite"/>
-                                </segments>
-                            </segmentedControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="REX-bd-9lh">
-                                <rect key="frame" x="20" y="420" width="280" height="40"/>
-                                <state key="normal" title="  Facebook RioBus" image="facebook.png">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="fb:" destination="5Av-an-b8f" eventType="touchUpInside" id="bgW-6H-ehN"/>
-                                </connections>
-                            </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NH2-9T-3Ol">
-                                <rect key="frame" x="240" y="170" width="51" height="31"/>
-                            </switch>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RioBus" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MjP-Bj-0qV">
-                                <rect key="frame" x="105" y="70" width="190" height="62"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="40"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bsp-ZB-4vg">
-                                <rect key="frame" x="26" y="70" width="60" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="aT7-bC-McZ"/>
-                                </constraints>
-                                <state key="normal" image="icon120.png">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7WG-WT-B0s">
-                                <rect key="frame" x="20" y="209" width="280" height="203"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-DC-OOX">
+                                <rect key="frame" x="16" y="28" width="288" height="395"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment>
@@ -197,9 +171,6 @@
                                     <fragment>
                                         <string key="content">Digite o número de uma linha municipal da cidade do Rio de Janeiro e clique em "Buscar" para que as posições de todos os ônibus desta linha sejam exibidas.
 Legenda de cores dos ícones das posições dos ônibus:
-Verde: atualizado há menos de 5 min Amarelo: atualizado entre 5 e 10 min atrás Vermelho: atualizado há mais de 10 min
-Clicando no marcador é possível ver mais detalhes sobre o instante da coleta dos dados.
-Os marcadores são atualizados a cada 15s e a posição dos ônibus a cada minuto.
 </string>
                                         <attributes>
                                             <font key="NSFont" size="13" name="HelveticaNeue"/>
@@ -208,7 +179,39 @@ Os marcadores são atualizados a cada 15s e a posição dos ônibus a cada minut
                                             </paragraphStyle>
                                         </attributes>
                                     </fragment>
-                                    <fragment content="Créditos">
+                                    <fragment content="Verde:">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" atualizado há menos de 5 min ">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Amarelo:">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" atualizado entre 5 e 10 min atrás ">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Vermelho:">
                                         <attributes>
                                             <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
@@ -217,10 +220,81 @@ Os marcadores são atualizados a cada 15s e a posição dos ônibus a cada minut
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content">
-Este app foi desenvolvido para iOS por Vinicius Bittencourt, baseado na ideia original de Marco Jardim, e é incrementado colaborativamente por:
-Fred Souza Bruno Lima Magno Ferreira Daniel Andrade Bruno do Amaral
-Os dados são oferecidos publicamente pela Prefeitura do Rio de Janeiro, em parceria com a FETRANSPOR.</string>
+                                        <string key="content"> atualizado há mais de 10 min
+Clicando no marcador é possível ver mais detalhes sobre o instante da coleta dos dados.
+Os marcadores são atualizados a cada 15s e a posição dos ônibus a cada minuto.
+Este app foi desenvolvido para iOS por </string>
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Vinicius Bittencourt">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=", baseado na ideia original de ">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Marco Jardim">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">, e é incrementado colaborativamente por:
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Fred Souza Bruno Lima Magno Ferreira Daniel Andrade Bruno do Amaral
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Os dados são oferecidos publicamente pela Prefeitura do Rio de Janeiro, em parceria com a FETRANSPOR.
+Gostou do projeto? Quer colaborar? Quer saber como funciona? Quer reclamar? Conheça nossa página do Facebook: </string>
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="RioBusOficial">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <url key="NSLink" string="fb://profile/1408367169433222"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=".">
                                         <attributes>
                                             <font key="NSFont" size="13" name="HelveticaNeue"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
@@ -232,52 +306,42 @@ Os dados são oferecidos publicamente pela Prefeitura do Rio de Janeiro, em parc
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i2a-dn-9tR">
+                                <rect key="frame" x="145" y="431" width="30" height="30"/>
+                                <state key="normal" title="OK">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="closeAboutWindow:" destination="sIx-zc-D3X" eventType="touchDown" id="1Lm-LQ-4AJ"/>
+                                    <action selector="closeAboutWindow:" destination="TAr-9s-PmU" eventType="touchUpInside" id="4Zo-Qg-dyV"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="naR-1e-Qpn" firstAttribute="top" secondItem="MjP-Bj-0qV" secondAttribute="bottom" constant="6" id="3bK-rL-WTa"/>
-                            <constraint firstItem="Nwg-q2-kg6" firstAttribute="top" secondItem="MjP-Bj-0qV" secondAttribute="bottom" constant="3" id="5Ao-JV-TpO"/>
-                            <constraint firstItem="7WG-WT-B0s" firstAttribute="top" secondItem="2uK-2R-NAB" secondAttribute="bottom" constant="14" id="Bx3-I1-fUD"/>
-                            <constraint firstItem="NH2-9T-3Ol" firstAttribute="trailing" secondItem="Nwg-q2-kg6" secondAttribute="trailing" id="E4k-qk-L3H"/>
-                            <constraint firstAttribute="trailing" secondItem="Nwg-q2-kg6" secondAttribute="trailing" constant="31" id="Fvr-hX-ygK"/>
-                            <constraint firstAttribute="trailing" secondItem="2uK-2R-NAB" secondAttribute="trailing" constant="58" id="FzW-Jc-Iug"/>
-                            <constraint firstItem="Nwg-q2-kg6" firstAttribute="leading" secondItem="naR-1e-Qpn" secondAttribute="trailing" constant="22" id="I4K-Nf-hmr"/>
-                            <constraint firstItem="MjP-Bj-0qV" firstAttribute="leading" secondItem="Bsp-ZB-4vg" secondAttribute="trailing" constant="19" id="MaR-BY-OGi"/>
-                            <constraint firstAttribute="trailing" secondItem="MjP-Bj-0qV" secondAttribute="trailing" constant="25" id="T2r-2U-MGp"/>
-                            <constraint firstItem="Bsp-ZB-4vg" firstAttribute="leading" secondItem="RU0-Uc-W9I" secondAttribute="leading" constant="26" id="TYr-xU-Qgk"/>
-                            <constraint firstItem="naR-1e-Qpn" firstAttribute="leading" secondItem="RU0-Uc-W9I" secondAttribute="leading" constant="33" id="UVd-oh-eo0"/>
-                            <constraint firstItem="Bsp-ZB-4vg" firstAttribute="top" secondItem="F4d-pD-fP4" secondAttribute="bottom" constant="6" id="VyI-nH-ay4"/>
-                            <constraint firstItem="REX-bd-9lh" firstAttribute="top" secondItem="7WG-WT-B0s" secondAttribute="bottom" constant="8" symbolic="YES" id="bWb-m0-gSh"/>
-                            <constraint firstItem="2uK-2R-NAB" firstAttribute="leading" secondItem="naR-1e-Qpn" secondAttribute="leading" id="cQ6-kc-FDO"/>
-                            <constraint firstItem="7WG-WT-B0s" firstAttribute="top" secondItem="NH2-9T-3Ol" secondAttribute="bottom" constant="8" symbolic="YES" id="cTZ-gr-NBl"/>
-                            <constraint firstAttribute="trailing" secondItem="7WG-WT-B0s" secondAttribute="trailing" constant="20" symbolic="YES" id="gVc-tX-aDd"/>
-                            <constraint firstItem="2uK-2R-NAB" firstAttribute="top" secondItem="Nwg-q2-kg6" secondAttribute="bottom" constant="11" id="iEd-Ad-TAX"/>
-                            <constraint firstItem="naR-1e-Qpn" firstAttribute="top" secondItem="Bsp-ZB-4vg" secondAttribute="bottom" constant="8" symbolic="YES" id="nSp-B2-gcB"/>
-                            <constraint firstItem="NH2-9T-3Ol" firstAttribute="top" secondItem="Nwg-q2-kg6" secondAttribute="bottom" constant="7" id="pcn-0J-JWa"/>
-                            <constraint firstItem="REX-bd-9lh" firstAttribute="leading" secondItem="7WG-WT-B0s" secondAttribute="leading" id="uiB-A7-hA3"/>
-                            <constraint firstItem="7WG-WT-B0s" firstAttribute="leading" secondItem="RU0-Uc-W9I" secondAttribute="leading" constant="20" symbolic="YES" id="vDj-0G-viE"/>
-                            <constraint firstItem="REX-bd-9lh" firstAttribute="trailing" secondItem="7WG-WT-B0s" secondAttribute="trailing" id="vsg-n8-tcq"/>
-                            <constraint firstItem="MjP-Bj-0qV" firstAttribute="top" secondItem="Bsp-ZB-4vg" secondAttribute="top" id="xxq-gT-sG7"/>
-                            <constraint firstAttribute="bottom" secondItem="REX-bd-9lh" secondAttribute="bottom" constant="20" symbolic="YES" id="zoV-6z-J9b"/>
+                            <constraint firstItem="i2a-dn-9tR" firstAttribute="top" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="8" symbolic="YES" id="0OE-W3-nVW"/>
+                            <constraint firstAttribute="bottom" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="57" id="AZh-49-H1m"/>
+                            <constraint firstItem="YkP-DC-OOX" firstAttribute="leading" secondItem="3m3-QU-KYY" secondAttribute="leadingMargin" id="CcG-RH-fL9"/>
+                            <constraint firstItem="YkP-DC-OOX" firstAttribute="top" secondItem="kB7-cd-FK6" secondAttribute="bottom" constant="8" symbolic="YES" id="FFP-h6-7FD"/>
+                            <constraint firstItem="YkP-DC-OOX" firstAttribute="trailing" secondItem="3m3-QU-KYY" secondAttribute="trailingMargin" id="RnI-04-90n"/>
+                            <constraint firstItem="i2a-dn-9tR" firstAttribute="centerX" secondItem="YkP-DC-OOX" secondAttribute="centerX" id="lbl-7o-wWa"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Opções" id="ca1-kb-5il"/>
-                    <connections>
-                        <outlet property="fbbutton" destination="REX-bd-9lh" id="Mvq-sP-TfV"/>
-                        <outlet property="textView" destination="7WG-WT-B0s" id="uss-Xa-etC"/>
-                        <outlet property="traf" destination="NH2-9T-3Ol" id="PhK-Q9-nBo"/>
-                        <outlet property="tupo" destination="Nwg-q2-kg6" id="E4k-DF-Os6"/>
-                    </connections>
+                    <navigationItem key="navigationItem" id="lds-IN-wQg">
+                        <barButtonItem key="leftBarButtonItem" title="Voltar" id="8Y0-py-rkH">
+                            <connections>
+                                <action selector="closeAboutWindow:" destination="sIx-zc-D3X" id="q96-O9-6Q4"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="heF-KQ-NGp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sIx-zc-D3X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="503" y="-46"/>
+            <point key="canvasLocation" x="624" y="-40"/>
         </scene>
     </scenes>
     <resources>
-        <image name="facebook.png" width="40" height="40"/>
-        <image name="icon-bus-toolbar.png" width="20" height="20"/>
-        <image name="icon120.png" width="60" height="60"/>
+        <image name="about.png" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
