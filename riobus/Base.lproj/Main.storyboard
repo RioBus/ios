@@ -171,9 +171,6 @@
                                     <fragment>
                                         <string key="content">Digite o número de uma linha municipal da cidade do Rio de Janeiro e clique em "Buscar" para que as posições de todos os ônibus desta linha sejam exibidas.
 Legenda de cores dos ícones das posições dos ônibus:
-Verde: atualizado há menos de 5 min Amarelo: atualizado entre 5 e 10 min atrás Vermelho: atualizado há mais de 10 min
-Clicando no marcador é possível ver mais detalhes sobre o instante da coleta dos dados.
-Os marcadores são atualizados a cada 15s e a posição dos ônibus a cada minuto.
 </string>
                                         <attributes>
                                             <font key="NSFont" size="13" name="HelveticaNeue"/>
@@ -182,7 +179,39 @@ Os marcadores são atualizados a cada 15s e a posição dos ônibus a cada minut
                                             </paragraphStyle>
                                         </attributes>
                                     </fragment>
-                                    <fragment content="Créditos">
+                                    <fragment content="Verde:">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" atualizado há menos de 5 min ">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Amarelo:">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" atualizado entre 5 e 10 min atrás ">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Vermelho:">
                                         <attributes>
                                             <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
@@ -191,10 +220,81 @@ Os marcadores são atualizados a cada 15s e a posição dos ônibus a cada minut
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content">
-Este app foi desenvolvido para iOS por Vinicius Bittencourt, baseado na ideia original de Marco Jardim, e é incrementado colaborativamente por:
-Fred Souza Bruno Lima Magno Ferreira Daniel Andrade Bruno do Amaral
-Os dados são oferecidos publicamente pela Prefeitura do Rio de Janeiro, em parceria com a FETRANSPOR.</string>
+                                        <string key="content"> atualizado há mais de 10 min
+Clicando no marcador é possível ver mais detalhes sobre o instante da coleta dos dados.
+Os marcadores são atualizados a cada 15s e a posição dos ônibus a cada minuto.
+Este app foi desenvolvido para iOS por </string>
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Vinicius Bittencourt">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=", baseado na ideia original de ">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Marco Jardim">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">, e é incrementado colaborativamente por:
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Fred Souza Bruno Lima Magno Ferreira Daniel Andrade Bruno do Amaral
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Os dados são oferecidos publicamente pela Prefeitura do Rio de Janeiro, em parceria com a FETRANSPOR.
+Gostou do projeto? Quer colaborar? Quer saber como funciona? Quer reclamar? Conheça nossa página do Facebook: </string>
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="RioBusOficial">
+                                        <attributes>
+                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                            <url key="NSLink" string="fb://profile/1408367169433222"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=".">
                                         <attributes>
                                             <font key="NSFont" size="13" name="HelveticaNeue"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
