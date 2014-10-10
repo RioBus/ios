@@ -40,6 +40,12 @@
     
     self.mapView.mapType = kGMSTypeNormal;
     self.mapView.trafficEnabled = YES;
+    self.mapView.myLocationEnabled = YES;
+}
+- (void)viewWillAppear:(BOOL)animated {
+    CLLocation *location = [self.mapView myLocation];
+    if (location) self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:14];
+    else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:-22.9043527 longitude:-43.1912805 zoom:12];
 }
 
 - (CLLocationManager*)locationManager {
@@ -166,10 +172,10 @@
             [self.markerForOrder setValue:marca forKey:busData.order];
         }
         
-        marca.title = [busData.lineNumber description] ;
+        marca.title = [busData.lineNumber description];
         marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %ld %@", busData.order,
                          [busData.velocity doubleValue], (long)delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
-        marca.position = busData.location.coordinate ;
+        marca.position = busData.location.coordinate;
         
         UIImage *imagem;
         if (delayInformation > 10)
@@ -190,7 +196,6 @@
         self.mapView.selectedMarker = selectedMarker ;
     }    
 }
-
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     [self.locationManager stopUpdatingLocation];
     
