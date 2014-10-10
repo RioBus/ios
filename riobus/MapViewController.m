@@ -26,6 +26,11 @@
 @property (weak,   nonatomic) IBOutlet UIView *overlayMap;
 @end
 
+#define CAMERA_DEFAULT_LATITUDE             -22.9043527
+#define CAMERA_DEFAULT_LONGITUDE            -43.1912805
+#define CAMERA_DEFAULT_ZOOM                 12
+#define CAMERA_CURRENT_LOCATION_ZOOM        14
+
 @implementation MapViewController
 
 - (void)viewDidLoad {
@@ -44,8 +49,9 @@
 }
 - (void)viewWillAppear:(BOOL)animated {
     CLLocation *location = [self.mapView myLocation];
-    if (location) self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:14];
-    else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:-22.9043527 longitude:-43.1912805 zoom:12];
+    if (location) self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:CAMERA_CURRENT_LOCATION_ZOOM];
+    else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
+                                                           longitude:CAMERA_DEFAULT_LONGITUDE zoom:CAMERA_DEFAULT_ZOOM];
 }
 
 - (CLLocationManager*)locationManager {
