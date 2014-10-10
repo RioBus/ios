@@ -14,14 +14,14 @@
 #import <Toast/Toast+UIView.h>
 #import "OptionsViewController.h"
 
-@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate>
+@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
 @property (strong, nonatomic) NSTimer *updateTimer;
 @property (weak,   nonatomic) NSOperation *lastRequest;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
-@property (weak,   nonatomic) IBOutlet UITextField *searchInput;
+@property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak,   nonatomic) IBOutlet UIToolbar *accessoryView;
 @property (weak,   nonatomic) IBOutlet UIView *overlayMap;
 @end
@@ -38,36 +38,8 @@
     self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
     [self.locationManager startUpdatingLocation];
     
-    [self updateMapOptions];
-    
-    // Adiciona label de teclado ao toolbar que fica acima do teclado (não dá pra fazer isso via Storyboard :/)
-    NSMutableArray *newAccesoryViewItems = [self.accessoryView.items mutableCopy];
-    
-    UILabel * lblTeclado = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
-    lblTeclado.text = @"Teclado:";
-    
-    UIBarButtonItem *labelItem = [[UIBarButtonItem alloc] initWithCustomView:lblTeclado];
-    [newAccesoryViewItems insertObject:labelItem atIndex:0];
-    [self.accessoryView setItems:newAccesoryViewItems animated:NO];
-    
-    self.searchInput.inputAccessoryView = self.accessoryView;
-    
-    // Monitora teclado
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-
-}
-
-- (void)updateMapOptions {
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    self.mapView.mapType = [prefs integerForKey:@"Tipo"]?kGMSTypeHybrid:kGMSTypeNormal;
-    self.mapView.trafficEnabled = [prefs boolForKey:@"Transito"];
+    self.mapView.mapType = kGMSTypeNormal;
+    self.mapView.trafficEnabled = YES;
 }
 
 - (CLLocationManager*)locationManager {
@@ -85,7 +57,6 @@
     }
     return UIViewAnimationOptionCurveEaseInOut;
 }
-
 - (void)setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info {
     // Obtém dados da animação
     UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
@@ -117,41 +88,33 @@
     }
 }
 
-- (void)keyboardWillShow:(NSNotification*)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    [self setOverlayMapVisible:YES withKeyboardInfo:userInfo];
-}
-
-- (void)keyboardWillHide:(NSNotification*)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    [self setOverlayMapVisible:NO withKeyboardInfo:userInfo];
-}
-
-- (IBAction)onTapOverlay:(id)sender {
+- (void)hideKeyboard:(UIButton *)sender {
     [self.searchInput resignFirstResponder];
+    [sender removeFromSuperview];
+    
+    if (self.searchInput.text.length > 0)
+        [self searchBarSearchButtonClicked:nil];
+}
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+    UIButton *overlayButton = [[UIButton alloc] initWithFrame:self.view.frame];
+    overlayButton.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3f];
+    [overlayButton addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:overlayButton];
+}
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    [self.searchInput resignFirstResponder];
+    [self.markerForOrder removeAllObjects];
+    [self.mapView clear];
+    
+    [self.view makeToastActivity];
+    
+    [self atualizar:self];
 }
 
 - (void)aTime {
     if(![self.searchInput isFirstResponder])
         [self atualizar:self];
 }
-- (IBAction)changeKeyboardType:(UISegmentedControl*)sender {
-    self.searchInput.keyboardType = sender.selectedSegmentIndex?UIKeyboardTypeDefault:UIKeyboardTypeNumberPad;
-    //Se sender.selectedSegmentIndex == 0, o valor é númerico, senão é alfabético
-
-    [self.searchInput reloadInputViews];
-}
-
-- (IBAction)searchClick:(id)sender {
-    [self.searchInput resignFirstResponder];
-    [self.markerForOrder removeAllObjects];
-    [self.mapView clear];
-    
-    [self.view makeToastActivity];
-
-    [self atualizar:self];
-}
-
 - (void)atualizar:(id)sender {
     [self.searchInput resignFirstResponder];
     
@@ -191,7 +154,6 @@
     _busesData = busesData ;
     [self updateMarkers];
 }
-
 - (void)updateMarkers {
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
@@ -205,7 +167,8 @@
         }
         
         marca.title = [busData.lineNumber description] ;
-        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %d %@", busData.order, [busData.velocity doubleValue], delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
+        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %ld %@", busData.order,
+                         [busData.velocity doubleValue], (long)delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
         marca.position = busData.location.coordinate ;
         
         UIImage *imagem;
@@ -244,7 +207,6 @@
 
 - (void)doneOptionsView {
     // Atualiza opções do mapa
-    [self updateMapOptions];
 }
 
 @end

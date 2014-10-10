@@ -20,10 +20,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    self.tupo.selectedSegmentIndex = [prefs integerForKey:@"Tipo"];
-    self.traf.on = [prefs boolForKey:@"Transito"];
 
     self.buttonClose.layer.cornerRadius = 10;
     self.fbbutton.layer.cornerRadius = 10;
@@ -53,12 +49,11 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    [prefs setInteger:[self.tupo selectedSegmentIndex] forKey:@"Tipo"];
-    [prefs setBool:self.traf.on forKey:@"Transito"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
     [self.delegate doneOptionsView];
+}
+
+- (IBAction)closeAboutWindow:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
