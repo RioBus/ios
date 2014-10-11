@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6307455419E74A1B00E9BBCE /* about.png in Resources */ = {isa = PBXBuildFile; fileRef = 6307455319E74A1B00E9BBCE /* about.png */; };
 		681A7F45196722530006C335 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F44196722530006C335 /* Foundation.framework */; };
 		681A7F47196722530006C335 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F46196722530006C335 /* CoreGraphics.framework */; };
 		681A7F49196722530006C335 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F48196722530006C335 /* UIKit.framework */; };
@@ -31,11 +32,7 @@
 		681A7F96196731410006C335 /* icon120@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 681A7F8A196731410006C335 /* icon120@2x.png */; };
 		681A7F9E196824890006C335 /* BusData.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F9D196824890006C335 /* BusData.m */; };
 		681A7FA1196824FC0006C335 /* BusDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA0196824FC0006C335 /* BusDataStore.m */; };
-		681A7FA4196847830006C335 /* icon-bus-toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 681A7FA2196847830006C335 /* icon-bus-toolbar.png */; };
-		681A7FA5196847830006C335 /* icon-bus-toolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 681A7FA3196847830006C335 /* icon-bus-toolbar@2x.png */; };
 		681A7FA819684A6C0006C335 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA719684A6C0006C335 /* OptionsViewController.m */; };
-		681A7FAB19684DC70006C335 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 681A7FA919684DC70006C335 /* facebook.png */; };
-		681A7FAC19684DC70006C335 /* facebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 681A7FAA19684DC70006C335 /* facebook@2x.png */; };
 		681A7FAE196890AB0006C335 /* icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = 681A7FAD196890AB0006C335 /* icon120.png */; };
 		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
 /* End PBXBuildFile section */
@@ -51,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.release.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.release.xcconfig"; sourceTree = "<group>"; };
+		6307455319E74A1B00E9BBCE /* about.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = about.png; path = ../../../../Downloads/about.png; sourceTree = "<group>"; };
 		681A7F41196722530006C335 /* riobus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = riobus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		681A7F44196722530006C335 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		681A7F46196722530006C335 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -83,15 +82,11 @@
 		681A7F9D196824890006C335 /* BusData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusData.m; sourceTree = "<group>"; };
 		681A7F9F196824FC0006C335 /* BusDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusDataStore.h; sourceTree = "<group>"; };
 		681A7FA0196824FC0006C335 /* BusDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataStore.m; sourceTree = "<group>"; };
-		681A7FA2196847830006C335 /* icon-bus-toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-bus-toolbar.png"; sourceTree = "<group>"; };
-		681A7FA3196847830006C335 /* icon-bus-toolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-bus-toolbar@2x.png"; sourceTree = "<group>"; };
 		681A7FA619684A6C0006C335 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		681A7FA719684A6C0006C335 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
-		681A7FA919684DC70006C335 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
-		681A7FAA19684DC70006C335 /* facebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook@2x.png"; sourceTree = "<group>"; };
 		681A7FAD196890AB0006C335 /* icon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon120.png; sourceTree = "<group>"; };
 		8D9CA8F077F246CFBA653042 /* libPods-riobus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-riobus.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		93573705E7B34D13ADE5C58F /* Pods-riobus.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.xcconfig"; path = "Pods/Pods-riobus.xcconfig"; sourceTree = "<group>"; };
+		E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +122,7 @@
 				681A7F69196722540006C335 /* riobusTests */,
 				681A7F43196722530006C335 /* Frameworks */,
 				681A7F42196722530006C335 /* Products */,
-				93573705E7B34D13ADE5C58F /* Pods-riobus.xcconfig */,
+				BEC75922FA062B67848E72FA /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -204,10 +199,7 @@
 		681A7F80196731410006C335 /* imagens */ = {
 			isa = PBXGroup;
 			children = (
-				681A7FA919684DC70006C335 /* facebook.png */,
-				681A7FAA19684DC70006C335 /* facebook@2x.png */,
-				681A7FA2196847830006C335 /* icon-bus-toolbar.png */,
-				681A7FA3196847830006C335 /* icon-bus-toolbar@2x.png */,
+				6307455319E74A1B00E9BBCE /* about.png */,
 				681A7F81196731410006C335 /* bus-green.png */,
 				681A7F82196731410006C335 /* bus-green@2x.png */,
 				681A7F84196731410006C335 /* bus-red.png */,
@@ -229,6 +221,15 @@
 				681A7FA0196824FC0006C335 /* BusDataStore.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		BEC75922FA062B67848E72FA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */,
+				27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -309,19 +310,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				681A7FA4196847830006C335 /* icon-bus-toolbar.png in Resources */,
 				681A7F8D196731410006C335 /* bus-green.png in Resources */,
-				681A7FAC19684DC70006C335 /* facebook@2x.png in Resources */,
 				681A7F5D196722540006C335 /* Images.xcassets in Resources */,
-				681A7FAB19684DC70006C335 /* facebook.png in Resources */,
 				681A7F90196731410006C335 /* bus-red.png in Resources */,
 				681A7F4F196722530006C335 /* InfoPlist.strings in Resources */,
+				6307455419E74A1B00E9BBCE /* about.png in Resources */,
 				681A7F92196731410006C335 /* bus-yellow.png in Resources */,
 				681A7F96196731410006C335 /* icon120@2x.png in Resources */,
 				681A7F91196731410006C335 /* bus-red@2x.png in Resources */,
 				681A7F8E196731410006C335 /* bus-green@2x.png in Resources */,
 				681A7FAE196890AB0006C335 /* icon120.png in Resources */,
-				681A7FA5196847830006C335 /* icon-bus-toolbar@2x.png in Resources */,
 				681A7F58196722540006C335 /* Main.storyboard in Resources */,
 				681A7F93196731410006C335 /* bus-yellow@2x.png in Resources */,
 			);
@@ -365,7 +363,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-riobus-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-riobus/Pods-riobus-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -502,7 +500,7 @@
 		};
 		681A7F74196722540006C335 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 93573705E7B34D13ADE5C58F /* Pods-riobus.xcconfig */;
+			baseConfigurationReference = E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -516,7 +514,7 @@
 		};
 		681A7F75196722540006C335 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 93573705E7B34D13ADE5C58F /* Pods-riobus.xcconfig */;
+			baseConfigurationReference = 27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

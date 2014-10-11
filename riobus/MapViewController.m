@@ -14,97 +14,66 @@
 #import <Toast/Toast+UIView.h>
 #import "OptionsViewController.h"
 
-@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate>
-
-@property (weak, nonatomic) IBOutlet GMSMapView *mapView;
-@property (strong, nonatomic) CLLocationManager *locationManager ;
+@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
+@property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
-@property (weak, nonatomic) NSOperation *lastRequest ;
-@property (strong, nonatomic) NSArray *busesData ;
-@property (weak, nonatomic) IBOutlet UITextField *searchInput;
-@property (strong, nonatomic) NSTimer *updateTimer ;
-@property (weak, nonatomic) IBOutlet UIToolbar *accessoryView;
-@property (weak, nonatomic) IBOutlet UIView *overlayMap;
-
+@property (strong, nonatomic) NSArray *busesData;
+@property (strong, nonatomic) NSTimer *updateTimer;
+@property (weak,   nonatomic) NSOperation *lastRequest;
+@property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
+@property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
+@property (weak,   nonatomic) IBOutlet UIToolbar *accessoryView;
+@property (weak,   nonatomic) IBOutlet UIView *overlayMap;
 @end
+
+#define CAMERA_DEFAULT_LATITUDE             -22.9043527
+#define CAMERA_DEFAULT_LONGITUDE            -43.1912805
+#define CAMERA_DEFAULT_ZOOM                 12
+#define CAMERA_CURRENT_LOCATION_ZOOM        14
 
 @implementation MapViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
 
-    self.locationManager.delegate = self ;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters ;
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
     [self.locationManager startUpdatingLocation];
     
-    [self updateMapOptions];
-    
-    // Adiciona label de teclado ao toolbar que fica acima do teclado (não dá pra fazer isso via Storyboard :/)
-    NSMutableArray *newAccesoryViewItems = [self.accessoryView.items mutableCopy];
-    
-    UILabel * lblTeclado = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
-    lblTeclado.text = @"Teclado:";
-    
-    UIBarButtonItem *labelItem = [[UIBarButtonItem alloc] initWithCustomView:lblTeclado];
-    [newAccesoryViewItems insertObject:labelItem atIndex:0];
-    [self.accessoryView setItems:newAccesoryViewItems animated:NO];
-    
-    self.searchInput.inputAccessoryView = self.accessoryView ;
-    
-    // Monitora teclado
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillShow:)
-                                                 name:UIKeyboardWillShowNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide:)
-                                                 name:UIKeyboardWillHideNotification
-                                               object:nil];
-
+    self.mapView.mapType = kGMSTypeNormal;
+    self.mapView.trafficEnabled = YES;
+    self.mapView.myLocationEnabled = YES;
+}
+- (void)viewWillAppear:(BOOL)animated {
+    CLLocation *location = [self.mapView myLocation];
+    if (location) self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:CAMERA_CURRENT_LOCATION_ZOOM];
+    else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
+                                                           longitude:CAMERA_DEFAULT_LONGITUDE zoom:CAMERA_DEFAULT_ZOOM];
 }
 
-- (void) updateMapOptions
-{
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSInteger myInt = [prefs integerForKey:@"Tipo"];
-    if (myInt == 0){
-        self.mapView.mapType = kGMSTypeNormal;
-    }else{
-        self.mapView.mapType = kGMSTypeHybrid;
-    }
-    BOOL trafego = [prefs boolForKey:@"Transito"];
-    self.mapView.trafficEnabled = trafego;
-}
-
-- (CLLocationManager *)locationManager
-{
-    // Lazy initialization
+- (CLLocationManager*)locationManager {
+    // Se variável não existe, a mesma é criada no momento da chamada
     if (!_locationManager) _locationManager = [[CLLocationManager alloc] init];
     return _locationManager ;
 }
 
-- (void) setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info
-{
+- (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve {
+    switch (curve) {
+        case UIViewAnimationCurveEaseInOut: return UIViewAnimationOptionCurveEaseInOut;
+        case UIViewAnimationCurveEaseIn:    return UIViewAnimationOptionCurveEaseIn;
+        case UIViewAnimationCurveEaseOut:   return UIViewAnimationOptionCurveEaseOut;
+        case UIViewAnimationCurveLinear:    return UIViewAnimationOptionCurveLinear;
+    }
+    return UIViewAnimationOptionCurveEaseInOut;
+}
+- (void)setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info {
     // Obtém dados da animação
     UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
     UIViewAnimationOptions animationOptions = UIViewAnimationOptionBeginFromCurrentState;
-    if (animationCurve == UIViewAnimationCurveEaseIn) {
-        animationOptions |= UIViewAnimationOptionCurveEaseIn;
-    }
-    else if (animationCurve == UIViewAnimationCurveEaseInOut) {
-        animationOptions |= UIViewAnimationOptionCurveEaseInOut;
-    }
-    else if (animationCurve == UIViewAnimationCurveEaseOut) {
-        animationOptions |= UIViewAnimationOptionCurveEaseOut;
-    }
-    else if (animationCurve == UIViewAnimationCurveLinear) {
-        animationOptions |= UIViewAnimationOptionCurveLinear;
-    }
+    animationOptions |= [self animationOptionsWithCurve:animationCurve];
 
     NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
 
@@ -131,47 +100,33 @@
     }
 }
 
-- (void)keyboardWillShow:(NSNotification *)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    [self setOverlayMapVisible:YES withKeyboardInfo:userInfo];
-}
-
-- (void)keyboardWillHide:(NSNotification *)notification {
-    NSDictionary *userInfo = [notification userInfo];
-    [self setOverlayMapVisible:NO withKeyboardInfo:userInfo];
-}
-
-- (IBAction)onTapOverlay:(id)sender
-{
+- (void)hideKeyboard:(UIButton *)sender {
     [self.searchInput resignFirstResponder];
-}
-
--(void)aTime{
+    [sender removeFromSuperview];
     
-    if(![self.searchInput isFirstResponder])
-        [self atualizar:self];
-    
+    if (self.searchInput.text.length > 0)
+        [self searchBarSearchButtonClicked:nil];
 }
-- (IBAction)changeKeyboardType:(UISegmentedControl *)sender {
-    if ( sender.selectedSegmentIndex == 0 ) {   // 0 == "0-9"
-        self.searchInput.keyboardType = UIKeyboardTypeNumberPad ;
-    } else {    // "A-Z"
-        self.searchInput.keyboardType = UIKeyboardTypeDefault ;
-    }
-
-    [self.searchInput reloadInputViews];
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
+    UIButton *overlayButton = [[UIButton alloc] initWithFrame:self.view.frame];
+    overlayButton.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3f];
+    [overlayButton addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:overlayButton];
 }
-
-- (IBAction)searchClick:(id)sender {
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     [self.searchInput resignFirstResponder];
     [self.markerForOrder removeAllObjects];
     [self.mapView clear];
     
     [self.view makeToastActivity];
-
+    
     [self atualizar:self];
 }
 
+- (void)aTime {
+    if(![self.searchInput isFirstResponder])
+        [self atualizar:self];
+}
 - (void)atualizar:(id)sender {
     [self.searchInput resignFirstResponder];
     
@@ -207,14 +162,11 @@
     }
 }
 
-- (void)setBusesData:(NSArray *)busesData
-{
+- (void)setBusesData:(NSArray*)busesData {
     _busesData = busesData ;
     [self updateMarkers];
 }
-
-- (void)updateMarkers
-{
+- (void)updateMarkers {
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
         
@@ -226,9 +178,10 @@
             [self.markerForOrder setValue:marca forKey:busData.order];
         }
         
-        marca.title = [busData.lineNumber description] ;
-        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %d %@", busData.order, [busData.velocity doubleValue], delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
-        marca.position = busData.location.coordinate ;
+        marca.title = [busData.lineNumber description];
+        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %ld %@", busData.order,
+                         [busData.velocity doubleValue], (long)delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
+        marca.position = busData.location.coordinate;
         
         UIImage *imagem;
         if (delayInformation > 10)
@@ -249,27 +202,22 @@
         self.mapView.selectedMarker = selectedMarker ;
     }    
 }
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     [self.locationManager stopUpdatingLocation];
     
     CLLocation *location = [locations lastObject];
     self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:11];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ( [segue.identifier isEqualToString:@"viewOptions"] ) {
         OptionsViewController *optionsVC = segue.destinationViewController ;
         optionsVC.delegate = self ;
     }
 }
 
-- (void)doneOptionsView
-{
+- (void)doneOptionsView {
     // Atualiza opções do mapa
-    [self updateMapOptions];
 }
 
 @end
