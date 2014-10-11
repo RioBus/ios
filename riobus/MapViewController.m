@@ -49,9 +49,11 @@
 }
 - (void)viewWillAppear:(BOOL)animated {
     CLLocation *location = [self.mapView myLocation];
-    if (location) self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:CAMERA_CURRENT_LOCATION_ZOOM];
+    if (location) self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate
+                                                                       zoom:CAMERA_CURRENT_LOCATION_ZOOM];
     else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
-                                                           longitude:CAMERA_DEFAULT_LONGITUDE zoom:CAMERA_DEFAULT_ZOOM];
+                                                           longitude:CAMERA_DEFAULT_LONGITUDE
+                                                                zoom:CAMERA_DEFAULT_ZOOM];
 }
 
 - (CLLocationManager*)locationManager {
@@ -100,6 +102,7 @@
     }
 }
 
+//Keyboard/SearchBar related functions
 - (void)hideKeyboard:(UIButton *)sender {
     [self.searchInput resignFirstResponder];
     [sender removeFromSuperview];
@@ -184,12 +187,9 @@
         marca.position = busData.location.coordinate;
         
         UIImage *imagem;
-        if (delayInformation > 10)
-            imagem = [UIImage imageNamed:@"bus-red.png"];
-        else if (delayInformation > 5)
-            imagem = [UIImage imageNamed:@"bus-yellow.png"];
-        else
-            imagem = [UIImage imageNamed:@"bus-green.png"];
+             if (delayInformation > 10) imagem = [UIImage imageNamed:@"bus-red.png"];
+        else if (delayInformation > 5)  imagem = [UIImage imageNamed:@"bus-yellow.png"];
+        else                            imagem = [UIImage imageNamed:@"bus-green.png"];
         
         marca.icon = imagem;
     }];
@@ -209,15 +209,16 @@
     self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:11];
 }
 
+- (void)doneOptionsView {
+    // Atualiza opções do mapa
+}
+
+//Segue que muda para a tela de Sobre
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ( [segue.identifier isEqualToString:@"viewOptions"] ) {
         OptionsViewController *optionsVC = segue.destinationViewController ;
         optionsVC.delegate = self ;
     }
-}
-
-- (void)doneOptionsView {
-    // Atualiza opções do mapa
 }
 
 @end
