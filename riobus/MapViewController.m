@@ -209,10 +209,6 @@
     self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:11];
 }
 
-- (void)doneOptionsView {
-    // Atualiza opções do mapa
-}
-
 //Segue que muda para a tela de Sobre
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ( [segue.identifier isEqualToString:@"viewOptions"] ) {
