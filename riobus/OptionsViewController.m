@@ -29,7 +29,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.delegate doneOptionsView];
 }
 
 - (IBAction)closeAboutWindow:(id)sender{
