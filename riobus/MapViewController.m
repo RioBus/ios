@@ -31,6 +31,10 @@
 #define CAMERA_DEFAULT_ZOOM                 12
 #define CAMERA_CURRENT_LOCATION_ZOOM        14
 
+#define BUS_ROUTE_SHAPE_ID_INDEX            4
+#define BUS_ROUTE_LATITUDE_INDEX            5
+#define BUS_ROUTE_LONGITUDE_INDEX           6
+
 @implementation MapViewController
 
 - (void)viewDidLoad {
@@ -41,19 +45,21 @@
 
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    [self.locationManager startUpdatingLocation];
     
     self.mapView.mapType = kGMSTypeNormal;
     self.mapView.trafficEnabled = YES;
     self.mapView.myLocationEnabled = YES;
+    
+    [self.locationManager startUpdatingLocation];
 }
 - (void)viewWillAppear:(BOOL)animated {
     CLLocation *location = [self.mapView myLocation];
-    if (location) self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate
-                                                                       zoom:CAMERA_CURRENT_LOCATION_ZOOM];
-    else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
-                                                           longitude:CAMERA_DEFAULT_LONGITUDE
-                                                                zoom:CAMERA_DEFAULT_ZOOM];
+    if (location) self.mapView.camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
+                                                                    longitude:location.coordinate.longitude
+                                                                         zoom:CAMERA_CURRENT_LOCATION_ZOOM];
+             else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
+                                                                    longitude:CAMERA_DEFAULT_LONGITUDE
+                                                                         zoom:CAMERA_DEFAULT_ZOOM];
 }
 
 - (CLLocationManager*)locationManager {
@@ -165,17 +171,84 @@
     }
 }
 
+- (CLLocationCoordinate2D)getCoordinateForLatitude:(NSString*)latitude andLongitude:(NSString*)longitude{
+    return CLLocationCoordinate2DMake([[[latitude  substringToIndex:[latitude  length]-2] substringFromIndex:1] doubleValue],
+                                      [[[longitude substringToIndex:[longitude length]-2] substringFromIndex:1] doubleValue]);
+}
+- (CGFloat)distanceFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation{
+    CGFloat medLatitude = (objectLocation.latitude + personLocation.latitude)/2;
+    CGFloat metersPerLatitude = 111132.954 - 559.822*cos(2*medLatitude) + 1.175*cos(4*medLatitude);
+    CGFloat metersPerLongitude = 111319.490*cos(medLatitude);
+    
+    CGFloat busYDist = (objectLocation.latitude - personLocation.latitude)*metersPerLatitude;
+    CGFloat busXDist = (objectLocation.longitude - personLocation.longitude)*metersPerLongitude;
+    
+    return sqrt(busYDist*busYDist + busXDist*busXDist);
+}
+- (CGFloat)timeFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation atSpeed:(CGFloat)speed{
+    return [self distanceFromObject:objectLocation toPerson:personLocation]/(speed/3.6);
+}
 - (void)setBusesData:(NSArray*)busesData {
     _busesData = busesData ;
     [self updateMarkers];
+}
+- (void)insertRouteOfBus:(BusData*)busData{
+    NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Rotas de Onibus"] mutableCopy];
+    if (!buses) buses = [[NSMutableDictionary alloc] init];
+    
+    NSString* csvData = [buses objectForKey:[busData.lineNumber description]];
+    if (!csvData){
+        NSString* csvPath = [NSString stringWithFormat:@"http://dadosabertos.rio.rj.gov.br/apiTransporte/Apresentacao/csv/gtfs/onibus/percursos/gtfs_linha%@-shapes.csv",[busData.lineNumber description]];
+        csvData = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:csvPath] encoding:NSASCIIStringEncoding error:nil];
+        [buses setObject:csvData forKey:[busData.lineNumber description]];
+        [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"Rotas de Onibus"];
+    }
+    if (csvData){
+        NSArray* pontosDoPercurso = [csvData componentsSeparatedByString:@"\n"];
+        NSArray* dadosDoPonto = [pontosDoPercurso[1] componentsSeparatedByString:@","];
+        
+        //Sistema para inserir pontos e evitar grandes ruídos
+        CLLocationCoordinate2D firstPoint = [self getCoordinateForLatitude:dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX]
+                                                              andLongitude:dadosDoPonto[BUS_ROUTE_LONGITUDE_INDEX]];
+        CLLocationCoordinate2D tempPoint;
+        
+        GMSMutablePath *path = [GMSMutablePath path];
+        NSString* shapeIdPoint = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
+        for (int x = 1; x<[pontosDoPercurso count]; x++){
+            dadosDoPonto = [pontosDoPercurso[x] componentsSeparatedByString:@","];
+            if ([dadosDoPonto count]==7){
+                shapeIdPoint = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
+                tempPoint = [self getCoordinateForLatitude:dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX]
+                                              andLongitude:dadosDoPonto[BUS_ROUTE_LONGITUDE_INDEX]];
+
+                if (![shapeIdPoint isEqualToString:dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX]]){
+                    GMSPolyline *rectangle = [GMSPolyline polylineWithPath:path];
+                    rectangle.strokeWidth = 2.0;
+                    rectangle.map = self.mapView;
+                    
+                    path = [GMSMutablePath path];
+                    shapeIdPoint = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
+                }
+                [path addCoordinate:tempPoint];
+            }
+        }
+        
+        [path addCoordinate:firstPoint];
+        GMSPolyline *rectangle = [GMSPolyline polylineWithPath:path];
+        rectangle.strokeWidth = 2.f;
+        rectangle.map = _mapView;
+    }
 }
 - (void)updateMarkers {
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
         
+        //Adiciona o percurso do ônibus
+        [self insertRouteOfBus:busData];
+        
         // Busca o marcador na "cache"
         GMSMarker *marca = self.markerForOrder[busData.order];
-        if ( !marca ) {
+        if (!marca){
             marca = [[GMSMarker alloc] init];
             [marca setMap:self.mapView];
             [self.markerForOrder setValue:marca forKey:busData.order];
@@ -186,16 +259,24 @@
                          [busData.velocity doubleValue], (long)delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
         marca.position = busData.location.coordinate;
         
+        /*
+        if ([self timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate atSpeed:[busData.velocity doubleValue]] < 300.0){
+            //Ação a ser tomada se ônibus estiver próximo a uma duração em segundos menor que a determinada
+            //O raio precisa ser avaliado e decidido
+            //Esse trecho do código está comentado por que o sistema de notificação ainda não está presente
+        }
+        */
+        
+        //Escolhe ícone de ônibus
         UIImage *imagem;
              if (delayInformation > 10) imagem = [UIImage imageNamed:@"bus-red.png"];
-        else if (delayInformation > 5)  imagem = [UIImage imageNamed:@"bus-yellow.png"];
+        else if (delayInformation > 5 ) imagem = [UIImage imageNamed:@"bus-yellow.png"];
         else                            imagem = [UIImage imageNamed:@"bus-green.png"];
-        
         marca.icon = imagem;
     }];
     
-    // Atuzalia infor-window corrente
-    if( self.mapView.selectedMarker ) {
+    // Atualizar info-window corrente
+    if(self.mapView.selectedMarker){
         // Forca atualizacao do marcador selecionado
         GMSMarker *selectedMarker = self.mapView.selectedMarker ;
         self.mapView.selectedMarker = nil ;
