@@ -193,6 +193,40 @@
     [self updateMarkers];
 }
 - (void)insertRouteOfBus:(BusData*)busData{
+    self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:[busData.lineNumber description] withCompletionHandler:^(NSArray *shapes, NSError *error) {
+        if (!error) {
+            NSArray *colors = @[
+                [UIColor redColor],
+                [UIColor greenColor],
+                [UIColor blueColor],
+                [UIColor orangeColor],
+            ];
+            __block NSInteger colorIdx = 0 ;
+            __block GMSCoordinateBounds *shapesBounds = nil ;
+            [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
+                GMSMutablePath *gmShape = [GMSMutablePath path];
+                [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
+                    [gmShape addCoordinate:location.coordinate];
+                }];
+                GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape] ;
+                polyLine.strokeColor = colors[colorIdx];
+                colorIdx = (colorIdx+1) % colors.count;
+                polyLine.strokeWidth = 2.0 ;
+                polyLine.map = self.mapView ;
+                // Atualiza bounds
+                if ( idxShape == 0 ) {
+                    shapesBounds = [[GMSCoordinateBounds alloc] initWithPath:gmShape] ;
+                } else {
+                    shapesBounds = [shapesBounds includingPath:gmShape];
+                }
+            }];
+            UIEdgeInsets edgeInsetsMap = UIEdgeInsetsMake(self.searchInput.frame.size.height+30, 20, 20, 20);
+            [self.mapView moveCamera:[GMSCameraUpdate fitBounds:shapesBounds withEdgeInsets:edgeInsetsMap]];
+        }
+    }];
+    
+    
+    
     NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Rotas de Onibus"] mutableCopy];
     if (!buses) buses = [[NSMutableDictionary alloc] init];
     
