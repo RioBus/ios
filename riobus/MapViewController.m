@@ -195,19 +195,92 @@
     _busesData = busesData ;
     [self updateMarkers];
 }
+<<<<<<< HEAD
 - (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex{
     self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName withCompletionHandler:^(NSArray *shapes, NSError *error) {
         if (!error) {
+=======
+- (void)insertRouteOfBus:(BusData*)busData{
+    self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:[busData.lineNumber description] withCompletionHandler:^(NSArray *shapes, NSError *error) {
+        if (!error) {
+            NSArray *colors = @[
+                [UIColor redColor],
+                [UIColor greenColor],
+                [UIColor blueColor],
+                [UIColor orangeColor],
+            ];
+            __block NSInteger colorIdx = 0 ;
+            __block GMSCoordinateBounds *shapesBounds = nil ;
+>>>>>>> FETCH_HEAD
             [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
                 GMSMutablePath *gmShape = [GMSMutablePath path];
                 [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
                     [gmShape addCoordinate:location.coordinate];
                 }];
                 GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape] ;
+<<<<<<< HEAD
                 polyLine.strokeColor = self.busesColors[colorIndex];
                 polyLine.strokeWidth = 2.0;
                 polyLine.map = self.mapView;
             }];
+=======
+                polyLine.strokeColor = colors[colorIdx];
+                colorIdx = (colorIdx+1) % colors.count;
+                polyLine.strokeWidth = 2.0 ;
+                polyLine.map = self.mapView ;
+                // Atualiza bounds
+                if ( idxShape == 0 ) {
+                    shapesBounds = [[GMSCoordinateBounds alloc] initWithPath:gmShape] ;
+                } else {
+                    shapesBounds = [shapesBounds includingPath:gmShape];
+                }
+            }];
+            UIEdgeInsets edgeInsetsMap = UIEdgeInsetsMake(self.searchInput.frame.size.height+30, 20, 20, 20);
+            [self.mapView moveCamera:[GMSCameraUpdate fitBounds:shapesBounds withEdgeInsets:edgeInsetsMap]];
+        }
+    }];
+    
+    
+    
+    NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Rotas de Onibus"] mutableCopy];
+    if (!buses) buses = [[NSMutableDictionary alloc] init];
+    
+    NSString* csvData = [buses objectForKey:[busData.lineNumber description]];
+    if (!csvData){
+        NSString* csvPath = [NSString stringWithFormat:@"http://dadosabertos.rio.rj.gov.br/apiTransporte/Apresentacao/csv/gtfs/onibus/percursos/gtfs_linha%@-shapes.csv",[busData.lineNumber description]];
+        csvData = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:csvPath] encoding:NSASCIIStringEncoding error:nil];
+        [buses setObject:csvData forKey:[busData.lineNumber description]];
+        [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"Rotas de Onibus"];
+    }
+    if (csvData){
+        NSArray* pontosDoPercurso = [csvData componentsSeparatedByString:@"\n"];
+        NSArray* dadosDoPonto = [pontosDoPercurso[1] componentsSeparatedByString:@","];
+        
+        //Sistema para inserir pontos e evitar grandes ruídos
+        CLLocationCoordinate2D firstPoint = [self getCoordinateForLatitude:dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX]
+                                                              andLongitude:dadosDoPonto[BUS_ROUTE_LONGITUDE_INDEX]];
+        CLLocationCoordinate2D tempPoint;
+        
+        GMSMutablePath *path = [GMSMutablePath path];
+        NSString* shapeIdPoint = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
+        for (int x = 1; x<[pontosDoPercurso count]; x++){
+            dadosDoPonto = [pontosDoPercurso[x] componentsSeparatedByString:@","];
+            if ([dadosDoPonto count]==7){
+                shapeIdPoint = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
+                tempPoint = [self getCoordinateForLatitude:dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX]
+                                              andLongitude:dadosDoPonto[BUS_ROUTE_LONGITUDE_INDEX]];
+
+                if (![shapeIdPoint isEqualToString:dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX]]){
+                    GMSPolyline *rectangle = [GMSPolyline polylineWithPath:path];
+                    rectangle.strokeWidth = 2.0;
+                    rectangle.map = self.mapView;
+                    
+                    path = [GMSMutablePath path];
+                    shapeIdPoint = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
+                }
+                [path addCoordinate:tempPoint];
+            }
+>>>>>>> FETCH_HEAD
         }
     }];
 }
