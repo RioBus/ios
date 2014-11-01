@@ -46,8 +46,7 @@
     return _jsonDateFormat ;
 }
 
-- (NSOperation *)loadBusLineShapeForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler
-{
+- (NSOperation *)loadBusLineShapeForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler{
     // Previne URL injection
     AFHTTPRequestOperation *operation;
     NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -58,7 +57,6 @@
     NSString* csvData = [buses objectForKey:webSafeNumber];
     if (!csvData){
         NSString *strUrl = [NSString stringWithFormat:@"http://dadosabertos.rio.rj.gov.br/apiTransporte/Apresentacao/csv/gtfs/onibus/percursos/gtfs_linha%@-shapes.csv", webSafeNumber];
-        NSLog(@"URL = %@" , strUrl);
         
         // Monta o request
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
@@ -89,21 +87,23 @@
         __block NSString *lastShapeId = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
         [pontosDoPercurso enumerateObjectsUsingBlock:^(NSString *shapeItem, NSUInteger idx, BOOL *stop) {
             NSArray* dadosDoPonto = [shapeItem componentsSeparatedByString:@","];
-            NSString *strLatitude = [dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX] stringByTrimmingCharactersInSet:quoteCharSet];
-            NSString *strLongitude = [dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX] stringByTrimmingCharactersInSet:quoteCharSet];
+            if ([dadosDoPonto count]>6){
+                NSString *strLatitude = [dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX] stringByTrimmingCharactersInSet:quoteCharSet];
+                NSString *strLongitude = [dadosDoPonto[BUS_ROUTE_LONGITUDE_INDEX] stringByTrimmingCharactersInSet:quoteCharSet];
             
-            CLLocation *location = [[CLLocation alloc] initWithLatitude:[strLatitude doubleValue] longitude:[strLongitude doubleValue]];
-            NSString *currShapeId = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:[strLatitude doubleValue] longitude:[strLongitude doubleValue]];
+                NSString *currShapeId = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
             
-            NSMutableArray *currShapeArray ;
-            if ( [lastShapeId isEqualToString:currShapeId] ) {
-                currShapeArray = [shapes lastObject];
-            } else {
-                currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
-                [shapes addObject:currShapeArray];
+                NSMutableArray *currShapeArray ;
+                if ( [lastShapeId isEqualToString:currShapeId] ) {
+                    currShapeArray = [shapes lastObject];
+                } else {
+                    currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
+                    [shapes addObject:currShapeArray];
+                }
+                lastShapeId = currShapeId ;
+                [currShapeArray addObject:location];
             }
-            lastShapeId = currShapeId ;
-            [currShapeArray addObject:location];
         }];
         
         handler(shapes, nil);
@@ -116,7 +116,9 @@
 
 - (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {
     // Previne URL injection
-    NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSMutableArray* buses = [[lineNumber componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" ,;"]] mutableCopy];
+    [buses removeObjectIdenticalTo:@""];
+    NSString* webSafeNumber = [[buses componentsJoinedByString:@","] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     NSString *strUrl = [NSString stringWithFormat:@"http://riob.us/proxy.php?s=1&linha=%@", webSafeNumber];
     

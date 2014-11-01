@@ -19,6 +19,7 @@
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
 @property (strong, nonatomic) NSTimer *updateTimer;
+@property (strong, nonatomic) NSArray* busesColors;
 @property (weak,   nonatomic) NSOperation *lastRequest;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
@@ -60,6 +61,8 @@
              else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
                                                                     longitude:CAMERA_DEFAULT_LONGITUDE
                                                                          zoom:CAMERA_DEFAULT_ZOOM];
+    self.busesColors = @[[UIColor blueColor], [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
+                         [UIColor magentaColor], [UIColor blackColor], [UIColor yellowColor], [UIColor redColor], [UIColor greenColor]];
 }
 
 - (CLLocationManager*)locationManager {
@@ -192,59 +195,30 @@
     _busesData = busesData ;
     [self updateMarkers];
 }
-- (void)insertRouteOfBus:(BusData*)busData{
-    NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Rotas de Onibus"] mutableCopy];
-    if (!buses) buses = [[NSMutableDictionary alloc] init];
-    
-    NSString* csvData = [buses objectForKey:[busData.lineNumber description]];
-    if (!csvData){
-        NSString* csvPath = [NSString stringWithFormat:@"http://dadosabertos.rio.rj.gov.br/apiTransporte/Apresentacao/csv/gtfs/onibus/percursos/gtfs_linha%@-shapes.csv",[busData.lineNumber description]];
-        csvData = [[NSString alloc] initWithContentsOfURL:[NSURL URLWithString:csvPath] encoding:NSASCIIStringEncoding error:nil];
-        [buses setObject:csvData forKey:[busData.lineNumber description]];
-        [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"Rotas de Onibus"];
-    }
-    if (csvData){
-        NSArray* pontosDoPercurso = [csvData componentsSeparatedByString:@"\n"];
-        NSArray* dadosDoPonto = [pontosDoPercurso[1] componentsSeparatedByString:@","];
-        
-        //Sistema para inserir pontos e evitar grandes ruídos
-        CLLocationCoordinate2D firstPoint = [self getCoordinateForLatitude:dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX]
-                                                              andLongitude:dadosDoPonto[BUS_ROUTE_LONGITUDE_INDEX]];
-        CLLocationCoordinate2D tempPoint;
-        
-        GMSMutablePath *path = [GMSMutablePath path];
-        NSString* shapeIdPoint = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
-        for (int x = 1; x<[pontosDoPercurso count]; x++){
-            dadosDoPonto = [pontosDoPercurso[x] componentsSeparatedByString:@","];
-            if ([dadosDoPonto count]==7){
-                shapeIdPoint = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
-                tempPoint = [self getCoordinateForLatitude:dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX]
-                                              andLongitude:dadosDoPonto[BUS_ROUTE_LONGITUDE_INDEX]];
-
-                if (![shapeIdPoint isEqualToString:dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX]]){
-                    GMSPolyline *rectangle = [GMSPolyline polylineWithPath:path];
-                    rectangle.strokeWidth = 2.0;
-                    rectangle.map = self.mapView;
-                    
-                    path = [GMSMutablePath path];
-                    shapeIdPoint = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
-                }
-                [path addCoordinate:tempPoint];
-            }
+- (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex{
+    self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName withCompletionHandler:^(NSArray *shapes, NSError *error) {
+        if (!error) {
+            [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
+                GMSMutablePath *gmShape = [GMSMutablePath path];
+                [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
+                    [gmShape addCoordinate:location.coordinate];
+                }];
+                GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape] ;
+                polyLine.strokeColor = self.busesColors[colorIndex];
+                polyLine.strokeWidth = 2.0;
+                polyLine.map = self.mapView;
+            }];
         }
-        
-        [path addCoordinate:firstPoint];
-        GMSPolyline *rectangle = [GMSPolyline polylineWithPath:path];
-        rectangle.strokeWidth = 2.f;
-        rectangle.map = _mapView;
-    }
+    }];
 }
 - (void)updateMarkers {
+    __block NSInteger colorIndex = 0;
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
         
         //Adiciona o percurso do ônibus
-        [self insertRouteOfBus:busData];
+        [self insertRouteOfBus:[busData.lineNumber description] withColorIndex:colorIndex];
+        colorIndex = (colorIndex+1)%self.busesColors.count;
         
         // Busca o marcador na "cache"
         GMSMarker *marca = self.markerForOrder[busData.order];
@@ -268,7 +242,10 @@
         */
         
         //Escolhe ícone de ônibus
-        UIImage *imagem;
+        
+        //Ler para usar novo tipo de ícone: Bitmap Images and Image Masks
+        
+        UIImage* imagem = nil;
              if (delayInformation > 10) imagem = [UIImage imageNamed:@"bus-red.png"];
         else if (delayInformation > 5 ) imagem = [UIImage imageNamed:@"bus-yellow.png"];
         else                            imagem = [UIImage imageNamed:@"bus-green.png"];
