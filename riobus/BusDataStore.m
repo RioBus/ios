@@ -116,9 +116,7 @@
 
 - (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {
     // Previne URL injection
-    NSMutableArray* buses = [[lineNumber componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" ,;"]] mutableCopy];
-    [buses removeObjectIdenticalTo:@""];
-    NSString* webSafeNumber = [[buses componentsJoinedByString:@","] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString* webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     NSString *strUrl = [NSString stringWithFormat:@"http://riob.us/proxy.php?s=1&linha=%@", webSafeNumber];
     

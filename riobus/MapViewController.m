@@ -13,6 +13,7 @@
 #import "BusDataStore.h"
 #import <Toast/Toast+UIView.h>
 #import "OptionsViewController.h"
+#import "UIBusIcon.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -38,6 +39,8 @@
 
 @implementation MapViewController
 
+NSInteger colorIndex = 0;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -61,8 +64,8 @@
              else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
                                                                     longitude:CAMERA_DEFAULT_LONGITUDE
                                                                          zoom:CAMERA_DEFAULT_ZOOM];
-    self.busesColors = @[[UIColor blueColor], [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
-                         [UIColor magentaColor], [UIColor blackColor], [UIColor yellowColor], [UIColor redColor], [UIColor greenColor]];
+    self.busesColors = @[[UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
+                         [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
 }
 
 - (CLLocationManager*)locationManager {
@@ -140,34 +143,48 @@
         [self atualizar:self];
 }
 - (void)atualizar:(id)sender {
+    colorIndex = -1;
     [self.searchInput resignFirstResponder];
     
-    if ( self.lastRequest ) {
+    if (self.lastRequest) {
         NSLog(@"Cancelando o request antigo %@", self.lastRequest);
         [self.lastRequest cancel];
     }
     
-    if ( self.searchInput.text.length > 0 ) {
-        self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:self.searchInput.text withCompletionHandler:^(NSArray *busesData, NSError *error) {
+    if (self.searchInput.text.length>0){
+        NSMutableArray* buses = [[self.searchInput.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" ,;."]] mutableCopy];
+        [buses removeObjectIdenticalTo:@""];
+                                   
+        for (NSString* busLineNumber in buses){
+            colorIndex = (colorIndex+1)%self.busesColors.count;
+            [self insertRouteOfBus:busLineNumber withColorIndex:colorIndex];
+        }
+        
+        self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:[buses componentsJoinedByString:@","]
+                                                             withCompletionHandler:^(NSArray *busesData, NSError *error) {
             [self.view hideToastActivity];
-            if ( error ) {
+            if (error){
                 // Mostra Toast parecido com o Android
                 if ( error.code != NSURLErrorCancelled ) { // Erro ao cancelar um request
                     [self.view makeToast:[error localizedDescription]];
                 }
                 
                 // Atualiza informacoes dos marcadores
+                //Adiciona o percurso do ônibus
+                
+                
                 [self updateMarkers];
             } else {
-                self.busesData = busesData ;
+                self.busesData = busesData;
                 
-                if ( self.busesData.count == 0 ) {
+                if (self.busesData.count == 0){
                     NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
                     [self.view makeToast:msg];
                 } else {
                     // Ajusta o timer
                     [self.updateTimer invalidate];
-                    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(aTime) userInfo:nil repeats:NO];
+                    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(aTime)
+                                                                      userInfo:nil repeats:NO];
                 }
             }
         }];
@@ -191,12 +208,15 @@
 - (CGFloat)timeFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation atSpeed:(CGFloat)speed{
     return [self distanceFromObject:objectLocation toPerson:personLocation]/(speed/3.6);
 }
+
 - (void)setBusesData:(NSArray*)busesData {
     _busesData = busesData ;
     [self updateMarkers];
 }
+
 - (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex{
-    self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName withCompletionHandler:^(NSArray *shapes, NSError *error) {
+    self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
+                                                              withCompletionHandler:^(NSArray *shapes, NSError *error) {
         if (!error) {
             [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
                 GMSMutablePath *gmShape = [GMSMutablePath path];
@@ -211,14 +231,9 @@
         }
     }];
 }
-- (void)updateMarkers {
-    __block NSInteger colorIndex = 0;
+- (void)updateMarkers{
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
-        
-        //Adiciona o percurso do ônibus
-        [self insertRouteOfBus:[busData.lineNumber description] withColorIndex:colorIndex];
-        colorIndex = (colorIndex+1)%self.busesColors.count;
         
         // Busca o marcador na "cache"
         GMSMarker *marca = self.markerForOrder[busData.order];
@@ -228,10 +243,11 @@
             [self.markerForOrder setValue:marca forKey:busData.order];
         }
         
-        marca.title = [busData.lineNumber description];
         marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %ld %@", busData.order,
-                         [busData.velocity doubleValue], (long)delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
+                             [busData.velocity doubleValue], (long)delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
+        marca.title = [busData.lineNumber description];
         marca.position = busData.location.coordinate;
+        marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation andColor:self.busesColors[colorIndex]];
         
         /*
         if ([self timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate atSpeed:[busData.velocity doubleValue]] < 300.0){
@@ -240,24 +256,14 @@
             //Esse trecho do código está comentado por que o sistema de notificação ainda não está presente
         }
         */
-        
-        //Escolhe ícone de ônibus
-        
-        //Ler para usar novo tipo de ícone: Bitmap Images and Image Masks
-        
-        UIImage* imagem = nil;
-             if (delayInformation > 10) imagem = [UIImage imageNamed:@"bus-red.png"];
-        else if (delayInformation > 5 ) imagem = [UIImage imageNamed:@"bus-yellow.png"];
-        else                            imagem = [UIImage imageNamed:@"bus-green.png"];
-        marca.icon = imagem;
     }];
     
     // Atualizar info-window corrente
     if(self.mapView.selectedMarker){
         // Forca atualizacao do marcador selecionado
-        GMSMarker *selectedMarker = self.mapView.selectedMarker ;
-        self.mapView.selectedMarker = nil ;
-        self.mapView.selectedMarker = selectedMarker ;
+        GMSMarker *selectedMarker = self.mapView.selectedMarker;
+        self.mapView.selectedMarker = nil;
+        self.mapView.selectedMarker = selectedMarker;
     }    
 }
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {

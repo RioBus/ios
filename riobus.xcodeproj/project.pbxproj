@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		636058501A0528FC00E3E4CD /* bus-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 6360584E1A0528FC00E3E4CD /* bus-gray.png */; };
+		636058511A0528FC00E3E4CD /* bus-gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6360584F1A0528FC00E3E4CD /* bus-gray@2x.png */; };
+		636058541A05297700E3E4CD /* UIBusIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 636058531A05297700E3E4CD /* UIBusIcon.m */; };
 		63CA9BA719E9A29700AE9569 /* about.png in Resources */ = {isa = PBXBuildFile; fileRef = 63CA9BA619E9A29700AE9569 /* about.png */; };
 		681A7F45196722530006C335 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F44196722530006C335 /* Foundation.framework */; };
 		681A7F47196722530006C335 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F46196722530006C335 /* CoreGraphics.framework */; };
@@ -49,6 +52,10 @@
 
 /* Begin PBXFileReference section */
 		27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.release.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.release.xcconfig"; sourceTree = "<group>"; };
+		6360584E1A0528FC00E3E4CD /* bus-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bus-gray.png"; sourceTree = "<group>"; };
+		6360584F1A0528FC00E3E4CD /* bus-gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bus-gray@2x.png"; sourceTree = "<group>"; };
+		636058521A05297700E3E4CD /* UIBusIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBusIcon.h; sourceTree = "<group>"; };
+		636058531A05297700E3E4CD /* UIBusIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBusIcon.m; sourceTree = "<group>"; };
 		639F57FE19F2B39200CE6B7F /* librpcsvc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = librpcsvc.dylib; path = usr/lib/librpcsvc.dylib; sourceTree = SDKROOT; };
 		63CA9BA619E9A29700AE9569 /* about.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = about.png; sourceTree = "<group>"; };
 		681A7F41196722530006C335 /* riobus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = riobus.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -158,6 +165,8 @@
 				681A7F79196725C40006C335 /* SDKDemoAPIKey.h */,
 				681A7F53196722540006C335 /* AppDelegate.h */,
 				681A7F54196722540006C335 /* AppDelegate.m */,
+				636058521A05297700E3E4CD /* UIBusIcon.h */,
+				636058531A05297700E3E4CD /* UIBusIcon.m */,
 				681A7F56196722540006C335 /* Main.storyboard */,
 				681A7F5C196722540006C335 /* Images.xcassets */,
 				681A7F4B196722530006C335 /* Supporting Files */,
@@ -202,6 +211,8 @@
 			isa = PBXGroup;
 			children = (
 				63CA9BA619E9A29700AE9569 /* about.png */,
+				6360584E1A0528FC00E3E4CD /* bus-gray.png */,
+				6360584F1A0528FC00E3E4CD /* bus-gray@2x.png */,
 				681A7F81196731410006C335 /* bus-green.png */,
 				681A7F82196731410006C335 /* bus-green@2x.png */,
 				681A7F84196731410006C335 /* bus-red.png */,
@@ -318,8 +329,10 @@
 				681A7F4F196722530006C335 /* InfoPlist.strings in Resources */,
 				681A7F92196731410006C335 /* bus-yellow.png in Resources */,
 				681A7F96196731410006C335 /* icon120@2x.png in Resources */,
+				636058511A0528FC00E3E4CD /* bus-gray@2x.png in Resources */,
 				681A7F91196731410006C335 /* bus-red@2x.png in Resources */,
 				681A7F8E196731410006C335 /* bus-green@2x.png in Resources */,
+				636058501A0528FC00E3E4CD /* bus-gray.png in Resources */,
 				681A7FAE196890AB0006C335 /* icon120.png in Resources */,
 				681A7F58196722540006C335 /* Main.storyboard in Resources */,
 				681A7F93196731410006C335 /* bus-yellow@2x.png in Resources */,
@@ -376,6 +389,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				681A7F9E196824890006C335 /* BusData.m in Sources */,
+				636058541A05297700E3E4CD /* UIBusIcon.m in Sources */,
 				681A7F7C196727C60006C335 /* MapViewController.m in Sources */,
 				681A7F55196722540006C335 /* AppDelegate.m in Sources */,
 				681A7F51196722530006C335 /* main.m in Sources */,
