@@ -17,6 +17,7 @@
 @property NSNumber *velocity ;
 @property CLLocation *location ;
 
+- (NSString*) humanReadableDelay;
 - (NSInteger) delayInMinutes ;
 - (NSInteger) delayInSeconds ;
 
