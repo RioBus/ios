@@ -13,9 +13,11 @@
 #import "BusDataStore.h"
 #import <Toast/Toast+UIView.h>
 #import "OptionsViewController.h"
+#import "BusSuggestionsTable.h"
 #import "UIBusIcon.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
+@property (strong, nonatomic) BusSuggestionsTable *suggestionTable;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
@@ -38,12 +40,14 @@
 #define BUS_ROUTE_LATITUDE_INDEX            5
 #define BUS_ROUTE_LONGITUDE_INDEX           6
 
+#define IOS_KEYBOARD_HEIGHT_ON_PORTRAIT     216.0
+
 @implementation MapViewController
 
 NSInteger routeColorIndex = 0;
 NSInteger markerColorIndex = 0;
 
-- (void)viewDidLoad {
+- (void)viewDidLoad{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
@@ -58,7 +62,7 @@ NSInteger markerColorIndex = 0;
     
     [self.locationManager startUpdatingLocation];
 }
-- (void)viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated{
     CLLocation *location = [self.mapView myLocation];
     if (location) self.mapView.camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
                                                                     longitude:location.coordinate.longitude
@@ -69,15 +73,22 @@ NSInteger markerColorIndex = 0;
     self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
                          [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
                          [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
+    
+    _searchInput.tag = 22;
+    
+    int y = 20 + self.searchInput.frame.size.height;
+    CGRect tableRect = CGRectMake(0, y, [UIScreen mainScreen].bounds.size.width,
+                                  [UIScreen mainScreen].bounds.size.height - y - IOS_KEYBOARD_HEIGHT_ON_PORTRAIT);
+    _suggestionTable = [[BusSuggestionsTable alloc] initWithFrame:tableRect];
 }
 
-- (CLLocationManager*)locationManager {
+- (CLLocationManager*)locationManager{
     // Se variável não existe, a mesma é criada no momento da chamada
     if (!_locationManager) _locationManager = [[CLLocationManager alloc] init];
     return _locationManager ;
 }
 
-- (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve {
+- (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve{
     switch (curve) {
         case UIViewAnimationCurveEaseInOut: return UIViewAnimationOptionCurveEaseInOut;
         case UIViewAnimationCurveEaseIn:    return UIViewAnimationOptionCurveEaseIn;
@@ -86,7 +97,7 @@ NSInteger markerColorIndex = 0;
     }
     return UIViewAnimationOptionCurveEaseInOut;
 }
-- (void)setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info {
+- (void)setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info{
     // Obtém dados da animação
     UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
     UIViewAnimationOptions animationOptions = UIViewAnimationOptionBeginFromCurrentState;
@@ -117,23 +128,27 @@ NSInteger markerColorIndex = 0;
     }
 }
 
-//Funções relacionadas ao teclado e ao mecanismo de busca
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+//Funções relacionadas ao mecanismo de busca
+- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar{
     [self.searchInput resignFirstResponder];
     [self.markerForOrder removeAllObjects];
+    [self.suggestionTable removeFromSuperview];
     [self.mapView clear];
     
     [self.view makeToastActivity];
     
     [self atualizar:self];
 }
+- (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
+    [self.mapView.superview addSubview:_suggestionTable];
+}
 
-//Atualiza o mapa
-- (void)aTime {
+//Atualiza os dados para o carregamento do mapa
+- (void)aTime{
     if(![self.searchInput isFirstResponder])
         [self atualizar:self];
 }
-- (void)atualizar:(id)sender {
+- (void)atualizar:(id)sender{
     routeColorIndex = -1;
     markerColorIndex = -1;
     
@@ -148,8 +163,11 @@ NSInteger markerColorIndex = 0;
     
     if (self.searchInput.text.length>0){
         [self.lastRequests removeAllObjects];
-        NSMutableArray* buses = [[self.searchInput.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" ,;."]] mutableCopy];
-        [buses removeObjectIdenticalTo:@""];
+        NSCharacterSet* splitCharacters = [NSCharacterSet characterSetWithCharactersInString:@" ,;./\\&#-+"];
+        NSMutableArray* buses = [[self.searchInput.text componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
+        [buses removeObject:@""];
+        
+        [_suggestionTable addToRecentTable:[buses componentsJoinedByString:@", "]];
         
         for (NSString* busLineNumber in buses){
             routeColorIndex = (routeColorIndex+1)%self.busesColors.count;
@@ -184,6 +202,10 @@ NSInteger markerColorIndex = 0;
         }
     }
 }
+- (void)setBusesData:(NSArray*)busesData{
+    _busesData = busesData ;
+    [self updateMarkers];
+}
 
 //Funções para determinar a distância de um ônibus para a pessoa
 - (CLLocationCoordinate2D)getCoordinateForLatitude:(NSString*)latitude andLongitude:(NSString*)longitude{
@@ -204,11 +226,7 @@ NSInteger markerColorIndex = 0;
     return [self distanceFromObject:objectLocation toPerson:personLocation]/(speed/3.6);
 }
 
-//Função referentes ao carregamento do mapa
-- (void)setBusesData:(NSArray*)busesData {
-    _busesData = busesData ;
-    [self updateMarkers];
-}
+//Funções referentes ao carregamento do marcadores, da rota e do mapa
 - (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex{
     self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
                                                               withCompletionHandler:^(NSArray *shapes, NSError *error) {
@@ -263,7 +281,7 @@ NSInteger markerColorIndex = 0;
         self.mapView.selectedMarker = selectedMarker;
     }    
 }
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+- (void)locationManager:(CLLocationManager*)manager didUpdateLocations:(NSArray*)locations{
     [self.locationManager stopUpdatingLocation];
     
     CLLocation *location = [locations lastObject];
@@ -271,7 +289,7 @@ NSInteger markerColorIndex = 0;
 }
 
 //Segue que muda para a tela de Sobre
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender{
     if ( [segue.identifier isEqualToString:@"viewOptions"] ) {
         OptionsViewController *optionsVC = segue.destinationViewController ;
         optionsVC.delegate = self ;
