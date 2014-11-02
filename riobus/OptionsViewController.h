@@ -9,9 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @protocol OptionsViewControllerDelegate <NSObject>
-
-- (void) doneOptionsView;
-
 @end
 
 @interface OptionsViewController : UIViewController<UITextFieldDelegate>

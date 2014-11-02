@@ -13,12 +13,15 @@
 #import "BusDataStore.h"
 #import <Toast/Toast+UIView.h>
 #import "OptionsViewController.h"
+#import "UIBusIcon.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
 @property (strong, nonatomic) NSTimer *updateTimer;
+@property (strong, nonatomic) NSArray *busesColors;
+@property (weak,   nonatomic) NSMutableArray *lastRequests;
 @property (weak,   nonatomic) NSOperation *lastRequest;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
@@ -31,7 +34,14 @@
 #define CAMERA_DEFAULT_ZOOM                 12
 #define CAMERA_CURRENT_LOCATION_ZOOM        14
 
+#define BUS_ROUTE_SHAPE_ID_INDEX            4
+#define BUS_ROUTE_LATITUDE_INDEX            5
+#define BUS_ROUTE_LONGITUDE_INDEX           6
+
 @implementation MapViewController
+
+NSInteger routeColorIndex = 0;
+NSInteger markerColorIndex = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,19 +51,24 @@
 
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    [self.locationManager startUpdatingLocation];
     
     self.mapView.mapType = kGMSTypeNormal;
     self.mapView.trafficEnabled = YES;
     self.mapView.myLocationEnabled = YES;
+    
+    [self.locationManager startUpdatingLocation];
 }
 - (void)viewWillAppear:(BOOL)animated {
     CLLocation *location = [self.mapView myLocation];
-    if (location) self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate
-                                                                       zoom:CAMERA_CURRENT_LOCATION_ZOOM];
-    else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
-                                                           longitude:CAMERA_DEFAULT_LONGITUDE
-                                                                zoom:CAMERA_DEFAULT_ZOOM];
+    if (location) self.mapView.camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
+                                                                    longitude:location.coordinate.longitude
+                                                                         zoom:CAMERA_CURRENT_LOCATION_ZOOM];
+             else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
+                                                                    longitude:CAMERA_DEFAULT_LONGITUDE
+                                                                         zoom:CAMERA_DEFAULT_ZOOM];
+    self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
+                         [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
+                         [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
 }
 
 - (CLLocationManager*)locationManager {
@@ -102,20 +117,7 @@
     }
 }
 
-//Keyboard/SearchBar related functions
-- (void)hideKeyboard:(UIButton *)sender {
-    [self.searchInput resignFirstResponder];
-    [sender removeFromSuperview];
-    
-    if (self.searchInput.text.length > 0)
-        [self searchBarSearchButtonClicked:nil];
-}
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
-    UIButton *overlayButton = [[UIButton alloc] initWithFrame:self.view.frame];
-    overlayButton.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3f];
-    [overlayButton addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:overlayButton];
-}
+//Funções relacionadas ao teclado e ao mecanismo de busca
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     [self.searchInput resignFirstResponder];
     [self.markerForOrder removeAllObjects];
@@ -126,80 +128,139 @@
     [self atualizar:self];
 }
 
+//Atualiza o mapa
 - (void)aTime {
     if(![self.searchInput isFirstResponder])
         [self atualizar:self];
 }
 - (void)atualizar:(id)sender {
+    routeColorIndex = -1;
+    markerColorIndex = -1;
+    
     [self.searchInput resignFirstResponder];
     
-    if ( self.lastRequest ) {
-        NSLog(@"Cancelando o request antigo %@", self.lastRequest);
-        [self.lastRequest cancel];
+    if (self.lastRequests) {
+        for (NSOperation* request in self.lastRequests){
+            NSLog(@"Cancelando o request antigo %@", request);
+            [request cancel];
+        }
     }
     
-    if ( self.searchInput.text.length > 0 ) {
-        self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:self.searchInput.text withCompletionHandler:^(NSArray *busesData, NSError *error) {
-            [self.view hideToastActivity];
-            if ( error ) {
-                // Mostra Toast parecido com o Android
-                if ( error.code != NSURLErrorCancelled ) { // Erro ao cancelar um request
-                    [self.view makeToast:[error localizedDescription]];
-                }
+    if (self.searchInput.text.length>0){
+        [self.lastRequests removeAllObjects];
+        NSMutableArray* buses = [[self.searchInput.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" ,;."]] mutableCopy];
+        [buses removeObjectIdenticalTo:@""];
+        
+        for (NSString* busLineNumber in buses){
+            routeColorIndex = (routeColorIndex+1)%self.busesColors.count;
+            [self insertRouteOfBus:busLineNumber withColorIndex:routeColorIndex];
+            
+            self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
+                                                                 withCompletionHandler:^(NSArray *busesData, NSError *error) {
+                [self.view hideToastActivity];
+                if (error){
+                    // Mostra Toast parecido com o Android
+                    if (error.code != NSURLErrorCancelled) // Erro ao cancelar um request
+                        [self.view makeToast:[error localizedDescription]];
                 
-                // Atualiza informacoes dos marcadores
-                [self updateMarkers];
-            } else {
-                self.busesData = busesData ;
-                
-                if ( self.busesData.count == 0 ) {
-                    NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
-                    [self.view makeToast:msg];
+                    // Atualiza informacoes dos marcadores
+                    [self updateMarkers];
                 } else {
-                    // Ajusta o timer
-                    [self.updateTimer invalidate];
-                    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(aTime) userInfo:nil repeats:NO];
+                    self.busesData = busesData;
+                
+                    if (self.busesData.count == 0){
+                        NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
+                        [self.view makeToast:msg];
+                    } else {
+                        // Ajusta o timer
+                        [self.updateTimer invalidate];
+                        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(aTime)
+                                                                          userInfo:nil repeats:NO];
+                    }
                 }
-            }
-        }];
+            }];
+            
+            [self.lastRequests addObject:self.lastRequest];
+        }
     }
 }
 
+//Funções para determinar a distância de um ônibus para a pessoa
+- (CLLocationCoordinate2D)getCoordinateForLatitude:(NSString*)latitude andLongitude:(NSString*)longitude{
+    return CLLocationCoordinate2DMake([[[latitude  substringToIndex:[latitude  length]-2] substringFromIndex:1] doubleValue],
+                                      [[[longitude substringToIndex:[longitude length]-2] substringFromIndex:1] doubleValue]);
+}
+- (CGFloat)distanceFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation{
+    CGFloat medLatitude = (objectLocation.latitude + personLocation.latitude)/2;
+    CGFloat metersPerLatitude = 111132.954 - 559.822*cos(2*medLatitude) + 1.175*cos(4*medLatitude);
+    CGFloat metersPerLongitude = 111319.490*cos(medLatitude);
+    
+    CGFloat busYDist = (objectLocation.latitude - personLocation.latitude)*metersPerLatitude;
+    CGFloat busXDist = (objectLocation.longitude - personLocation.longitude)*metersPerLongitude;
+    
+    return sqrt(busYDist*busYDist + busXDist*busXDist);
+}
+- (CGFloat)timeFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation atSpeed:(CGFloat)speed{
+    return [self distanceFromObject:objectLocation toPerson:personLocation]/(speed/3.6);
+}
+
+//Função referentes ao carregamento do mapa
 - (void)setBusesData:(NSArray*)busesData {
     _busesData = busesData ;
     [self updateMarkers];
 }
-- (void)updateMarkers {
+- (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex{
+    self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
+                                                              withCompletionHandler:^(NSArray *shapes, NSError *error) {
+        if (!error) {
+            [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
+                GMSMutablePath *gmShape = [GMSMutablePath path];
+                [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
+                    [gmShape addCoordinate:location.coordinate];
+                }];
+                GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape] ;
+                polyLine.strokeColor = self.busesColors[colorIndex];
+                polyLine.strokeWidth = 2.0;
+                polyLine.map = self.mapView;
+            }];
+        }
+    }];
+}
+- (void)updateMarkers{
+    markerColorIndex = (markerColorIndex+1)%self.busesColors.count;
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
         
         // Busca o marcador na "cache"
         GMSMarker *marca = self.markerForOrder[busData.order];
-        if ( !marca ) {
+        if (!marca){
             marca = [[GMSMarker alloc] init];
             [marca setMap:self.mapView];
             [self.markerForOrder setValue:marca forKey:busData.order];
         }
         
+        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order,
+                             [busData.velocity doubleValue], [busData humanReadableDelay]];
         marca.title = [busData.lineNumber description];
-        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %ld %@", busData.order,
-                         [busData.velocity doubleValue], (long)delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
         marca.position = busData.location.coordinate;
+        marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation
+                                      andColor:self.busesColors[markerColorIndex]];
         
-        UIImage *imagem;
-             if (delayInformation > 10) imagem = [UIImage imageNamed:@"bus-red.png"];
-        else if (delayInformation > 5)  imagem = [UIImage imageNamed:@"bus-yellow.png"];
-        else                            imagem = [UIImage imageNamed:@"bus-green.png"];
-        
-        marca.icon = imagem;
+        /*
+        if ([self timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate atSpeed:[busData.velocity doubleValue]] < 300.0){
+            //Ação a ser tomada se ônibus estiver próximo a uma duração em segundos menor que a determinada
+            //O raio precisa ser avaliado e decidido
+            //Esse trecho do código está comentado por que o sistema de notificação ainda não está presente
+        }
+        */
     }];
     
-    // Atuzalia infor-window corrente
-    if( self.mapView.selectedMarker ) {
+    // Atualizar info-window corrente
+    if(self.mapView.selectedMarker){
         // Forca atualizacao do marcador selecionado
-        GMSMarker *selectedMarker = self.mapView.selectedMarker ;
-        self.mapView.selectedMarker = nil ;
-        self.mapView.selectedMarker = selectedMarker ;
+        GMSMarker *selectedMarker = self.mapView.selectedMarker;
+        self.mapView.selectedMarker = nil;
+        self.mapView.selectedMarker = selectedMarker;
     }    
 }
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
@@ -207,10 +268,6 @@
     
     CLLocation *location = [locations lastObject];
     self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:11];
-}
-
-- (void)doneOptionsView {
-    // Atualiza opções do mapa
 }
 
 //Segue que muda para a tela de Sobre
