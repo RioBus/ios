@@ -20,7 +20,8 @@
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
 @property (strong, nonatomic) NSTimer *updateTimer;
-@property (strong, nonatomic) NSArray* busesColors;
+@property (strong, nonatomic) NSArray *busesColors;
+@property (weak,   nonatomic) NSMutableArray *lastRequests;
 @property (weak,   nonatomic) NSOperation *lastRequest;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
@@ -39,7 +40,8 @@
 
 @implementation MapViewController
 
-NSInteger colorIndex = 0;
+NSInteger routeColorIndex = 0;
+NSInteger markerColorIndex = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -132,48 +134,54 @@ NSInteger colorIndex = 0;
         [self atualizar:self];
 }
 - (void)atualizar:(id)sender {
-    colorIndex = -1;
+    routeColorIndex = -1;
+    markerColorIndex = -1;
+    
     [self.searchInput resignFirstResponder];
     
-    if (self.lastRequest) {
-        NSLog(@"Cancelando o request antigo %@", self.lastRequest);
-        [self.lastRequest cancel];
+    if (self.lastRequests) {
+        for (NSOperation* request in self.lastRequests){
+            NSLog(@"Cancelando o request antigo %@", request);
+            [request cancel];
+        }
     }
     
     if (self.searchInput.text.length>0){
+        [self.lastRequests removeAllObjects];
         NSMutableArray* buses = [[self.searchInput.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" ,;."]] mutableCopy];
         [buses removeObjectIdenticalTo:@""];
-                                   
-        for (NSString* busLineNumber in buses){
-            colorIndex = (colorIndex+1)%self.busesColors.count;
-            [self insertRouteOfBus:busLineNumber withColorIndex:colorIndex];
-        }
         
-        self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:[buses componentsJoinedByString:@","]
-                                                             withCompletionHandler:^(NSArray *busesData, NSError *error) {
-            [self.view hideToastActivity];
-            if (error){
-                // Mostra Toast parecido com o Android
-                if ( error.code != NSURLErrorCancelled ) { // Erro ao cancelar um request
-                    [self.view makeToast:[error localizedDescription]];
-                }
+        for (NSString* busLineNumber in buses){
+            routeColorIndex = (routeColorIndex+1)%self.busesColors.count;
+            [self insertRouteOfBus:busLineNumber withColorIndex:routeColorIndex];
+            
+            self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
+                                                                 withCompletionHandler:^(NSArray *busesData, NSError *error) {
+                [self.view hideToastActivity];
+                if (error){
+                    // Mostra Toast parecido com o Android
+                    if (error.code != NSURLErrorCancelled) // Erro ao cancelar um request
+                        [self.view makeToast:[error localizedDescription]];
                 
-                // Atualiza informacoes dos marcadores
-                [self updateMarkers];
-            } else {
-                self.busesData = busesData;
-                
-                if (self.busesData.count == 0){
-                    NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
-                    [self.view makeToast:msg];
+                    // Atualiza informacoes dos marcadores
+                    [self updateMarkers];
                 } else {
-                    // Ajusta o timer
-                    [self.updateTimer invalidate];
-                    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(aTime)
-                                                                      userInfo:nil repeats:NO];
+                    self.busesData = busesData;
+                
+                    if (self.busesData.count == 0){
+                        NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
+                        [self.view makeToast:msg];
+                    } else {
+                        // Ajusta o timer
+                        [self.updateTimer invalidate];
+                        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(aTime)
+                                                                          userInfo:nil repeats:NO];
+                    }
                 }
-            }
-        }];
+            }];
+            
+            [self.lastRequests addObject:self.lastRequest];
+        }
     }
 }
 
@@ -219,6 +227,7 @@ NSInteger colorIndex = 0;
     }];
 }
 - (void)updateMarkers{
+    markerColorIndex = (markerColorIndex+1)%self.busesColors.count;
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
         
@@ -234,7 +243,8 @@ NSInteger colorIndex = 0;
                              [busData.velocity doubleValue], [busData humanReadableDelay]];
         marca.title = [busData.lineNumber description];
         marca.position = busData.location.coordinate;
-        marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation andColor:self.busesColors[colorIndex]];
+        marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation
+                                      andColor:self.busesColors[markerColorIndex]];
         
         /*
         if ([self timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate atSpeed:[busData.velocity doubleValue]] < 300.0){
