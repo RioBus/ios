@@ -64,7 +64,8 @@ NSInteger colorIndex = 0;
              else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
                                                                     longitude:CAMERA_DEFAULT_LONGITUDE
                                                                          zoom:CAMERA_DEFAULT_ZOOM];
-    self.busesColors = @[[UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
+    self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
+                         [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
                          [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
 }
 
@@ -114,20 +115,7 @@ NSInteger colorIndex = 0;
     }
 }
 
-//Keyboard/SearchBar related functions
-- (void)hideKeyboard:(UIButton *)sender {
-    [self.searchInput resignFirstResponder];
-    [sender removeFromSuperview];
-    
-    if (self.searchInput.text.length > 0)
-        [self searchBarSearchButtonClicked:nil];
-}
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar{
-    UIButton *overlayButton = [[UIButton alloc] initWithFrame:self.view.frame];
-    overlayButton.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3f];
-    [overlayButton addTarget:self action:@selector(hideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:overlayButton];
-}
+//Funções relacionadas ao teclado e ao mecanismo de busca
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     [self.searchInput resignFirstResponder];
     [self.markerForOrder removeAllObjects];
@@ -138,6 +126,7 @@ NSInteger colorIndex = 0;
     [self atualizar:self];
 }
 
+//Atualiza o mapa
 - (void)aTime {
     if(![self.searchInput isFirstResponder])
         [self atualizar:self];
@@ -170,9 +159,6 @@ NSInteger colorIndex = 0;
                 }
                 
                 // Atualiza informacoes dos marcadores
-                //Adiciona o percurso do ônibus
-                
-                
                 [self updateMarkers];
             } else {
                 self.busesData = busesData;
@@ -191,6 +177,7 @@ NSInteger colorIndex = 0;
     }
 }
 
+//Funções para determinar a distância de um ônibus para a pessoa
 - (CLLocationCoordinate2D)getCoordinateForLatitude:(NSString*)latitude andLongitude:(NSString*)longitude{
     return CLLocationCoordinate2DMake([[[latitude  substringToIndex:[latitude  length]-2] substringFromIndex:1] doubleValue],
                                       [[[longitude substringToIndex:[longitude length]-2] substringFromIndex:1] doubleValue]);
@@ -209,11 +196,11 @@ NSInteger colorIndex = 0;
     return [self distanceFromObject:objectLocation toPerson:personLocation]/(speed/3.6);
 }
 
+//Função referentes ao carregamento do mapa
 - (void)setBusesData:(NSArray*)busesData {
     _busesData = busesData ;
     [self updateMarkers];
 }
-
 - (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex{
     self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
                                                               withCompletionHandler:^(NSArray *shapes, NSError *error) {
@@ -243,8 +230,8 @@ NSInteger colorIndex = 0;
             [self.markerForOrder setValue:marca forKey:busData.order];
         }
         
-        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %ld %@", busData.order,
-                             [busData.velocity doubleValue], (long)delayInformation, (delayInformation == 1 ? @"minuto" : @"minutos")];
+        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order,
+                             [busData.velocity doubleValue], [busData humanReadableDelay]];
         marca.title = [busData.lineNumber description];
         marca.position = busData.location.coordinate;
         marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation andColor:self.busesColors[colorIndex]];

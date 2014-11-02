@@ -118,7 +118,7 @@
     // Previne URL injection
     NSString* webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSString *strUrl = [NSString stringWithFormat:@"http://riob.us/proxy.php?s=1&linha=%@", webSafeNumber];
+    NSString *strUrl = [NSString stringWithFormat:@"http://riob.us:81/?linha=%@&s=2", webSafeNumber];
     
     NSLog(@"URL = %@" , strUrl);
     

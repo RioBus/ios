@@ -12,6 +12,19 @@
 
 @implementation BusData
 
+- (NSString*)humanReadableDelay{
+    NSInteger value = [self delayInSeconds];
+    if (value<60)
+        return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"segundo" : @"segundos")];
+    
+    value/=60;
+    if (value<60)
+        return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"minuto" : @"minutos")];
+    
+    value/=60;
+    return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"hora" : @"horas")];
+}
+
 - (NSInteger)delayInMinutes {
     return [self delayInSeconds]/MINUTES_IN_HOUR;
 }
