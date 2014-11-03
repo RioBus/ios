@@ -47,6 +47,11 @@
 NSInteger routeColorIndex = 0;
 NSInteger markerColorIndex = 0;
 
+- (CGFloat)statusBarHeight{
+    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+    return MIN(statusBarSize.width, statusBarSize.height);
+}
+
 - (void)viewDidLoad{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -74,9 +79,10 @@ NSInteger markerColorIndex = 0;
                          [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
                          [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
     
+    //Tag usada para identificar buscador de dentro da tabela
     _searchInput.tag = 22;
     
-    int y = 20 + self.searchInput.frame.size.height;
+    int y = [self statusBarHeight] + self.searchInput.frame.size.height;
     CGRect tableRect = CGRectMake(0, y, [UIScreen mainScreen].bounds.size.width,
                                   [UIScreen mainScreen].bounds.size.height - y - IOS_KEYBOARD_HEIGHT_ON_PORTRAIT);
     _suggestionTable = [[BusSuggestionsTable alloc] initWithFrame:tableRect];
