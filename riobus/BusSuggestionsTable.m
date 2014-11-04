@@ -8,6 +8,9 @@
 
 #import "BusSuggestionsTable.h"
 
+#define FAVORITES_SECTION 0
+#define RECENTS_SECTION   1
+
 @implementation BusSuggestionsTable
 
 -(void)addToRecentTable:(NSString*)newOne{
@@ -87,8 +90,8 @@
     return 2;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0) return [_favorites count];
-    if (section == 1) return [_recents count];
+    if (section == FAVORITES_SECTION) return [_favorites count];
+    if (section == RECENTS_SECTION  ) return [_recents count];
     return 0;
 }
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -110,8 +113,8 @@
     
     [cardCell addSubview:[self generateFavoriteButton:![indexPath section] forIndex:[indexPath item] atFrame:buttonFrame]];
     
-    if ([indexPath section] == 0) nameText.text = _favorites[[indexPath item]];
-    if ([indexPath section] == 1) nameText.text = _recents[[indexPath item]];
+    if ([indexPath section] == FAVORITES_SECTION) nameText.text = _favorites[[indexPath item]];
+    if ([indexPath section] == RECENTS_SECTION  ) nameText.text = _recents[[indexPath item]];
     
     [cardCell addSubview:nameText];
     cardCell.textLabel.text = @"";
@@ -122,11 +125,11 @@
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     UISearchBar* searchInput;
     for (UIView* view in [self.superview subviews])
-        if (view.tag == 22) searchInput = (UISearchBar*)view;
+        if ([view isKindOfClass:[UISearchBar class]]) searchInput = (UISearchBar*)view;
     
     if (searchInput){
-        if ([indexPath section] == 0) [searchInput setText:_favorites[[indexPath section]]];
-        if ([indexPath section] == 1) [searchInput setText:_recents[[indexPath section]]];
+        if ([indexPath section] == FAVORITES_SECTION) [searchInput setText:_favorites[[indexPath section]]];
+        if ([indexPath section] == RECENTS_SECTION  ) [searchInput setText:_recents[[indexPath section]]];
         [searchInput.delegate searchBarSearchButtonClicked:searchInput];
     }
     
