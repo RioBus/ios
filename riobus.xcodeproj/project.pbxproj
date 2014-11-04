@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6331A56C1A08516E006BBFB5 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6331A56B1A08516E006BBFB5 /* GLKit.framework */; };
 		636058501A0528FC00E3E4CD /* bus-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 6360584E1A0528FC00E3E4CD /* bus-gray.png */; };
 		636058511A0528FC00E3E4CD /* bus-gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6360584F1A0528FC00E3E4CD /* bus-gray@2x.png */; };
 		636058541A05297700E3E4CD /* UIBusIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 636058531A05297700E3E4CD /* UIBusIcon.m */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.release.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.release.xcconfig"; sourceTree = "<group>"; };
+		6331A56B1A08516E006BBFB5 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		6360584E1A0528FC00E3E4CD /* bus-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bus-gray.png"; sourceTree = "<group>"; };
 		6360584F1A0528FC00E3E4CD /* bus-gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bus-gray@2x.png"; sourceTree = "<group>"; };
 		636058521A05297700E3E4CD /* UIBusIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIBusIcon.h; sourceTree = "<group>"; };
@@ -63,7 +65,6 @@
 		639261501A06A88400B9A53C /* BusSuggestionsTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusSuggestionsTable.m; sourceTree = "<group>"; };
 		639261521A06C22700B9A53C /* bookmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bookmark.png; sourceTree = "<group>"; };
 		639261531A06C22700B9A53C /* recent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = recent.png; sourceTree = "<group>"; };
-		639F57FE19F2B39200CE6B7F /* librpcsvc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = librpcsvc.dylib; path = usr/lib/librpcsvc.dylib; sourceTree = SDKROOT; };
 		63CA9BA619E9A29700AE9569 /* about.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = about.png; sourceTree = "<group>"; };
 		681A7F41196722530006C335 /* riobus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = riobus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		681A7F44196722530006C335 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -109,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6331A56C1A08516E006BBFB5 /* GLKit.framework in Frameworks */,
 				681A7F7E19672ACF0006C335 /* CoreLocation.framework in Frameworks */,
 				681A7F47196722530006C335 /* CoreGraphics.framework in Frameworks */,
 				681A7F49196722530006C335 /* UIKit.framework in Frameworks */,
@@ -153,7 +155,7 @@
 		681A7F43196722530006C335 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				639F57FE19F2B39200CE6B7F /* librpcsvc.dylib */,
+				6331A56B1A08516E006BBFB5 /* GLKit.framework */,
 				681A7F7D19672ACF0006C335 /* CoreLocation.framework */,
 				681A7F44196722530006C335 /* Foundation.framework */,
 				681A7F46196722530006C335 /* CoreGraphics.framework */,
