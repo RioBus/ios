@@ -16,6 +16,7 @@
 #define BUSDATA_IDX_LATITUDE        3
 #define BUSDATA_IDX_LONGITUDE       4
 #define BUSDATA_IDX_VELOCITY        5
+#define BUSDATA_IDX_DIRECTION       6
 
 #define BUS_ROUTE_SHAPE_ID_INDEX            4
 #define BUS_ROUTE_LATITUDE_INDEX            5
@@ -67,6 +68,7 @@
             NSString *response = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
             [buses setObject:response forKey:webSafeNumber];
             [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"Rotas de Onibus"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             // Chama "callback" de retorno na thread principal (evita problemas na atualizacao da interface)
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -117,7 +119,6 @@
 - (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {
     // Previne URL injection
     NSString* webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
     NSString *strUrl = [NSString stringWithFormat:@"http://riob.us:81/?linha=%@&s=2", webSafeNumber];
     
     NSLog(@"URL = %@" , strUrl);
@@ -142,6 +143,7 @@
             busData.lineNumber = [jsonBusData[BUSDATA_IDX_LINE_NUMBER] description];
             busData.velocity = jsonBusData[BUSDATA_IDX_VELOCITY];
             busData.location =  [[CLLocation alloc] initWithLatitude:[jsonBusData[BUSDATA_IDX_LATITUDE] doubleValue] longitude:[jsonBusData[BUSDATA_IDX_LONGITUDE] doubleValue]];
+            busData.direction = jsonBusData[BUSDATA_IDX_DIRECTION];
             
             [busesData addObject:busData];
         }];
