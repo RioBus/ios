@@ -54,7 +54,7 @@
                                 <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="search"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="namePhonePad" keyboardAppearance="light" returnKeyType="search"/>
                                 <connections>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="hSM-yE-dcJ"/>
                                 </connections>
@@ -170,7 +170,7 @@
                                     </fragment>
                                     <fragment>
                                         <string key="content">Digite o número de uma linha municipal da cidade do Rio de Janeiro e clique em "Buscar" para que as posições de todos os ônibus desta linha sejam exibidas.
-Legenda de cores dos ícones das posições dos ônibus:
+As bordas dos marcadores dos ônibus simbolizam o seguinte:
 </string>
                                         <attributes>
                                             <font key="NSFont" size="13" name="HelveticaNeue"/>
@@ -266,7 +266,7 @@ Este app foi desenvolvido para iOS por </string>
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content">Fred Souza Bruno Lima Magno Ferreira Daniel Andrade Bruno do Amaral
+                                        <string key="content">Fred Souza Bruno Lima Magno Ferreira Daniel Andrade Bruno do Amaral Vitor Miranda
 </string>
                                         <attributes>
                                             <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
@@ -307,7 +307,7 @@ Gostou do projeto? Quer colaborar? Quer saber como funciona? Quer reclamar? Conh
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i2a-dn-9tR">
-                                <rect key="frame" x="145" y="431" width="30" height="30"/>
+                                <rect key="frame" x="274" y="431" width="30" height="30"/>
                                 <state key="normal" title="OK">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -316,15 +316,26 @@ Gostou do projeto? Quer colaborar? Quer saber como funciona? Quer reclamar? Conh
                                     <action selector="closeAboutWindow:" destination="TAr-9s-PmU" eventType="touchUpInside" id="4Zo-Qg-dyV"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FWK-Od-CVk">
+                                <rect key="frame" x="16" y="431" width="96" height="30"/>
+                                <state key="normal" title="Limpar Cache">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="clearCache:" destination="TAr-9s-PmU" eventType="touchUpInside" id="GcS-Kb-Ubt"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="i2a-dn-9tR" firstAttribute="top" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="8" symbolic="YES" id="0OE-W3-nVW"/>
                             <constraint firstAttribute="bottom" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="57" id="AZh-49-H1m"/>
+                            <constraint firstItem="i2a-dn-9tR" firstAttribute="trailing" secondItem="YkP-DC-OOX" secondAttribute="trailing" id="Byl-U3-Ge0"/>
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="leading" secondItem="3m3-QU-KYY" secondAttribute="leadingMargin" id="CcG-RH-fL9"/>
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="top" secondItem="kB7-cd-FK6" secondAttribute="bottom" constant="8" symbolic="YES" id="FFP-h6-7FD"/>
+                            <constraint firstItem="FWK-Od-CVk" firstAttribute="baseline" secondItem="i2a-dn-9tR" secondAttribute="baseline" id="Rmj-UE-gVN"/>
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="trailing" secondItem="3m3-QU-KYY" secondAttribute="trailingMargin" id="RnI-04-90n"/>
-                            <constraint firstItem="i2a-dn-9tR" firstAttribute="centerX" secondItem="YkP-DC-OOX" secondAttribute="centerX" id="lbl-7o-wWa"/>
+                            <constraint firstItem="i2a-dn-9tR" firstAttribute="top" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="8" symbolic="YES" id="Sv2-xY-b2J"/>
+                            <constraint firstItem="FWK-Od-CVk" firstAttribute="leading" secondItem="YkP-DC-OOX" secondAttribute="leading" id="iBX-tQ-GAt"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="lds-IN-wQg">
