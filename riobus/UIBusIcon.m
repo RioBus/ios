@@ -8,11 +8,14 @@
 
 #import "UIBusIcon.h"
 
+<<<<<<< HEAD
 #define RED_BORDER_LIMIT    10
 #define YELLOW_BORDER_LIMIT 5
 
 #define DEFAULT_FONT_SIZE   18
 
+=======
+>>>>>>> FETCH_HEAD
 @implementation UIImage (UIBusIconImage)
 -(UIImage*)imageByCombiningImage:(UIImage*)firstImage{
     UIImage *image = nil;
@@ -54,7 +57,11 @@
     BOOL isRetina = ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
                      ([UIScreen mainScreen].scale == 2.0));
     
+<<<<<<< HEAD
     UIFont *font = [UIFont boldSystemFontOfSize:isRetina?DEFAULT_FONT_SIZE:DEFAULT_FONT_SIZE/2];
+=======
+    UIFont *font = [UIFont boldSystemFontOfSize:isRetina?18:9];
+>>>>>>> FETCH_HEAD
     UIGraphicsBeginImageContext(self.size);
     [self drawInRect:CGRectMake(0,0,self.size.width,self.size.height)];
     
@@ -116,9 +123,15 @@
     UIImage* imagem = [[UIImage imageNamed:@"bus-gray"] imageByMaskingImageWithColor:color];
     imagem = [imagem imageByWritingText:busLine withColor:[color foregroundColor]];
     
+<<<<<<< HEAD
          if (delayInformation > RED_BORDER_LIMIT)    return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-red"   ]];
     else if (delayInformation > YELLOW_BORDER_LIMIT) return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-yellow"]];
     else                                             return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-green" ]];
+=======
+         if (delayInformation > 10) return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-red"   ]];
+    else if (delayInformation > 5 ) return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-yellow"]];
+    else                            return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-green" ]];
+>>>>>>> FETCH_HEAD
 }
 
 @end

@@ -293,6 +293,7 @@ NSInteger markerColorIndex = 0;
         marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation
                                       andColor:self.busesColors[markerColorIndex]];
         
+<<<<<<< HEAD
         //Notificação de aproximação de ônibus
         CGFloat secondsToObject = [self timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate
                                                atSpeed:[busData.velocity doubleValue]];
@@ -302,6 +303,20 @@ NSInteger markerColorIndex = 0;
                 UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
                 acceptAction.title = [NSString stringWithFormat:@"Ônibus %@ se aproximando! Tempo de chegada: %@", marca.title,
                                       [BusData humanReadableStringForSeconds:secondsToObject]];
+=======
+        /*
+        CGFloat secondsToObject = [self timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate
+                                               atSpeed:[busData.velocity doubleValue]];
+        if (secondsToObject < 300.0){
+            //Ação a ser tomada se ônibus estiver próximo a uma duração em segundos menor que a determinada
+            //O raio precisa ser avaliado e decidido
+            //Método de notificação ainda não testado
+            
+            if ([self isAngle:[self angleFromObject:marca.position toPerson:[self.mapView myLocation].coordinate]
+              nearOfDirection:[busData.direction floatValue] withAnErrorGapOf:30]){
+                UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
+                acceptAction.title = [NSString stringWithFormat:@"Ônibus %@ se aproximando!", marca.title];
+>>>>>>> FETCH_HEAD
                 
                 UIMutableUserNotificationCategory *inviteCategory = [[UIMutableUserNotificationCategory alloc] init];
                 [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
