@@ -31,6 +31,20 @@
     [super viewWillDisappear:animated];
 }
 
+- (IBAction)clearCache:(id)sender{
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Limpar Cache"
+                                                    message:@"Limpando a cache você irá remover os trajetos de linhas de ônibus armazenadas."
+                                             preferredStyle:UIAlertControllerStyleActionSheet];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancelar" style:UIAlertActionStyleCancel  handler:NULL]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Limpar"   style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Rotas de Onibus"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }]];
+    
+    alert.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (IBAction)closeAboutWindow:(id)sender{
     [self.navigationController popViewControllerAnimated:YES];
 }

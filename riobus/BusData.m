@@ -8,32 +8,41 @@
 
 #import "BusData.h"
 
-#define MINUTES_IN_HOUR 60
+#define SECONDS_IN_MINUTE 60
+#define MINUTES_IN_HOUR   60
+#define HOUR_IN_DAY       24
 
 @implementation BusData
 
-- (NSString*)humanReadableDelay{
-    NSInteger value = [self delayInSeconds];
-    if (value<60)
++ (NSString*)humanReadableStringForSeconds:(NSInteger)value{
+    if (value<SECONDS_IN_MINUTE)
         return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"segundo" : @"segundos")];
     
-    value/=60;
-    if (value<60)
+    value/=SECONDS_IN_MINUTE;
+    if (value<MINUTES_IN_HOUR)
         return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"minuto" : @"minutos")];
     
-    value/=60;
-    return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"hora" : @"horas")];
+    value/=MINUTES_IN_HOUR;
+    if (value<HOUR_IN_DAY)
+        return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"hora" : @"horas")];
+    
+    value/=HOUR_IN_DAY;
+    return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"dia" : @"dias")];
+}
+
+- (NSString*)humanReadableDelay{
+    return [BusData humanReadableStringForSeconds:[self delayInSeconds]];
 }
 
 - (NSInteger)delayInMinutes {
-    return [self delayInSeconds]/MINUTES_IN_HOUR;
+    return [self delayInSeconds]/SECONDS_IN_MINUTE;
 }
 
 - (NSInteger)delayInSeconds {
     NSInteger result = [[NSDate date] timeIntervalSinceDate:self.lastUpdate];
 
     if ([[[NSCalendar currentCalendar] timeZone] isDaylightSavingTime])
-        result-=3600;
+        result-=SECONDS_IN_MINUTE*MINUTES_IN_HOUR;
 
     return result;
 }
