@@ -56,10 +56,7 @@
 
 /* Begin PBXFileReference section */
 		27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.release.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.release.xcconfig"; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		63156F1D1A09922C00548BCB /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
-=======
->>>>>>> FETCH_HEAD
 		6331A56B1A08516E006BBFB5 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		6360584E1A0528FC00E3E4CD /* bus-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bus-gray.png"; sourceTree = "<group>"; };
 		6360584F1A0528FC00E3E4CD /* bus-gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bus-gray@2x.png"; sourceTree = "<group>"; };

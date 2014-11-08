@@ -14,12 +14,7 @@
 
 @implementation BusData
 
-<<<<<<< HEAD
 + (NSString*)humanReadableStringForSeconds:(NSInteger)value{
-=======
-- (NSString*)humanReadableDelay{
-    NSInteger value = [self delayInSeconds];
->>>>>>> FETCH_HEAD
     if (value<SECONDS_IN_MINUTE)
         return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"segundo" : @"segundos")];
     
@@ -32,15 +27,11 @@
         return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"hora" : @"horas")];
     
     value/=HOUR_IN_DAY;
-<<<<<<< HEAD
     return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"dia" : @"dias")];
 }
 
 - (NSString*)humanReadableDelay{
     return [BusData humanReadableStringForSeconds:[self delayInSeconds]];
-=======
-        return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"dia" : @"dias")];
->>>>>>> FETCH_HEAD
 }
 
 - (NSInteger)delayInMinutes {

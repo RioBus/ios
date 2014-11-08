@@ -8,7 +8,6 @@
 
 #import "BusSuggestionsTable.h"
 
-<<<<<<< HEAD
 #define FAVORITES_SECTION        0
 #define RECENTS_SECTION          1
 
@@ -19,10 +18,6 @@
 #define CELL_TEXT_INSETS         0.2
 #define CELL_LEFT_SPACE          10
 #define CELL_TEXT_FONT_SIZE      18
-=======
-#define FAVORITES_SECTION 0
-#define RECENTS_SECTION   1
->>>>>>> FETCH_HEAD
 
 @implementation BusSuggestionsTable
 
