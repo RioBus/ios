@@ -249,8 +249,8 @@ NSInteger markerColorIndex = 0;
         if (angle>180)     angle -= 360;
         if (direction>180) direction -= 360;
     }
-    if ((direction-margin<angle) && (direction+margin>angle)) return TRUE;
-    return FALSE;
+    //return ((direction-margin<angle) && (direction+margin>angle));
+    return (ABS(direction-angle)<margin);
 }
 
 //Funções referentes ao carregamento do marcadores, da rota e do mapa
@@ -299,10 +299,10 @@ NSInteger markerColorIndex = 0;
         if (secondsToObject < DISTANCE_NOTIFICATION_WARNING_TIME){
             if ([self isAngle:[self angleFromObject:marca.position toPerson:[self.mapView myLocation].coordinate]
               nearOfDirection:[busData.direction floatValue] withAnErrorGapOf:DISTANCE_NOTIFICATION_ERROR_GAP_ANGLE]){
+                
                 UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
                 acceptAction.title = [NSString stringWithFormat:@"Ônibus %@ se aproximando! Tempo de chegada: %@", marca.title,
                                       [BusData humanReadableStringForSeconds:secondsToObject]];
-                
                 UIMutableUserNotificationCategory *inviteCategory = [[UIMutableUserNotificationCategory alloc] init];
                 [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
             }
