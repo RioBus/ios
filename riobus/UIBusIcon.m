@@ -18,11 +18,9 @@
     UIImage *image = nil;
     
     CGSize newImageSize = CGSizeMake(self.size.width,self.size.height);
-    if (UIGraphicsBeginImageContextWithOptions != NULL) {
-        UIGraphicsBeginImageContextWithOptions(newImageSize, NO, [[UIScreen mainScreen] scale]);
-    } else {
-        UIGraphicsBeginImageContext(newImageSize);
-    }
+    if (!UIGraphicsBeginImageContextWithOptions)
+         UIGraphicsBeginImageContextWithOptions(newImageSize, NO, [[UIScreen mainScreen] scale]);
+    else UIGraphicsBeginImageContext(newImageSize);
     
     [self drawAtPoint:CGPointMake(roundf((newImageSize.width-self.size.width)/2),
                                         roundf((newImageSize.height-self.size.height)/2))];
@@ -53,14 +51,15 @@
 -(UIImage*)imageByWritingText:(NSString*)text withColor:(UIColor*)textColor{
     BOOL isRetina = ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
                      ([UIScreen mainScreen].scale == 2.0));
+    NSInteger retinaScale = isRetina?1:2;
     
-    UIFont *font = [UIFont boldSystemFontOfSize:isRetina?DEFAULT_FONT_SIZE:DEFAULT_FONT_SIZE/2];
+    UIFont *font = [UIFont boldSystemFontOfSize:DEFAULT_FONT_SIZE/retinaScale];
     UIGraphicsBeginImageContext(self.size);
     [self drawInRect:CGRectMake(0,0,self.size.width,self.size.height)];
     
     NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
     CGFloat width = [[[NSAttributedString alloc] initWithString:text attributes:attributes] size].width;
-    CGRect rect = CGRectMake((self.size.width-width)/2, isRetina?4:2, width, self.size.height);
+    CGRect rect = CGRectMake((self.size.width-width)/2, 4/retinaScale, width, self.size.height);
     
     [text drawInRect:rect withAttributes:@{NSFontAttributeName:font, NSForegroundColorAttributeName:textColor}];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -92,27 +91,7 @@
 @end
 
 @implementation UIBusIcon
-
-+(UIColor*)textColorForBackground:(UIColor*)backColor{
-    CGFloat grayScale;
-    
-    CGColorRef color = [backColor CGColor];
-    unsigned long numComponents = CGColorGetNumberOfComponents(color);
-    const CGFloat *components = CGColorGetComponents(color);
-    grayScale = components[0];
-    
-    if (numComponents == 4){
-        CGFloat red = components[0];
-        CGFloat green = components[1];
-        CGFloat blue = components[2];
-        grayScale = red*0.299 + green*0.587 + blue*0.114;
-    }
-    
-    if (grayScale<0.5) return [UIColor whiteColor];
-    else return [UIColor blackColor];
-}
 +(UIImage*)iconForBusLine:(NSString*)busLine withDelay:(NSInteger)delayInformation andColor:(UIColor*)color{
-    //Ler para usar novo tipo de ícone: Bitmap Images and Image Masks
     UIImage* imagem = [[UIImage imageNamed:@"bus-gray"] imageByMaskingImageWithColor:color];
     imagem = [imagem imageByWritingText:busLine withColor:[color foregroundColor]];
     
@@ -120,5 +99,4 @@
     else if (delayInformation > YELLOW_BORDER_LIMIT) return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-yellow"]];
     else                                             return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-green" ]];
 }
-
 @end
