@@ -14,20 +14,24 @@
 
 @implementation BusData
 
++ (NSString*)humanReadableStringForTime:(NSInteger)value ofType:(NSString*)type{
+    return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? type : [type stringByAppendingString:@"s"])];
+}
+
 + (NSString*)humanReadableStringForSeconds:(NSInteger)value{
     if (value<SECONDS_IN_MINUTE)
-        return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"segundo" : @"segundos")];
+        return [BusData humanReadableStringForTime:value ofType:"segundo"];
     
     value/=SECONDS_IN_MINUTE;
     if (value<MINUTES_IN_HOUR)
-        return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"minuto" : @"minutos")];
+        return [BusData humanReadableStringForTime:value ofType:"minuto"];
     
     value/=MINUTES_IN_HOUR;
     if (value<HOUR_IN_DAY)
-        return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"hora" : @"horas")];
+        return [BusData humanReadableStringForTime:value ofType:"hora"];
     
     value/=HOUR_IN_DAY;
-    return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? @"dia" : @"dias")];
+    return [BusData humanReadableStringForTime:value ofType:"dia"];
 }
 
 - (NSString*)humanReadableDelay{
