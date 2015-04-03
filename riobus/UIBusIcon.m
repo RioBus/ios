@@ -8,16 +8,20 @@
 
 #import "UIBusIcon.h"
 
-@implementation UIImage (SuperUIImage)
+#define RED_BORDER_LIMIT    10
+#define YELLOW_BORDER_LIMIT 5
+
+#define DEFAULT_FONT_SIZE   18
+
+@implementation UIImage (UIBusIconImage)
 -(UIImage*)imageByCombiningImage:(UIImage*)firstImage{
     UIImage *image = nil;
     
     CGSize newImageSize = CGSizeMake(self.size.width,self.size.height);
-    if (UIGraphicsBeginImageContextWithOptions != NULL) {
-        UIGraphicsBeginImageContextWithOptions(newImageSize, NO, [[UIScreen mainScreen] scale]);
-    } else {
-        UIGraphicsBeginImageContext(newImageSize);
-    }
+    if (!UIGraphicsBeginImageContextWithOptions)
+         UIGraphicsBeginImageContextWithOptions(newImageSize, NO, [[UIScreen mainScreen] scale]);
+    else UIGraphicsBeginImageContext(newImageSize);
+    
     [self drawAtPoint:CGPointMake(roundf((newImageSize.width-self.size.width)/2),
                                         roundf((newImageSize.height-self.size.height)/2))];
     [firstImage drawAtPoint:CGPointMake(roundf((newImageSize.width-firstImage.size.width)/2),
@@ -27,19 +31,49 @@
     
     return image;
 }
+-(UIImage*)imageByMaskingImageWithColor:(UIColor*)color{
+    CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
+    
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, self.scale);
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    
+    [self drawInRect:rect];
+    
+    CGContextSetFillColorWithColor(c, [color CGColor]);
+    CGContextSetBlendMode(c, kCGBlendModeSourceAtop);
+    CGContextFillRect(c, rect);
+    
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return result;
+}
+-(UIImage*)imageByWritingText:(NSString*)text withColor:(UIColor*)textColor{
+    BOOL isRetina = ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
+                     ([UIScreen mainScreen].scale == 2.0));
+    NSInteger retinaScale = isRetina?1:2;
+    
+    UIFont *font = [UIFont boldSystemFontOfSize:DEFAULT_FONT_SIZE/retinaScale];
+    UIGraphicsBeginImageContext(self.size);
+    [self drawInRect:CGRectMake(0,0,self.size.width,self.size.height)];
+    
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
+    CGFloat width = [[[NSAttributedString alloc] initWithString:text attributes:attributes] size].width;
+    CGRect rect = CGRectMake((self.size.width-width)/2, 4/retinaScale, width, self.size.height);
+    
+    [text drawInRect:rect withAttributes:@{NSFontAttributeName:font, NSForegroundColorAttributeName:textColor}];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
 @end
 
-@implementation UIBusIcon
-
-+(BOOL)isRetina{
-    if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] &&
-        ([UIScreen mainScreen].scale == 2.0)) return TRUE;
-    else return FALSE;
-}
-+(UIColor*)textColorForBackground:(UIColor*)backColor{
+@implementation UIColor (UIBusIconColor)
+-(UIColor*)foregroundColor{
     CGFloat grayScale;
     
-    CGColorRef color = [backColor CGColor];
+    CGColorRef color = [self CGColor];
     unsigned long numComponents = CGColorGetNumberOfComponents(color);
     const CGFloat *components = CGColorGetComponents(color);
     grayScale = components[0];
@@ -54,53 +88,15 @@
     if (grayScale<0.5) return [UIColor whiteColor];
     else return [UIColor blackColor];
 }
-+(CGFloat)widthOfString:(NSString*)string withFont:(UIFont*)font{
-    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName, nil];
-    return [[[NSAttributedString alloc] initWithString:string attributes:attributes] size].width;
-}
+@end
 
-+(UIImage*)ipMaskedImageNamed:(NSString *)name color:(UIColor *)color{
-    UIImage *image = [UIImage imageNamed:name];
-    CGRect rect = CGRectMake(0, 0, image.size.width, image.size.height);
-    
-    UIGraphicsBeginImageContextWithOptions(rect.size, NO, image.scale);
-    CGContextRef c = UIGraphicsGetCurrentContext();
-    
-    [image drawInRect:rect];
-    
-    CGContextSetFillColorWithColor(c, [color CGColor]);
-    CGContextSetBlendMode(c, kCGBlendModeSourceAtop);
-    CGContextFillRect(c, rect);
-    
-    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return result;
-}
-+(UIImage*)drawText:(NSString*)text inImage:(UIImage*)image withColor:(UIColor*)textColor{
-    UIFont *font = [UIFont boldSystemFontOfSize:[UIBusIcon isRetina]?18:9];
-    UIGraphicsBeginImageContext(image.size);
-    [image drawInRect:CGRectMake(0,0,image.size.width,image.size.height)];
-    
-    CGFloat width = [UIBusIcon widthOfString:text withFont:font];
-    CGRect rect = CGRectMake((image.size.width-width)/2, [UIBusIcon isRetina]?4:2, width, image.size.height);
-    
-    [text drawInRect:rect withAttributes:@{NSFontAttributeName:font, NSForegroundColorAttributeName:textColor}];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return newImage;
-}
-
+@implementation UIBusIcon
 +(UIImage*)iconForBusLine:(NSString*)busLine withDelay:(NSInteger)delayInformation andColor:(UIColor*)color{
-    //Ler para usar novo tipo de ícone: Bitmap Images and Image Masks
-    UIImage* imagem = [UIBusIcon ipMaskedImageNamed:@"bus-gray" color:color];
+    UIImage* imagem = [[UIImage imageNamed:@"bus-gray"] imageByMaskingImageWithColor:color];
+    imagem = [imagem imageByWritingText:busLine withColor:[color foregroundColor]];
     
-    imagem = [UIBusIcon drawText:busLine inImage:imagem withColor:[UIBusIcon textColorForBackground:color]];
-    
-         if (delayInformation > 10) return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-red"]];
-    else if (delayInformation > 5 ) return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-yellow"]];
-    else                            return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-green"]];
+         if (delayInformation > RED_BORDER_LIMIT)    return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-red"   ]];
+    else if (delayInformation > YELLOW_BORDER_LIMIT) return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-yellow"]];
+    else                                             return [imagem imageByCombiningImage:[UIImage imageNamed:@"bus-green" ]];
 }
-
 @end
