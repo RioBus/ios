@@ -152,8 +152,8 @@
         if ([view isKindOfClass:[UISearchBar class]]) searchInput = (UISearchBar*)view;
     
     if (searchInput){
-        if ([indexPath section] == FAVORITES_SECTION) [searchInput setText:_favorites[[indexPath section]]];
-        if ([indexPath section] == RECENTS_SECTION  ) [searchInput setText:_recents[[indexPath section]]];
+        if ([indexPath section] == FAVORITES_SECTION) [searchInput setText:_favorites[[indexPath row]]];
+        if ([indexPath section] == RECENTS_SECTION  ) [searchInput setText:_recents[[indexPath row]]];
         [searchInput.delegate searchBarSearchButtonClicked:searchInput];
     }
     
