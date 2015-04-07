@@ -36,6 +36,7 @@
 #define CAMERA_DEFAULT_LONGITUDE               -43.1912805
 #define CAMERA_DEFAULT_ZOOM                    12
 #define CAMERA_CURRENT_LOCATION_ZOOM           14
+#define CAMERA_DEFAULT_PADDING                 50.0F
 
 #define BUS_ROUTE_SHAPE_ID_INDEX               4
 #define BUS_ROUTE_LATITUDE_INDEX               5
@@ -60,9 +61,6 @@ NSInteger markerColorIndex = 0;
     // Do any additional setup after loading the view.
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
-
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
     
     self.mapView.mapType = kGMSTypeNormal;
     self.mapView.trafficEnabled = YES;
@@ -70,12 +68,20 @@ NSInteger markerColorIndex = 0;
     
     self.suggestionTable.hidden = YES;
     
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    // This checks for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
+    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestWhenInUseAuthorization];
+    }
     [self.locationManager startUpdatingLocation];
     
     self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
                          [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
                          [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
 }
+
 - (void)viewWillAppear:(BOOL)animated{
     CLLocation *location = [self.mapView myLocation];
     if (location) self.mapView.camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
@@ -91,12 +97,6 @@ NSInteger markerColorIndex = 0;
 //    _suggestionTable = [[BusSuggestionsTable alloc] initWithFrame:tableRect];
 }
 
-- (CLLocationManager*)locationManager{
-    // Se variável não existe, a mesma é criada no momento da chamada
-    if (!_locationManager) _locationManager = [[CLLocationManager alloc] init];
-    return _locationManager ;
-}
-
 - (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve{
     switch (curve) {
         case UIViewAnimationCurveEaseInOut: return UIViewAnimationOptionCurveEaseInOut;
@@ -106,6 +106,7 @@ NSInteger markerColorIndex = 0;
     }
     return UIViewAnimationOptionCurveEaseInOut;
 }
+
 - (void)setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info{
     // Obtém dados da animação
     UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
@@ -118,20 +119,20 @@ NSInteger markerColorIndex = 0;
     if (visible){
         if (self.overlayMap.hidden){
             // Mostra o overlay
-            self.overlayMap.alpha = 0.0 ;
-            self.overlayMap.hidden = NO ;
+            self.overlayMap.alpha = 0.0;
+            self.overlayMap.hidden = NO;
             
             [UIView animateWithDuration:animationDuration delay:0 options:animationOptions animations:^{
-                self.overlayMap.alpha = 0.3 ;
+                self.overlayMap.alpha = 0.3;
             } completion:nil];
         }
     } else{
         if (!self.overlayMap.hidden){
             // Esconde o overlay
             [UIView animateWithDuration:animationDuration delay:0 options:animationOptions animations:^{
-                self.overlayMap.alpha = 0.0 ;
+                self.overlayMap.alpha = 0.0;
             } completion:^(BOOL finished) {
-                self.overlayMap.hidden = YES ;
+                self.overlayMap.hidden = YES;
             }];
         }
     }
@@ -149,6 +150,7 @@ NSInteger markerColorIndex = 0;
     
     [self atualizar:self];
 }
+
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
 //    [self.mapView.superview addSubview:_suggestionTable];
     self.suggestionTable.hidden = NO;
@@ -161,6 +163,7 @@ NSInteger markerColorIndex = 0;
     if(![self.searchInput isFirstResponder])
         [self atualizar:self];
 }
+
 - (void)atualizar:(id)sender{
     routeColorIndex = -1;
     markerColorIndex = -1;
@@ -219,7 +222,7 @@ NSInteger markerColorIndex = 0;
     }
 }
 - (void)setBusesData:(NSArray*)busesData{
-    _busesData = busesData ;
+    _busesData = busesData;
     [self updateMarkers];
 }
 
@@ -269,7 +272,7 @@ NSInteger markerColorIndex = 0;
                 [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
                     [gmShape addCoordinate:location.coordinate];
                 }];
-                GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape] ;
+                GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
                 polyLine.strokeColor = self.busesColors[colorIndex];
                 polyLine.strokeWidth = 2.0;
                 polyLine.map = self.mapView;
@@ -280,6 +283,8 @@ NSInteger markerColorIndex = 0;
     [self.lastRequests addObject:self.lastRequest];
 }
 - (void)updateMarkers{
+    __block GMSCoordinateBounds* mapBounds = [[GMSCoordinateBounds alloc] init];
+
     markerColorIndex = (markerColorIndex+1)%self.busesColors.count;
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
@@ -299,6 +304,8 @@ NSInteger markerColorIndex = 0;
         marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation
                                       andColor:self.busesColors[markerColorIndex]];
         
+        mapBounds = [mapBounds includingCoordinate:marca.position];
+        
         //Notificação de aproximação de ônibus
         CGFloat secondsToObject = [self timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate
                                                atSpeed:[busData.velocity doubleValue]];
@@ -316,25 +323,29 @@ NSInteger markerColorIndex = 0;
     }];
     
     // Atualizar info-window corrente
-    if(self.mapView.selectedMarker){
-        // Forca atualizacao do marcador selecionado
-        GMSMarker *selectedMarker = self.mapView.selectedMarker;
-        self.mapView.selectedMarker = nil;
-        self.mapView.selectedMarker = selectedMarker;
-    }    
-}
-- (void)locationManager:(CLLocationManager*)manager didUpdateLocations:(NSArray*)locations{
-    [self.locationManager stopUpdatingLocation];
+//    if(self.mapView.selectedMarker){
+//        // Forca atualizacao do marcador selecionado
+//        GMSMarker *selectedMarker = self.mapView.selectedMarker;
+//        self.mapView.selectedMarker = nil;
+//        self.mapView.selectedMarker = selectedMarker;
+//    }
     
+    [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:mapBounds withPadding:CAMERA_DEFAULT_PADDING]];
+    
+
+}
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    [self.locationManager stopUpdatingLocation];
+
     CLLocation *location = [locations lastObject];
     self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:CAMERA_CURRENT_LOCATION_ZOOM];
 }
 
 //Segue que muda para a tela de Sobre
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender{
-    if ( [segue.identifier isEqualToString:@"viewOptions"] ) {
-        OptionsViewController *optionsVC = segue.destinationViewController ;
-        optionsVC.delegate = self ;
+    if ([segue.identifier isEqualToString:@"viewOptions"]) {
+        OptionsViewController *optionsVC = segue.destinationViewController;
+        optionsVC.delegate = self;
     }
 }
 
