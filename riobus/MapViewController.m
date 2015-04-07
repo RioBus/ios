@@ -18,7 +18,7 @@
 #import "UIBusIcon.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
-@property (strong, nonatomic) BusSuggestionsTable *suggestionTable;
+@property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
@@ -68,6 +68,8 @@ NSInteger markerColorIndex = 0;
     self.mapView.trafficEnabled = YES;
     self.mapView.myLocationEnabled = YES;
     
+    self.suggestionTable.hidden = YES;
+    
     [self.locationManager startUpdatingLocation];
     
     self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
@@ -86,7 +88,7 @@ NSInteger markerColorIndex = 0;
     CGFloat y = [self statusBarHeight] + self.searchInput.frame.size.height;
     CGFloat height = [UIScreen mainScreen].bounds.size.height - y - IOS_KEYBOARD_HEIGHT_ON_PORTRAIT;
     CGRect tableRect = CGRectMake(0, y, [UIScreen mainScreen].bounds.size.width, height);
-    _suggestionTable = [[BusSuggestionsTable alloc] initWithFrame:tableRect];
+//    _suggestionTable = [[BusSuggestionsTable alloc] initWithFrame:tableRect];
 }
 
 - (CLLocationManager*)locationManager{
@@ -139,7 +141,8 @@ NSInteger markerColorIndex = 0;
 - (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar{
     [self.searchInput resignFirstResponder];
     [self.markerForOrder removeAllObjects];
-    [self.suggestionTable removeFromSuperview];
+    self.suggestionTable.hidden = YES;
+    self.mapView.alpha = 1.0f;
     [self.mapView clear];
     
     [self.view makeToastActivity];
@@ -147,7 +150,10 @@ NSInteger markerColorIndex = 0;
     [self atualizar:self];
 }
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
-    [self.mapView.superview addSubview:_suggestionTable];
+//    [self.mapView.superview addSubview:_suggestionTable];
+    self.suggestionTable.hidden = NO;
+    self.mapView.alpha = 0.25f;
+    [searchBar becomeFirstResponder];
 }
 
 //Atualiza os dados para o carregamento do mapa
@@ -176,7 +182,7 @@ NSInteger markerColorIndex = 0;
         [buses removeObject:@""];
         
         if ([buses count]>0){
-            [_suggestionTable addToRecentTable:[buses componentsJoinedByString:@", "]];
+            [self.suggestionTable addToRecentTable:[buses componentsJoinedByString:@", "]];
         
             for (NSString* busLineNumber in buses){
                 routeColorIndex = (routeColorIndex+1)%self.busesColors.count;

@@ -95,10 +95,18 @@
 -(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
-        [self setRowHeight:frame.size.height/NUMBER_OF_ROWS_IN_SCREEN];
+        self.rowHeight = 45;
     }
     return self;
 }
+-(id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        self.rowHeight = 45;
+    }
+    return self;
+}
+
 -(void)drawRect:(CGRect)rect{
     self.delegate = self;
     self.dataSource = self;
