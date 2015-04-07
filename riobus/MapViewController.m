@@ -22,15 +22,16 @@
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
 @property (strong, nonatomic) NSTimer *updateTimer;
-@property (strong, nonatomic) NSArray *busesColors;
-@property (weak,   nonatomic) NSMutableArray *lastRequests;
+@property (strong, nonatomic) NSArray *busesColors;@property (weak,   nonatomic) NSMutableArray *lastRequests;
 @property (weak,   nonatomic) NSOperation *lastRequest;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (weak,   nonatomic) IBOutlet UIToolbar *accessoryView;
 @property (weak,   nonatomic) IBOutlet UIView *overlayMap;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomContraint;
+@property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomContraint;
+@property (nonatomic)         BOOL hasRepositionedMap;
+
 @end
 
 #define CAMERA_DEFAULT_LATITUDE                -22.9043527
@@ -74,7 +75,7 @@ NSInteger markerColorIndex = 0;
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.locationManager requestWhenInUseAuthorization];
     }
-    [self.locationManager startUpdatingLocation];
+//    [self.locationManager startUpdatingLocation];
     
     self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
                          [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
@@ -143,13 +144,14 @@ NSInteger markerColorIndex = 0;
     self.mapView.alpha = 1.0f;
     [self.mapView clear];
     
+    self.hasRepositionedMap = NO;
+    
     [self.view makeToastActivity];
     
     [self atualizar:self];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
-//    [self.mapView.superview addSubview:_suggestionTable];
     self.suggestionTable.hidden = NO;
     self.mapView.alpha = 0.5f;
     [searchBar becomeFirstResponder];
@@ -327,7 +329,10 @@ NSInteger markerColorIndex = 0;
 //        self.mapView.selectedMarker = selectedMarker;
 //    }
     
-    [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:mapBounds withPadding:CAMERA_DEFAULT_PADDING]];
+    if (!self.hasRepositionedMap) {
+        [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:mapBounds withPadding:CAMERA_DEFAULT_PADDING]];
+        self.hasRepositionedMap = YES;
+    }
     
 
 }
