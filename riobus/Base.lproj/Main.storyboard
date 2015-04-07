@@ -41,7 +41,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBl-c9-bVI">
-                                <rect key="frame" x="269" y="523" width="37" height="37"/>
+                                <rect key="frame" x="14" y="501" width="37" height="37"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="37" id="4qO-Cj-B5Y"/>
@@ -66,7 +66,6 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="qBl-c9-bVI" secondAttribute="trailing" constant="-2" id="3yK-fx-9tm"/>
                             <constraint firstAttribute="trailing" secondItem="Lfw-bq-mSB" secondAttribute="trailing" id="4Pz-St-5qA"/>
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="trailing" secondItem="7Gl-dC-szk" secondAttribute="trailing" id="7Ex-pt-7qS"/>
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="top" secondItem="7Gl-dC-szk" secondAttribute="bottom" id="Ago-qn-ZKp"/>
@@ -77,8 +76,9 @@
                             <constraint firstItem="7Gl-dC-szk" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-10" id="fFI-Pa-ZUD"/>
                             <constraint firstItem="rdR-J6-ubo" firstAttribute="leading" secondItem="Lfw-bq-mSB" secondAttribute="leading" id="g4x-NL-P7Q"/>
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="leading" secondItem="7Gl-dC-szk" secondAttribute="leading" id="hHT-a9-n2k"/>
+                            <constraint firstItem="qBl-c9-bVI" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-2" id="hfp-zR-meq"/>
                             <constraint firstItem="Lfw-bq-mSB" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="kGz-O1-zpg"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="qBl-c9-bVI" secondAttribute="bottom" constant="8" id="mQE-c4-SpF"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="qBl-c9-bVI" secondAttribute="bottom" constant="30" id="mQE-c4-SpF"/>
                             <constraint firstAttribute="bottom" secondItem="Lfw-bq-mSB" secondAttribute="bottom" id="q1H-50-wFW"/>
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="width" secondItem="7Gl-dC-szk" secondAttribute="width" id="tHM-OH-wAf"/>
                             <constraint firstAttribute="trailingMargin" secondItem="7Gl-dC-szk" secondAttribute="trailing" constant="-10" id="tgm-GR-ilC"/>

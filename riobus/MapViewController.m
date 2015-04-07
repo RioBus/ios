@@ -12,13 +12,12 @@
 #import <AFNetworking/AFNetworking.h>
 #import <GLKit/GLKit.h>
 #import "BusDataStore.h"
-#import <Toast/Toast+UIView.h>
+#import <Toast/UIView+Toast.h>
 #import "OptionsViewController.h"
 #import "BusSuggestionsTable.h"
 #import "UIBusIcon.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
-@property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
@@ -28,6 +27,7 @@
 @property (weak,   nonatomic) NSOperation *lastRequest;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
+@property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (weak,   nonatomic) IBOutlet UIToolbar *accessoryView;
 @property (weak,   nonatomic) IBOutlet UIView *overlayMap;
 @end
