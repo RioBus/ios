@@ -30,6 +30,7 @@
 @property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (weak,   nonatomic) IBOutlet UIToolbar *accessoryView;
 @property (weak,   nonatomic) IBOutlet UIView *overlayMap;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomContraint;
 @end
 
 #define CAMERA_DEFAULT_LATITUDE                -22.9043527
@@ -80,6 +81,8 @@ NSInteger markerColorIndex = 0;
     self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
                          [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
                          [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -91,10 +94,6 @@ NSInteger markerColorIndex = 0;
                                                                     longitude:CAMERA_DEFAULT_LONGITUDE
                                                                          zoom:CAMERA_DEFAULT_ZOOM];
     
-    CGFloat y = [self statusBarHeight] + self.searchInput.frame.size.height;
-    CGFloat height = [UIScreen mainScreen].bounds.size.height - y - IOS_KEYBOARD_HEIGHT_ON_PORTRAIT;
-    CGRect tableRect = CGRectMake(0, y, [UIScreen mainScreen].bounds.size.width, height);
-//    _suggestionTable = [[BusSuggestionsTable alloc] initWithFrame:tableRect];
 }
 
 - (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve{
@@ -154,7 +153,7 @@ NSInteger markerColorIndex = 0;
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
 //    [self.mapView.superview addSubview:_suggestionTable];
     self.suggestionTable.hidden = NO;
-    self.mapView.alpha = 0.25f;
+    self.mapView.alpha = 0.5f;
     [searchBar becomeFirstResponder];
 }
 
@@ -347,6 +346,13 @@ NSInteger markerColorIndex = 0;
         OptionsViewController *optionsVC = segue.destinationViewController;
         optionsVC.delegate = self;
     }
+}
+
+// Atualiza o tamanho da tabela de acordo com o tamanho do teclado
+- (void)keyboardWillShow:(NSNotification *)sender {
+    CGRect keyboardFrame = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    self.keyboardBottomContraint.constant = keyboardFrame.size.height + 5;
+    [self.suggestionTable layoutIfNeeded];
 }
 
 @end

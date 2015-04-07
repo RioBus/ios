@@ -36,8 +36,8 @@
                                     <outletCollection property="gestureRecognizers" destination="ilN-NR-9Rp" appends="YES" id="ECy-m2-YLQ"/>
                                 </connections>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
-                                <rect key="frame" x="6" y="64" width="308" height="504"/>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
+                                <rect key="frame" x="6" y="64" width="308" height="499"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBl-c9-bVI">
@@ -70,7 +70,7 @@
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="trailing" secondItem="7Gl-dC-szk" secondAttribute="trailing" id="7Ex-pt-7qS"/>
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="top" secondItem="7Gl-dC-szk" secondAttribute="bottom" id="Ago-qn-ZKp"/>
                             <constraint firstItem="Lfw-bq-mSB" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="BfG-tf-jBp"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lsP-IF-CM0" secondAttribute="bottom" id="OZ7-aC-PBQ"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lsP-IF-CM0" secondAttribute="bottom" constant="5" id="OZ7-aC-PBQ"/>
                             <constraint firstItem="rdR-J6-ubo" firstAttribute="bottom" secondItem="Lfw-bq-mSB" secondAttribute="bottom" id="Sd7-3X-8Ip"/>
                             <constraint firstItem="rdR-J6-ubo" firstAttribute="top" secondItem="Lfw-bq-mSB" secondAttribute="top" id="dJO-nI-pky"/>
                             <constraint firstItem="7Gl-dC-szk" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-10" id="fFI-Pa-ZUD"/>
@@ -91,6 +91,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="accessoryView" destination="wWi-WK-oeK" id="DyX-uy-Fjm"/>
+                        <outlet property="keyboardBottomContraint" destination="OZ7-aC-PBQ" id="jyk-Cd-taQ"/>
                         <outlet property="mapView" destination="Lfw-bq-mSB" id="IVe-WC-4Ar"/>
                         <outlet property="overlayMap" destination="rdR-J6-ubo" id="ltn-e8-8G9"/>
                         <outlet property="searchDisplayController" destination="SXP-NW-eBt" id="1of-vD-bwM"/>
