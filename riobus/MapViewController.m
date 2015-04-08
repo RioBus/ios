@@ -139,6 +139,7 @@ NSInteger markerColorIndex = 0;
 //Funções relacionadas ao mecanismo de busca
 - (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar{
     [self.searchInput resignFirstResponder];
+    [self.searchInput setShowsCancelButton:NO animated:YES];
     [self.markerForOrder removeAllObjects];
     self.suggestionTable.hidden = YES;
     self.mapView.alpha = 1.0f;
@@ -152,9 +153,17 @@ NSInteger markerColorIndex = 0;
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
+    [self.searchInput becomeFirstResponder];
+    [self.searchInput setShowsCancelButton:YES animated:YES];
     self.suggestionTable.hidden = NO;
     self.mapView.alpha = 0.5f;
-    [searchBar becomeFirstResponder];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar{
+    [self.searchInput resignFirstResponder];
+    [self.searchInput setShowsCancelButton:NO animated:YES];
+    self.suggestionTable.hidden = YES;
+    self.mapView.alpha = 1.0f;
 }
 
 //Atualiza os dados para o carregamento do mapa
