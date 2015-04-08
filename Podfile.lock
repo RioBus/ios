@@ -24,9 +24,9 @@ PODS:
   - Toast (2.4)
 
 DEPENDENCIES:
-  - AFNetworking (~> 2.3)
+  - AFNetworking (~> 2.5)
   - Google-Maps-iOS-SDK (~> 1.9)
-  - Toast (~> 2.2)
+  - Toast (~> 2.4)
 
 SPEC CHECKSUMS:
   AFNetworking: fefbce9660acb17f48ae0011292d4da0f457bf36
