@@ -52,10 +52,6 @@
 NSInteger routeColorIndex  = 0;
 NSInteger markerColorIndex = 0;
 
-- (CGFloat)statusBarHeight{
-    CGSize size = [[UIApplication sharedApplication] statusBarFrame].size;
-    return MIN(size.height,size.width);
-}
 - (void)viewDidLoad{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -68,6 +64,8 @@ NSInteger markerColorIndex = 0;
     
     self.suggestionTable.hidden = YES;
     
+    [self.searchInput setImage:[UIImage imageNamed:@"about.png"] forSearchBarIcon:UISearchBarIconBookmark state:UIControlStateNormal];
+    
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
@@ -75,7 +73,6 @@ NSInteger markerColorIndex = 0;
     if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [self.locationManager requestWhenInUseAuthorization];
     }
-//    [self.locationManager startUpdatingLocation];
     
     self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
                          [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
@@ -86,12 +83,15 @@ NSInteger markerColorIndex = 0;
 
 - (void)viewWillAppear:(BOOL)animated{
     CLLocation *location = [self.mapView myLocation];
-    if (location) self.mapView.camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
-                                                                    longitude:location.coordinate.longitude
-                                                                         zoom:CAMERA_CURRENT_LOCATION_ZOOM];
-             else self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
-                                                                    longitude:CAMERA_DEFAULT_LONGITUDE
-                                                                         zoom:CAMERA_DEFAULT_ZOOM];
+    if (location) {
+        self.mapView.camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
+                                                          longitude:location.coordinate.longitude
+                                                               zoom:CAMERA_CURRENT_LOCATION_ZOOM];
+    } else {
+        self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
+                                                          longitude:CAMERA_DEFAULT_LONGITUDE
+                                                               zoom:CAMERA_DEFAULT_ZOOM];
+    }
     
 }
 
@@ -110,11 +110,11 @@ NSInteger markerColorIndex = 0;
     UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
     UIViewAnimationOptions animationOptions = UIViewAnimationOptionBeginFromCurrentState;
     animationOptions |= [self animationOptionsWithCurve:animationCurve];
-
+    
     NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-
+    
     // Inicia a animação
-    if (visible){
+    if (visible) {
         if (self.overlayMap.hidden){
             // Mostra o overlay
             self.overlayMap.alpha = 0.0;
@@ -124,7 +124,7 @@ NSInteger markerColorIndex = 0;
                 self.overlayMap.alpha = 0.3;
             } completion:nil];
         }
-    } else{
+    } else {
         if (!self.overlayMap.hidden){
             // Esconde o overlay
             [UIView animateWithDuration:animationDuration delay:0 options:animationOptions animations:^{
@@ -134,36 +134,6 @@ NSInteger markerColorIndex = 0;
             }];
         }
     }
-}
-
-//Funções relacionadas ao mecanismo de busca
-- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar{
-    [self.searchInput resignFirstResponder];
-    [self.searchInput setShowsCancelButton:NO animated:YES];
-    [self.markerForOrder removeAllObjects];
-    self.suggestionTable.hidden = YES;
-    self.mapView.alpha = 1.0f;
-    [self.mapView clear];
-    
-    self.hasRepositionedMap = NO;
-    
-    [self.view makeToastActivity];
-    
-    [self atualizar:self];
-}
-
-- (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
-    [self.searchInput becomeFirstResponder];
-    [self.searchInput setShowsCancelButton:YES animated:YES];
-    self.suggestionTable.hidden = NO;
-    self.mapView.alpha = 0.5f;
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar{
-    [self.searchInput resignFirstResponder];
-    [self.searchInput setShowsCancelButton:NO animated:YES];
-    self.suggestionTable.hidden = YES;
-    self.mapView.alpha = 1.0f;
 }
 
 //Atualiza os dados para o carregamento do mapa
@@ -194,41 +164,42 @@ NSInteger markerColorIndex = 0;
         
         if ([buses count]>0){
             [self.suggestionTable addToRecentTable:[buses componentsJoinedByString:@", "]];
-        
+            
             for (NSString* busLineNumber in buses){
                 routeColorIndex = (routeColorIndex+1)%self.busesColors.count;
                 [self insertRouteOfBus:busLineNumber withColorIndex:routeColorIndex];
-            
+                
                 self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
                                                                      withCompletionHandler:^(NSArray *busesData, NSError *error) {
-                    [self.view hideToastActivity];
-                    if (error){
-                        // Mostra Toast parecido com o Android
-                        if (error.code != NSURLErrorCancelled) // Erro ao cancelar um request
-                            [self.view makeToast:[error localizedDescription]];
-                    
-                        // Atualiza informacoes dos marcadores
-                        [self updateMarkers];
-                    } else {
-                        self.busesData = busesData;
-                    
-                        if (self.busesData.count == 0){
-                            NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
-                            [self.view makeToast:msg];
-                        } else {
-                            // Ajusta o timer
-                            [self.updateTimer invalidate];
-                            self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(aTime)
-                                                                              userInfo:nil repeats:NO];
-                        }
-                    }
-                }];
-            
+                                                                         [self.view hideToastActivity];
+                                                                         if (error){
+                                                                             // Mostra Toast parecido com o Android
+                                                                             if (error.code != NSURLErrorCancelled) // Erro ao cancelar um request
+                                                                                 [self.view makeToast:[error localizedDescription]];
+                                                                             
+                                                                             // Atualiza informacoes dos marcadores
+                                                                             [self updateMarkers];
+                                                                         } else {
+                                                                             self.busesData = busesData;
+                                                                             
+                                                                             if (self.busesData.count == 0){
+                                                                                 NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
+                                                                                 [self.view makeToast:msg];
+                                                                             } else {
+                                                                                 // Ajusta o timer
+                                                                                 [self.updateTimer invalidate];
+                                                                                 self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(aTime)
+                                                                                                                                   userInfo:nil repeats:NO];
+                                                                             }
+                                                                         }
+                                                                     }];
+                
                 [self.lastRequests addObject:self.lastRequest];
             }
         }
     }
 }
+
 - (void)setBusesData:(NSArray*)busesData{
     _busesData = busesData;
     [self updateMarkers];
@@ -249,6 +220,7 @@ NSInteger markerColorIndex = 0;
     
     return CGSizeMake(busXDist,busYDist);
 }
+
 - (CGFloat)timeFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation atSpeed:(CGFloat)speed{
     CGSize busDist = [self distanceFromObject:objectLocation toPerson:personLocation];
     return (sqrt(busDist.height*busDist.height + busDist.width*busDist.width))/(speed/3.6);
@@ -261,6 +233,7 @@ NSInteger markerColorIndex = 0;
     
     return GLKMathRadiansToDegrees(busDist.width/hipotenusa);
 }
+
 - (BOOL)isAngle:(CGFloat)angle nearOfDirection:(CGFloat)direction withAnErrorGapOf:(CGFloat)margin{
     if (direction<margin || direction>(360-margin)){
         if (angle>180)     angle -= 360;
@@ -274,25 +247,26 @@ NSInteger markerColorIndex = 0;
 - (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex{
     self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
                                                               withCompletionHandler:^(NSArray *shapes, NSError *error) {
-        if (!error) {
-            [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
-                GMSMutablePath *gmShape = [GMSMutablePath path];
-                [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
-                    [gmShape addCoordinate:location.coordinate];
-                }];
-                GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
-                polyLine.strokeColor = self.busesColors[colorIndex];
-                polyLine.strokeWidth = 2.0;
-                polyLine.map = self.mapView;
-            }];
-        }
-    }];
+                                                                  if (!error) {
+                                                                      [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
+                                                                          GMSMutablePath *gmShape = [GMSMutablePath path];
+                                                                          [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
+                                                                              [gmShape addCoordinate:location.coordinate];
+                                                                          }];
+                                                                          GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
+                                                                          polyLine.strokeColor = self.busesColors[colorIndex];
+                                                                          polyLine.strokeWidth = 2.0;
+                                                                          polyLine.map = self.mapView;
+                                                                      }];
+                                                                  }
+                                                              }];
     
     [self.lastRequests addObject:self.lastRequest];
 }
+
 - (void)updateMarkers{
     __block GMSCoordinateBounds* mapBounds = [[GMSCoordinateBounds alloc] init];
-
+    
     markerColorIndex = (markerColorIndex+1)%self.busesColors.count;
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
@@ -306,7 +280,7 @@ NSInteger markerColorIndex = 0;
         }
         
         marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order,
-                             [busData.velocity doubleValue], [busData humanReadableDelay]];
+                         [busData.velocity doubleValue], [busData humanReadableDelay]];
         marca.title = [busData.lineNumber description];
         marca.position = busData.location.coordinate;
         marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation
@@ -330,24 +304,56 @@ NSInteger markerColorIndex = 0;
         }
     }];
     
-    // Atualizar info-window corrente
-//    if(self.mapView.selectedMarker){
-//        // Forca atualizacao do marcador selecionado
-//        GMSMarker *selectedMarker = self.mapView.selectedMarker;
-//        self.mapView.selectedMarker = nil;
-//        self.mapView.selectedMarker = selectedMarker;
-//    }
-    
     if (!self.hasRepositionedMap) {
         [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:mapBounds withPadding:CAMERA_DEFAULT_PADDING]];
         self.hasRepositionedMap = YES;
     }
-    
-
 }
+
+
+#pragma mark UISearchBarDelegate methods
+
+- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar{
+    [self.searchInput resignFirstResponder];
+    [self.searchInput setShowsCancelButton:NO animated:YES];
+    [self.markerForOrder removeAllObjects];
+    self.suggestionTable.hidden = YES;
+    self.searchInput.showsBookmarkButton = YES;
+    self.mapView.alpha = 1.0f;
+    [self.mapView clear];
+    
+    self.hasRepositionedMap = NO;
+    
+    [self.view makeToastActivity];
+    
+    [self atualizar:self];
+}
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
+    [self.searchInput becomeFirstResponder];
+    [self.searchInput setShowsCancelButton:YES animated:YES];
+    self.suggestionTable.hidden = NO;
+    self.searchInput.showsBookmarkButton = NO;
+    self.mapView.alpha = 0.5f;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar{
+    [self.searchInput resignFirstResponder];
+    [self.searchInput setShowsCancelButton:NO animated:YES];
+    self.suggestionTable.hidden = YES;
+    self.searchInput.showsBookmarkButton = YES;
+    self.mapView.alpha = 1.0f;
+}
+
+- (void)searchBarBookmarkButtonClicked:(UISearchBar*)searchBar{
+    [self performSegueWithIdentifier:@"viewOptions" sender:self];
+}
+
+#pragma mark CLLocationManagerDelegate methods
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     [self.locationManager stopUpdatingLocation];
-
+    
     CLLocation *location = [locations lastObject];
     self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:CAMERA_CURRENT_LOCATION_ZOOM];
 }
