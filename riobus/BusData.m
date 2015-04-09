@@ -45,8 +45,9 @@
 - (NSInteger)delayInSeconds {
     NSInteger result = [[NSDate date] timeIntervalSinceDate:self.lastUpdate];
 
-    if ([[[NSCalendar currentCalendar] timeZone] isDaylightSavingTime])
-        result-=SECONDS_IN_MINUTE*MINUTES_IN_HOUR;
+    if ([[[NSCalendar currentCalendar] timeZone] isDaylightSavingTime]) {
+        result -= SECONDS_IN_MINUTE*MINUTES_IN_HOUR;
+    }
 
     return result;
 }
