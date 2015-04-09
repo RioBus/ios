@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Rio Bus. All rights reserved.
 //
 
-#import "MapViewController.h"
-#import <GoogleMaps/GoogleMaps.h>
+#import <GLKit/GLKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AFNetworking/AFNetworking.h>
-#import <GLKit/GLKit.h>
-#import "BusDataStore.h"
 #import <Toast/UIView+Toast.h>
+#import <GoogleMaps/GoogleMaps.h>
+#import "MapViewController.h"
+#import "BusDataStore.h"
 #import "OptionsViewController.h"
 #import "BusSuggestionsTable.h"
 #import "UIBusIcon.h"
