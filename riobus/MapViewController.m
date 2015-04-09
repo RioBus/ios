@@ -18,6 +18,7 @@
 #import "UIBusIcon.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
+
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
@@ -39,10 +40,6 @@
 #define CAMERA_DEFAULT_ZOOM                    12
 #define CAMERA_CURRENT_LOCATION_ZOOM           14
 #define CAMERA_DEFAULT_PADDING                 50.0F
-
-#define BUS_ROUTE_SHAPE_ID_INDEX               4
-#define BUS_ROUTE_LATITUDE_INDEX               5
-#define BUS_ROUTE_LONGITUDE_INDEX              6
 
 #define DISTANCE_NOTIFICATION_WARNING_TIME     300
 #define DISTANCE_NOTIFICATION_ERROR_GAP_ANGLE  30
@@ -66,19 +63,15 @@ NSInteger markerColorIndex = 0;
     
     [self.searchInput setImage:[UIImage imageNamed:@"about.png"] forSearchBarIcon:UISearchBarIconBookmark state:UIControlStateNormal];
     
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    // This checks for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
-    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestWhenInUseAuthorization];
-    }
+    [self startLocationServices];
     
     self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
                          [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
                          [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];;
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -95,21 +88,11 @@ NSInteger markerColorIndex = 0;
     
 }
 
-- (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve{
-    switch (curve) {
-        case UIViewAnimationCurveEaseInOut: return UIViewAnimationOptionCurveEaseInOut;
-        case UIViewAnimationCurveEaseIn:    return UIViewAnimationOptionCurveEaseIn;
-        case UIViewAnimationCurveEaseOut:   return UIViewAnimationOptionCurveEaseOut;
-        case UIViewAnimationCurveLinear:    return UIViewAnimationOptionCurveLinear;
-    }
-    return UIViewAnimationOptionCurveEaseInOut;
-}
-
 - (void)setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info{
     // Obtém dados da animação
     UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
     UIViewAnimationOptions animationOptions = UIViewAnimationOptionBeginFromCurrentState;
-    animationOptions |= [self animationOptionsWithCurve:animationCurve];
+    animationOptions |= [MapViewController animationOptionsWithCurve:animationCurve];
     
     NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
@@ -136,68 +119,75 @@ NSInteger markerColorIndex = 0;
     }
 }
 
-//Atualiza os dados para o carregamento do mapa
-- (void)aTime{
-    if(![self.searchInput isFirstResponder])
-        [self atualizar:self];
+- (void)startLocationServices {
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    // This checks for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
+    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestWhenInUseAuthorization];
+    }
 }
 
-- (void)atualizar:(id)sender{
+// Atualiza os dados para o carregamento do mapa
+- (void)atualizarDados:(id)sender{
+    if ([self.searchInput isFirstResponder] || !self.searchInput.text.length) {
+        return;
+    }
+    
     routeColorIndex = -1;
     markerColorIndex = -1;
     
     [self.searchInput resignFirstResponder];
     
+    // Limpar possíveis requests na fila
     if (self.lastRequests) {
-        for (NSOperation* request in self.lastRequests){
+        for (NSOperation* request in self.lastRequests) {
             NSLog(@"Cancelando o request antigo %@", request);
             [request cancel];
         }
     }
+    [self.lastRequests removeAllObjects];
     
-    if (self.searchInput.text.length>0){
-        [self.lastRequests removeAllObjects];
-        NSString* validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        NSCharacterSet* splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
-        NSMutableArray* buses = [[[self.searchInput.text uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
-        [buses removeObject:@""];
+    NSString* validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    NSCharacterSet* splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
+    NSMutableArray* buses = [[[self.searchInput.text uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
+    [buses removeObject:@""];
+    
+    if ([buses count]) {
+        [self.suggestionTable addToRecentTable:[buses componentsJoinedByString:@", "]];
         
-        if ([buses count]>0){
-            [self.suggestionTable addToRecentTable:[buses componentsJoinedByString:@", "]];
+        for (NSString* busLineNumber in buses) {
+            routeColorIndex = (routeColorIndex+1)%self.busesColors.count;
+            [self insertRouteOfBus:busLineNumber withColorIndex:routeColorIndex];
             
-            for (NSString* busLineNumber in buses){
-                routeColorIndex = (routeColorIndex+1)%self.busesColors.count;
-                [self insertRouteOfBus:busLineNumber withColorIndex:routeColorIndex];
-                
-                self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
-                                                                     withCompletionHandler:^(NSArray *busesData, NSError *error) {
-                                                                         [self.view hideToastActivity];
-                                                                         if (error){
-                                                                             // Mostra Toast parecido com o Android
-                                                                             if (error.code != NSURLErrorCancelled) // Erro ao cancelar um request
-                                                                                 [self.view makeToast:[error localizedDescription]];
-                                                                             
-                                                                             // Atualiza informacoes dos marcadores
-                                                                             [self updateMarkers];
+            self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
+                                                                 withCompletionHandler:^(NSArray *busesData, NSError *error) {
+                                                                     [self.view hideToastActivity];
+                                                                     if (error) {
+                                                                         // Mostra Toast parecido com o Android
+                                                                         if (error.code != NSURLErrorCancelled) // Erro ao cancelar um request
+                                                                             [self.view makeToast:[error localizedDescription]];
+                                                                         
+                                                                         // Atualiza informacoes dos marcadores
+                                                                         [self updateMarkers];
+                                                                     } else {
+                                                                         self.busesData = busesData;
+                                                                         
+                                                                         if (!self.busesData.count) {
+                                                                             NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
+                                                                             [self.view makeToast:msg];
                                                                          } else {
-                                                                             self.busesData = busesData;
-                                                                             
-                                                                             if (self.busesData.count == 0){
-                                                                                 NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
-                                                                                 [self.view makeToast:msg];
-                                                                             } else {
-                                                                                 // Ajusta o timer
-                                                                                 [self.updateTimer invalidate];
-                                                                                 self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(aTime)
-                                                                                                                                   userInfo:nil repeats:NO];
-                                                                             }
+                                                                             // Ajusta o timer
+                                                                             self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(atualizarDados:) userInfo:nil repeats:NO];
                                                                          }
-                                                                     }];
-                
-                [self.lastRequests addObject:self.lastRequest];
-            }
+                                                                     }
+                                                                 }];
+            
+            [self.lastRequests addObject:self.lastRequest];
         }
     }
+    
 }
 
 - (void)setBusesData:(NSArray*)busesData{
@@ -205,45 +195,9 @@ NSInteger markerColorIndex = 0;
     [self updateMarkers];
 }
 
-//Funções para determinar a distância de um ônibus para a pessoa
-- (CLLocationCoordinate2D)getCoordinateForLatitude:(NSString*)latitude andLongitude:(NSString*)longitude{
-    return CLLocationCoordinate2DMake([[[latitude  substringToIndex:[latitude  length]-2] substringFromIndex:1] doubleValue],
-                                      [[[longitude substringToIndex:[longitude length]-2] substringFromIndex:1] doubleValue]);
-}
-- (CGSize)distanceFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation{
-    CGFloat medLatitude = (objectLocation.latitude + personLocation.latitude)/2;
-    CGFloat metersPerLatitude = 111132.954 - 559.822*cos(2*medLatitude) + 1.175*cos(4*medLatitude);
-    CGFloat metersPerLongitude = 111319.490*cos(medLatitude);
-    
-    CGFloat busYDist = (objectLocation.latitude - personLocation.latitude)*metersPerLatitude;
-    CGFloat busXDist = (objectLocation.longitude - personLocation.longitude)*metersPerLongitude;
-    
-    return CGSizeMake(busXDist,busYDist);
-}
 
-- (CGFloat)timeFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation atSpeed:(CGFloat)speed{
-    CGSize busDist = [self distanceFromObject:objectLocation toPerson:personLocation];
-    return (sqrt(busDist.height*busDist.height + busDist.width*busDist.width))/(speed/3.6);
-}
+#pragma mark Carregamento do marcadores, da rota e do mapa
 
-//Funções para determinar a direção do ônibus em relação à pessoa
-- (CGFloat)angleFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation{
-    CGSize busDist = [self distanceFromObject:objectLocation toPerson:personLocation];
-    CGFloat hipotenusa = sqrt(busDist.height*busDist.height + busDist.width*busDist.width);
-    
-    return GLKMathRadiansToDegrees(busDist.width/hipotenusa);
-}
-
-- (BOOL)isAngle:(CGFloat)angle nearOfDirection:(CGFloat)direction withAnErrorGapOf:(CGFloat)margin{
-    if (direction<margin || direction>(360-margin)){
-        if (angle>180)     angle -= 360;
-        if (direction>180) direction -= 360;
-    }
-    //return ((direction-margin<angle) && (direction+margin>angle));
-    return (ABS(direction-angle)<margin);
-}
-
-//Funções referentes ao carregamento do marcadores, da rota e do mapa
 - (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex{
     self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
                                                               withCompletionHandler:^(NSArray *shapes, NSError *error) {
@@ -273,7 +227,7 @@ NSInteger markerColorIndex = 0;
         
         // Busca o marcador na "cache"
         GMSMarker *marca = self.markerForOrder[busData.order];
-        if (!marca){
+        if (!marca) {
             marca = [[GMSMarker alloc] init];
             [marca setMap:self.mapView];
             [self.markerForOrder setValue:marca forKey:busData.order];
@@ -289,11 +243,11 @@ NSInteger markerColorIndex = 0;
         mapBounds = [mapBounds includingCoordinate:marca.position];
         
         //Notificação de aproximação de ônibus
-        CGFloat secondsToObject = [self timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate
+        CGFloat secondsToObject = [MapViewController timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate
                                                atSpeed:[busData.velocity doubleValue]];
-        if (secondsToObject < DISTANCE_NOTIFICATION_WARNING_TIME){
-            if ([self isAngle:[self angleFromObject:marca.position toPerson:[self.mapView myLocation].coordinate]
-              nearOfDirection:[busData.direction floatValue] withAnErrorGapOf:DISTANCE_NOTIFICATION_ERROR_GAP_ANGLE]){
+        if (secondsToObject < DISTANCE_NOTIFICATION_WARNING_TIME) {
+            if ([MapViewController isAngle:[MapViewController angleFromObject:marca.position toPerson:[self.mapView myLocation].coordinate]
+              nearOfDirection:[busData.direction floatValue] withAnErrorGapOf:DISTANCE_NOTIFICATION_ERROR_GAP_ANGLE]) {
                 
                 UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
                 acceptAction.title = [NSString stringWithFormat:@"Ônibus %@ se aproximando! Tempo de chegada: %@", marca.title,
@@ -326,7 +280,7 @@ NSInteger markerColorIndex = 0;
     
     [self.view makeToastActivity];
     
-    [self atualizar:self];
+    [self atualizarDados:self];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
@@ -349,6 +303,7 @@ NSInteger markerColorIndex = 0;
     [self performSegueWithIdentifier:@"viewOptions" sender:self];
 }
 
+
 #pragma mark CLLocationManagerDelegate methods
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
@@ -358,7 +313,10 @@ NSInteger markerColorIndex = 0;
     self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:CAMERA_CURRENT_LOCATION_ZOOM];
 }
 
-//Segue que muda para a tela de Sobre
+
+#pragma mark Segue control
+
+// Segue que muda para a tela de Sobre
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender{
     if ([segue.identifier isEqualToString:@"viewOptions"]) {
         OptionsViewController *optionsVC = segue.destinationViewController;
@@ -366,11 +324,79 @@ NSInteger markerColorIndex = 0;
     }
 }
 
+
+#pragma mark Listeners de notificações
+
 // Atualiza o tamanho da tabela de acordo com o tamanho do teclado
 - (void)keyboardWillShow:(NSNotification *)sender {
     CGRect keyboardFrame = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     self.keyboardBottomContraint.constant = keyboardFrame.size.height + 5;
     [self.suggestionTable layoutIfNeeded];
+}
+
+- (void)appDidEnterBackground:(NSNotification *)sender {
+    // Cancela o timer para não ficar gastando bateria no background
+    if (self.updateTimer) {
+        [self.updateTimer invalidate];
+        self.updateTimer = nil;
+    }
+}
+
+- (void)appWillEnterForeground:(NSNotification *)sender {
+    [self performSelector:@selector(atualizarDados:) withObject:self];
+}
+
+
+#pragma mark Funções utilitárias
+
+// Funções para determinar a distância de um ônibus para a pessoa
++ (CLLocationCoordinate2D)getCoordinateForLatitude:(NSString*)latitude andLongitude:(NSString*)longitude{
+    return CLLocationCoordinate2DMake([[[latitude  substringToIndex:[latitude  length]-2] substringFromIndex:1] doubleValue],
+                                      [[[longitude substringToIndex:[longitude length]-2] substringFromIndex:1] doubleValue]);
+}
+
++ (CGSize)distanceFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation{
+    CGFloat medLatitude = (objectLocation.latitude + personLocation.latitude)/2;
+    CGFloat metersPerLatitude = 111132.954 - 559.822*cos(2*medLatitude) + 1.175*cos(4*medLatitude);
+    CGFloat metersPerLongitude = 111319.490*cos(medLatitude);
+    
+    CGFloat busYDist = (objectLocation.latitude - personLocation.latitude)*metersPerLatitude;
+    CGFloat busXDist = (objectLocation.longitude - personLocation.longitude)*metersPerLongitude;
+    
+    return CGSizeMake(busXDist,busYDist);
+}
+
++ (CGFloat)timeFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation atSpeed:(CGFloat)speed{
+    CGSize busDist = [self distanceFromObject:objectLocation toPerson:personLocation];
+    return (sqrt(busDist.height*busDist.height + busDist.width*busDist.width))/(speed/3.6);
+}
+
+// Funções para determinar a direção do ônibus em relação à pessoa
++ (CGFloat)angleFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation{
+    CGSize busDist = [self distanceFromObject:objectLocation toPerson:personLocation];
+    CGFloat hipotenusa = sqrt(busDist.height*busDist.height + busDist.width*busDist.width);
+    
+    return GLKMathRadiansToDegrees(busDist.width/hipotenusa);
+}
+
++ (BOOL)isAngle:(CGFloat)angle nearOfDirection:(CGFloat)direction withAnErrorGapOf:(CGFloat)margin{
+    if (direction<margin || direction>(360-margin)){
+        if (angle>180)     angle -= 360;
+        if (direction>180) direction -= 360;
+    }
+    
+    return (ABS(direction-angle)<margin);
+}
+
+
++ (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve{
+    switch (curve) {
+        case UIViewAnimationCurveEaseInOut: return UIViewAnimationOptionCurveEaseInOut;
+        case UIViewAnimationCurveEaseIn:    return UIViewAnimationOptionCurveEaseIn;
+        case UIViewAnimationCurveEaseOut:   return UIViewAnimationOptionCurveEaseOut;
+        case UIViewAnimationCurveLinear:    return UIViewAnimationOptionCurveLinear;
+    }
+    return UIViewAnimationOptionCurveEaseInOut;
 }
 
 @end
