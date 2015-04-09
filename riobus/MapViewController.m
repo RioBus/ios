@@ -281,7 +281,7 @@ NSInteger markerColorIndex = 0;
         
         marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order,
                          [busData.velocity doubleValue], [busData humanReadableDelay]];
-        marca.title = [busData.lineNumber description];
+        marca.title = busData.sense;
         marca.position = busData.location.coordinate;
         marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation
                                       andColor:self.busesColors[markerColorIndex]];
