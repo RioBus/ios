@@ -34,7 +34,7 @@
         if ([[NSUserDefaults standardUserDefaults] floatForKey:@"cache_version"] < 2.0) {
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"Rotas de Onibus"];
             [[NSUserDefaults standardUserDefaults] setFloat:2.0 forKey:@"cache_version"];
-            NSLog(@"Cache do usuário redefinido (cache incompatível).");
+            NSLog(@"Cache do usuário redefinido (cache incompatível ou não existente).");
         }
     }
     return self;

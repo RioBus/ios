@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -44,7 +44,7 @@
                                 <rect key="frame" x="6" y="20" width="308" height="44"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="namePhonePad" returnKeyType="search"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="search"/>
                                 <connections>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="hSM-yE-dcJ"/>
                                 </connections>
@@ -73,6 +73,7 @@
                     <navigationItem key="navigationItem" id="fyO-ox-e98">
                         <nil key="title"/>
                     </navigationItem>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="accessoryView" destination="wWi-WK-oeK" id="DyX-uy-Fjm"/>
                         <outlet property="keyboardBottomContraint" destination="OZ7-aC-PBQ" id="jyk-Cd-taQ"/>
@@ -124,10 +125,15 @@
         <!--Navigation Controller-->
         <scene sceneID="MsF-Ft-6bt">
             <objects>
-                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="8Yh-BV-TBK" sceneMemberID="viewController">
-                    <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="t8b-Y1-f6V">
+                <navigationController definesPresentationContext="YES" id="8Yh-BV-TBK" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="t8b-Y1-f6V">
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.26300890148207701" green="0.63410336320551774" blue="0.95744694182727275" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="NeJ-go-FgT"/>
@@ -137,7 +143,7 @@
             </objects>
             <point key="canvasLocation" x="-376" y="-54.43333333333333"/>
         </scene>
-        <!--Options View Controller-->
+        <!--RioBus-->
         <scene sceneID="uLg-Wb-IE0">
             <objects>
                 <viewController id="TAr-9s-PmU" customClass="OptionsViewController" sceneMemberID="viewController">
@@ -146,173 +152,180 @@
                         <viewControllerLayoutGuide type="bottom" id="CKf-uL-pEv"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3m3-QU-KYY">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-DC-OOX">
-                                <rect key="frame" x="16" y="28" width="288" height="483"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="16" y="28" width="288" height="490"/>
                                 <attributedString key="attributedText">
+                                    <fragment content="O ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="RioBus">
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                        </attributes>
+                                    </fragment>
                                     <fragment>
-                                        <string key="content">Como Usar
+                                        <string key="content"> é um sistema colaborativo de monitoramento de ônibus em tempo real, que utiliza a API aberta de dados de mobilidade urbana fornecida pela parceria entre a </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Prefeitura do Rio de Janeiro">
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" e a ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="FETRANSPOR">
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">. Seu objetivo principal é ajudar o cidadão, seja ele morador ou visitante, do Rio de Janeiro a se deslocar pela cidade.
+ O serviço é desenvolvido de forma colaborativa, e por isso depende da sua ajuda para melhorar, seja dando apenas um feedback ou aprimorando algum código.
+
 </string>
                                         <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content">Digite o número de uma linha municipal da cidade do Rio de Janeiro e clique em "Buscar" para que as posições de todos os ônibus desta linha sejam exibidas.
-As bordas dos marcadores dos ônibus simbolizam o seguinte:
+                                        <string key="content">Como funciona?
 </string>
                                         <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="20" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="Verde:">
-                                        <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" atualizado há menos de 5 min ">
-                                        <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="Amarelo:">
-                                        <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=" atualizado entre 5 e 10 min atrás ">
-                                        <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="Vermelho:">
-                                        <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
-                                                <tabStops/>
-                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content"> atualizado há mais de 10 min
-Clicando no marcador é possível ver mais detalhes sobre o instante da coleta dos dados.
-Os marcadores são atualizados a cada 15s e a posição dos ônibus a cada minuto.
-Este app foi desenvolvido para iOS por </string>
-                                        <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="Vinicius Bittencourt">
-                                        <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content=", baseado na ideia original de ">
-                                        <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment content="Marco Jardim">
-                                        <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
-                                                <tabStops/>
-                                            </paragraphStyle>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">, e é incrementado colaborativamente por:
+                                        <string key="content">Basta digitar a linha do ônibus que você deseja encontrar na caixa de busca e a posição de cada carro aparecerá no mapa. Também pode ser feita a busca diretamente pela URL (exemplo: http://riob.us/?485). Além disso, você pode ver mais informações sobre o ônibus ao clicar sobre o marcador.
+
 </string>
                                         <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content">Fred Souza Bruno Lima Magno Ferreira Daniel Andrade Bruno do Amaral Vitor Miranda
+                                        <string key="content">Legenda dos marcadores
 </string>
                                         <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue-Bold"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="20" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content">Os dados são oferecidos publicamente pela Prefeitura do Rio de Janeiro, em parceria com a FETRANSPOR.
-Gostou do projeto? Quer colaborar? Quer saber como funciona? Quer reclamar? Conheça nossa página do Facebook: </string>
+                                        <string key="content">Verde: atualizado há menos de 5 min
+Amarelo: atualizado entre 5 e 10 min atrás
+Vermelho: atualizado há mais de 10 min
+
+</string>
                                         <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
-                                    <fragment content="RioBusOficial">
+                                    <fragment content="Gostou do projeto?">
                                         <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                            <url key="NSLink" string="fb://profile/1408367169433222"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="20" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
-                                    <fragment content=".">
+                                    <fragment>
+                                        <string key="content">
+Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestões através da nossa página no Facebook. Ou então, caso você seja o tipo que prefere pôr a mão na massa, pode nos ajudar a aprimorar o nosso código, que está hospedado publicamente no Github. O código está licenciado sob a licença GNU GPL v2, isso quer dizer que você pode alterar e reutilizar à vontade!</string>
                                         <attributes>
-                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" paragraphSpacing="14" defaultTabInterval="36">
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
                                 </attributedString>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i2a-dn-9tR">
-                                <rect key="frame" x="274" y="519" width="30" height="30"/>
-                                <state key="normal" title="OK">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="closeAboutWindow:" destination="sIx-zc-D3X" eventType="touchDown" id="1Lm-LQ-4AJ"/>
-                                    <action selector="closeAboutWindow:" destination="TAr-9s-PmU" eventType="touchUpInside" id="4Zo-Qg-dyV"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FWK-Od-CVk">
-                                <rect key="frame" x="16" y="519" width="96" height="30"/>
+                                <rect key="frame" x="16" y="530" width="96" height="30"/>
                                 <state key="normal" title="Limpar Cache">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -321,25 +334,17 @@ Gostou do projeto? Quer colaborar? Quer saber como funciona? Quer reclamar? Conh
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="57" id="AZh-49-H1m"/>
-                            <constraint firstItem="i2a-dn-9tR" firstAttribute="trailing" secondItem="YkP-DC-OOX" secondAttribute="trailing" id="Byl-U3-Ge0"/>
+                            <constraint firstItem="CKf-uL-pEv" firstAttribute="top" secondItem="FWK-Od-CVk" secondAttribute="bottom" constant="8" id="3uX-Au-X9b"/>
+                            <constraint firstAttribute="bottom" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="50" id="AZh-49-H1m"/>
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="leading" secondItem="3m3-QU-KYY" secondAttribute="leadingMargin" id="CcG-RH-fL9"/>
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="top" secondItem="kB7-cd-FK6" secondAttribute="bottom" constant="8" symbolic="YES" id="FFP-h6-7FD"/>
-                            <constraint firstItem="FWK-Od-CVk" firstAttribute="baseline" secondItem="i2a-dn-9tR" secondAttribute="baseline" id="Rmj-UE-gVN"/>
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="trailing" secondItem="3m3-QU-KYY" secondAttribute="trailingMargin" id="RnI-04-90n"/>
-                            <constraint firstItem="i2a-dn-9tR" firstAttribute="top" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="8" symbolic="YES" id="Sv2-xY-b2J"/>
                             <constraint firstItem="FWK-Od-CVk" firstAttribute="leading" secondItem="YkP-DC-OOX" secondAttribute="leading" id="iBX-tQ-GAt"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="lds-IN-wQg">
-                        <barButtonItem key="leftBarButtonItem" title="Voltar" id="8Y0-py-rkH">
-                            <connections>
-                                <action selector="closeAboutWindow:" destination="sIx-zc-D3X" id="q96-O9-6Q4"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="RioBus" id="lds-IN-wQg"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sIx-zc-D3X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -39,7 +39,7 @@
 #define CAMERA_DEFAULT_LONGITUDE               -43.1912805
 #define CAMERA_DEFAULT_ZOOM                    12
 #define CAMERA_CURRENT_LOCATION_ZOOM           14
-#define CAMERA_DEFAULT_PADDING                 50.0F
+#define CAMERA_DEFAULT_PADDING                 100.0f
 
 #define DISTANCE_NOTIFICATION_WARNING_TIME     300
 #define DISTANCE_NOTIFICATION_ERROR_GAP_ANGLE  30
@@ -51,7 +51,6 @@ NSInteger markerColorIndex = 0;
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
     
@@ -74,7 +73,11 @@ NSInteger markerColorIndex = 0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];;
 }
 
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+
     CLLocation *location = [self.mapView myLocation];
     if (location) {
         self.mapView.camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
