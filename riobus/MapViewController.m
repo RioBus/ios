@@ -58,9 +58,9 @@ NSInteger markerColorIndex = 0;
     self.mapView.trafficEnabled = YES;
     self.mapView.myLocationEnabled = YES;
     
-    self.suggestionTable.hidden = YES;
+    self.suggestionTable.alpha = 0;
     
-    [self.searchInput setImage:[UIImage imageNamed:@"about.png"] forSearchBarIcon:UISearchBarIconBookmark state:UIControlStateNormal];
+    [self.searchInput setImage:[UIImage imageNamed:@"info.png"] forSearchBarIcon:UISearchBarIconBookmark state:UIControlStateNormal];
     
     [self startLocationServices];
     
@@ -274,10 +274,10 @@ NSInteger markerColorIndex = 0;
     [self.searchInput resignFirstResponder];
     [self.searchInput setShowsCancelButton:NO animated:YES];
     [self.markerForOrder removeAllObjects];
-    self.suggestionTable.hidden = YES;
     self.searchInput.showsBookmarkButton = YES;
-    self.mapView.alpha = 1.0f;
     [self.mapView clear];
+    
+    [self setSuggestionsTableVisible:NO];
     
     self.hasRepositionedMap = NO;
     
@@ -288,18 +288,21 @@ NSInteger markerColorIndex = 0;
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
     [self.searchInput becomeFirstResponder];
-    [self.searchInput setShowsCancelButton:YES animated:YES];
-    self.suggestionTable.hidden = NO;
-    self.searchInput.showsBookmarkButton = NO;
-    self.mapView.alpha = 0.5f;
+//    self.suggestionTable.hidden = NO;
+//    self.searchInput.showsBookmarkButton = NO;
+//    self.mapView.alpha = 0.5f;
+    
+    [self setSuggestionsTableVisible:YES];
+
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar{
     [self.searchInput resignFirstResponder];
-    [self.searchInput setShowsCancelButton:NO animated:YES];
-    self.suggestionTable.hidden = YES;
-    self.searchInput.showsBookmarkButton = YES;
-    self.mapView.alpha = 1.0f;
+//    [self.searchInput setShowsCancelButton:NO animated:YES];
+//    self.suggestionTable.hidden = YES;
+//    self.searchInput.showsBookmarkButton = YES;
+//    self.mapView.alpha = 1.0f;
+    [self setSuggestionsTableVisible:NO];
 }
 
 - (void)searchBarBookmarkButtonClicked:(UISearchBar*)searchBar{
@@ -391,7 +394,6 @@ NSInteger markerColorIndex = 0;
     return (ABS(direction-angle)<margin);
 }
 
-
 + (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve{
     switch (curve) {
         case UIViewAnimationCurveEaseInOut: return UIViewAnimationOptionCurveEaseInOut;
@@ -400,6 +402,29 @@ NSInteger markerColorIndex = 0;
         case UIViewAnimationCurveLinear:    return UIViewAnimationOptionCurveLinear;
     }
     return UIViewAnimationOptionCurveEaseInOut;
+}
+
+- (void)setSuggestionsTableVisible:(BOOL)visible {
+    static const float ANIMATION_DURATION = 0.2;
+    static const CGFloat BACKGROUND_ALPHA = 0.3f;
+    
+    if (visible) {
+        // Appear
+        self.searchInput.showsBookmarkButton = NO;
+        [self.searchInput setShowsCancelButton:YES animated:YES];
+        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+            self.suggestionTable.alpha = 1.0f;
+            self.mapView.alpha = BACKGROUND_ALPHA;
+        }];
+    } else {
+        // Disappear
+        self.searchInput.showsBookmarkButton = YES;
+        [self.searchInput setShowsCancelButton:NO animated:YES];
+        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+            self.suggestionTable.alpha = 0.0f;
+            self.mapView.alpha = 1.0f;
+        }];
+    }
 }
 
 @end

@@ -41,6 +41,8 @@
 		681A7FA1196824FC0006C335 /* BusDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA0196824FC0006C335 /* BusDataStore.m */; };
 		681A7FA819684A6C0006C335 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA719684A6C0006C335 /* OptionsViewController.m */; };
 		681A7FAE196890AB0006C335 /* icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = 681A7FAD196890AB0006C335 /* icon120.png */; };
+		A3443D8F1ADF500900240B46 /* info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A3443D8E1ADF500900240B46 /* info@2x.png */; };
+		A3443D911ADF506E00240B46 /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = A3443D901ADF506E00240B46 /* info.png */; };
 		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
 /* End PBXBuildFile section */
 
@@ -56,7 +58,6 @@
 
 /* Begin PBXFileReference section */
 		27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.release.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.release.xcconfig"; sourceTree = "<group>"; };
-		63156F1D1A09922C00548BCB /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
 		6331A56B1A08516E006BBFB5 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		6360584E1A0528FC00E3E4CD /* bus-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bus-gray.png"; sourceTree = "<group>"; };
 		6360584F1A0528FC00E3E4CD /* bus-gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bus-gray@2x.png"; sourceTree = "<group>"; };
@@ -103,6 +104,8 @@
 		681A7FA719684A6C0006C335 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		681A7FAD196890AB0006C335 /* icon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon120.png; sourceTree = "<group>"; };
 		8D9CA8F077F246CFBA653042 /* libPods-riobus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-riobus.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3443D8E1ADF500900240B46 /* info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info@2x.png"; sourceTree = "<group>"; };
+		A3443D901ADF506E00240B46 /* info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = info.png; sourceTree = "<group>"; };
 		E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -195,7 +198,6 @@
 				681A7F4D196722530006C335 /* InfoPlist.strings */,
 				681A7F50196722530006C335 /* main.m */,
 				681A7F52196722540006C335 /* riobus-Prefix.pch */,
-				63156F1D1A09922C00548BCB /* TODO */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -221,6 +223,8 @@
 		681A7F80196731410006C335 /* imagens */ = {
 			isa = PBXGroup;
 			children = (
+				A3443D8E1ADF500900240B46 /* info@2x.png */,
+				A3443D901ADF506E00240B46 /* info.png */,
 				639261521A06C22700B9A53C /* bookmark.png */,
 				639261531A06C22700B9A53C /* recent.png */,
 				63CA9BA619E9A29700AE9569 /* about.png */,
@@ -346,11 +350,13 @@
 				681A7F90196731410006C335 /* bus-red.png in Resources */,
 				681A7F4F196722530006C335 /* InfoPlist.strings in Resources */,
 				681A7F92196731410006C335 /* bus-yellow.png in Resources */,
+				A3443D8F1ADF500900240B46 /* info@2x.png in Resources */,
 				681A7F96196731410006C335 /* icon120@2x.png in Resources */,
 				636058511A0528FC00E3E4CD /* bus-gray@2x.png in Resources */,
 				681A7F91196731410006C335 /* bus-red@2x.png in Resources */,
 				681A7F8E196731410006C335 /* bus-green@2x.png in Resources */,
 				636058501A0528FC00E3E4CD /* bus-gray.png in Resources */,
+				A3443D911ADF506E00240B46 /* info.png in Resources */,
 				681A7FAE196890AB0006C335 /* icon120.png in Resources */,
 				681A7F58196722540006C335 /* Main.storyboard in Resources */,
 				639261541A06C22700B9A53C /* bookmark.png in Resources */,
