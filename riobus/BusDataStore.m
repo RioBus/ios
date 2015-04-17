@@ -61,7 +61,7 @@
     // Procura o cache da linha pesquisada
     NSString* jsonData = [buses objectForKey:webSafeNumber];
     if (!jsonData) {
-        NSString *strUrl = [NSString stringWithFormat:@"http://localhost:8081/itinerary/%@", webSafeNumber];
+        NSString *strUrl = [NSString stringWithFormat:@"http://rest.riob.us/itinerary/%@", webSafeNumber];
         NSLog(@"URL = %@" , strUrl);
         
         // Monta o request
@@ -129,7 +129,7 @@
 - (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {
     // Previne URL injection
     NSString* webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *strUrl = [NSString stringWithFormat:@"http://localhost:8081/search/2/%@", webSafeNumber];
+    NSString *strUrl = [NSString stringWithFormat:@"http://rest.riob.us/search/2/%@", webSafeNumber];
     NSLog(@"URL = %@" , strUrl);
     
     // Monta o request
