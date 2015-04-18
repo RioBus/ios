@@ -1,36 +1,36 @@
 PODS:
-  - AFNetworking (2.3.1):
-    - AFNetworking/NSURLConnection (= 2.3.1)
-    - AFNetworking/NSURLSession (= 2.3.1)
-    - AFNetworking/Reachability (= 2.3.1)
-    - AFNetworking/Security (= 2.3.1)
-    - AFNetworking/Serialization (= 2.3.1)
-    - AFNetworking/UIKit (= 2.3.1)
-  - AFNetworking/NSURLConnection (2.3.1):
+  - AFNetworking (2.5.2):
+    - AFNetworking/NSURLConnection (= 2.5.2)
+    - AFNetworking/NSURLSession (= 2.5.2)
+    - AFNetworking/Reachability (= 2.5.2)
+    - AFNetworking/Security (= 2.5.2)
+    - AFNetworking/Serialization (= 2.5.2)
+    - AFNetworking/UIKit (= 2.5.2)
+  - AFNetworking/NSURLConnection (2.5.2):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.3.1):
+  - AFNetworking/NSURLSession (2.5.2):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.3.1)
-  - AFNetworking/Security (2.3.1)
-  - AFNetworking/Serialization (2.3.1)
-  - AFNetworking/UIKit (2.3.1):
+  - AFNetworking/Reachability (2.5.2)
+  - AFNetworking/Security (2.5.2)
+  - AFNetworking/Serialization (2.5.2)
+  - AFNetworking/UIKit (2.5.2):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Google-Maps-iOS-SDK (1.8.1)
-  - Toast (2.2)
+  - Google-Maps-iOS-SDK (1.9.2)
+  - Toast (2.4)
 
 DEPENDENCIES:
-  - AFNetworking (~> 2.3)
-  - Google-Maps-iOS-SDK (~> 1.8)
-  - Toast (~> 2.2)
+  - AFNetworking (~> 2.5)
+  - Google-Maps-iOS-SDK (~> 1.9)
+  - Toast (~> 2.4)
 
 SPEC CHECKSUMS:
-  AFNetworking: 05b9f6e3aa5ac45bc383b4bb108ef338080a26c7
-  Google-Maps-iOS-SDK: ac676d383fccd332bcb0abb24e483891b5956bb4
-  Toast: d2249f9554899565c9e5bdd1c0bc0e4ad376f592
+  AFNetworking: fefbce9660acb17f48ae0011292d4da0f457bf36
+  Google-Maps-iOS-SDK: 4c008abdb68e03ae125c7f674be841d369e2b3de
+  Toast: 0773b8fc0e97352ca6054517bec7ebdd4110029d
 
 COCOAPODS: 0.36.3

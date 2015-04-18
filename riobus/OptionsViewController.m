@@ -18,6 +18,12 @@
     // Do any additional setup after loading the view.
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
@@ -43,10 +49,6 @@
     
     alert.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (IBAction)closeAboutWindow:(id)sender{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

@@ -9,23 +9,10 @@
 #import "BusDataStore.h"
 #import <AFNetworking/AFNetworking.h>
 
-// Indice dos campos no array retornado pelo servidor
-#define BUSDATA_IDX_HOUR            0
-#define BUSDATA_IDX_ID              1
-#define BUSDATA_IDX_LINE_NUMBER     2
-#define BUSDATA_IDX_LATITUDE        3
-#define BUSDATA_IDX_LONGITUDE       4
-#define BUSDATA_IDX_VELOCITY        5
-#define BUSDATA_IDX_DIRECTION       6
-
-#define BUS_ROUTE_SHAPE_ID_INDEX    4
-#define BUS_ROUTE_LATITUDE_INDEX    5
-#define BUS_ROUTE_LONGITUDE_INDEX   6
-
-#define BUS_ROUTE_VAR_NUMBER        7
-
 @interface BusDataStore ()
+
 @property (strong, nonatomic) NSDateFormatter *jsonDateFormat;
+
 @end
 
 @implementation BusDataStore
@@ -39,6 +26,20 @@
     return __instance ;
 }
 
+- (id)init {
+    self = [super init];
+    if (self) {
+        // Verifica se o cache salvo é incompatível com o formato atual. Isso serve caso o usuário atualize o app
+        // para uma versão que usa um cache diferente.
+        if ([[NSUserDefaults standardUserDefaults] floatForKey:@"cache_version"] < 2.0) {
+            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"Rotas de Onibus"];
+            [[NSUserDefaults standardUserDefaults] setFloat:2.0 forKey:@"cache_version"];
+            NSLog(@"Cache do usuário redefinido (cache incompatível ou não existente).");
+        }
+    }
+    return self;
+}
+
 - (NSDateFormatter *)jsonDateFormat {
     // Se jsonDateFormat não existe, é instanciado em tempo de chamada
     if (! _jsonDateFormat ) {
@@ -49,7 +50,7 @@
     return _jsonDateFormat ;
 }
 
-- (NSOperation *)loadBusLineShapeForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler{
+- (NSOperation *)loadBusLineShapeForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {
     // Previne URL injection
     AFHTTPRequestOperation *operation;
     NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -57,9 +58,10 @@
     NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Rotas de Onibus"] mutableCopy];
     if (!buses) buses = [[NSMutableDictionary alloc] init];
     
-    NSString* csvData = [buses objectForKey:webSafeNumber];
-    if (!csvData){
-        NSString *strUrl = [NSString stringWithFormat:@"http://dadosabertos.rio.rj.gov.br/apiTransporte/Apresentacao/csv/gtfs/onibus/percursos/gtfs_linha%@-shapes.csv", webSafeNumber];
+    // Procura o cache da linha pesquisada
+    NSString* jsonData = [buses objectForKey:webSafeNumber];
+    if (!jsonData) {
+        NSString *strUrl = [NSString stringWithFormat:@"http://rest.riob.us/itinerary/%@", webSafeNumber];
         NSLog(@"URL = %@" , strUrl);
         
         // Monta o request
@@ -79,50 +81,55 @@
             });
         }];
         
-        csvData = [buses objectForKey:webSafeNumber];
+        jsonData = [buses objectForKey:webSafeNumber];
     }
-    if (csvData){
-        NSArray* pontosDoPercurso = [csvData componentsSeparatedByString:@"\n"];
-        NSArray* dadosDoPonto = [pontosDoPercurso[1] componentsSeparatedByString:@","];
+    
+    if (jsonData) {
+        // Agora já temos os dados da linha no cache
+        NSData* itineraryJsonData = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
+        NSError* jsonParseError = nil;
+        NSArray* pontosDoPercurso = [NSJSONSerialization JSONObjectWithData:itineraryJsonData options: NSJSONReadingMutableContainers error:&jsonParseError];
+        if (jsonParseError) {
+            NSLog(@"Error decoding JSON itinerary data");
+        }
         
         // Converte dados para lista de shapes
         NSMutableArray *shapes = [[NSMutableArray alloc] initWithCapacity:6];
         NSCharacterSet* quoteCharSet = [NSCharacterSet characterSetWithCharactersInString:@"\""] ;
         [shapes addObject:[[NSMutableArray alloc] initWithCapacity:200]];
-        __block NSString *lastShapeId = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
-        [pontosDoPercurso enumerateObjectsUsingBlock:^(NSString *shapeItem, NSUInteger idx, BOOL *stop) {
-            NSArray* dadosDoPonto = [shapeItem componentsSeparatedByString:@","];
-            if ([dadosDoPonto count] >= BUS_ROUTE_VAR_NUMBER){
-                NSString *strLatitude = [dadosDoPonto[BUS_ROUTE_LATITUDE_INDEX] stringByTrimmingCharactersInSet:quoteCharSet];
-                NSString *strLongitude = [dadosDoPonto[BUS_ROUTE_LONGITUDE_INDEX] stringByTrimmingCharactersInSet:quoteCharSet];
+        __block NSString *lastShapeId = pontosDoPercurso[0][@"shape"];
+        
+        [pontosDoPercurso enumerateObjectsUsingBlock:^(NSDictionary *dadosDoPonto, NSUInteger idx, BOOL *stop) {
+            NSString *strLatitude = [dadosDoPonto[@"latitude"] stringByTrimmingCharactersInSet:quoteCharSet];
+            NSString *strLongitude = [dadosDoPonto[@"longitude"] stringByTrimmingCharactersInSet:quoteCharSet];
             
-                CLLocation *location = [[CLLocation alloc] initWithLatitude:[strLatitude doubleValue] longitude:[strLongitude doubleValue]];
-                NSString *currShapeId = dadosDoPonto[BUS_ROUTE_SHAPE_ID_INDEX];
+            CLLocation *location = [[CLLocation alloc] initWithLatitude:[strLatitude doubleValue] longitude:[strLongitude doubleValue]];
+            NSString *currShapeId = dadosDoPonto[@"shape"];
             
-                NSMutableArray *currShapeArray ;
-                if ( [lastShapeId isEqualToString:currShapeId] ) {
-                    currShapeArray = [shapes lastObject];
-                } else {
-                    currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
-                    [shapes addObject:currShapeArray];
-                }
-                lastShapeId = currShapeId ;
-                [currShapeArray addObject:location];
+            NSMutableArray *currShapeArray;
+            if ([lastShapeId isEqualToString:currShapeId]) {
+                currShapeArray = [shapes lastObject];
+            } else {
+                currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
+                [shapes addObject:currShapeArray];
             }
+            
+            lastShapeId = currShapeId;
+            [currShapeArray addObject:location];
         }];
         
         handler(shapes, nil);
-        
     }
     
     [operation start];
     return operation ;
+    
 }
 
 - (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {
     // Previne URL injection
     NSString* webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *strUrl = [NSString stringWithFormat:@"http://66.228.60.200/?busca=%@&s=2", webSafeNumber];
+    NSString *strUrl = [NSString stringWithFormat:@"http://rest.riob.us/search/2/%@", webSafeNumber];
     NSLog(@"URL = %@" , strUrl);
     
     // Monta o request
@@ -132,22 +139,21 @@
     
     // Chama a URL
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        // Objeto com os dados...
-        NSArray *jsonBusesData = [responseObject objectForKey:@"DATA"];
-        
-        // Monta array de retorno
+        // Objeto com os
+        NSArray *jsonBusesData = (NSArray *)responseObject;
         NSMutableArray *busesData = [[NSMutableArray alloc] initWithCapacity:jsonBusesData.count];
         
-        [jsonBusesData enumerateObjectsUsingBlock:^(NSArray *jsonBusData, NSUInteger idx, BOOL *stop) {
-            BusData *busData = [[BusData alloc] init];
-            busData.lastUpdate = [self.jsonDateFormat dateFromString:jsonBusData[BUSDATA_IDX_HOUR]];
-            busData.order = jsonBusData[BUSDATA_IDX_ID];
-            busData.lineNumber = [jsonBusData[BUSDATA_IDX_LINE_NUMBER] description];
-            busData.velocity = jsonBusData[BUSDATA_IDX_VELOCITY];
-            busData.location =  [[CLLocation alloc] initWithLatitude:[jsonBusData[BUSDATA_IDX_LATITUDE] doubleValue] longitude:[jsonBusData[BUSDATA_IDX_LONGITUDE] doubleValue]];
-            busData.direction = jsonBusData[BUSDATA_IDX_DIRECTION];
+        [jsonBusesData enumerateObjectsUsingBlock:^(NSDictionary *jsonBusData, NSUInteger idx, BOOL *stop) {
+            BusData *bus = [[BusData alloc] init];
+            bus.lastUpdate = [self.jsonDateFormat dateFromString:jsonBusData[@"timeStamp"]];
+            bus.order = jsonBusData[@"order"];
+            bus.lineNumber = jsonBusData[@"line"];
+            bus.velocity = jsonBusData[@"speed"];
+            bus.location = [[CLLocation alloc] initWithLatitude:[jsonBusData[@"latitude"] doubleValue] longitude:[jsonBusData[@"longitude"] doubleValue]];
+            bus.direction = jsonBusData[@"direction"];
+            bus.sense = jsonBusData[@"sense"];
             
-            [busesData addObject:busData];
+            [busesData addObject:bus];
         }];
         
         // Chama "callback" de retorno na thread principal (evita problemas na atualizacao da interface)
@@ -162,7 +168,6 @@
         });
     }];
     
-    // 5
     [operation start];
     
     return operation;
