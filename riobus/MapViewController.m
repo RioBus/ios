@@ -274,20 +274,11 @@ NSInteger markerColorIndex = 0;
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
     [self.searchInput becomeFirstResponder];
-//    self.suggestionTable.hidden = NO;
-//    self.searchInput.showsBookmarkButton = NO;
-//    self.mapView.alpha = 0.5f;
-    
     [self setSuggestionsTableVisible:YES];
-
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar{
     [self.searchInput resignFirstResponder];
-//    [self.searchInput setShowsCancelButton:NO animated:YES];
-//    self.suggestionTable.hidden = YES;
-//    self.searchInput.showsBookmarkButton = YES;
-//    self.mapView.alpha = 1.0f;
     [self setSuggestionsTableVisible:NO];
 }
 
