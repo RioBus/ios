@@ -276,7 +276,7 @@
 				681A7F3E196722530006C335 /* Frameworks */,
 				681A7F3F196722530006C335 /* Resources */,
 				F53865278DE24F58A1EE981B /* Copy Pods Resources */,
-				A36CEC211AF02C39002A3B0C /* ShellScript */,
+				A36CEC211AF02C39002A3B0C /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -390,18 +390,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		A36CEC211AF02C39002A3B0C /* ShellScript */ = {
+		A36CEC211AF02C39002A3B0C /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "buildNumber=`git rev-parse --verify HEAD --short`\necho \"Build number is $buildNumber\"\nbuildPlist=${INFOPLIST_FILE}\necho \"Plist: $buildPlist\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" $buildPlist\n";
+			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\nbuildPlist=${INFOPLIST_FILE}\nnewVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+\\.\\d+\\.)(\\d+)/$1.($2+1)/eg'`\n#echo $newVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newVersion\" \"$buildPlist\"";
 		};
 		F53865278DE24F58A1EE981B /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
