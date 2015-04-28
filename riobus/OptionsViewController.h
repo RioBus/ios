@@ -11,7 +11,7 @@
 @protocol OptionsViewControllerDelegate <NSObject>
 @end
 
-@interface OptionsViewController : UIViewController<UITextFieldDelegate>
+@interface OptionsViewController : UIViewController<UIAlertViewDelegate>
 
 @property (weak, nonatomic) id<OptionsViewControllerDelegate> delegate;
 
