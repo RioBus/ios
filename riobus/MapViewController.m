@@ -245,20 +245,6 @@ NSInteger markerColorIndex = 0;
         
         mapBounds = [mapBounds includingCoordinate:marca.position];
         
-        //Notificação de aproximação de ônibus
-        CGFloat secondsToObject = [MapViewController timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate
-                                               atSpeed:[busData.velocity doubleValue]];
-        if (secondsToObject < DISTANCE_NOTIFICATION_WARNING_TIME) {
-            if ([MapViewController isAngle:[MapViewController angleFromObject:marca.position toPerson:[self.mapView myLocation].coordinate]
-              nearOfDirection:[busData.direction floatValue] withAnErrorGapOf:DISTANCE_NOTIFICATION_ERROR_GAP_ANGLE]) {
-                
-                UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
-                acceptAction.title = [NSString stringWithFormat:@"Ônibus %@ se aproximando! Tempo de chegada: %@", marca.title,
-                                      [BusData humanReadableStringForSeconds:secondsToObject]];
-                UIMutableUserNotificationCategory *inviteCategory = [[UIMutableUserNotificationCategory alloc] init];
-                [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
-            }
-        }
     }];
     
     if (!self.hasRepositionedMap) {
