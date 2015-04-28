@@ -65,7 +65,7 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
+    if (buttonIndex != alertView.cancelButtonIndex) {
         [self clearCache];
     }
 }
