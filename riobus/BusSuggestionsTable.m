@@ -168,10 +168,10 @@
     return cell;
 }
 
--(NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UISearchBar* searchInput;
     for (UIView* view in [self.superview subviews])
-        if ([view isKindOfClass:[UISearchBar class]]) searchInput = (UISearchBar*)view;
+        if ([view isKindOfClass:[UISearchBar class]]) searchInput = (UISearchBar *)view;
     
     if (searchInput){
         if (indexPath.section == FAVORITES_SECTION) {
@@ -184,9 +184,8 @@
             [self clearRecentSearches];
         }
     }
-    
-    [[self cellForRowAtIndexPath:indexPath] setSelected:NO animated:YES];
-    return indexPath;
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

@@ -245,20 +245,6 @@ NSInteger markerColorIndex = 0;
         
         mapBounds = [mapBounds includingCoordinate:marca.position];
         
-        //Notificação de aproximação de ônibus
-        CGFloat secondsToObject = [MapViewController timeFromObject:marca.position toPerson:[self.mapView myLocation].coordinate
-                                               atSpeed:[busData.velocity doubleValue]];
-        if (secondsToObject < DISTANCE_NOTIFICATION_WARNING_TIME) {
-            if ([MapViewController isAngle:[MapViewController angleFromObject:marca.position toPerson:[self.mapView myLocation].coordinate]
-              nearOfDirection:[busData.direction floatValue] withAnErrorGapOf:DISTANCE_NOTIFICATION_ERROR_GAP_ANGLE]) {
-                
-                UIMutableUserNotificationAction *acceptAction = [[UIMutableUserNotificationAction alloc] init];
-                acceptAction.title = [NSString stringWithFormat:@"Ônibus %@ se aproximando! Tempo de chegada: %@", marca.title,
-                                      [BusData humanReadableStringForSeconds:secondsToObject]];
-                UIMutableUserNotificationCategory *inviteCategory = [[UIMutableUserNotificationCategory alloc] init];
-                [inviteCategory setActions:@[acceptAction] forContext:UIUserNotificationActionContextMinimal];
-            }
-        }
     }];
     
     if (!self.hasRepositionedMap) {
@@ -288,20 +274,11 @@ NSInteger markerColorIndex = 0;
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
     [self.searchInput becomeFirstResponder];
-//    self.suggestionTable.hidden = NO;
-//    self.searchInput.showsBookmarkButton = NO;
-//    self.mapView.alpha = 0.5f;
-    
     [self setSuggestionsTableVisible:YES];
-
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar{
     [self.searchInput resignFirstResponder];
-//    [self.searchInput setShowsCancelButton:NO animated:YES];
-//    self.suggestionTable.hidden = YES;
-//    self.searchInput.showsBookmarkButton = YES;
-//    self.mapView.alpha = 1.0f;
     [self setSuggestionsTableVisible:NO];
 }
 

@@ -15,7 +15,7 @@
 @implementation BusData
 
 + (NSString*)humanReadableStringForTime:(NSInteger)value ofType:(NSString*)type{
-    return [NSString stringWithFormat:@"%ld %@",value,(value == 1 ? type : [type stringByAppendingString:@"s"])];
+    return [NSString stringWithFormat:@"%ld %@", (long)value,(value == 1 ? type : [type stringByAppendingString:@"s"])];
 }
 
 + (NSString*)humanReadableStringForSeconds:(NSInteger)value{
