@@ -42,6 +42,7 @@
 		681A7FAE196890AB0006C335 /* icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = 681A7FAD196890AB0006C335 /* icon120.png */; };
 		A31D90EE1AFA950E00AD3B35 /* BusDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */; };
 		A31D90F51AFAADE100AD3B35 /* BusDataStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */; };
+		A31D90F71AFABCE700AD3B35 /* UIBusIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90F61AFABCE700AD3B35 /* UIBusIconTests.m */; };
 		A3443D8F1ADF500900240B46 /* info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A3443D8E1ADF500900240B46 /* info@2x.png */; };
 		A3443D911ADF506E00240B46 /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = A3443D901ADF506E00240B46 /* info.png */; };
 		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
@@ -105,6 +106,7 @@
 		8D9CA8F077F246CFBA653042 /* libPods-riobus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-riobus.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataTests.m; sourceTree = "<group>"; };
 		A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataStoreTests.m; sourceTree = "<group>"; };
+		A31D90F61AFABCE700AD3B35 /* UIBusIconTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBusIconTests.m; sourceTree = "<group>"; };
 		A3443D8E1ADF500900240B46 /* info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info@2x.png"; sourceTree = "<group>"; };
 		A3443D901ADF506E00240B46 /* info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = info.png; sourceTree = "<group>"; };
 		E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.debug.xcconfig"; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				681A7F6A196722540006C335 /* Supporting Files */,
 				A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */,
 				A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */,
+				A31D90F61AFABCE700AD3B35 /* UIBusIconTests.m */,
 			);
 			path = riobusTests;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A31D90F71AFABCE700AD3B35 /* UIBusIconTests.m in Sources */,
 				A31D90EE1AFA950E00AD3B35 /* BusDataTests.m in Sources */,
 				A31D90F51AFAADE100AD3B35 /* BusDataStoreTests.m in Sources */,
 			);
