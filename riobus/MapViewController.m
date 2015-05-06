@@ -41,9 +41,6 @@
 #define CAMERA_CURRENT_LOCATION_ZOOM           14
 #define CAMERA_DEFAULT_PADDING                 100.0f
 
-#define DISTANCE_NOTIFICATION_WARNING_TIME     300
-#define DISTANCE_NOTIFICATION_ERROR_GAP_ANGLE  30
-
 @implementation MapViewController
 
 NSInteger routeColorIndex  = 0;
