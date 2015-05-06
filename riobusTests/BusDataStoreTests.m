@@ -149,7 +149,6 @@
     while (waitingForBlock) {
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate dateWithTimeIntervalSinceNow:10]];
-        XCTAssert(waitingForBlock);
     }
 }
 
