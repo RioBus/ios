@@ -1,11 +1,3 @@
-//
-//  BusSuggestionsTable.m
-//  riobus
-//
-//  Created by Vitor Marques de Miranda on 02/11/14.
-//  Copyright (c) 2014 Rio Bus. All rights reserved.
-//
-
 #import "BusSuggestionsTable.h"
 
 #define FAVORITES_SECTION        0

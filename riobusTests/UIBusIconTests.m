@@ -1,11 +1,3 @@
-//
-//  UIBusIconTests.m
-//  riobus
-//
-//  Created by Mario Cecchi on 5/6/15.
-//  Copyright (c) 2015 Rio Bus. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 

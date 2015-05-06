@@ -1,11 +1,3 @@
-//
-//  BusDataStore.m
-//  riobus
-//
-//  Created by Bruno do Amaral on 05/07/2014.
-//  Copyright (c) 2014 Rio Bus. All rights reserved.
-//
-
 #import "BusDataStore.h"
 #import <AFNetworking/AFNetworking.h>
 

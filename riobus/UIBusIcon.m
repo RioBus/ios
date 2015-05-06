@@ -1,11 +1,3 @@
-//
-//  UIBusIcon.m
-//  riobus
-//
-//  Created by Vitor Marques de Miranda on 01/11/14.
-//  Copyright (c) 2014 Rio Bus. All rights reserved.
-//
-
 #import "UIBusIcon.h"
 
 #define RED_BORDER_LIMIT    10
