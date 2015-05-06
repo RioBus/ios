@@ -95,28 +95,31 @@
         
         // Converte dados para lista de shapes
         NSMutableArray *shapes = [[NSMutableArray alloc] initWithCapacity:6];
-        NSCharacterSet* quoteCharSet = [NSCharacterSet characterSetWithCharactersInString:@"\""] ;
-        [shapes addObject:[[NSMutableArray alloc] initWithCapacity:200]];
-        __block NSString *lastShapeId = pontosDoPercurso[0][@"shape"];
         
-        [pontosDoPercurso enumerateObjectsUsingBlock:^(NSDictionary *dadosDoPonto, NSUInteger idx, BOOL *stop) {
-            NSString *strLatitude = [dadosDoPonto[@"latitude"] stringByTrimmingCharactersInSet:quoteCharSet];
-            NSString *strLongitude = [dadosDoPonto[@"longitude"] stringByTrimmingCharactersInSet:quoteCharSet];
+        if (pontosDoPercurso.count > 0) {
+            NSCharacterSet* quoteCharSet = [NSCharacterSet characterSetWithCharactersInString:@"\""] ;
+            [shapes addObject:[[NSMutableArray alloc] initWithCapacity:200]];
+            __block NSString *lastShapeId = pontosDoPercurso[0][@"shape"];
             
-            CLLocation *location = [[CLLocation alloc] initWithLatitude:[strLatitude doubleValue] longitude:[strLongitude doubleValue]];
-            NSString *currShapeId = dadosDoPonto[@"shape"];
-            
-            NSMutableArray *currShapeArray;
-            if ([lastShapeId isEqualToString:currShapeId]) {
-                currShapeArray = [shapes lastObject];
-            } else {
-                currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
-                [shapes addObject:currShapeArray];
-            }
-            
-            lastShapeId = currShapeId;
-            [currShapeArray addObject:location];
-        }];
+            [pontosDoPercurso enumerateObjectsUsingBlock:^(NSDictionary *dadosDoPonto, NSUInteger idx, BOOL *stop) {
+                NSString *strLatitude = [dadosDoPonto[@"latitude"] stringByTrimmingCharactersInSet:quoteCharSet];
+                NSString *strLongitude = [dadosDoPonto[@"longitude"] stringByTrimmingCharactersInSet:quoteCharSet];
+                
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:[strLatitude doubleValue] longitude:[strLongitude doubleValue]];
+                NSString *currShapeId = dadosDoPonto[@"shape"];
+                
+                NSMutableArray *currShapeArray;
+                if ([lastShapeId isEqualToString:currShapeId]) {
+                    currShapeArray = [shapes lastObject];
+                } else {
+                    currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
+                    [shapes addObject:currShapeArray];
+                }
+                
+                lastShapeId = currShapeId;
+                [currShapeArray addObject:location];
+            }];
+        }
         
         handler(shapes, nil);
     }
