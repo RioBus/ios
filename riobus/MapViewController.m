@@ -46,7 +46,7 @@
 NSInteger routeColorIndex  = 0;
 NSInteger markerColorIndex = 0;
 
-- (void)viewDidLoad{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
@@ -88,37 +88,6 @@ NSInteger markerColorIndex = 0;
     
 }
 
-- (void)setOverlayMapVisible:(BOOL)visible withKeyboardInfo:(NSDictionary*)info{
-    // Obtém dados da animação
-    UIViewAnimationCurve animationCurve = [info[UIKeyboardAnimationCurveUserInfoKey] unsignedIntegerValue];
-    UIViewAnimationOptions animationOptions = UIViewAnimationOptionBeginFromCurrentState;
-    animationOptions |= [MapViewController animationOptionsWithCurve:animationCurve];
-    
-    NSTimeInterval animationDuration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    
-    // Inicia a animação
-    if (visible) {
-        if (self.overlayMap.hidden){
-            // Mostra o overlay
-            self.overlayMap.alpha = 0.0;
-            self.overlayMap.hidden = NO;
-            
-            [UIView animateWithDuration:animationDuration delay:0 options:animationOptions animations:^{
-                self.overlayMap.alpha = 0.3;
-            } completion:nil];
-        }
-    } else {
-        if (!self.overlayMap.hidden){
-            // Esconde o overlay
-            [UIView animateWithDuration:animationDuration delay:0 options:animationOptions animations:^{
-                self.overlayMap.alpha = 0.0;
-            } completion:^(BOOL finished) {
-                self.overlayMap.hidden = YES;
-            }];
-        }
-    }
-}
-
 - (void)startLocationServices {
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
@@ -130,7 +99,7 @@ NSInteger markerColorIndex = 0;
 }
 
 // Atualiza os dados para o carregamento do mapa
-- (void)atualizarDados:(id)sender{
+- (void)atualizarDados:(id)sender {
     if ([self.searchInput isFirstResponder] || !self.searchInput.text.length) {
         return;
     }
@@ -190,7 +159,7 @@ NSInteger markerColorIndex = 0;
     
 }
 
-- (void)setBusesData:(NSArray*)busesData{
+- (void)setBusesData:(NSArray*)busesData {
     _busesData = busesData;
     [self updateMarkers];
 }
@@ -198,7 +167,7 @@ NSInteger markerColorIndex = 0;
 
 #pragma mark Carregamento do marcadores, da rota e do mapa
 
-- (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex{
+- (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex {
     self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
                                                               withCompletionHandler:^(NSArray *shapes, NSError *error) {
                                                                   if (!error) {
@@ -218,7 +187,7 @@ NSInteger markerColorIndex = 0;
     [self.lastRequests addObject:self.lastRequest];
 }
 
-- (void)updateMarkers{
+- (void)updateMarkers {
     __block GMSCoordinateBounds* mapBounds = [[GMSCoordinateBounds alloc] init];
     
     markerColorIndex = (markerColorIndex+1)%self.busesColors.count;
@@ -253,7 +222,7 @@ NSInteger markerColorIndex = 0;
 
 #pragma mark UISearchBarDelegate methods
 
-- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar{
+- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar {
     [self.searchInput resignFirstResponder];
     [self.searchInput setShowsCancelButton:NO animated:YES];
     [self.markerForOrder removeAllObjects];
@@ -269,24 +238,24 @@ NSInteger markerColorIndex = 0;
     [self atualizarDados:self];
 }
 
-- (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar{
+- (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar {
     [self.searchInput becomeFirstResponder];
     [self setSuggestionsTableVisible:YES];
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar{
+- (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar {
     [self.searchInput resignFirstResponder];
     [self setSuggestionsTableVisible:NO];
 }
 
-- (void)searchBarBookmarkButtonClicked:(UISearchBar*)searchBar{
+- (void)searchBarBookmarkButtonClicked:(UISearchBar*)searchBar {
     [self performSegueWithIdentifier:@"viewOptions" sender:self];
 }
 
 
 #pragma mark CLLocationManagerDelegate methods
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     [self.locationManager stopUpdatingLocation];
     
     CLLocation *location = [locations lastObject];
@@ -297,7 +266,7 @@ NSInteger markerColorIndex = 0;
 #pragma mark Segue control
 
 // Segue que muda para a tela de Sobre
-- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender{
+- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"viewOptions"]) {
         OptionsViewController *optionsVC = segue.destinationViewController;
         optionsVC.delegate = self;
@@ -328,55 +297,6 @@ NSInteger markerColorIndex = 0;
 
 
 #pragma mark Funções utilitárias
-
-// Funções para determinar a distância de um ônibus para a pessoa
-+ (CLLocationCoordinate2D)getCoordinateForLatitude:(NSString*)latitude andLongitude:(NSString*)longitude{
-    return CLLocationCoordinate2DMake([[[latitude  substringToIndex:[latitude  length]-2] substringFromIndex:1] doubleValue],
-                                      [[[longitude substringToIndex:[longitude length]-2] substringFromIndex:1] doubleValue]);
-}
-
-+ (CGSize)distanceFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation{
-    CGFloat medLatitude = (objectLocation.latitude + personLocation.latitude)/2;
-    CGFloat metersPerLatitude = 111132.954 - 559.822*cos(2*medLatitude) + 1.175*cos(4*medLatitude);
-    CGFloat metersPerLongitude = 111319.490*cos(medLatitude);
-    
-    CGFloat busYDist = (objectLocation.latitude - personLocation.latitude)*metersPerLatitude;
-    CGFloat busXDist = (objectLocation.longitude - personLocation.longitude)*metersPerLongitude;
-    
-    return CGSizeMake(busXDist,busYDist);
-}
-
-+ (CGFloat)timeFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation atSpeed:(CGFloat)speed{
-    CGSize busDist = [self distanceFromObject:objectLocation toPerson:personLocation];
-    return (sqrt(busDist.height*busDist.height + busDist.width*busDist.width))/(speed/3.6);
-}
-
-// Funções para determinar a direção do ônibus em relação à pessoa
-+ (CGFloat)angleFromObject:(CLLocationCoordinate2D)objectLocation toPerson:(CLLocationCoordinate2D)personLocation{
-    CGSize busDist = [self distanceFromObject:objectLocation toPerson:personLocation];
-    CGFloat hipotenusa = sqrt(busDist.height*busDist.height + busDist.width*busDist.width);
-    
-    return GLKMathRadiansToDegrees(busDist.width/hipotenusa);
-}
-
-+ (BOOL)isAngle:(CGFloat)angle nearOfDirection:(CGFloat)direction withAnErrorGapOf:(CGFloat)margin{
-    if (direction<margin || direction>(360-margin)){
-        if (angle>180)     angle -= 360;
-        if (direction>180) direction -= 360;
-    }
-    
-    return (ABS(direction-angle)<margin);
-}
-
-+ (UIViewAnimationOptions)animationOptionsWithCurve:(UIViewAnimationCurve)curve{
-    switch (curve) {
-        case UIViewAnimationCurveEaseInOut: return UIViewAnimationOptionCurveEaseInOut;
-        case UIViewAnimationCurveEaseIn:    return UIViewAnimationOptionCurveEaseIn;
-        case UIViewAnimationCurveEaseOut:   return UIViewAnimationOptionCurveEaseOut;
-        case UIViewAnimationCurveLinear:    return UIViewAnimationOptionCurveLinear;
-    }
-    return UIViewAnimationOptionCurveEaseInOut;
-}
 
 - (void)setSuggestionsTableVisible:(BOOL)visible {
     static const float ANIMATION_DURATION = 0.2;
