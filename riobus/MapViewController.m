@@ -146,9 +146,7 @@ NSInteger markerColorIndex = 0;
                                                                          if (!self.busesData.count) {
                                                                              NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
                                                                              [self.view makeToast:msg];
-                                                                         } else {
-                                                                             // Ajusta o timer
-                                                                             self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(atualizarDados:) userInfo:nil repeats:NO];
+                                                                             self.updateTimer = nil;
                                                                          }
                                                                      }
                                                                  }];
@@ -157,6 +155,7 @@ NSInteger markerColorIndex = 0;
         }
     }
     
+    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(atualizarDados:) userInfo:nil repeats:NO];
 }
 
 - (void)setBusesData:(NSArray*)busesData {
