@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "SDKDemoAPIKey.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 
@@ -15,10 +14,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Configura chave do Google Maps
-    [GMSServices provideAPIKey:kAPIKey];
+    [GMSServices provideAPIKey:@"AIzaSyAOXbZQbs0_scRqMWj83eDc8snV54yfF5I"];
     
     // Configura AFNetworking
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
+    
     return YES;
 }
 							

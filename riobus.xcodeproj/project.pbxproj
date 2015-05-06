@@ -85,7 +85,6 @@
 		681A7F63196722540006C335 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		681A7F6B196722540006C335 /* riobusTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "riobusTests-Info.plist"; sourceTree = "<group>"; };
 		681A7F6D196722540006C335 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		681A7F79196725C40006C335 /* SDKDemoAPIKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDKDemoAPIKey.h; sourceTree = "<group>"; };
 		681A7F7A196727C60006C335 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		681A7F7B196727C60006C335 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		681A7F7D19672ACF0006C335 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -177,7 +176,6 @@
 			children = (
 				681A7F9B196824560006C335 /* Model */,
 				681A7F80196731410006C335 /* imagens */,
-				681A7F79196725C40006C335 /* SDKDemoAPIKey.h */,
 				681A7F53196722540006C335 /* AppDelegate.h */,
 				681A7F54196722540006C335 /* AppDelegate.m */,
 				636058521A05297700E3E4CD /* UIBusIcon.h */,
