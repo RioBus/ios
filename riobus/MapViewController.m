@@ -61,7 +61,7 @@ NSInteger markerColorIndex = 0;
     self.suggestionTable.alpha = 0;
     
     [self.searchInput setImage:[UIImage imageNamed:@"info.png"] forSearchBarIcon:UISearchBarIconBookmark state:UIControlStateNormal];
-    
+	
     [self startLocationServices];
     
     self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
