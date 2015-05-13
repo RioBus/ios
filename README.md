@@ -1,18 +1,19 @@
-riobus-ios
-==========
+RioBus
+======
 
-iOS app for Rio de Janeiro bus geolocalization
+O RioBus é um sistema colaborativo de monitoramento de ônibus em tempo real, que utiliza a API aberta de dados de mobilidade urbana fornecida pela parceria entre a Prefeitura do Rio de Janeiro e a FETRANSPOR. Seu objetivo principal é ajudar o cidadão, seja ele morador ou visitante, do Rio de Janeiro a se deslocar pela cidade.
 
 
-http://riob.us
+Instalação
+----------
 
-Os dados são oferecidos publicamente pela prefeitura do Rio de Janeiro, em parceria com a FETRANSPOR e Iplanrio. A posição dos ônibus são recuparadas pelo GPS embarcado neles, enviados para a FETRANSPOR e, por fim, a Iplanrio a disponibiliza na página do projeto de dados abertos Data.Rio.
-
-Para instalar as dependências, primeiro instale o CocoaPods:
+A aplicação utiliza o CocoaPods para gerenciar as dependências
 > sudo gem install cocoapods
 
-Em seguida, instale as dependências:
+Em seguida, instale as dependências
 > pod install
 
-Para abrir o projeto corretamente, sempre utilize o arquivo riobus.xcworkspace:
+Abra o projeto no Xcode
 > open riobus.xcworkspace
+
+```Obs.: O projeto sempre deve ser carregado à partir do riobus.xcworkspace, já que as dependências do projeto precisam ser carregadas.```
