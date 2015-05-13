@@ -15,7 +15,8 @@
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
 @property (strong, nonatomic) NSTimer *updateTimer;
-@property (strong, nonatomic) NSArray *busesColors;@property (weak,   nonatomic) NSMutableArray *lastRequests;
+@property (strong, nonatomic) NSArray *busesColors;
+@property (weak,   nonatomic) NSMutableArray *lastRequests;
 @property (weak,   nonatomic) NSOperation *lastRequest;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
@@ -42,6 +43,7 @@ NSInteger markerColorIndex = 0;
     [super viewDidLoad];
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
+    self.searchedLines = [[NSMutableArray alloc] init];
     
     self.mapView.mapType = kGMSTypeNormal;
     self.mapView.trafficEnabled = YES;
@@ -91,15 +93,17 @@ NSInteger markerColorIndex = 0;
 }
 
 // Atualiza os dados para o carregamento do mapa
-- (void)atualizarDados:(id)sender {
-    if ([self.searchInput isFirstResponder] || !self.searchInput.text.length) {
+- (void)updateSearchedBusesData:(id)sender {
+    if (!self.searchedLines.count) {
+        [self.updateTimer invalidate];
+        self.updateTimer = nil;
+    }
+    
+    if ([self.searchInput isFirstResponder] || !self.searchedLines.count) {
         return;
     }
     
-    routeColorIndex = -1;
     markerColorIndex = -1;
-    
-    [self.searchInput resignFirstResponder];
     
     // Limpar possíveis requests na fila
     if (self.lastRequests) {
@@ -110,44 +114,33 @@ NSInteger markerColorIndex = 0;
     }
     [self.lastRequests removeAllObjects];
     
-    NSString* validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    NSCharacterSet* splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
-    NSMutableArray* buses = [[[self.searchInput.text uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
-    [buses removeObject:@""];
-    
-    if ([buses count]) {
-        [self.suggestionTable addToRecentTable:[buses componentsJoinedByString:@", "]];
-        
-        for (NSString* busLineNumber in buses) {
-            routeColorIndex = (routeColorIndex+1)%self.busesColors.count;
-            [self insertRouteOfBus:busLineNumber withColorIndex:routeColorIndex];
-            
-            self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
-                                                                 withCompletionHandler:^(NSArray *busesData, NSError *error) {
-                                                                     [self.view hideToastActivity];
-                                                                     if (error) {
-                                                                         // Mostra Toast parecido com o Android
-                                                                         if (error.code != NSURLErrorCancelled) // Erro ao cancelar um request
-                                                                             [self.view makeToast:[error localizedDescription]];
-                                                                         
-                                                                         // Atualiza informacoes dos marcadores
-                                                                         [self updateMarkers];
-                                                                     } else {
-                                                                         self.busesData = busesData;
-                                                                         
-                                                                         if (!self.busesData.count) {
-                                                                             NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
-                                                                             [self.view makeToast:msg];
-                                                                             self.updateTimer = nil;
-                                                                         }
+    // Load bus data for each searched line
+    for (NSString* busLineNumber in self.searchedLines) {
+        self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
+                                                             withCompletionHandler:^(NSArray *busesData, NSError *error) {
+                                                                 [self.view hideToastActivity];
+                                                                 
+                                                                 if (error) {
+                                                                     if (error.code != NSURLErrorCancelled) { // Erro ao cancelar um request
+                                                                         [self.view makeToast:[error localizedDescription]];
                                                                      }
-                                                                 }];
-            
-            [self.lastRequests addObject:self.lastRequest];
-        }
+                                                                     self.busesData = nil;
+                                                                 } else {
+                                                                     self.busesData = busesData;
+                                                                     
+                                                                     if (!self.busesData.count) {
+                                                                         NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
+                                                                         [self.view makeToast:msg];
+                                                                         self.updateTimer = nil;
+                                                                     }
+                                                                 }
+                                                             }];
+        
+        [self.lastRequests addObject:self.lastRequest];
     }
     
-    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(atualizarDados:) userInfo:nil repeats:NO];
+    [self.updateTimer invalidate];
+    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(updateSearchedBusesData:) userInfo:nil repeats:NO];
 }
 
 - (void)setBusesData:(NSArray*)busesData {
@@ -193,12 +186,10 @@ NSInteger markerColorIndex = 0;
             [self.markerForOrder setValue:marca forKey:busData.order];
         }
         
-        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order,
-                         [busData.velocity doubleValue], [busData humanReadableDelay]];
+        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order, [busData.velocity doubleValue], [busData humanReadableDelay]];
         marca.title = busData.sense;
         marca.position = busData.location.coordinate;
-        marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation
-                                      andColor:self.busesColors[markerColorIndex]];
+        marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation andColor:self.busesColors[markerColorIndex]];
         
         mapBounds = [mapBounds includingCoordinate:marca.position];
         
@@ -226,7 +217,25 @@ NSInteger markerColorIndex = 0;
     
     [self.view makeToastActivity];
     
-    [self atualizarDados:self];
+    // Escape search input
+    NSString* validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    NSCharacterSet* splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
+    self.searchedLines = [[[searchBar.text uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
+    [self.searchedLines removeObject:@""];
+    
+    // Save search to history
+    [self.suggestionTable addToRecentTable:[self.searchedLines componentsJoinedByString:@", "]];
+    
+    // Draw itineraries
+    routeColorIndex = -1;
+    for (NSString* busLineNumber in self.searchedLines) {
+        routeColorIndex = (routeColorIndex+1) % self.busesColors.count;
+        
+        [self insertRouteOfBus:busLineNumber withColorIndex:routeColorIndex];
+    }
+    
+    // Call updater
+    [self updateSearchedBusesData:self];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar {
@@ -283,7 +292,7 @@ NSInteger markerColorIndex = 0;
 }
 
 - (void)appWillEnterForeground:(NSNotification *)sender {
-    [self performSelector:@selector(atualizarDados:) withObject:self];
+    [self performSelector:@selector(updateSearchedBusesData:) withObject:self];
 }
 
 
