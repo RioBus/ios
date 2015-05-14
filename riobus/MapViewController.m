@@ -29,11 +29,14 @@
 
 @end
 
-#define CAMERA_DEFAULT_LATITUDE                -22.9043527
-#define CAMERA_DEFAULT_LONGITUDE               -43.1912805
-#define CAMERA_DEFAULT_ZOOM                    12
-#define CAMERA_CURRENT_LOCATION_ZOOM           14
-#define CAMERA_DEFAULT_PADDING                 100.0f
+static const CGFloat cameraDefaultLatitude = -22.9043527f;
+static const CGFloat cameraDefaultLongitude = -43.1912805f;
+static const CGFloat cameraDefaultZoomLevel = 12.0f;
+static const CGFloat cameraCurrentLocationZoomLevel = 14.0f;
+static const CGFloat cameraPaddingTop = 20.0f;
+static const CGFloat cameraPaddingLeft = 50.0f;
+static const CGFloat cameraPaddingBottom = 50.0f;
+static const CGFloat cameraPaddingRight = 50.0f;
 
 @implementation MapViewController
 
@@ -73,11 +76,11 @@
     if (location) {
         self.mapView.camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
                                                           longitude:location.coordinate.longitude
-                                                               zoom:CAMERA_CURRENT_LOCATION_ZOOM];
+                                                               zoom:cameraCurrentLocationZoomLevel];
     } else {
-        self.mapView.camera = [GMSCameraPosition cameraWithLatitude:CAMERA_DEFAULT_LATITUDE
-                                                          longitude:CAMERA_DEFAULT_LONGITUDE
-                                                               zoom:CAMERA_DEFAULT_ZOOM];
+        self.mapView.camera = [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
+                                                          longitude:cameraDefaultLongitude
+                                                               zoom:cameraDefaultZoomLevel];
     }
     
 }
@@ -123,9 +126,9 @@
     for (NSString* busLineNumber in self.searchedLines) {
         NSOperation* request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
                                                              withCompletionHandler:^(NSArray *busesData, NSError *error) {
-                                                                 [self.view hideToastActivity];
-                                                                 
                                                                  if (error) {
+                                                                     [self.view hideToastActivity];
+
                                                                      if (error.code != NSURLErrorCancelled) { // Erro ao cancelar um request
                                                                          [self.view makeToast:[error localizedDescription]];
                                                                      }
@@ -198,8 +201,17 @@
     }];
     
     if (self.hasRepositionedMapTimes < self.searchedLines.count) {
-        [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withPadding:CAMERA_DEFAULT_PADDING]];
+        UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
+                                                        cameraPaddingRight,
+                                                        cameraPaddingBottom,
+                                                        cameraPaddingLeft);
+        [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
+
         self.hasRepositionedMapTimes++;
+    }
+    
+    if (self.hasRepositionedMapTimes == self.searchedLines.count) {
+        [self.view hideToastActivity];
     }
 }
 
@@ -266,7 +278,7 @@
     [self.locationManager stopUpdatingLocation];
     
     CLLocation *location = [locations lastObject];
-    self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:CAMERA_CURRENT_LOCATION_ZOOM];
+    self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:cameraCurrentLocationZoomLevel];
 }
 
 
