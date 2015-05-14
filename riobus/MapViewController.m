@@ -15,7 +15,8 @@
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
 @property (strong, nonatomic) NSTimer *updateTimer;
-@property (strong, nonatomic) NSArray *busesColors;
+@property (strong, nonatomic) NSArray *availableColors;
+@property (strong, nonatomic) NSMutableDictionary *lineColor;
 @property (weak,   nonatomic) NSMutableArray *lastRequests;
 @property (weak,   nonatomic) NSOperation *lastRequest;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
@@ -36,13 +37,11 @@
 
 @implementation MapViewController
 
-NSInteger routeColorIndex  = 0;
-NSInteger markerColorIndex = 0;
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
+    self.lineColor = [[NSMutableDictionary alloc] init];
     self.searchedLines = [[NSMutableArray alloc] init];
     
     self.mapView.mapType = kGMSTypeNormal;
@@ -55,7 +54,7 @@ NSInteger markerColorIndex = 0;
 	
     [self startLocationServices];
     
-    self.busesColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
+    self.availableColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
                          [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
                          [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
     
@@ -103,8 +102,6 @@ NSInteger markerColorIndex = 0;
         return;
     }
     
-    markerColorIndex = -1;
-    
     // Limpar possíveis requests na fila
     if (self.lastRequests) {
         for (NSOperation* request in self.lastRequests) {
@@ -151,7 +148,7 @@ NSInteger markerColorIndex = 0;
 
 #pragma mark Carregamento do marcadores, da rota e do mapa
 
-- (void)insertRouteOfBus:(NSString*)lineName withColorIndex:(NSInteger)colorIndex {
+- (void)insertRouteOfBus:(NSString*)lineName {
     self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
                                                               withCompletionHandler:^(NSArray *shapes, NSError *error) {
                                                                   if (!error) {
@@ -161,7 +158,7 @@ NSInteger markerColorIndex = 0;
                                                                               [gmShape addCoordinate:location.coordinate];
                                                                           }];
                                                                           GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
-                                                                          polyLine.strokeColor = self.busesColors[colorIndex];
+                                                                          polyLine.strokeColor = self.lineColor[lineName];
                                                                           polyLine.strokeWidth = 2.0;
                                                                           polyLine.map = self.mapView;
                                                                       }];
@@ -174,7 +171,6 @@ NSInteger markerColorIndex = 0;
 - (void)updateMarkers {
     __block GMSCoordinateBounds* mapBounds = [[GMSCoordinateBounds alloc] init];
     
-    markerColorIndex = (markerColorIndex+1)%self.busesColors.count;
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
         
@@ -189,7 +185,7 @@ NSInteger markerColorIndex = 0;
         marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order, [busData.velocity doubleValue], [busData humanReadableDelay]];
         marca.title = busData.sense;
         marca.position = busData.location.coordinate;
-        marca.icon = [UIBusIcon iconForBusLine:[busData.lineNumber description] withDelay:delayInformation andColor:self.busesColors[markerColorIndex]];
+        marca.icon = [UIBusIcon iconForBusLine:busData.lineNumber.description withDelay:delayInformation andColor:self.lineColor[busData.lineNumber.description]];
         
         mapBounds = [mapBounds includingCoordinate:marca.position];
         
@@ -227,11 +223,14 @@ NSInteger markerColorIndex = 0;
     [self.suggestionTable addToRecentTable:[self.searchedLines componentsJoinedByString:@", "]];
     
     // Draw itineraries
-    routeColorIndex = -1;
+    [self.lineColor removeAllObjects];
+    
+    int colorIndex = -1;
     for (NSString* busLineNumber in self.searchedLines) {
-        routeColorIndex = (routeColorIndex+1) % self.busesColors.count;
+        colorIndex = (colorIndex+1) % self.availableColors.count;
+        self.lineColor[busLineNumber] = self.availableColors[colorIndex];
         
-        [self insertRouteOfBus:busLineNumber withColorIndex:routeColorIndex];
+        [self insertRouteOfBus:busLineNumber];
     }
     
     // Call updater
