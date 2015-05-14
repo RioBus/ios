@@ -117,8 +117,7 @@
     }
     
     [operation start];
-    return operation ;
-    
+    return operation;
 }
 
 - (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {

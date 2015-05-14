@@ -17,15 +17,15 @@
 @property (strong, nonatomic) NSTimer *updateTimer;
 @property (strong, nonatomic) NSArray *availableColors;
 @property (strong, nonatomic) NSMutableDictionary *lineColor;
-@property (weak,   nonatomic) NSMutableArray *lastRequests;
-@property (weak,   nonatomic) NSOperation *lastRequest;
+@property (strong, atomic   ) GMSCoordinateBounds* mapBounds;
+@property (strong, nonatomic) NSMutableArray *lastRequests;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (weak,   nonatomic) IBOutlet UIToolbar *accessoryView;
 @property (weak,   nonatomic) IBOutlet UIView *overlayMap;
 @property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomContraint;
-@property (nonatomic)         BOOL hasRepositionedMap;
+@property int hasRepositionedMapTimes;
 
 @end
 
@@ -43,6 +43,7 @@
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
     self.lineColor = [[NSMutableDictionary alloc] init];
     self.searchedLines = [[NSMutableArray alloc] init];
+    self.lastRequests = [[NSMutableArray alloc] init];
     
     self.mapView.mapType = kGMSTypeNormal;
     self.mapView.trafficEnabled = YES;
@@ -91,7 +92,21 @@
     }
 }
 
-// Atualiza os dados para o carregamento do mapa
+/**
+ * Cancelar todas as requisições pendentes
+ */
+- (void)stopCurrentRequests {
+    if (self.lastRequests) {
+        for (NSOperation* request in self.lastRequests) {
+            [request cancel];
+        }
+    }
+    [self.lastRequests removeAllObjects];
+}
+
+/**
+ * Atualiza os dados para o carregamento do mapa
+ */
 - (void)updateSearchedBusesData:(id)sender {
     if (!self.searchedLines.count) {
         [self.updateTimer invalidate];
@@ -102,18 +117,11 @@
         return;
     }
     
-    // Limpar possíveis requests na fila
-    if (self.lastRequests) {
-        for (NSOperation* request in self.lastRequests) {
-            NSLog(@"Cancelando o request antigo %@", request);
-            [request cancel];
-        }
-    }
-    [self.lastRequests removeAllObjects];
+    [self stopCurrentRequests];
     
     // Load bus data for each searched line
     for (NSString* busLineNumber in self.searchedLines) {
-        self.lastRequest = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
+        NSOperation* request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
                                                              withCompletionHandler:^(NSArray *busesData, NSError *error) {
                                                                  [self.view hideToastActivity];
                                                                  
@@ -133,7 +141,7 @@
                                                                  }
                                                              }];
         
-        [self.lastRequests addObject:self.lastRequest];
+        [self.lastRequests addObject:request];
     }
     
     [self.updateTimer invalidate];
@@ -149,7 +157,7 @@
 #pragma mark Carregamento do marcadores, da rota e do mapa
 
 - (void)insertRouteOfBus:(NSString*)lineName {
-    self.lastRequest = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
+    NSOperation* request = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
                                                               withCompletionHandler:^(NSArray *shapes, NSError *error) {
                                                                   if (!error) {
                                                                       [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
@@ -165,16 +173,14 @@
                                                                   }
                                                               }];
     
-    [self.lastRequests addObject:self.lastRequest];
+    if (request) [self.lastRequests addObject:request];
 }
 
 - (void)updateMarkers {
-    __block GMSCoordinateBounds* mapBounds = [[GMSCoordinateBounds alloc] init];
-    
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
         NSInteger delayInformation = [busData delayInMinutes];
         
-        // Busca o marcador na "cache"
+        // Busca o marcador no mapa se já existir
         GMSMarker *marca = self.markerForOrder[busData.order];
         if (!marca) {
             marca = [[GMSMarker alloc] init];
@@ -187,13 +193,13 @@
         marca.position = busData.location.coordinate;
         marca.icon = [UIBusIcon iconForBusLine:busData.lineNumber.description withDelay:delayInformation andColor:self.lineColor[busData.lineNumber.description]];
         
-        mapBounds = [mapBounds includingCoordinate:marca.position];
+        self.mapBounds = [self.mapBounds includingCoordinate:marca.position];
         
     }];
     
-    if (!self.hasRepositionedMap) {
-        [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:mapBounds withPadding:CAMERA_DEFAULT_PADDING]];
-        self.hasRepositionedMap = YES;
+    if (self.hasRepositionedMapTimes < self.searchedLines.count) {
+        [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withPadding:CAMERA_DEFAULT_PADDING]];
+        self.hasRepositionedMapTimes++;
     }
 }
 
@@ -203,13 +209,13 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar {
     [self.searchInput resignFirstResponder];
     [self.searchInput setShowsCancelButton:NO animated:YES];
-    [self.markerForOrder removeAllObjects];
     self.searchInput.showsBookmarkButton = YES;
+    [self.markerForOrder removeAllObjects];
     [self.mapView clear];
-    
+    self.mapBounds = [[GMSCoordinateBounds alloc] init];
     [self setSuggestionsTableVisible:NO];
     
-    self.hasRepositionedMap = NO;
+    self.hasRepositionedMapTimes = 0;
     
     [self.view makeToastActivity];
     
@@ -240,6 +246,8 @@
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar {
     [self.searchInput becomeFirstResponder];
     [self setSuggestionsTableVisible:YES];
+    [self stopCurrentRequests];
+    [self.view hideToastActivity];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar {
@@ -264,7 +272,9 @@
 
 #pragma mark Segue control
 
-// Segue que muda para a tela de Sobre
+/**
+ * Prepara os segues disparados pelo Storyboard
+ */
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"viewOptions"]) {
         OptionsViewController *optionsVC = segue.destinationViewController;
@@ -275,7 +285,9 @@
 
 #pragma mark Listeners de notificações
 
-// Atualiza o tamanho da tabela de acordo com o tamanho do teclado
+/**
+ * Atualiza o tamanho da tabela de acordo com o tamanho do teclado
+ */
 - (void)keyboardWillShow:(NSNotification *)sender {
     CGRect keyboardFrame = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     self.keyboardBottomContraint.constant = keyboardFrame.size.height + 5;
