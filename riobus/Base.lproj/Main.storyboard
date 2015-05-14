@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
@@ -281,9 +281,9 @@
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content">Verde: atualizado há menos de 5 min
-Amarelo: atualizado entre 5 e 10 min atrás
-Vermelho: atualizado há mais de 10 min
+                                        <string key="content">O título do marcador indica o sentido do ônibus, no formato ORIGEM x DESTINO.  A cor da borda do marcador indica a última atualização recebida. - Verde: atualizado há menos de 5 min
+- Amarelo: atualizado entre 5 e 10 min atrás
+- Vermelho: atualizado há mais de 10 min
 
 </string>
                                         <attributes>
