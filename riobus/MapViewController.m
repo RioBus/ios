@@ -33,7 +33,7 @@ static const CGFloat cameraDefaultLatitude = -22.9043527f;
 static const CGFloat cameraDefaultLongitude = -43.1912805f;
 static const CGFloat cameraDefaultZoomLevel = 12.0f;
 static const CGFloat cameraCurrentLocationZoomLevel = 14.0f;
-static const CGFloat cameraPaddingTop = 20.0f;
+static const CGFloat cameraPaddingTop = 50.0f;
 static const CGFloat cameraPaddingLeft = 50.0f;
 static const CGFloat cameraPaddingBottom = 50.0f;
 static const CGFloat cameraPaddingRight = 50.0f;
@@ -108,18 +108,24 @@ static const CGFloat cameraPaddingRight = 50.0f;
 }
 
 /**
- * Atualiza os dados para o carregamento do mapa
+ * Cancelar todos os timers ativos
  */
-- (void)updateSearchedBusesData:(id)sender {
-    if (!self.searchedLines.count) {
+- (void)stopActiveTimers {
+    if (self.updateTimer) {
         [self.updateTimer invalidate];
         self.updateTimer = nil;
     }
-    
+}
+
+/**
+ * Atualiza os dados para o carregamento do mapa
+ */
+- (void)updateSearchedBusesData:(id)sender {
     if ([self.searchInput isFirstResponder] || !self.searchedLines.count) {
         return;
     }
     
+    [self stopActiveTimers];
     [self stopCurrentRequests];
     
     // Load bus data for each searched line
@@ -137,9 +143,10 @@ static const CGFloat cameraPaddingRight = 50.0f;
                                                                      self.busesData = busesData;
                                                                      
                                                                      if (!self.busesData.count) {
-                                                                         NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", self.searchInput.text];
+                                                                         [self.view hideToastActivity];
+                                                                         NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", busLineNumber];
+                                                                         
                                                                          [self.view makeToast:msg];
-                                                                         self.updateTimer = nil;
                                                                      }
                                                                  }
                                                              }];
@@ -147,7 +154,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
         [self.lastRequests addObject:request];
     }
     
-    [self.updateTimer invalidate];
+    [self stopActiveTimers];
     self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(updateSearchedBusesData:) userInfo:nil repeats:NO];
 }
 
@@ -308,10 +315,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
 
 - (void)appDidEnterBackground:(NSNotification *)sender {
     // Cancela o timer para não ficar gastando bateria no background
-    if (self.updateTimer) {
-        [self.updateTimer invalidate];
-        self.updateTimer = nil;
-    }
+    [self stopActiveTimers];
 }
 
 - (void)appWillEnterForeground:(NSNotification *)sender {
