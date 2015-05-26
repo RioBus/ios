@@ -2,6 +2,4 @@
 
 @interface MapViewController : UIViewController
 
-@property (nonatomic) NSMutableArray* searchedLines;
-
 @end

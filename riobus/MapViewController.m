@@ -14,6 +14,7 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
 @property (strong, nonatomic) NSArray *busesData;
+@property (strong, nonatomic) NSMutableArray* searchedLines;
 @property (strong, nonatomic) NSTimer *updateTimer;
 @property (strong, nonatomic) NSArray *availableColors;
 @property (strong, nonatomic) NSMutableDictionary *lineColor;
@@ -54,7 +55,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
     
     self.suggestionTable.alpha = 0;
     
-//    [self.searchInput setImage:[UIImage imageNamed:@"info.png"] forSearchBarIcon:UISearchBarIconBookmark state:UIControlStateNormal];
     [self.searchInput setBackgroundImage:[UIImage new]];
     [self.searchInput setTranslucent:YES];
 	
@@ -233,7 +233,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
 - (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar {
     [self.searchInput resignFirstResponder];
     [self.searchInput setShowsCancelButton:NO animated:YES];
-    self.searchInput.showsBookmarkButton = YES;
     [self.markerForOrder removeAllObjects];
     [self.mapView clear];
     self.mapBounds = [[GMSCoordinateBounds alloc] init];
@@ -279,6 +278,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
     [self setSuggestionsTableVisible:NO];
 }
 
+// TODO remove
 - (void)searchBarBookmarkButtonClicked:(UISearchBar*)searchBar {
     [self performSegueWithIdentifier:@"viewOptions" sender:self];
 }
@@ -336,7 +336,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
     
     if (visible) {
         // Appear
-        self.searchInput.showsBookmarkButton = NO;
         [self.searchInput setShowsCancelButton:YES animated:YES];
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
             self.suggestionTable.alpha = 1.0f;
@@ -344,7 +343,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
         }];
     } else {
         // Disappear
-        self.searchInput.showsBookmarkButton = YES;
         [self.searchInput setShowsCancelButton:NO animated:YES];
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
             self.suggestionTable.alpha = 0.0f;

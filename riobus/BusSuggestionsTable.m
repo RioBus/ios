@@ -9,7 +9,7 @@
 
 @implementation BusSuggestionsTable
 
--(id)initWithCoder:(NSCoder *)aDecoder {
+- (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.rowHeight = 45;
@@ -19,7 +19,7 @@
         
         _favorites = [self userFavoritesList];
         _recents = [self userRecentsList];
-        
+
         [self updateOptionsList];
         
         [self reloadData];
@@ -27,21 +27,21 @@
     return self;
 }
 
--(void)updateUserRecentsList{
+- (void)updateUserRecentsList {
     [[NSUserDefaults standardUserDefaults] setObject:self.recents forKey:@"Recents"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [self updateOptionsList];
 }
 
--(void)updateUserFavoritesList{
+- (void)updateUserFavoritesList {
     [[NSUserDefaults standardUserDefaults] setObject:self.favorites forKey:@"Favorites"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     [self updateOptionsList];
 }
 
--(void)updateOptionsList {
+- (void)updateOptionsList {
     if (self.recents.count) {
         if (!self.options.count) [self.options addObject:@"Limpar recentes"];
     } else {
@@ -49,21 +49,21 @@
     }
 }
 
--(NSMutableArray*)userFavoritesList{
+- (NSMutableArray*)userFavoritesList {
     NSArray* tempFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:@"Favorites"];
     if (tempFavorites) return [tempFavorites mutableCopy];
     else return [[NSMutableArray alloc] init];
 }
 
--(NSMutableArray*)userRecentsList{
+- (NSMutableArray*)userRecentsList {
     NSArray* tempRecents = [[NSUserDefaults standardUserDefaults] objectForKey:@"Recents"];
     
     if (tempRecents) return [tempRecents mutableCopy];
     else return [[NSMutableArray alloc] init];
 }
 
--(void)addToRecentTable:(NSString*)newOne{
-    if (![_recents containsObject:newOne] && ![_favorites containsObject:newOne]){
+- (void)addToRecentTable:(NSString*)newOne {
+    if (![_recents containsObject:newOne] && ![_favorites containsObject:newOne]) {
         while ([_recents count]>=RECENT_ITEMS_LIMIT) [_recents removeObjectAtIndex:0];
         [_recents addObject:newOne];
         [self updateUserRecentsList];
@@ -71,7 +71,7 @@
     }
 }
 
--(void)moveFromRecentToFavoriteTable:(UITapGestureRecognizer*)sender{
+- (void)moveFromRecentToFavoriteTable:(UITapGestureRecognizer*)sender {
     NSString* newItem = [_recents objectAtIndex:sender.view.tag];
     [_recents removeObjectAtIndex:sender.view.tag];
     [self updateUserRecentsList];
@@ -82,20 +82,19 @@
     [self reloadData];
 }
 
--(void)removeFromFavoriteTable:(UITapGestureRecognizer*)sender{
+- (void)removeFromFavoriteTable:(UITapGestureRecognizer*)sender {
     [_favorites removeObjectAtIndex:sender.view.tag];
     [self updateUserFavoritesList];
     [self reloadData];
 }
 
 - (void)clearRecentSearches {
-    // TODO confirmar
     [_recents removeAllObjects];
     [self updateUserRecentsList];
     [self reloadData];
 }
 
--(UIButton*)generateFavoriteButton:(BOOL)favorite forIndex:(NSInteger)index atFrame:(CGRect)frame{
+- (UIButton*)generateFavoriteButton:(BOOL)favorite forIndex:(NSInteger)index atFrame:(CGRect)frame {
     UIButton* button = [[UIButton alloc] initWithFrame:frame];
     button.tag = index;
     
@@ -111,22 +110,26 @@
     return button;
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return NUMBER_OF_SECTIONS;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == FAVORITES_SECTION) return self.favorites.count;
-    if (section == RECENTS_SECTION  ) return self.recents.count;
-    if (section == OPTIONS_SECTION  ) return self.options.count;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == FAVORITES_SECTION)
+        return self.favorites.count;
+    if (section == RECENTS_SECTION)
+        return self.recents.count;
+    if (section == OPTIONS_SECTION)
+        return self.options.count;
+    
     return 0;
 }
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
 
--(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath{
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
     static NSString *simpleTableIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
@@ -160,7 +163,7 @@
     return cell;
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UISearchBar* searchInput;
     for (UIView* view in [self.superview subviews])
         if ([view isKindOfClass:[UISearchBar class]]) searchInput = (UISearchBar *)view;
