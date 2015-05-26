@@ -22,7 +22,6 @@
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
-@property (weak,   nonatomic) IBOutlet UIToolbar *accessoryView;
 @property (weak,   nonatomic) IBOutlet UIView *overlayMap;
 @property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomContraint;
 @property int hasRepositionedMapTimes;
@@ -42,6 +41,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setNeedsStatusBarAppearanceUpdate];
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
     self.lineColor = [[NSMutableDictionary alloc] init];
@@ -54,7 +54,9 @@ static const CGFloat cameraPaddingRight = 50.0f;
     
     self.suggestionTable.alpha = 0;
     
-    [self.searchInput setImage:[UIImage imageNamed:@"info.png"] forSearchBarIcon:UISearchBarIconBookmark state:UIControlStateNormal];
+//    [self.searchInput setImage:[UIImage imageNamed:@"info.png"] forSearchBarIcon:UISearchBarIconBookmark state:UIControlStateNormal];
+    [self.searchInput setBackgroundImage:[UIImage new]];
+    [self.searchInput setTranslucent:YES];
 	
     [self startLocationServices];
     
@@ -82,7 +84,10 @@ static const CGFloat cameraPaddingRight = 50.0f;
                                                           longitude:cameraDefaultLongitude
                                                                zoom:cameraDefaultZoomLevel];
     }
-    
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)startLocationServices {
