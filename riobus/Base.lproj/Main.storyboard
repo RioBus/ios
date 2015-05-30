@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -19,28 +19,22 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lfw-bq-mSB" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="511"/>
-                                <color key="backgroundColor" red="0.35300647909999999" green="0.48889838679999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="0.0" y="71" width="320" height="447"/>
                                 <gestureRecognizers/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="settings.compassButton" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="settings.myLocationButton" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="settings.myLocationButton" value="NO"/>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="myLocationEnabled" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view hidden="YES" opaque="NO" alpha="0.29999999999999999" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rdR-J6-ubo" userLabel="Overlay">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                            </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
-                                <rect key="frame" x="6" y="79" width="308" height="424"/>
+                                <rect key="frame" x="0.0" y="71" width="320" height="440"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qj4-Wq-QPi" userLabel="Top Bar View">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qj4-Wq-QPi" userLabel="Top Bar View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
                                 <subviews>
-                                    <searchBar opaque="NO" contentMode="redraw" ambiguous="YES" misplaced="YES" text="" placeholder="Pesquisar linha de ônibus" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Gl-dC-szk">
+                                    <searchBar opaque="NO" contentMode="redraw" text="" placeholder="Pesquisar linha de ônibus" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Gl-dC-szk">
                                         <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -53,34 +47,36 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.2627450980392157" green="0.63529411764705879" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="7Gl-dC-szk" firstAttribute="leading" secondItem="qj4-Wq-QPi" secondAttribute="leading" id="GIw-ST-IOK"/>
+                                    <constraint firstItem="7Gl-dC-szk" firstAttribute="top" secondItem="qj4-Wq-QPi" secondAttribute="top" constant="22" id="M6N-hB-enq"/>
+                                    <constraint firstAttribute="height" constant="71" id="MRD-kG-vmw"/>
                                     <constraint firstItem="7Gl-dC-szk" firstAttribute="width" secondItem="qj4-Wq-QPi" secondAttribute="width" id="TDi-SA-ItP"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Zz-pQ-lWZ" userLabel="Bottom Bar View">
-                                <rect key="frame" x="0.0" y="511" width="326" height="57"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Zz-pQ-lWZ" userLabel="Bottom Bar View">
+                                <rect key="frame" x="0.0" y="518" width="326" height="50"/>
                                 <color key="backgroundColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="ofK-ZD-gyH"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="lsP-IF-CM0" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-10" id="23R-H8-JNq"/>
-                            <constraint firstItem="lsP-IF-CM0" firstAttribute="top" secondItem="qj4-Wq-QPi" secondAttribute="top" constant="79" id="27f-xg-36h"/>
-                            <constraint firstAttribute="trailing" secondItem="Lfw-bq-mSB" secondAttribute="trailing" id="4Pz-St-5qA"/>
-                            <constraint firstItem="Lfw-bq-mSB" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="BfG-tf-jBp"/>
-                            <constraint firstItem="rdR-J6-ubo" firstAttribute="height" secondItem="Lfw-bq-mSB" secondAttribute="height" id="KZr-3u-6cX"/>
-                            <constraint firstItem="8Zz-pQ-lWZ" firstAttribute="bottom" secondItem="Lfw-bq-mSB" secondAttribute="bottom" constant="57" id="LK5-Ar-xvS"/>
-                            <constraint firstItem="rdR-J6-ubo" firstAttribute="width" secondItem="Lfw-bq-mSB" secondAttribute="width" id="NGM-5O-zuc"/>
-                            <constraint firstItem="qj4-Wq-QPi" firstAttribute="width" secondItem="kh9-bI-dsS" secondAttribute="width" id="Y80-3q-otn"/>
-                            <constraint firstItem="8Zz-pQ-lWZ" firstAttribute="width" secondItem="kh9-bI-dsS" secondAttribute="width" id="agF-CU-WvT"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="qj4-Wq-QPi" secondAttribute="trailing" constant="-16" id="1yr-d0-6D5"/>
+                            <constraint firstItem="lsP-IF-CM0" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="Aqd-Y3-EfR"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="8Zz-pQ-lWZ" secondAttribute="bottom" id="D6A-Ze-Vcx"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="lsP-IF-CM0" secondAttribute="trailing" constant="-16" id="L35-SY-wad"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lsP-IF-CM0" secondAttribute="bottom" constant="57" id="OBE-EA-03m"/>
+                            <constraint firstItem="qj4-Wq-QPi" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="a9r-Q1-a6H"/>
+                            <constraint firstItem="Lfw-bq-mSB" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="b9a-gM-SRd"/>
                             <constraint firstItem="qj4-Wq-QPi" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="-20" id="cuA-hn-qbM"/>
-                            <constraint firstItem="rdR-J6-ubo" firstAttribute="top" secondItem="Lfw-bq-mSB" secondAttribute="top" id="dJO-nI-pky"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="8Zz-pQ-lWZ" secondAttribute="bottom" id="dKY-3k-k0g"/>
-                            <constraint firstItem="rdR-J6-ubo" firstAttribute="leading" secondItem="Lfw-bq-mSB" secondAttribute="leading" id="g4x-NL-P7Q"/>
+                            <constraint firstItem="qj4-Wq-QPi" firstAttribute="top" secondItem="lsP-IF-CM0" secondAttribute="top" constant="-71" id="et9-LQ-Ft3"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Lfw-bq-mSB" secondAttribute="trailing" constant="-16" id="fu2-e3-dLx"/>
                             <constraint firstItem="8Zz-pQ-lWZ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="gEb-xC-6Ak"/>
-                            <constraint firstItem="Lfw-bq-mSB" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="kGz-O1-zpg"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="lsP-IF-CM0" secondAttribute="trailing" constant="-10" id="oNl-8W-sXT"/>
-                            <constraint firstItem="8Zz-pQ-lWZ" firstAttribute="bottom" secondItem="lsP-IF-CM0" secondAttribute="bottom" constant="65" id="unr-UP-TBe"/>
-                            <constraint firstItem="rdR-J6-ubo" firstAttribute="trailing" secondItem="Lfw-bq-mSB" secondAttribute="trailing" id="yUv-AG-qQD"/>
+                            <constraint firstItem="8Zz-pQ-lWZ" firstAttribute="top" secondItem="Lfw-bq-mSB" secondAttribute="bottom" id="mj0-Xy-IjU"/>
+                            <constraint firstItem="Lfw-bq-mSB" firstAttribute="top" secondItem="qj4-Wq-QPi" secondAttribute="top" constant="71" id="pI5-2c-iHp"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="8Zz-pQ-lWZ" secondAttribute="trailing" constant="-22" id="uno-8W-OcV"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="fyO-ox-e98">
@@ -88,8 +84,8 @@
                     </navigationItem>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="keyboardBottomConstraint" destination="OBE-EA-03m" id="9nP-NQ-FHC"/>
                         <outlet property="mapView" destination="Lfw-bq-mSB" id="IVe-WC-4Ar"/>
-                        <outlet property="overlayMap" destination="rdR-J6-ubo" id="ltn-e8-8G9"/>
                         <outlet property="searchDisplayController" destination="SXP-NW-eBt" id="1of-vD-bwM"/>
                         <outlet property="searchInput" destination="7Gl-dC-szk" id="SUm-y6-ddu"/>
                         <outlet property="suggestionTable" destination="lsP-IF-CM0" id="vlk-aV-VkW"/>

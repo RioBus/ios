@@ -8,6 +8,7 @@ IB_DESIGNABLE
 - (void)updateOptionsList;
 - (void)addToRecentTable:(NSString*)newOne;
 
+@property (strong, nonatomic) UISearchBar* searchInput;
 @property (strong, nonatomic) NSMutableArray* favorites;
 @property (strong, nonatomic) NSMutableArray* recents;
 @property (strong, nonatomic) NSMutableArray* options;

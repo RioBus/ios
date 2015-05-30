@@ -164,17 +164,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UISearchBar* searchInput;
-    for (UIView* view in [self.superview subviews])
-        if ([view isKindOfClass:[UISearchBar class]]) searchInput = (UISearchBar *)view;
-    
-    if (searchInput){
+    if (self.searchInput){
         if (indexPath.section == FAVORITES_SECTION) {
-            [searchInput setText:_favorites[[indexPath row]]];
-            [searchInput.delegate searchBarSearchButtonClicked:searchInput];
+            [self.searchInput setText:_favorites[[indexPath row]]];
+            [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
         } else if (indexPath.section == RECENTS_SECTION) {
-            [searchInput setText:_recents[[indexPath row]]];
-            [searchInput.delegate searchBarSearchButtonClicked:searchInput];
+            [self.searchInput setText:_recents[[indexPath row]]];
+            [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
         } else if (indexPath.section == OPTIONS_SECTION) {
             [self clearRecentSearches];
         }

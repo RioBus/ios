@@ -23,8 +23,7 @@
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
-@property (weak,   nonatomic) IBOutlet UIView *overlayMap;
-@property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomContraint;
+@property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
 @property int hasRepositionedMapTimes;
 
 @end
@@ -53,6 +52,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
     self.mapView.trafficEnabled = YES;
     self.mapView.myLocationEnabled = YES;
     
+    self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
     
     [self.searchInput setBackgroundImage:[UIImage new]];
@@ -314,7 +314,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
  */
 - (void)keyboardWillShow:(NSNotification *)sender {
     CGRect keyboardFrame = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    self.keyboardBottomContraint.constant = keyboardFrame.size.height + 5;
+    self.keyboardBottomConstraint.constant = keyboardFrame.size.height;
     [self.suggestionTable layoutIfNeeded];
 }
 

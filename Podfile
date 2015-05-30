@@ -3,7 +3,7 @@
 
 target "riobus" do
 
-	pod 'Google-Maps-iOS-SDK', '~> 1.9'
+	pod 'GoogleMaps', '~> 1.10'
 	pod 'AFNetworking', '~> 2.5'
 	pod 'Toast', '~> 2.4'
 
