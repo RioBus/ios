@@ -50,7 +50,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
     
     self.mapView.mapType = kGMSTypeNormal;
     self.mapView.trafficEnabled = YES;
-    self.mapView.myLocationEnabled = YES;
     
     self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
@@ -74,21 +73,34 @@ static const CGFloat cameraPaddingRight = 50.0f;
     
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 
-    CLLocation *location = [self.mapView myLocation];
-    if (location) {
-        self.mapView.camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
-                                                          longitude:location.coordinate.longitude
-                                                               zoom:cameraCurrentLocationZoomLevel];
-    } else {
-        self.mapView.camera = [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
-                                                          longitude:cameraDefaultLongitude
-                                                               zoom:cameraDefaultZoomLevel];
-    }
+    self.mapView.camera = [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
+                                                      longitude:cameraDefaultLongitude
+                                                           zoom:cameraDefaultZoomLevel];
+    
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
+
+
+
+#pragma mark Menu actions
+
+- (IBAction)informationMenuButtonTapped:(id)sender {
+    [self performSegueWithIdentifier:@"viewOptions" sender:self];
+}
+
+- (IBAction)locationMenuButtonTapped:(id)sender {
+    [self.locationManager startUpdatingLocation];
+}
+
+- (IBAction)favoriteMenuButtonTapped:(id)sender {
+    NSLog(@"Favorite manu tapped");
+}
+
+
+#pragma mark Controller control
 
 - (void)startLocationServices {
     self.locationManager = [[CLLocationManager alloc] init];
@@ -193,8 +205,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
 
 - (void)updateMarkers {
     [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
-        NSInteger delayInformation = [busData delayInMinutes];
-        
         // Busca o marcador no mapa se já existir
         GMSMarker *marca = self.markerForOrder[busData.order];
         if (!marca) {
@@ -206,7 +216,11 @@ static const CGFloat cameraPaddingRight = 50.0f;
         marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order, [busData.velocity doubleValue], [busData humanReadableDelay]];
         marca.title = busData.sense;
         marca.position = busData.location.coordinate;
-        marca.icon = [UIBusIcon iconForBusLine:busData.lineNumber.description withDelay:delayInformation andColor:self.lineColor[busData.lineNumber.description]];
+        marca.icon = [UIImage imageNamed:@"BusMarker"];
+        marca.layer.shadowOpacity = 0.7;
+        marca.layer.shadowOffset = CGSizeMake(0, 3);
+        marca.layer.shadowRadius = 5.0;
+        marca.layer.shadowColor = [UIColor blackColor].CGColor;
         
         self.mapBounds = [self.mapBounds includingCoordinate:marca.position];
         
@@ -276,11 +290,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
 - (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar {
     [self.searchInput resignFirstResponder];
     [self setSuggestionsTableVisible:NO];
-}
-
-// TODO remove
-- (void)searchBarBookmarkButtonClicked:(UISearchBar*)searchBar {
-    [self performSegueWithIdentifier:@"viewOptions" sender:self];
 }
 
 

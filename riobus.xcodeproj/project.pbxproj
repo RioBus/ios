@@ -45,6 +45,7 @@
 		A31D90F71AFABCE700AD3B35 /* UIBusIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90F61AFABCE700AD3B35 /* UIBusIconTests.m */; };
 		A3443D8F1ADF500900240B46 /* info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A3443D8E1ADF500900240B46 /* info@2x.png */; };
 		A3443D911ADF506E00240B46 /* info.png in Resources */ = {isa = PBXBuildFile; fileRef = A3443D901ADF506E00240B46 /* info.png */; };
+		A3C41BE21B1A7B89004CB63A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3C41BE11B1A7B89004CB63A /* MapKit.framework */; };
 		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
 /* End PBXBuildFile section */
 
@@ -109,6 +110,7 @@
 		A31D90F61AFABCE700AD3B35 /* UIBusIconTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIBusIconTests.m; sourceTree = "<group>"; };
 		A3443D8E1ADF500900240B46 /* info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info@2x.png"; sourceTree = "<group>"; };
 		A3443D901ADF506E00240B46 /* info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = info.png; sourceTree = "<group>"; };
+		A3C41BE11B1A7B89004CB63A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -117,6 +119,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3C41BE21B1A7B89004CB63A /* MapKit.framework in Frameworks */,
 				6331A56C1A08516E006BBFB5 /* GLKit.framework in Frameworks */,
 				681A7F7E19672ACF0006C335 /* CoreLocation.framework in Frameworks */,
 				681A7F47196722530006C335 /* CoreGraphics.framework in Frameworks */,
@@ -162,6 +165,7 @@
 		681A7F43196722530006C335 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A3C41BE11B1A7B89004CB63A /* MapKit.framework */,
 				6331A56B1A08516E006BBFB5 /* GLKit.framework */,
 				681A7F7D19672ACF0006C335 /* CoreLocation.framework */,
 				681A7F44196722530006C335 /* Foundation.framework */,

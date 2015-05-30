@@ -94,22 +94,6 @@
     [self reloadData];
 }
 
-- (UIButton*)generateFavoriteButton:(BOOL)favorite forIndex:(NSInteger)index atFrame:(CGRect)frame {
-    UIButton* button = [[UIButton alloc] initWithFrame:frame];
-    button.tag = index;
-    
-    if (favorite){
-        [button setBackgroundImage:[UIImage imageNamed:@"bookmark"] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(removeFromFavoriteTable:) forControlEvents:UIControlEventTouchDown];
-    }
-    else{
-        [button setBackgroundImage:[UIImage imageNamed:@"recent"] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(moveFromRecentToFavoriteTable:) forControlEvents:UIControlEventTouchDown];
-    }
-    
-    return button;
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return NUMBER_OF_SECTIONS;
 }
@@ -141,7 +125,7 @@
     cell.imageView.tag = indexPath.item;
 
     if (indexPath.section == FAVORITES_SECTION) {
-        cell.imageView.image = [UIImage imageNamed:@"bookmark.png"];
+        cell.imageView.image = [[UIImage imageNamed:@"FavoriteMarker"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = self.favorites[indexPath.item];
         cell.textLabel.textColor = [UIColor darkGrayColor];
         UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeFromFavoriteTable:)];
