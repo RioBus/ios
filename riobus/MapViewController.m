@@ -41,7 +41,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setNeedsStatusBarAppearanceUpdate];
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
     self.lineColor = [[NSMutableDictionary alloc] init];
@@ -49,19 +48,24 @@ static const CGFloat cameraPaddingRight = 50.0f;
     self.lastRequests = [[NSMutableArray alloc] init];
     
     self.mapView.mapType = kGMSTypeNormal;
-    self.mapView.trafficEnabled = YES;
     
     self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
     
     [self.searchInput setBackgroundImage:[UIImage new]];
     [self.searchInput setTranslucent:YES];
-	
+    
     [self startLocationServices];
     
-    self.availableColors = @[[UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
-                         [UIColor orangeColor], [UIColor purpleColor], [UIColor brownColor], [UIColor cyanColor],
-                         [UIColor magentaColor], [UIColor blackColor], [UIColor blueColor]];
+    self.availableColors = @[[UIColor colorWithRed:243.0/255.0 green:102.0/255.0 blue:32.0/255.0 alpha:1.0],
+                             [UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
+                             [UIColor orangeColor],
+                             [UIColor purpleColor],
+                             [UIColor brownColor],
+                             [UIColor cyanColor],
+                             [UIColor magentaColor],
+                             [UIColor blackColor],
+                             [UIColor blueColor]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];;
@@ -71,8 +75,9 @@ static const CGFloat cameraPaddingRight = 50.0f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self setNeedsStatusBarAppearanceUpdate];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
-
+    
     self.mapView.camera = [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
                                                       longitude:cameraDefaultLongitude
                                                            zoom:cameraDefaultZoomLevel];
@@ -82,7 +87,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
 - (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
-
 
 
 #pragma mark Menu actions
@@ -100,7 +104,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
 }
 
 
-#pragma mark Controller control
+#pragma mark Controller methods
 
 - (void)startLocationServices {
     self.locationManager = [[CLLocationManager alloc] init];
@@ -148,25 +152,25 @@ static const CGFloat cameraPaddingRight = 50.0f;
     // Load bus data for each searched line
     for (NSString* busLineNumber in self.searchedLines) {
         NSOperation* request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
-                                                             withCompletionHandler:^(NSArray *busesData, NSError *error) {
-                                                                 if (error) {
-                                                                     [self.view hideToastActivity];
-
-                                                                     if (error.code != NSURLErrorCancelled) { // Erro ao cancelar um request
-                                                                         [self.view makeToast:[error localizedDescription]];
-                                                                     }
-                                                                     self.busesData = nil;
-                                                                 } else {
-                                                                     self.busesData = busesData;
-                                                                     
-                                                                     if (!self.busesData.count) {
+                                                                 withCompletionHandler:^(NSArray *busesData, NSError *error) {
+                                                                     if (error) {
                                                                          [self.view hideToastActivity];
-                                                                         NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", busLineNumber];
                                                                          
-                                                                         [self.view makeToast:msg];
+                                                                         if (error.code != NSURLErrorCancelled) { // Erro ao cancelar um request
+                                                                             [self.view makeToast:[error localizedDescription]];
+                                                                         }
+                                                                         self.busesData = nil;
+                                                                     } else {
+                                                                         self.busesData = busesData;
+                                                                         
+                                                                         if (!self.busesData.count) {
+                                                                             [self.view hideToastActivity];
+                                                                             NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", busLineNumber];
+                                                                             
+                                                                             [self.view makeToast:msg];
+                                                                         }
                                                                      }
-                                                                 }
-                                                             }];
+                                                                 }];
         
         [self.lastRequests addObject:request];
     }
@@ -184,23 +188,23 @@ static const CGFloat cameraPaddingRight = 50.0f;
 #pragma mark Carregamento do marcadores, da rota e do mapa
 
 - (void)insertRouteOfBus:(NSString*)lineName {
-    NSOperation* request = [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
-                                                              withCompletionHandler:^(NSArray *shapes, NSError *error) {
-                                                                  if (!error) {
-                                                                      [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
-                                                                          GMSMutablePath *gmShape = [GMSMutablePath path];
-                                                                          [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
-                                                                              [gmShape addCoordinate:location.coordinate];
-                                                                          }];
-                                                                          GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
-                                                                          polyLine.strokeColor = self.lineColor[lineName];
-                                                                          polyLine.strokeWidth = 2.0;
-                                                                          polyLine.map = self.mapView;
-                                                                      }];
-                                                                  }
-                                                              }];
-    
-    if (request) [self.lastRequests addObject:request];
+    [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
+                                           withCompletionHandler:^(NSArray *shapes, NSError *error) {
+                                               if (!error) {
+                                                   [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
+                                                       GMSMutablePath *gmShape = [GMSMutablePath path];
+                                                       [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
+                                                           [gmShape addCoordinate:location.coordinate];
+                                                       }];
+                                                       GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
+                                                       polyLine.strokeColor = self.lineColor[lineName];
+                                                       polyLine.strokeWidth = 2.0;
+                                                       polyLine.map = self.mapView;
+                                                   }];
+                                               } else {
+                                                   NSLog(@"ERRO: Nenhuma rota para exibir");
+                                               }
+                                           }];
 }
 
 - (void)updateMarkers {
@@ -232,7 +236,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
                                                         cameraPaddingBottom,
                                                         cameraPaddingLeft);
         [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
-
+        
         self.hasRepositionedMapTimes++;
     }
     
@@ -341,21 +345,18 @@ static const CGFloat cameraPaddingRight = 50.0f;
 
 - (void)setSuggestionsTableVisible:(BOOL)visible {
     static const float ANIMATION_DURATION = 0.2;
-    static const CGFloat BACKGROUND_ALPHA = 0.3f;
     
     if (visible) {
         // Appear
         [self.searchInput setShowsCancelButton:YES animated:YES];
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
             self.suggestionTable.alpha = 1.0f;
-            self.mapView.alpha = BACKGROUND_ALPHA;
         }];
     } else {
         // Disappear
         [self.searchInput setShowsCancelButton:NO animated:YES];
         [UIView animateWithDuration:ANIMATION_DURATION animations:^{
             self.suggestionTable.alpha = 0.0f;
-            self.mapView.alpha = 1.0f;
         }];
     }
 }

@@ -42,7 +42,7 @@
     return _jsonDateFormat ;
 }
 
-- (NSOperation *)loadBusLineShapeForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {
+- (NSOperation *)loadBusLineShapeForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler {
     // Previne URL injection
     AFHTTPRequestOperation *operation;
     NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -51,8 +51,9 @@
     if (!buses) buses = [[NSMutableDictionary alloc] init];
     
     // Procura o cache da linha pesquisada
-    NSString* jsonData = [buses objectForKey:webSafeNumber];
+    __block NSString* jsonData = [buses objectForKey:webSafeNumber];
     if (!jsonData) {
+        NSLog(@"Itinerário para a linha %@ não está no cache.", webSafeNumber);
         NSString *strUrl = [NSString stringWithFormat:@"http://rest.riob.us/itinerary/%@", webSafeNumber];
         NSLog(@"URL = %@" , strUrl);
         
@@ -66,61 +67,31 @@
             [buses setObject:response forKey:webSafeNumber];
             [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"Rotas de Onibus"];
             [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            NSLog(@"Itinerário da linha %@ salvo no cache.", webSafeNumber);
+            
+            jsonData = [buses objectForKey:webSafeNumber];
+            [self processBusLineShapeWithJsonData:jsonData withCompletionHandler:handler];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             // Chama "callback" de retorno na thread principal (evita problemas na atualizacao da interface)
+            NSLog(@"ERRO: Requisição de itinerário falhou. %@", error.localizedDescription);
             dispatch_async(dispatch_get_main_queue(), ^{
                 handler(nil, error);
             });
         }];
         
-        jsonData = [buses objectForKey:webSafeNumber];
+        [operation start];
+        
+    } else {
+        NSLog(@"Itinerário para a linha %@ encontrado no cache.", webSafeNumber);
+        
+        [self processBusLineShapeWithJsonData:jsonData withCompletionHandler:handler];
     }
     
-    if (jsonData) {
-        // Agora já temos os dados da linha no cache
-        NSData* itineraryJsonData = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
-        NSError* jsonParseError = nil;
-        NSArray* pontosDoPercurso = [NSJSONSerialization JSONObjectWithData:itineraryJsonData options: NSJSONReadingMutableContainers error:&jsonParseError];
-        if (jsonParseError) {
-            NSLog(@"Error decoding JSON itinerary data");
-        }
-        
-        // Converte dados para lista de shapes
-        NSMutableArray *shapes = [[NSMutableArray alloc] initWithCapacity:6];
-        
-        if (pontosDoPercurso.count > 0) {
-            NSCharacterSet* quoteCharSet = [NSCharacterSet characterSetWithCharactersInString:@"\""] ;
-            [shapes addObject:[[NSMutableArray alloc] initWithCapacity:200]];
-            __block NSString *lastShapeId = pontosDoPercurso[0][@"shape"];
-            
-            [pontosDoPercurso enumerateObjectsUsingBlock:^(NSDictionary *dadosDoPonto, NSUInteger idx, BOOL *stop) {
-                NSString *strLatitude = [dadosDoPonto[@"latitude"] stringByTrimmingCharactersInSet:quoteCharSet];
-                NSString *strLongitude = [dadosDoPonto[@"longitude"] stringByTrimmingCharactersInSet:quoteCharSet];
-                
-                CLLocation *location = [[CLLocation alloc] initWithLatitude:[strLatitude doubleValue] longitude:[strLongitude doubleValue]];
-                NSString *currShapeId = dadosDoPonto[@"shape"];
-                
-                NSMutableArray *currShapeArray;
-                if ([lastShapeId isEqualToString:currShapeId]) {
-                    currShapeArray = [shapes lastObject];
-                } else {
-                    currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
-                    [shapes addObject:currShapeArray];
-                }
-                
-                lastShapeId = currShapeId;
-                [currShapeArray addObject:location];
-            }];
-        }
-        
-        handler(shapes, nil);
-    }
-    
-    [operation start];
     return operation;
 }
 
-- (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *)) handler {
+- (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler {
     // Previne URL injection
     NSString* webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *strUrl = [NSString stringWithFormat:@"http://rest.riob.us/search/2/%@", webSafeNumber];
@@ -165,6 +136,49 @@
     [operation start];
     
     return operation;
+}
+
+- (void)processBusLineShapeWithJsonData:(NSString*)jsonData withCompletionHandler:(void (^)(NSArray *busesData, NSError *error))handler {
+    if (jsonData) {
+        // Agora já temos os dados da linha no cache
+        NSData* itineraryJsonData = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
+        NSError* jsonParseError = nil;
+        NSArray* pontosDoPercurso = [NSJSONSerialization JSONObjectWithData:itineraryJsonData options: NSJSONReadingMutableContainers error:&jsonParseError];
+        if (jsonParseError) {
+            NSLog(@"Error decoding JSON itinerary data");
+        }
+        
+        // Converte dados para lista de shapes
+        NSMutableArray *shapes = [[NSMutableArray alloc] initWithCapacity:6];
+        
+        if (pontosDoPercurso.count > 0) {
+            NSCharacterSet* quoteCharSet = [NSCharacterSet characterSetWithCharactersInString:@"\""] ;
+            [shapes addObject:[[NSMutableArray alloc] initWithCapacity:200]];
+            __block NSString *lastShapeId = pontosDoPercurso[0][@"shape"];
+            
+            [pontosDoPercurso enumerateObjectsUsingBlock:^(NSDictionary *dadosDoPonto, NSUInteger idx, BOOL *stop) {
+                NSString *strLatitude = [dadosDoPonto[@"latitude"] stringByTrimmingCharactersInSet:quoteCharSet];
+                NSString *strLongitude = [dadosDoPonto[@"longitude"] stringByTrimmingCharactersInSet:quoteCharSet];
+                
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:[strLatitude doubleValue] longitude:[strLongitude doubleValue]];
+                NSString *currShapeId = dadosDoPonto[@"shape"];
+                
+                NSMutableArray *currShapeArray;
+                if ([lastShapeId isEqualToString:currShapeId]) {
+                    currShapeArray = [shapes lastObject];
+                } else {
+                    currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
+                    [shapes addObject:currShapeArray];
+                }
+                
+                lastShapeId = currShapeId;
+                [currShapeArray addObject:location];
+            }];
+        }
+        
+        handler(shapes, nil);
+    }
+
 }
 
 @end

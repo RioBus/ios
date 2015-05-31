@@ -113,6 +113,7 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="qj4-Wq-QPi" secondAttribute="trailing" constant="-16" id="1yr-d0-6D5"/>
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="Aqd-Y3-EfR"/>
@@ -162,7 +163,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="t8b-Y1-f6V">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <color key="barTintColor" red="0.26300890148207701" green="0.63410336320551774" blue="0.95744694182727275" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="barTintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -368,6 +369,7 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="CKf-uL-pEv" firstAttribute="top" secondItem="FWK-Od-CVk" secondAttribute="bottom" constant="8" id="3uX-Au-X9b"/>
                             <constraint firstAttribute="bottom" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="50" id="AZh-49-H1m"/>
