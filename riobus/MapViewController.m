@@ -48,12 +48,13 @@ static const CGFloat cameraPaddingRight = 50.0f;
     self.lastRequests = [[NSMutableArray alloc] init];
     
     self.mapView.mapType = kGMSTypeNormal;
+    self.mapView.myLocationEnabled = YES;
     
     self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
     
     [self.searchInput setBackgroundImage:[UIImage new]];
-    [self.searchInput setTranslucent:YES];
+    [[UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor whiteColor]];
     
     [self startLocationServices];
     
@@ -75,17 +76,12 @@ static const CGFloat cameraPaddingRight = 50.0f;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self setNeedsStatusBarAppearanceUpdate];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     
     self.mapView.camera = [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
                                                       longitude:cameraDefaultLongitude
                                                            zoom:cameraDefaultZoomLevel];
     
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
 }
 
 
@@ -96,7 +92,11 @@ static const CGFloat cameraPaddingRight = 50.0f;
 }
 
 - (IBAction)locationMenuButtonTapped:(id)sender {
-    [self.locationManager startUpdatingLocation];
+    if ([CLLocationManager locationServicesEnabled]) {
+        [self.locationManager startUpdatingLocation];
+    } else {
+        NSLog(@"Location services not enabled");
+    }
 }
 
 - (IBAction)favoriteMenuButtonTapped:(id)sender {
@@ -306,6 +306,9 @@ static const CGFloat cameraPaddingRight = 50.0f;
     self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:cameraCurrentLocationZoomLevel];
 }
 
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NSLog(@"Location manager failed with error %@", error.description);
+}
 
 #pragma mark Segue control
 

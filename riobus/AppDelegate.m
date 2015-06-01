@@ -9,7 +9,7 @@
     [GMSServices provideAPIKey:@"AIzaSyAOXbZQbs0_scRqMWj83eDc8snV54yfF5I"];
     
     // Configura AFNetworking
-    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     
     return YES;
 }
