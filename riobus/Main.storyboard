@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -113,6 +113,12 @@
                                     <constraint firstItem="eQr-1u-aMf" firstAttribute="leading" secondItem="8Zz-pQ-lWZ" secondAttribute="leading" id="vCz-iT-qNF"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oXi-dn-3U5" customClass="BusLineBarView">
+                                <rect key="frame" x="0.0" y="444" width="320" height="124"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="124" id="Jyt-Pa-n5y"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -124,13 +130,16 @@
                             <constraint firstAttribute="trailingMargin" secondItem="lsP-IF-CM0" secondAttribute="trailing" constant="-16" id="L35-SY-wad"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="Lfw-bq-mSB" secondAttribute="bottom" constant="45" id="O1T-xq-S6K"/>
                             <constraint firstItem="Lfw-bq-mSB" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="-20" id="Vz5-GC-JFu"/>
+                            <constraint firstItem="oXi-dn-3U5" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="Xnn-4G-qwA"/>
                             <constraint firstItem="qj4-Wq-QPi" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="a9r-Q1-a6H"/>
                             <constraint firstItem="Lfw-bq-mSB" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="b9a-gM-SRd"/>
                             <constraint firstItem="qj4-Wq-QPi" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="-20" id="cuA-hn-qbM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Lfw-bq-mSB" secondAttribute="trailing" constant="-16" id="fu2-e3-dLx"/>
                             <constraint firstItem="8Zz-pQ-lWZ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="gEb-xC-6Ak"/>
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="top" secondItem="qj4-Wq-QPi" secondAttribute="bottom" id="oaV-4p-ZJJ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="oXi-dn-3U5" secondAttribute="trailing" constant="-16" id="t53-Vz-nlp"/>
                             <constraint firstAttribute="trailingMargin" secondItem="8Zz-pQ-lWZ" secondAttribute="trailing" constant="-22" id="uno-8W-OcV"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="oXi-dn-3U5" secondAttribute="bottom" id="v2x-Uf-iBe"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="fyO-ox-e98">

@@ -303,7 +303,8 @@ static const CGFloat cameraPaddingRight = 50.0f;
     [self.locationManager stopUpdatingLocation];
     
     CLLocation *location = [locations lastObject];
-    self.mapView.camera = [GMSCameraPosition cameraWithTarget:location.coordinate zoom:cameraCurrentLocationZoomLevel];
+    [self.mapView animateToLocation:location.coordinate];
+    [self.mapView animateToZoom:cameraCurrentLocationZoomLevel];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
