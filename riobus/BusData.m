@@ -6,6 +6,23 @@
 
 @implementation BusData
 
+- (NSString *)destination {
+    // Verifica se a linha possui informação de sentido
+    if (![self.sense isEqualToString:@""] && ![self.sense isEqualToString:@"desconhecido"]) {
+        // Tirar informação entre parênteses do nome da linha
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSString *lineNameWithoutParentheses = [regex stringByReplacingMatchesInString:self.sense options:0 range:NSMakeRange(0, [self.sense length]) withTemplate:@""];
+        lineNameWithoutParentheses = [lineNameWithoutParentheses stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        NSArray *places = [lineNameWithoutParentheses componentsSeparatedByString:@" X "];
+        if ([places count] == 2) {
+            return places[1];
+        }
+    }
+    
+    return nil;
+}
+
 + (NSString*)humanReadableStringForTime:(NSInteger)value ofType:(NSString*)type{
     return [NSString stringWithFormat:@"%ld %@", (long)value,(value == 1 ? type : [type stringByAppendingString:@"s"])];
 }

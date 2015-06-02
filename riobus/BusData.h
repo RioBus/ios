@@ -15,5 +15,6 @@
 - (NSString*)humanReadableDelay;
 - (NSInteger)delayInMinutes;
 - (NSInteger)delayInSeconds;
+- (NSString*)destination;
 
 @end

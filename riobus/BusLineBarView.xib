@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BusLineBarView">
             <connections>
                 <outlet property="busLineBar" destination="KYv-rm-N1k" id="3cQ-O9-wah"/>
+                <outlet property="directionBar" destination="qnm-aE-a2P" id="Ku8-Rc-roh"/>
                 <outlet property="leftDestinationButton" destination="Eta-JV-XkO" id="ReR-Cz-rlL"/>
                 <outlet property="lineNameLabel" destination="3Yr-es-i85" id="jx6-tD-f2m"/>
                 <outlet property="rightDestinationButton" destination="VwV-WY-5PP" id="rEV-Ot-Pon"/>
@@ -47,6 +48,9 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uUW-Bq-UfH" userLabel="Direction Button">
                                     <rect key="frame" x="210" y="11" width="15" height="18"/>
                                     <state key="normal" image="DirectionButton"/>
+                                    <connections>
+                                        <action selector="didTapDirectionButton:" destination="-1" eventType="touchUpInside" id="bAx-vO-9Ab"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eta-JV-XkO">
                                     <rect key="frame" x="20" y="3" width="182" height="33"/>
@@ -54,6 +58,9 @@
                                     <state key="normal" title="Origem">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
+                                    <connections>
+                                        <action selector="didTapLeftDestinationButton:" destination="-1" eventType="touchUpInside" id="lVV-Bm-AhM"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VwV-WY-5PP">
                                     <rect key="frame" x="233" y="3" width="182" height="33"/>
@@ -61,6 +68,9 @@
                                     <state key="normal" title="Destino">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
+                                    <connections>
+                                        <action selector="didTapRightDestinationButton:" destination="-1" eventType="touchUpInside" id="L6h-2e-LWK"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" red="0.14117647059999999" green="0.49803921569999998" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>

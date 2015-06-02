@@ -9,7 +9,7 @@
 #import "BusSuggestionsTable.h"
 #import "BusLineBarView.h"
 
-@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
+@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate, BusLineBarViewDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
@@ -23,7 +23,7 @@
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
-@property (weak, nonatomic) IBOutlet BusLineBarView *busLineBarView;
+@property (weak,   nonatomic) IBOutlet BusLineBarView *busLineBarView;
 @property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
 @property int hasRepositionedMapTimes;
 @property BOOL lastUpdateWasOk;
@@ -54,6 +54,8 @@ static const CGFloat cameraPaddingRight = 50.0f;
     self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
     
+    self.busLineBarView.delegate = self;
+    
     [self.searchInput setBackgroundImage:[UIImage new]];
     [[UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor whiteColor]];
     
@@ -69,9 +71,9 @@ static const CGFloat cameraPaddingRight = 50.0f;
                              [UIColor blackColor],
                              [UIColor blueColor]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -102,6 +104,17 @@ static const CGFloat cameraPaddingRight = 50.0f;
 
 - (IBAction)favoriteMenuButtonTapped:(id)sender {
     NSLog(@"Favorite manu tapped");
+}
+
+
+#pragma mark BusLineBarViewDelegate methods
+
+- (BOOL)busLineBarView:(BusLineBarView *)sender didSelectDestination:(NSString *)destination {
+    NSLog(@"Selecionou destino %@", destination);
+    
+    // TODO: filtrar linhas do mapa de acordo com o destino selecionado
+    
+    return YES;
 }
 
 
@@ -199,18 +212,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
     [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:lineName
                                                  withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
                                                      if (!error) {
-                                                         if (busLineInformation[@"name"]) {
-                                                             self.busLineBarView.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLineInformation[@"line"], busLineInformation[@"name"]];
-                                                         } else {
-                                                             self.busLineBarView.lineNameLabel.text = [NSString stringWithFormat:@"Linha %@", busLineInformation[@"line"]];
-                                                         }
-                                                         
-                                                         NSArray *places = busLineInformation[@"places"];
-                                                         if (places.count == 2) {
-                                                             [self.busLineBarView.leftDestinationButton setTitle:places[0] forState:UIControlStateNormal];
-                                                             [self.busLineBarView.rightDestinationButton setTitle:places[1] forState:UIControlStateNormal];
-                                                         }
-                                                         [self.busLineBarView appear];
+                                                         [self.busLineBarView appearWithBusLine:busLineInformation];
                                                          
                                                          NSArray *shapes = busLineInformation[@"shapes"];
                                                          [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
