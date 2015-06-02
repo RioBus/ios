@@ -26,16 +26,16 @@
 @property (weak, nonatomic) IBOutlet BusLineBarView *busLineBarView;
 @property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
 @property int hasRepositionedMapTimes;
-
+@property BOOL lastUpdateWasOk;
 @end
 
 static const CGFloat cameraDefaultLatitude = -22.9043527f;
 static const CGFloat cameraDefaultLongitude = -43.1912805f;
 static const CGFloat cameraDefaultZoomLevel = 12.0f;
 static const CGFloat cameraCurrentLocationZoomLevel = 14.0f;
-static const CGFloat cameraPaddingTop = 50.0f;
+static const CGFloat cameraPaddingTop = 80.0f;
 static const CGFloat cameraPaddingLeft = 50.0f;
-static const CGFloat cameraPaddingBottom = 50.0f;
+static const CGFloat cameraPaddingBottom = 120.0f;
 static const CGFloat cameraPaddingRight = 50.0f;
 
 @implementation MapViewController
@@ -165,10 +165,14 @@ static const CGFloat cameraPaddingRight = 50.0f;
                                                                          self.busesData = busesData;
                                                                          
                                                                          if (!self.busesData.count) {
+                                                                             [self.busLineBarView hide];
                                                                              [self.view hideToastActivity];
+                                                                             
                                                                              NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", busLineNumber];
                                                                              
                                                                              [self.view makeToast:msg];
+                                                                             
+                                                                             self.lastUpdateWasOk = NO;
                                                                          }
                                                                      }
                                                                  }];
@@ -177,7 +181,10 @@ static const CGFloat cameraPaddingRight = 50.0f;
     }
     
     [self stopActiveTimers];
-    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(updateSearchedBusesData:) userInfo:nil repeats:NO];
+    
+    if (self.lastUpdateWasOk) {
+        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(updateSearchedBusesData:) userInfo:nil repeats:NO];
+    }
 }
 
 - (void)setBusesData:(NSArray*)busesData {
@@ -189,23 +196,37 @@ static const CGFloat cameraPaddingRight = 50.0f;
 #pragma mark Carregamento do marcadores, da rota e do mapa
 
 - (void)insertRouteOfBus:(NSString*)lineName {
-    [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:lineName
-                                           withCompletionHandler:^(NSArray *shapes, NSError *error) {
-                                               if (!error) {
-                                                   [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
-                                                       GMSMutablePath *gmShape = [GMSMutablePath path];
-                                                       [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
-                                                           [gmShape addCoordinate:location.coordinate];
-                                                       }];
-                                                       GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
-                                                       polyLine.strokeColor = self.lineColor[lineName];
-                                                       polyLine.strokeWidth = 2.0;
-                                                       polyLine.map = self.mapView;
-                                                   }];
-                                               } else {
-                                                   NSLog(@"ERRO: Nenhuma rota para exibir");
-                                               }
-                                           }];
+    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:lineName
+                                                 withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+                                                     if (!error) {
+                                                         if (busLineInformation[@"name"]) {
+                                                             self.busLineBarView.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLineInformation[@"line"], busLineInformation[@"name"]];
+                                                         } else {
+                                                             self.busLineBarView.lineNameLabel.text = [NSString stringWithFormat:@"Linha %@", busLineInformation[@"line"]];
+                                                         }
+                                                         
+                                                         NSArray *places = busLineInformation[@"places"];
+                                                         if (places.count == 2) {
+                                                             [self.busLineBarView.leftDestinationButton setTitle:places[0] forState:UIControlStateNormal];
+                                                             [self.busLineBarView.rightDestinationButton setTitle:places[1] forState:UIControlStateNormal];
+                                                         }
+                                                         [self.busLineBarView appear];
+                                                         
+                                                         NSArray *shapes = busLineInformation[@"shapes"];
+                                                         [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
+                                                             GMSMutablePath *gmShape = [GMSMutablePath path];
+                                                             [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
+                                                                 [gmShape addCoordinate:location.coordinate];
+                                                             }];
+                                                             GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
+                                                             polyLine.strokeColor = self.lineColor[lineName];
+                                                             polyLine.strokeWidth = 2.0;
+                                                             polyLine.map = self.mapView;
+                                                         }];
+                                                     } else {
+                                                         NSLog(@"ERRO: Nenhuma rota para exibir");
+                                                     }
+                                                 }];
 }
 
 - (void)updateMarkers {
@@ -281,6 +302,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
     }
     
     // Call updater
+    self.lastUpdateWasOk = YES;
     [self updateSearchedBusesData:self];
 }
 

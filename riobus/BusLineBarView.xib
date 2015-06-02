@@ -8,11 +8,13 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BusLineBarView">
             <connections>
                 <outlet property="busLineBar" destination="KYv-rm-N1k" id="3cQ-O9-wah"/>
-                <outlet property="busLineLabel" destination="3Yr-es-i85" id="9ta-ke-Tvc"/>
+                <outlet property="leftDestinationButton" destination="Eta-JV-XkO" id="ReR-Cz-rlL"/>
+                <outlet property="lineNameLabel" destination="3Yr-es-i85" id="jx6-tD-f2m"/>
+                <outlet property="rightDestinationButton" destination="VwV-WY-5PP" id="rEV-Ot-Pon"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" userLabel="Bus Line Container View">
+        <view contentMode="scaleToFill" horizontalCompressionResistancePriority="751" id="iN0-l3-epB" userLabel="Bus Line Container View">
             <rect key="frame" x="0.0" y="0.0" width="435" height="124"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -21,7 +23,7 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y5X-ex-o2D" userLabel="Bar Background">
                             <rect key="frame" x="0.0" y="15" width="435" height="109"/>
-                            <color key="backgroundColor" red="0.25882352941176473" green="0.58039215686274515" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.31372549019607843" green="0.65490196078431373" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="109" id="1Rq-rg-oGi"/>
                             </constraints>
@@ -33,21 +35,62 @@
                                 <constraint firstAttribute="height" constant="124" id="vB6-0g-nz5"/>
                             </constraints>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="696 - Meier X Praia do Dendê" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Yr-es-i85">
-                            <rect key="frame" x="104" y="52" width="227" height="21"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123 - Origem X Destino" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Yr-es-i85" userLabel="Line Name">
+                            <rect key="frame" x="123" y="50" width="189" height="22"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qnm-aE-a2P" userLabel="Direction Bar">
+                            <rect key="frame" x="0.0" y="86" width="435" height="38"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uUW-Bq-UfH" userLabel="Direction Button">
+                                    <rect key="frame" x="210" y="11" width="15" height="18"/>
+                                    <state key="normal" image="DirectionButton"/>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eta-JV-XkO">
+                                    <rect key="frame" x="20" y="3" width="182" height="33"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <state key="normal" title="Origem">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VwV-WY-5PP">
+                                    <rect key="frame" x="233" y="3" width="182" height="33"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <state key="normal" title="Destino">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" red="0.14117647059999999" green="0.49803921569999998" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstItem="Eta-JV-XkO" firstAttribute="leading" secondItem="qnm-aE-a2P" secondAttribute="leading" constant="20" id="10t-Jn-5Zp"/>
+                                <constraint firstAttribute="trailing" secondItem="VwV-WY-5PP" secondAttribute="trailing" constant="20" id="583-Sb-1aD"/>
+                                <constraint firstAttribute="centerY" secondItem="VwV-WY-5PP" secondAttribute="centerY" id="EOi-jY-LBU"/>
+                                <constraint firstItem="uUW-Bq-UfH" firstAttribute="leading" secondItem="Eta-JV-XkO" secondAttribute="trailing" constant="8" id="J01-fs-UXR"/>
+                                <constraint firstAttribute="centerX" secondItem="uUW-Bq-UfH" secondAttribute="centerX" id="JIB-iz-YR8"/>
+                                <constraint firstAttribute="centerY" secondItem="Eta-JV-XkO" secondAttribute="centerY" id="XUQ-Su-b9F"/>
+                                <constraint firstItem="VwV-WY-5PP" firstAttribute="leading" secondItem="uUW-Bq-UfH" secondAttribute="trailing" constant="8" id="chb-iJ-ECp"/>
+                                <constraint firstAttribute="centerY" secondItem="uUW-Bq-UfH" secondAttribute="centerY" constant="-1" id="uX1-UJ-3Wx"/>
+                                <constraint firstAttribute="height" constant="38" id="uxx-dX-uvH"/>
+                            </constraints>
+                        </view>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="y5X-ex-o2D" secondAttribute="trailing" id="8Nh-NN-abB"/>
-                        <constraint firstItem="3Yr-es-i85" firstAttribute="top" secondItem="KYv-rm-N1k" secondAttribute="top" constant="52" id="Cgs-sp-A7n"/>
+                        <constraint firstItem="3Yr-es-i85" firstAttribute="top" secondItem="KYv-rm-N1k" secondAttribute="top" constant="50" id="Cgs-sp-A7n"/>
+                        <constraint firstAttribute="bottom" secondItem="qnm-aE-a2P" secondAttribute="bottom" id="N6Q-0e-WHW"/>
+                        <constraint firstItem="3Yr-es-i85" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KYv-rm-N1k" secondAttribute="leading" constant="20" id="OTr-Jr-GiE"/>
                         <constraint firstAttribute="bottom" secondItem="pgM-C2-icK" secondAttribute="bottom" id="Vfl-fa-xwM"/>
+                        <constraint firstItem="qnm-aE-a2P" firstAttribute="leading" secondItem="KYv-rm-N1k" secondAttribute="leading" id="Yyr-Jx-oUx"/>
                         <constraint firstItem="y5X-ex-o2D" firstAttribute="leading" secondItem="KYv-rm-N1k" secondAttribute="leading" id="eKf-oz-h1l"/>
                         <constraint firstItem="pgM-C2-icK" firstAttribute="leading" secondItem="KYv-rm-N1k" secondAttribute="leading" id="fEE-GX-lvG"/>
+                        <constraint firstAttribute="trailing" secondItem="qnm-aE-a2P" secondAttribute="trailing" id="gy5-wU-IWw"/>
+                        <constraint firstAttribute="height" constant="124" id="kZy-P1-HDZ"/>
                         <constraint firstAttribute="centerX" secondItem="3Yr-es-i85" secondAttribute="centerX" id="knP-kv-wg4"/>
                         <constraint firstAttribute="trailing" secondItem="pgM-C2-icK" secondAttribute="trailing" id="kpt-6W-DT8"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="3Yr-es-i85" secondAttribute="trailing" constant="20" id="m9u-fd-HMh"/>
                         <constraint firstAttribute="bottom" secondItem="y5X-ex-o2D" secondAttribute="bottom" id="zOe-Aj-Q4g"/>
                     </constraints>
                     <connections>
@@ -55,9 +98,9 @@
                     </connections>
                 </view>
             </subviews>
+            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="KYv-rm-N1k" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8RA-UQ-amq"/>
-                <constraint firstItem="KYv-rm-N1k" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Aw7-U1-WtR"/>
                 <constraint firstAttribute="bottom" secondItem="KYv-rm-N1k" secondAttribute="bottom" id="VTX-Ak-33M"/>
                 <constraint firstAttribute="trailing" secondItem="KYv-rm-N1k" secondAttribute="trailing" id="XoO-Av-RcE"/>
             </constraints>
@@ -76,6 +119,7 @@
     </objects>
     <resources>
         <image name="BusLineBar" width="375" height="124"/>
+        <image name="DirectionButton" width="15" height="18"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

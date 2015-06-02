@@ -1,10 +1,13 @@
 #import <UIKit/UIKit.h>
-IB_DESIGNABLE
+
 @interface BusLineBarView : UIView
 
 - (void)appear;
 - (void)hide;
 
-@property (weak, nonatomic) IBOutlet UILabel *busLineLabel;
+@property (weak, nonatomic) IBOutlet UILabel *lineNameLabel;
+@property (weak, nonatomic) IBOutlet UIButton *leftDestinationLabel;
+@property (weak, nonatomic) IBOutlet UIButton *rightDestinationButton;
+@property (weak, nonatomic) IBOutlet UIButton *leftDestinationButton;
 
 @end

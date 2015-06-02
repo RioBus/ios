@@ -106,8 +106,8 @@
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:@"" withCompletionHandler:^(NSArray *shapes, NSError *error) {
-        XCTAssertNil(shapes, @"Shapes should've returned nil with empty line number");
+    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:@"" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+        XCTAssertNil(busLineInformation, @"Shapes should've returned nil with empty line number");
         XCTAssertNotNil(error, @"Operation should have returned an error from server");
         
         waitingForBlock = NO;
@@ -130,7 +130,8 @@
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:@"ABCDEFGH" withCompletionHandler:^(NSArray *shapes, NSError *error) {
+    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:@"ABCDEFGH" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+        NSArray* shapes = busLineInformation[@"shapes"];
         XCTAssertNotNil(shapes, @"Shapes returned nil");
         XCTAssert(shapes.count == 0, @"Shapes should've returned an empty array");
         XCTAssertNil(error, @"Operation returned an error");
@@ -154,7 +155,8 @@
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusLineShapeForLineNumber:@"485" withCompletionHandler:^(NSArray *shapes, NSError *error) {
+    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:@"485" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+        NSArray* shapes = busLineInformation[@"shapes"];
         XCTAssertNotNil(shapes, @"Shapes returned nil");
         XCTAssert(shapes.count > 0, @"Shapes returned an empty array");
         XCTAssert(((NSArray*)shapes[0]).count > 0, @"Shapes does not contain a NSArray object");

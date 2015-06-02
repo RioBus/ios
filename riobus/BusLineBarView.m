@@ -46,8 +46,9 @@
         [self setNeedsUpdateConstraints];
     }
     
-    self.busLineBar.hidden = YES;
+    self.busLineBar.alpha = 0.0;
     self.userInteractionEnabled = NO;
+    
 }
 
 - (void)updateConstraints {
@@ -69,11 +70,29 @@
     }
     
     [super updateConstraints];
+    
+    NSLog(@"updateConstraints");
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    
+    self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
+                                       self.containerView.frame.origin.y + 64,
+                                       self.busLineBar.frame.size.width,
+                                       self.busLineBar.frame.size.height);
+    
+    NSLog(@"layoutSubviews y = %f", self.busLineBar.frame.origin.y);
 }
 
 - (void)appear {
-    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
-        self.busLineBar.hidden = NO;
+    self.busLineBar.alpha = 1.0;
+    self.lineNameLabel.alpha = 1.0;
+    
+    NSLog(@"appear y = %f", self.busLineBar.frame.origin.y);
+
+    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.userInteractionEnabled = YES;
         self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
                                            self.containerView.frame.origin.y,
@@ -85,14 +104,18 @@
 }
 
 - (void)hide {
-    [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+        self.lineNameLabel.alpha = 0.0;
         self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
-                                           self.containerView.frame.size.height,
+                                           self.containerView.frame.origin.y + 64,
                                            self.busLineBar.frame.size.width,
                                            self.busLineBar.frame.size.height);
     } completion:^(BOOL finished){
-        self.userInteractionEnabled = NO;
-        self.busLineBar.hidden = YES;
+        [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+            self.busLineBar.alpha = 0.0;
+        } completion:^(BOOL finished){
+            self.userInteractionEnabled = NO;
+        }];
     }];
 }
 
