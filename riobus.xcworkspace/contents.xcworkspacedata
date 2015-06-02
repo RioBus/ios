@@ -2,15 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:BusLineBarViewController.h">
-   </FileRef>
-   <FileRef
-      location = "group:BusLineBarViewController.m">
-   </FileRef>
-   <FileRef
-      location = "group:BusLineBarViewController.xib">
-   </FileRef>
-   <FileRef
       location = "group:riobus.xcodeproj">
    </FileRef>
    <FileRef

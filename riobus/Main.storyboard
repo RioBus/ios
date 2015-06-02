@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -147,6 +147,7 @@
                     </navigationItem>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="busLineBarView" destination="oXi-dn-3U5" id="Kbj-Wx-MLs"/>
                         <outlet property="keyboardBottomConstraint" destination="GX1-bd-vh2" id="CQB-Z9-GjU"/>
                         <outlet property="mapView" destination="Lfw-bq-mSB" id="IVe-WC-4Ar"/>
                         <outlet property="searchDisplayController" destination="SXP-NW-eBt" id="1of-vD-bwM"/>

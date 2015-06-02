@@ -193,11 +193,11 @@
 				A37A3CED1B1CD61E006A397C /* BusLineBarView.h */,
 				A37A3CEE1B1CD61E006A397C /* BusLineBarView.m */,
 				A37A3CE91B1CD425006A397C /* BusLineBarView.xib */,
-				681A7F5C196722540006C335 /* Images.xcassets */,
 				681A7F7A196727C60006C335 /* MapViewController.h */,
 				681A7F7B196727C60006C335 /* MapViewController.m */,
 				681A7FA619684A6C0006C335 /* OptionsViewController.h */,
 				681A7FA719684A6C0006C335 /* OptionsViewController.m */,
+				681A7F5C196722540006C335 /* Images.xcassets */,
 				681A7F4B196722530006C335 /* Supporting Files */,
 			);
 			path = riobus;

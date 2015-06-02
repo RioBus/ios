@@ -7,7 +7,7 @@
 #import "BusDataStore.h"
 #import "OptionsViewController.h"
 #import "BusSuggestionsTable.h"
-#import "UIBusIcon.h"
+#import "BusLineBarView.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate>
 
@@ -23,6 +23,7 @@
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
+@property (weak, nonatomic) IBOutlet BusLineBarView *busLineBarView;
 @property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
 @property int hasRepositionedMapTimes;
 
@@ -255,7 +256,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
     [self.mapView clear];
     self.mapBounds = [[GMSCoordinateBounds alloc] init];
     [self setSuggestionsTableVisible:NO];
-    
     self.hasRepositionedMapTimes = 0;
     
     [self.view makeToastActivity];
