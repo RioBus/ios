@@ -7,9 +7,9 @@
 #import "BusDataStore.h"
 #import "OptionsViewController.h"
 #import "BusSuggestionsTable.h"
-#import "BusLineBarView.h"
+#import "BusLineBar.h"
 
-@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate, BusLineBarViewDelegate>
+@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate, BusLineBarDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSMutableDictionary *markerForOrder;
@@ -18,12 +18,12 @@
 @property (strong, nonatomic) NSTimer *updateTimer;
 @property (strong, nonatomic) NSArray *availableColors;
 @property (strong, nonatomic) NSMutableDictionary *lineColor;
-@property (strong, atomic   ) GMSCoordinateBounds* mapBounds;
+@property (strong, nonatomic) GMSCoordinateBounds* mapBounds;
 @property (strong, nonatomic) NSMutableArray *lastRequests;
 @property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
-@property (weak,   nonatomic) IBOutlet BusLineBarView *busLineBarView;
+@property (weak,   nonatomic) IBOutlet BusLineBar *busLineBar;
 @property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
 @property int hasRepositionedMapTimes;
 @property BOOL lastUpdateWasOk;
@@ -54,7 +54,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
     self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
     
-    self.busLineBarView.delegate = self;
+    self.busLineBar.delegate = self;
     
     [self.searchInput setBackgroundImage:[UIImage new]];
     [[UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor whiteColor]];
@@ -104,15 +104,18 @@ static const CGFloat cameraPaddingRight = 50.0f;
 
 - (IBAction)favoriteMenuButtonTapped:(id)sender {
     NSLog(@"Favorite manu tapped");
+    
+    // TODO: funcionalidade de busca favorita
 }
 
 
 #pragma mark BusLineBarViewDelegate methods
 
-- (BOOL)busLineBarView:(BusLineBarView *)sender didSelectDestination:(NSString *)destination {
+- (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestination:(NSString *)destination {
     NSLog(@"Selecionou destino %@", destination);
     
-    // TODO: filtrar linhas do mapa de acordo com o destino selecionado
+    // TODO: filtrar ônibus exibidos no mapa
+    // TODO: salvar no histórico o último sentido selecionado
     
     return YES;
 }
@@ -178,7 +181,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
                                                                          self.busesData = busesData;
                                                                          
                                                                          if (!self.busesData.count) {
-                                                                             [self.busLineBarView hide];
+                                                                             [self.busLineBar hide];
                                                                              [self.view hideToastActivity];
                                                                              
                                                                              NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", busLineNumber];
@@ -212,7 +215,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
     [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:lineName
                                                  withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
                                                      if (!error) {
-                                                         [self.busLineBarView appearWithBusLine:busLineInformation];
+                                                         [self.busLineBar appearWithBusLine:busLineInformation];
                                                          
                                                          NSArray *shapes = busLineInformation[@"shapes"];
                                                          [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {

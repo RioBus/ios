@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -113,7 +112,7 @@
                                     <constraint firstItem="eQr-1u-aMf" firstAttribute="leading" secondItem="8Zz-pQ-lWZ" secondAttribute="leading" id="vCz-iT-qNF"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oXi-dn-3U5" customClass="BusLineBarView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oXi-dn-3U5" customClass="BusLineBar">
                                 <rect key="frame" x="0.0" y="444" width="320" height="124"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="124" id="Jyt-Pa-n5y"/>
@@ -147,7 +146,7 @@
                     </navigationItem>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
-                        <outlet property="busLineBarView" destination="oXi-dn-3U5" id="Kbj-Wx-MLs"/>
+                        <outlet property="busLineBar" destination="oXi-dn-3U5" id="BIo-lq-9vV"/>
                         <outlet property="keyboardBottomConstraint" destination="GX1-bd-vh2" id="CQB-Z9-GjU"/>
                         <outlet property="mapView" destination="Lfw-bq-mSB" id="IVe-WC-4Ar"/>
                         <outlet property="searchDisplayController" destination="SXP-NW-eBt" id="1of-vD-bwM"/>

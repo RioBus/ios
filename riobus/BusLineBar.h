@@ -1,8 +1,8 @@
 #import <UIKit/UIKit.h>
 
-@class BusLineBarView;
+@class BusLineBar;
 
-@protocol BusLineBarViewDelegate <NSObject>
+@protocol BusLineBarDelegate <NSObject>
 
 /**
  * Notifies the delegate that the user is trying to select a different destination and updates the view if successful.
@@ -10,11 +10,11 @@
  * @param destination The name of the destination the user has selected
  * @return A BOOL value indicating if the selection was authorised. YES will make the selection visible in the view and NO will keep the previous state.
  */
-- (BOOL)busLineBarView:(BusLineBarView *)sender didSelectDestination:(NSString *)destination;
+- (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestination:(NSString *)destination;
 
 @end
 
-@interface BusLineBarView : UIView
+@interface BusLineBar : UIView
 
 /**
  * Make bar appear in the view sliding from the bottom of the screen with the information about the especified line.
@@ -38,6 +38,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *leftDestinationLabel;
 @property (weak, nonatomic) IBOutlet UIButton *rightDestinationButton;
 @property (weak, nonatomic) IBOutlet UIButton *leftDestinationButton;
-@property id<BusLineBarViewDelegate> delegate;
+@property id<BusLineBarDelegate> delegate;
 
 @end

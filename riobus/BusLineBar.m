@@ -1,6 +1,6 @@
-#import "BusLineBarView.h"
+#import "BusLineBar.h"
 
-@interface BusLineBarView ()
+@interface BusLineBar ()
 @property (nonatomic, strong) UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIView *busLineBar;
 @property (weak, nonatomic) IBOutlet UIView *directionBar;
@@ -8,7 +8,7 @@
 @end
 
 
-@implementation BusLineBarView
+@implementation BusLineBar
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -30,7 +30,7 @@
     _customConstraints = [[NSMutableArray alloc] init];
     
     UIView *view = nil;
-    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"BusLineBarView"
+    NSArray *objects = [[NSBundle mainBundle] loadNibNamed:@"BusLineBar"
                                                      owner:self
                                                    options:nil];
     for (id object in objects) {
@@ -71,26 +71,12 @@
     }
     
     [super updateConstraints];
-    
-    NSLog(@"updateConstraints");
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    
-    
-    self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
-                                       self.containerView.frame.origin.y + 64,
-                                       self.busLineBar.frame.size.width,
-                                       self.busLineBar.frame.size.height);
-    
-    NSLog(@"layoutSubviews y = %f", self.busLineBar.frame.origin.y);
 }
 
 - (void)slideUpWithDestinationsVisible:(BOOL)destinationsVisible {
     self.busLineBar.alpha = 1.0;
     self.lineNameLabel.alpha = 1.0;
-    
+
     CGFloat finalY;
     if (destinationsVisible) {
         finalY = self.containerView.frame.origin.y;
@@ -98,7 +84,7 @@
         finalY = self.containerView.frame.origin.y + self.directionBar.frame.size.height;
     }
     
-    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:0.1 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.userInteractionEnabled = YES;
         self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
                                            finalY,

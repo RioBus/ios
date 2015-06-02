@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BusLineBarView">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BusLineBar">
             <connections>
                 <outlet property="busLineBar" destination="KYv-rm-N1k" id="3cQ-O9-wah"/>
                 <outlet property="directionBar" destination="qnm-aE-a2P" id="Ku8-Rc-roh"/>
@@ -92,7 +91,7 @@
                         <constraint firstItem="3Yr-es-i85" firstAttribute="top" secondItem="KYv-rm-N1k" secondAttribute="top" constant="50" id="Cgs-sp-A7n"/>
                         <constraint firstAttribute="bottom" secondItem="qnm-aE-a2P" secondAttribute="bottom" id="N6Q-0e-WHW"/>
                         <constraint firstItem="3Yr-es-i85" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KYv-rm-N1k" secondAttribute="leading" constant="20" id="OTr-Jr-GiE"/>
-                        <constraint firstAttribute="bottom" secondItem="pgM-C2-icK" secondAttribute="bottom" id="Vfl-fa-xwM"/>
+                        <constraint firstAttribute="bottom" secondItem="pgM-C2-icK" secondAttribute="bottom" id="Vfl-fa-xwM" userLabel="PreviewVertical Space - Bus Line Bar - Bar Background Image"/>
                         <constraint firstItem="qnm-aE-a2P" firstAttribute="leading" secondItem="KYv-rm-N1k" secondAttribute="leading" id="Yyr-Jx-oUx"/>
                         <constraint firstItem="y5X-ex-o2D" firstAttribute="leading" secondItem="KYv-rm-N1k" secondAttribute="leading" id="eKf-oz-h1l"/>
                         <constraint firstItem="pgM-C2-icK" firstAttribute="leading" secondItem="KYv-rm-N1k" secondAttribute="leading" id="fEE-GX-lvG"/>
@@ -110,8 +109,9 @@
             </subviews>
             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="KYv-rm-N1k" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" priority="750" constant="124" id="6eC-EL-kVJ" userLabel="Build Vertical Space - (124) - Bus Line Bar - Bus Line Container View"/>
                 <constraint firstItem="KYv-rm-N1k" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8RA-UQ-amq"/>
-                <constraint firstAttribute="bottom" secondItem="KYv-rm-N1k" secondAttribute="bottom" id="VTX-Ak-33M"/>
+                <constraint firstAttribute="bottom" secondItem="KYv-rm-N1k" secondAttribute="bottom" placeholder="YES" id="VTX-Ak-33M" userLabel="Preview Vertical Space - Bus Line Container View - Bus Line Bar"/>
                 <constraint firstAttribute="trailing" secondItem="KYv-rm-N1k" secondAttribute="trailing" id="XoO-Av-RcE"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>

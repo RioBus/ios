@@ -23,27 +23,27 @@
     return nil;
 }
 
-+ (NSString*)humanReadableStringForTime:(NSInteger)value ofType:(NSString*)type{
++ (NSString*)humanReadableStringForTime:(NSInteger)value ofType:(NSString*)type {
     return [NSString stringWithFormat:@"%ld %@", (long)value,(value == 1 ? type : [type stringByAppendingString:@"s"])];
 }
 
-+ (NSString*)humanReadableStringForSeconds:(NSInteger)value{
-    if (value<SECONDS_IN_MINUTE)
++ (NSString*)humanReadableStringForSeconds:(NSInteger)value {
+    if (value < SECONDS_IN_MINUTE)
         return [BusData humanReadableStringForTime:value ofType:@"segundo"];
     
-    value/=SECONDS_IN_MINUTE;
-    if (value<MINUTES_IN_HOUR)
+    value /= SECONDS_IN_MINUTE;
+    if (value < MINUTES_IN_HOUR)
         return [BusData humanReadableStringForTime:value ofType:@"minuto"];
     
-    value/=MINUTES_IN_HOUR;
-    if (value<HOUR_IN_DAY)
+    value /= MINUTES_IN_HOUR;
+    if (value < HOUR_IN_DAY)
         return [BusData humanReadableStringForTime:value ofType:@"hora"];
     
-    value/=HOUR_IN_DAY;
+    value /= HOUR_IN_DAY;
     return [BusData humanReadableStringForTime:value ofType:@"dia"];
 }
 
-- (NSString*)humanReadableDelay{
+- (NSString*)humanReadableDelay {
     return [BusData humanReadableStringForSeconds:[self delayInSeconds]];
 }
 
