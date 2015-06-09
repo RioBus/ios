@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6331A56C1A08516E006BBFB5 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6331A56B1A08516E006BBFB5 /* GLKit.framework */; };
 		639261511A06A88400B9A53C /* BusSuggestionsTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 639261501A06A88400B9A53C /* BusSuggestionsTable.m */; };
 		681A7F45196722530006C335 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F44196722530006C335 /* Foundation.framework */; };
-		681A7F47196722530006C335 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F46196722530006C335 /* CoreGraphics.framework */; };
 		681A7F49196722530006C335 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F48196722530006C335 /* UIKit.framework */; };
 		681A7F4F196722530006C335 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 681A7F4D196722530006C335 /* InfoPlist.strings */; };
 		681A7F51196722530006C335 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F50196722530006C335 /* main.m */; };
@@ -88,9 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6331A56C1A08516E006BBFB5 /* GLKit.framework in Frameworks */,
 				681A7F7E19672ACF0006C335 /* CoreLocation.framework in Frameworks */,
-				681A7F47196722530006C335 /* CoreGraphics.framework in Frameworks */,
 				681A7F49196722530006C335 /* UIKit.framework in Frameworks */,
 				681A7F45196722530006C335 /* Foundation.framework in Frameworks */,
 				F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */,
@@ -276,7 +272,7 @@
 				ORGANIZATIONNAME = "Rio Bus";
 				TargetAttributes = {
 					681A7F40196722530006C335 = {
-						DevelopmentTeam = CP4TSFS822;
+						DevelopmentTeam = 5JHLCV2DBL;
 					};
 					681A7F61196722540006C335 = {
 						TestTargetID = 681A7F40196722530006C335;

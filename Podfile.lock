@@ -21,16 +21,19 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - GoogleMaps (1.10.0)
+  - PSTAlertController (1.1.0)
   - Toast (2.4)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.5)
   - GoogleMaps (~> 1.10)
+  - PSTAlertController (~> 1.1)
   - Toast (~> 2.4)
 
 SPEC CHECKSUMS:
   AFNetworking: fefbce9660acb17f48ae0011292d4da0f457bf36
   GoogleMaps: 8eafd25b658a6401ca45a185700716c4a9e9edf2
+  PSTAlertController: cb21afcfa76c3229feec7db044afd4f60dab5892
   Toast: 0773b8fc0e97352ca6054517bec7ebdd4110029d
 
 COCOAPODS: 0.37.2

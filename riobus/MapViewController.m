@@ -1,8 +1,6 @@
-#import <GLKit/GLKit.h>
-#import <CoreLocation/CoreLocation.h>
-#import <AFNetworking/AFNetworking.h>
 #import <Toast/UIView+Toast.h>
 #import <GoogleMaps/GoogleMaps.h>
+#import <PSTAlertController/PSTAlertController.h>
 #import "MapViewController.h"
 #import "BusDataStore.h"
 #import "OptionsViewController.h"
@@ -14,19 +12,20 @@
 @property (nonatomic) CLLocationManager *locationManager;
 @property (nonatomic) NSMutableDictionary *markerForOrder;
 @property (nonatomic) NSArray *busesData;
+@property (nonatomic) NSDictionary *busLineInformation;
 @property (nonatomic) NSMutableArray *searchedLines;
 @property (nonatomic) NSTimer *updateTimer;
 @property (nonatomic) NSArray *availableColors;
 @property (nonatomic) NSMutableDictionary *lineColor;
 @property (nonatomic) GMSCoordinateBounds *mapBounds;
 @property (nonatomic) NSMutableArray *lastRequests;
+@property (nonatomic) int hasRepositionedMapTimes;
+@property (nonatomic) BOOL lastUpdateWasOk;
 @property (weak, nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (weak, nonatomic) IBOutlet BusLineBar *busLineBar;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
-@property (nonatomic) int hasRepositionedMapTimes;
-@property (nonatomic) BOOL lastUpdateWasOk;
 @end
 
 static const CGFloat cameraDefaultLatitude = -22.9043527;
@@ -179,24 +178,32 @@ static const CGFloat cameraPaddingRight = 50.0;
         NSOperation *request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
                                                                  withCompletionHandler:^(NSArray *busesData, NSError *error) {
                                                                      if (error) {
+                                                                         [self.busLineBar hide];
                                                                          [self.view hideToastActivity];
                                                                          
                                                                          if (error.code != NSURLErrorCancelled) { // Erro ao cancelar um request
-                                                                             [self.view makeToast:@"Erro buscando posição dos ônibus."];
+                                                                             
+                                                                             PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:@"Não foi possível buscar a posição dos ônibus."];
+                                                                             [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
+                                                                             [alertController showWithSender:sender controller:self animated:YES completion:nil];
+                                                                             
+                                                                             self.lastUpdateWasOk = NO;
                                                                          }
                                                                          
                                                                          self.busesData = nil;
                                                                      }
                                                                      else {
-                                                                         self.busesData = busesData;
-                                                                         
-                                                                         if (!self.busesData.count) {
+                                                                         if (busesData.count > 0) {
+                                                                             self.busesData = busesData;
+                                                                         }
+                                                                         else {
+                                                                             self.busesData = nil;
                                                                              [self.busLineBar hide];
                                                                              [self.view hideToastActivity];
                                                                              
-                                                                             NSString *msg = [NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@. ", busLineNumber];
-                                                                             
-                                                                             [self.view makeToast:msg];
+                                                                             PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@. ", busLineNumber]];
+                                                                             [alertController addAction:[PSTAlertAction actionWithTitle:@"Ok" style:PSTAlertActionStyleDefault handler:nil]];
+                                                                             [alertController showWithSender:sender controller:self animated:YES completion:nil];
                                                                              
                                                                              self.lastUpdateWasOk = NO;
                                                                          }
@@ -246,6 +253,7 @@ static const CGFloat cameraPaddingRight = 50.0;
                                                          }
                                                      }
                                                      else {
+                                                         self.busLineInformation = nil;
                                                          NSLog(@"ERRO: Nenhuma rota para exibir");
                                                      }
                                                  }];

@@ -6,6 +6,7 @@ target "riobus" do
 	pod 'GoogleMaps', '~> 1.10'
 	pod 'AFNetworking', '~> 2.5'
 	pod 'Toast', '~> 2.4'
+    pod 'PSTAlertController', '~> 1.1'
 
 end
 

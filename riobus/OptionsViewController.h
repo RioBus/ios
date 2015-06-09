@@ -3,7 +3,7 @@
 @protocol OptionsViewControllerDelegate <NSObject>
 @end
 
-@interface OptionsViewController : UIViewController<UIAlertViewDelegate>
+@interface OptionsViewController : UIViewController
 
 @property (weak, nonatomic) id<OptionsViewControllerDelegate> delegate;
 
