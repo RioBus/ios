@@ -182,7 +182,7 @@ static const CGFloat cameraPaddingRight = 50.0;
                                                                          [self.view hideToastActivity];
                                                                          
                                                                          if (error.code != NSURLErrorCancelled) { // Erro ao cancelar um request
-                                                                             [self.view makeToast:[error localizedDescription]];
+                                                                             [self.view makeToast:@"Erro buscando posição dos ônibus."];
                                                                          }
                                                                          
                                                                          self.busesData = nil;
@@ -194,7 +194,7 @@ static const CGFloat cameraPaddingRight = 50.0;
                                                                              [self.busLineBar hide];
                                                                              [self.view hideToastActivity];
                                                                              
-                                                                             NSString *msg = [NSString stringWithFormat:@"Nenhum resultado para a linha %@", busLineNumber];
+                                                                             NSString *msg = [NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@. ", busLineNumber];
                                                                              
                                                                              [self.view makeToast:msg];
                                                                              

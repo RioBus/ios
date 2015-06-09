@@ -36,6 +36,12 @@ static const int hoursInDay = 24;
         if ([places count] == 2) {
             return places[1];
         }
+        // Se não foi possível dividir, tentar com X minúsculo
+        places = [lineNameWithoutParentheses componentsSeparatedByString:@" x "];
+        if ([places count] == 2) {
+            return places[1];
+        }
+
     }
     
     return nil;
@@ -63,7 +69,9 @@ static const int hoursInDay = 24;
     return [NSString stringWithFormat:@"%ld %@", (long)value, (value == 1 ? type : [type stringByAppendingString:@"s"])];
 }
 
-+ (NSString *)humanReadableStringForSeconds:(NSInteger)value {
++ (NSString *)humanReadableStringForSeconds:(NSInteger)seconds {
+    NSInteger value = seconds;
+    
     if (value < secondsInMinute) {
         return [BusData humanReadableStringForTime:value ofType:@"segundo"];
     }

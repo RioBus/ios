@@ -8,7 +8,7 @@
  * Notifies the delegate that the user is trying to select a different destination and updates the view if successful.
  * @param sender The sender of the notification
  * @param destination The name of the destination the user has selected
- * @return A BOOL value indicating if the selection was authorised. YES will make the selection visible in the view and NO will keep the previous state.
+ * @returns A BOOL value indicating if the selection was authorised. YES will make the selection visible in the view and NO will keep the previous state.
  */
 - (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestination:(NSString *)destination;
 
@@ -30,7 +30,7 @@
 /**
  * Mark a destination as selected in the view
  * @param destination The name of the destination that should match one of the buttons
- * @return BOOL indicating if the destination was successfuly select. Will return NO if the destination could not be found.
+ * @returns BOOL indicating if the destination was successfuly select. Will return NO if the destination could not be found.
  */
 - (BOOL)selectDestination:(NSString *)destination;
 
