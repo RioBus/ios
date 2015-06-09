@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -62,10 +63,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Zz-pQ-lWZ" userLabel="Bottom Bar View">
-                                <rect key="frame" x="0.0" y="508" width="326" height="60"/>
+                                <rect key="frame" x="0.0" y="508" width="320" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koQ-fU-bdw" userLabel="Middle Button">
-                                        <rect key="frame" x="108" y="0.0" width="110" height="60"/>
+                                        <rect key="frame" x="105" y="0.0" width="110" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="7LX-6G-I7k"/>
                                         </constraints>
@@ -75,7 +76,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQr-1u-aMf" userLabel="Left Button">
-                                        <rect key="frame" x="0.0" y="14" width="108" height="46"/>
+                                        <rect key="frame" x="0.0" y="14" width="105" height="46"/>
                                         <color key="backgroundColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="eyd-BU-hly"/>
@@ -86,7 +87,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nS-lB-gHS" userLabel="Right Button">
-                                        <rect key="frame" x="218" y="14" width="108" height="46"/>
+                                        <rect key="frame" x="215" y="14" width="105" height="46"/>
                                         <color key="backgroundColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="vfn-dB-bea"/>
@@ -122,22 +123,22 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="qj4-Wq-QPi" secondAttribute="trailing" constant="-16" id="1yr-d0-6D5"/>
-                            <constraint firstItem="lsP-IF-CM0" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="Aqd-Y3-EfR"/>
+                            <constraint firstAttribute="trailing" secondItem="qj4-Wq-QPi" secondAttribute="trailing" id="1yr-d0-6D5"/>
+                            <constraint firstItem="lsP-IF-CM0" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Aqd-Y3-EfR"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="8Zz-pQ-lWZ" secondAttribute="bottom" id="D6A-Ze-Vcx"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lsP-IF-CM0" secondAttribute="bottom" constant="45" id="GX1-bd-vh2"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="lsP-IF-CM0" secondAttribute="trailing" constant="-16" id="L35-SY-wad"/>
+                            <constraint firstAttribute="trailing" secondItem="lsP-IF-CM0" secondAttribute="trailing" id="L35-SY-wad"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="Lfw-bq-mSB" secondAttribute="bottom" constant="45" id="O1T-xq-S6K"/>
                             <constraint firstItem="Lfw-bq-mSB" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="-20" id="Vz5-GC-JFu"/>
-                            <constraint firstItem="oXi-dn-3U5" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="Xnn-4G-qwA"/>
-                            <constraint firstItem="qj4-Wq-QPi" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="a9r-Q1-a6H"/>
-                            <constraint firstItem="Lfw-bq-mSB" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="b9a-gM-SRd"/>
+                            <constraint firstItem="oXi-dn-3U5" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Xnn-4G-qwA"/>
+                            <constraint firstItem="qj4-Wq-QPi" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="a9r-Q1-a6H"/>
+                            <constraint firstItem="Lfw-bq-mSB" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="b9a-gM-SRd"/>
                             <constraint firstItem="qj4-Wq-QPi" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="-20" id="cuA-hn-qbM"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Lfw-bq-mSB" secondAttribute="trailing" constant="-16" id="fu2-e3-dLx"/>
-                            <constraint firstItem="8Zz-pQ-lWZ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="gEb-xC-6Ak"/>
+                            <constraint firstAttribute="trailing" secondItem="Lfw-bq-mSB" secondAttribute="trailing" id="fu2-e3-dLx"/>
+                            <constraint firstItem="8Zz-pQ-lWZ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="gEb-xC-6Ak"/>
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="top" secondItem="qj4-Wq-QPi" secondAttribute="bottom" id="oaV-4p-ZJJ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="oXi-dn-3U5" secondAttribute="trailing" constant="-16" id="t53-Vz-nlp"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="8Zz-pQ-lWZ" secondAttribute="trailing" constant="-22" id="uno-8W-OcV"/>
+                            <constraint firstAttribute="trailing" secondItem="oXi-dn-3U5" secondAttribute="trailing" id="t53-Vz-nlp"/>
+                            <constraint firstAttribute="trailing" secondItem="8Zz-pQ-lWZ" secondAttribute="trailing" id="uno-8W-OcV"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="oXi-dn-3U5" secondAttribute="bottom" id="v2x-Uf-iBe"/>
                         </constraints>
                     </view>
