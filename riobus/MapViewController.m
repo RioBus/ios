@@ -11,32 +11,32 @@
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate, BusLineBarDelegate>
 
-@property (strong, nonatomic) CLLocationManager *locationManager;
-@property (strong, nonatomic) NSMutableDictionary *markerForOrder;
-@property (strong, nonatomic) NSArray *busesData;
-@property (strong, nonatomic) NSMutableArray* searchedLines;
-@property (strong, nonatomic) NSTimer *updateTimer;
-@property (strong, nonatomic) NSArray *availableColors;
-@property (strong, nonatomic) NSMutableDictionary *lineColor;
-@property (strong, nonatomic) GMSCoordinateBounds* mapBounds;
-@property (strong, nonatomic) NSMutableArray *lastRequests;
-@property (weak,   nonatomic) IBOutlet GMSMapView *mapView;
-@property (weak,   nonatomic) IBOutlet UISearchBar *searchInput;
-@property (weak,   nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
-@property (weak,   nonatomic) IBOutlet BusLineBar *busLineBar;
-@property (weak,   nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
-@property int hasRepositionedMapTimes;
-@property BOOL lastUpdateWasOk;
+@property (nonatomic) CLLocationManager *locationManager;
+@property (nonatomic) NSMutableDictionary *markerForOrder;
+@property (nonatomic) NSArray *busesData;
+@property (nonatomic) NSMutableArray *searchedLines;
+@property (nonatomic) NSTimer *updateTimer;
+@property (nonatomic) NSArray *availableColors;
+@property (nonatomic) NSMutableDictionary *lineColor;
+@property (nonatomic) GMSCoordinateBounds *mapBounds;
+@property (nonatomic) NSMutableArray *lastRequests;
+@property (weak, nonatomic) IBOutlet GMSMapView *mapView;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchInput;
+@property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
+@property (weak, nonatomic) IBOutlet BusLineBar *busLineBar;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
+@property (nonatomic) int hasRepositionedMapTimes;
+@property (nonatomic) BOOL lastUpdateWasOk;
 @end
 
-static const CGFloat cameraDefaultLatitude = -22.9043527f;
-static const CGFloat cameraDefaultLongitude = -43.1912805f;
-static const CGFloat cameraDefaultZoomLevel = 12.0f;
-static const CGFloat cameraCurrentLocationZoomLevel = 14.0f;
-static const CGFloat cameraPaddingTop = 80.0f;
-static const CGFloat cameraPaddingLeft = 50.0f;
-static const CGFloat cameraPaddingBottom = 120.0f;
-static const CGFloat cameraPaddingRight = 50.0f;
+static const CGFloat cameraDefaultLatitude = -22.9043527;
+static const CGFloat cameraDefaultLongitude = -43.1912805;
+static const CGFloat cameraDefaultZoomLevel = 12.0;
+static const CGFloat cameraCurrentLocationZoomLevel = 14.0;
+static const CGFloat cameraPaddingTop = 80.0;
+static const CGFloat cameraPaddingLeft = 50.0;
+static const CGFloat cameraPaddingBottom = 120.0;
+static const CGFloat cameraPaddingRight = 50.0;
 
 @implementation MapViewController
 
@@ -59,8 +59,6 @@ static const CGFloat cameraPaddingRight = 50.0f;
     [self.searchInput setBackgroundImage:[UIImage new]];
     [[UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor whiteColor]];
     
-    [self startLocationServices];
-    
     self.availableColors = @[[UIColor colorWithRed:243.0/255.0 green:102.0/255.0 blue:32.0/255.0 alpha:1.0],
                              [UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
                              [UIColor orangeColor],
@@ -71,9 +69,15 @@ static const CGFloat cameraPaddingRight = 50.0f;
                              [UIColor blackColor],
                              [UIColor blueColor]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -84,9 +88,21 @@ static const CGFloat cameraPaddingRight = 50.0f;
     self.mapView.camera = [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
                                                       longitude:cameraDefaultLongitude
                                                            zoom:cameraDefaultZoomLevel];
-    
 }
 
+- (CLLocationManager *)locationManager {
+    if (!_locationManager) {
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        
+        // This checks for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
+        if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [_locationManager requestWhenInUseAuthorization];
+        }
+    }
+    return _locationManager;
+}
 
 #pragma mark Menu actions
 
@@ -97,7 +113,8 @@ static const CGFloat cameraPaddingRight = 50.0f;
 - (IBAction)locationMenuButtonTapped:(id)sender {
     if ([CLLocationManager locationServicesEnabled]) {
         [self.locationManager startUpdatingLocation];
-    } else {
+    }
+    else {
         NSLog(@"Location services not enabled");
     }
 }
@@ -123,32 +140,23 @@ static const CGFloat cameraPaddingRight = 50.0f;
 
 #pragma mark Controller methods
 
-- (void)startLocationServices {
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    // This checks for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
-    if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [self.locationManager requestWhenInUseAuthorization];
-    }
-}
-
 /**
  * Cancelar todas as requisições pendentes
  */
-- (void)stopCurrentRequests {
+- (void)cancelCurrentRequests {
     if (self.lastRequests) {
         for (NSOperation* request in self.lastRequests) {
             [request cancel];
         }
     }
+    
     [self.lastRequests removeAllObjects];
 }
 
 /**
  * Cancelar todos os timers ativos
  */
-- (void)stopActiveTimers {
+- (void)cancelActiveTimers {
     if (self.updateTimer) {
         [self.updateTimer invalidate];
         self.updateTimer = nil;
@@ -163,12 +171,12 @@ static const CGFloat cameraPaddingRight = 50.0f;
         return;
     }
     
-    [self stopActiveTimers];
-    [self stopCurrentRequests];
+    [self cancelActiveTimers];
+    [self cancelCurrentRequests];
     
     // Load bus data for each searched line
-    for (NSString* busLineNumber in self.searchedLines) {
-        NSOperation* request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
+    for (NSString *busLineNumber in self.searchedLines) {
+        NSOperation *request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
                                                                  withCompletionHandler:^(NSArray *busesData, NSError *error) {
                                                                      if (error) {
                                                                          [self.view hideToastActivity];
@@ -176,8 +184,10 @@ static const CGFloat cameraPaddingRight = 50.0f;
                                                                          if (error.code != NSURLErrorCancelled) { // Erro ao cancelar um request
                                                                              [self.view makeToast:[error localizedDescription]];
                                                                          }
+                                                                         
                                                                          self.busesData = nil;
-                                                                     } else {
+                                                                     }
+                                                                     else {
                                                                          self.busesData = busesData;
                                                                          
                                                                          if (!self.busesData.count) {
@@ -196,10 +206,14 @@ static const CGFloat cameraPaddingRight = 50.0f;
         [self.lastRequests addObject:request];
     }
     
-    [self stopActiveTimers];
+    [self cancelActiveTimers];
     
     if (self.lastUpdateWasOk) {
-        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(updateSearchedBusesData:) userInfo:nil repeats:NO];
+        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15
+                                                            target:self
+                                                          selector:@selector(updateSearchedBusesData:)
+                                                          userInfo:nil
+                                                           repeats:NO];
     }
 }
 
@@ -218,24 +232,27 @@ static const CGFloat cameraPaddingRight = 50.0f;
                                                          [self.busLineBar appearWithBusLine:busLineInformation];
                                                          
                                                          NSArray *shapes = busLineInformation[@"shapes"];
-                                                         [shapes enumerateObjectsUsingBlock:^(NSMutableArray* shape, NSUInteger idxShape, BOOL *stop) {
+                                                         for (NSMutableArray *shape in shapes) {
                                                              GMSMutablePath *gmShape = [GMSMutablePath path];
-                                                             [shape enumerateObjectsUsingBlock:^(CLLocation *location, NSUInteger idxLocation, BOOL *stop) {
+                                                             
+                                                             for (CLLocation *location in shape) {
                                                                  [gmShape addCoordinate:location.coordinate];
-                                                             }];
+                                                             }
+                                                             
                                                              GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
                                                              polyLine.strokeColor = self.lineColor[lineName];
                                                              polyLine.strokeWidth = 2.0;
                                                              polyLine.map = self.mapView;
-                                                         }];
-                                                     } else {
+                                                         }
+                                                     }
+                                                     else {
                                                          NSLog(@"ERRO: Nenhuma rota para exibir");
                                                      }
                                                  }];
 }
 
 - (void)updateMarkers {
-    [self.busesData enumerateObjectsUsingBlock:^(BusData *busData, NSUInteger idx, BOOL *stop) {
+    for (BusData *busData in self.busesData) {
         // Busca o marcador no mapa se já existir
         GMSMarker *marca = self.markerForOrder[busData.order];
         if (!marca) {
@@ -248,14 +265,9 @@ static const CGFloat cameraPaddingRight = 50.0f;
         marca.title = busData.sense;
         marca.position = busData.location.coordinate;
         marca.icon = [UIImage imageNamed:@"BusMarker"];
-        marca.layer.shadowOpacity = 0.7;
-        marca.layer.shadowOffset = CGSizeMake(0, 3);
-        marca.layer.shadowRadius = 5.0;
-        marca.layer.shadowColor = [UIColor blackColor].CGColor;
         
         self.mapBounds = [self.mapBounds includingCoordinate:marca.position];
-        
-    }];
+    }
     
     if (self.hasRepositionedMapTimes < self.searchedLines.count) {
         UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
@@ -314,7 +326,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
 - (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar {
     [self.searchInput becomeFirstResponder];
     [self setSuggestionsTableVisible:YES];
-    [self stopCurrentRequests];
+    [self cancelCurrentRequests];
     [self.view hideToastActivity];
 }
 
@@ -364,7 +376,7 @@ static const CGFloat cameraPaddingRight = 50.0f;
 
 - (void)appDidEnterBackground:(NSNotification *)sender {
     // Cancela o timer para não ficar gastando bateria no background
-    [self stopActiveTimers];
+    [self cancelActiveTimers];
 }
 
 - (void)appWillEnterForeground:(NSNotification *)sender {
@@ -375,19 +387,20 @@ static const CGFloat cameraPaddingRight = 50.0f;
 #pragma mark Funções utilitárias
 
 - (void)setSuggestionsTableVisible:(BOOL)visible {
-    static const float ANIMATION_DURATION = 0.2;
+    static const float animationDuration = 0.2;
     
     if (visible) {
         // Appear
         [self.searchInput setShowsCancelButton:YES animated:YES];
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            self.suggestionTable.alpha = 1.0f;
+        [UIView animateWithDuration:animationDuration animations:^{
+            self.suggestionTable.alpha = 1.0;
         }];
-    } else {
+    }
+    else {
         // Disappear
         [self.searchInput setShowsCancelButton:NO animated:YES];
-        [UIView animateWithDuration:ANIMATION_DURATION animations:^{
-            self.suggestionTable.alpha = 0.0f;
+        [UIView animateWithDuration:animationDuration animations:^{
+            self.suggestionTable.alpha = 0.0;
         }];
     }
 }

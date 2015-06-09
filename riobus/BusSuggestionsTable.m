@@ -1,16 +1,16 @@
 #import "BusSuggestionsTable.h"
 
-#define FAVORITES_SECTION        0
-#define RECENTS_SECTION          1
-#define OPTIONS_SECTION          2
-#define NUMBER_OF_SECTIONS       3
-
-#define RECENT_ITEMS_LIMIT       5
-
 @implementation BusSuggestionsTable
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+static const int favoritesSectionIndex = 0;
+static const int recentsSectionIndex = 1;
+static const int optionsSectionIndex = 2;
+static const int totalSections = 3;
+static const int recentItemsLimit = 5;
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
+    
     if (self) {
         self.rowHeight = 45;
         self.delegate = self;
@@ -19,14 +19,16 @@
         NSArray* savedFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:@"Favorites"];
         if (savedFavorites) {
            self.favorites = [savedFavorites mutableCopy];
-        } else {
+        }
+        else {
             self.favorites = [[NSMutableArray alloc] init];
         }
         
         NSArray* savedRecents = [[NSUserDefaults standardUserDefaults] objectForKey:@"Recents"];
         if (savedRecents) {
             self.recents = [savedRecents mutableCopy];
-        } else {
+        }
+        else {
             self.recents = [[NSMutableArray alloc] init];
         }
     }
@@ -44,33 +46,35 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)addToRecentTable:(NSString*)newOne {
-    if (![self.recents containsObject:newOne] && ![self.favorites containsObject:newOne]) {
-        while (self.recents.count >= RECENT_ITEMS_LIMIT) [self.recents removeObjectAtIndex:0];
-        [self.recents addObject:newOne];
+- (void)addToRecentTable:(NSString *)busLine {
+    if (![self.recents containsObject:busLine] && ![self.favorites containsObject:busLine]) {
+        while (self.recents.count >= recentItemsLimit) {
+            [self.recents removeObjectAtIndex:0];
+        }
+        
+        [self.recents addObject:busLine];
         [self updateUserRecentsList];
         
         [self reloadData];
     }
 }
 
-- (void)moveFromRecentToFavoriteTable:(UITapGestureRecognizer*)sender {
+- (void)moveFromRecentToFavoriteTable:(UITapGestureRecognizer *)sender {
     NSInteger itemIndexRecents = sender.view.tag;
     NSString* newItem = self.recents[itemIndexRecents];
     [self.recents removeObjectAtIndex:itemIndexRecents];
 
     [self updateUserRecentsList];
     
-    if (![self.favorites containsObject:newItem]){
+    if (![self.favorites containsObject:newItem]) {
         [self.favorites addObject:newItem];
         [self updateUserFavoritesList];
     }
     
     [self reloadData];
-
 }
 
-- (void)removeFromFavoriteTable:(UITapGestureRecognizer*)sender {
+- (void)removeFromFavoriteTable:(UITapGestureRecognizer *)sender {
     [self.favorites removeObjectAtIndex:sender.view.tag];
     [self updateUserFavoritesList];
     [self reloadData];
@@ -82,26 +86,30 @@
     [self reloadData];
 }
 
+
+#pragma mark UITableViewDataSource methods
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return NUMBER_OF_SECTIONS;
+    return totalSections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == FAVORITES_SECTION)
+    if (section == favoritesSectionIndex) {
         return self.favorites.count;
-    if (section == RECENTS_SECTION)
+    }
+    
+    if (section == recentsSectionIndex) {
         return self.recents.count;
-    if (section == OPTIONS_SECTION)
+    }
+    
+    if (section == optionsSectionIndex) {
         return self.recents.count > 0;
+    }
     
     return 0;
 }
 
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
-}
-
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *simpleTableIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
@@ -112,21 +120,23 @@
     cell.imageView.userInteractionEnabled = YES;
     cell.imageView.tag = indexPath.item;
 
-    if (indexPath.section == FAVORITES_SECTION) {
+    if (indexPath.section == favoritesSectionIndex) {
         cell.imageView.image = [[UIImage imageNamed:@"FavoriteMarker"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = self.favorites[indexPath.item];
         cell.textLabel.textColor = [UIColor darkGrayColor];
         UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeFromFavoriteTable:)];
         tapped.numberOfTapsRequired = 1;
         [cell.imageView addGestureRecognizer:tapped];
-    } else if (indexPath.section == RECENTS_SECTION) {
+    }
+    else if (indexPath.section == recentsSectionIndex) {
         cell.imageView.image = [UIImage imageNamed:@"FavoriteMarker"];
         cell.textLabel.text = self.recents[indexPath.item];
         cell.textLabel.textColor = [UIColor darkGrayColor];
         UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(moveFromRecentToFavoriteTable:)];
         tapped.numberOfTapsRequired = 1;
         [cell.imageView addGestureRecognizer:tapped];
-    } else if (indexPath.section == OPTIONS_SECTION) {
+    }
+    else if (indexPath.section == optionsSectionIndex) {
         cell.imageView.image = nil;
         cell.textLabel.text = @"Limpar recentes";
         cell.textLabel.textColor = [UIColor lightGrayColor];
@@ -135,15 +145,24 @@
     return cell;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return NO;
+}
+
+
+#pragma mark UITableViewDelegate methods
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.searchInput) {
-        if (indexPath.section == FAVORITES_SECTION) {
-            [self.searchInput setText:_favorites[[indexPath row]]];
+        if (indexPath.section == favoritesSectionIndex) {
+            [self.searchInput setText:self.favorites[[indexPath row]]];
             [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
-        } else if (indexPath.section == RECENTS_SECTION) {
-            [self.searchInput setText:_recents[[indexPath row]]];
+        }
+        else if (indexPath.section == recentsSectionIndex) {
+            [self.searchInput setText:self.recents[[indexPath row]]];
             [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
-        } else if (indexPath.section == OPTIONS_SECTION) {
+        }
+        else if (indexPath.section == optionsSectionIndex) {
             [self clearRecentSearches];
         }
     }

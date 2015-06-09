@@ -1,10 +1,28 @@
 #import "BusData.h"
 
-#define SECONDS_IN_MINUTE 60
-#define MINUTES_IN_HOUR   60
-#define HOUR_IN_DAY       24
+static const int secondsInMinute = 60;
+static const int minutesInHour = 60;
+static const int hoursInDay = 24;
 
 @implementation BusData
+
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
+    self = [super init];
+    if (self) {
+        NSDateFormatter *jsonDateFormat = [[NSDateFormatter alloc] init];
+        jsonDateFormat.dateFormat = @"MM-dd-yyyy HH:mm:ss";
+
+        self.lastUpdate = [jsonDateFormat dateFromString:dictionary[@"timeStamp"]];
+        self.order = dictionary[@"order"];
+        self.lineNumber = dictionary[@"line"];
+        self.velocity = dictionary[@"speed"];
+        self.location = [[CLLocation alloc] initWithLatitude:[dictionary[@"latitude"] doubleValue]
+                                                   longitude:[dictionary[@"longitude"] doubleValue]];
+        self.direction = dictionary[@"direction"];
+        self.sense = dictionary[@"sense"];
+    }
+    return self;
+}
 
 - (NSString *)destination {
     // Verifica se a linha possui informação de sentido
@@ -23,42 +41,48 @@
     return nil;
 }
 
-+ (NSString*)humanReadableStringForTime:(NSInteger)value ofType:(NSString*)type {
-    return [NSString stringWithFormat:@"%ld %@", (long)value,(value == 1 ? type : [type stringByAppendingString:@"s"])];
-}
-
-+ (NSString*)humanReadableStringForSeconds:(NSInteger)value {
-    if (value < SECONDS_IN_MINUTE)
-        return [BusData humanReadableStringForTime:value ofType:@"segundo"];
-    
-    value /= SECONDS_IN_MINUTE;
-    if (value < MINUTES_IN_HOUR)
-        return [BusData humanReadableStringForTime:value ofType:@"minuto"];
-    
-    value /= MINUTES_IN_HOUR;
-    if (value < HOUR_IN_DAY)
-        return [BusData humanReadableStringForTime:value ofType:@"hora"];
-    
-    value /= HOUR_IN_DAY;
-    return [BusData humanReadableStringForTime:value ofType:@"dia"];
-}
-
-- (NSString*)humanReadableDelay {
+- (NSString *)humanReadableDelay {
     return [BusData humanReadableStringForSeconds:[self delayInSeconds]];
 }
 
 - (NSInteger)delayInMinutes {
-    return [self delayInSeconds]/SECONDS_IN_MINUTE;
+    return [self delayInSeconds] / secondsInMinute;
 }
 
 - (NSInteger)delayInSeconds {
     NSInteger result = [[NSDate date] timeIntervalSinceDate:self.lastUpdate];
 
     if ([[[NSCalendar currentCalendar] timeZone] isDaylightSavingTime]) {
-        result -= SECONDS_IN_MINUTE*MINUTES_IN_HOUR;
+        result -= secondsInMinute * minutesInHour;
     }
 
     return result;
+}
+
++ (NSString *)humanReadableStringForTime:(NSInteger)value ofType:(NSString *)type {
+    return [NSString stringWithFormat:@"%ld %@", (long)value, (value == 1 ? type : [type stringByAppendingString:@"s"])];
+}
+
++ (NSString *)humanReadableStringForSeconds:(NSInteger)value {
+    if (value < secondsInMinute) {
+        return [BusData humanReadableStringForTime:value ofType:@"segundo"];
+    }
+    
+    value /= secondsInMinute;
+    
+    if (value < minutesInHour) {
+        return [BusData humanReadableStringForTime:value ofType:@"minuto"];
+    }
+    
+    value /= minutesInHour;
+    
+    if (value < hoursInDay) {
+        return [BusData humanReadableStringForTime:value ofType:@"hora"];
+    }
+    
+    value /= hoursInDay;
+    
+    return [BusData humanReadableStringForTime:value ofType:@"dia"];
 }
 
 @end

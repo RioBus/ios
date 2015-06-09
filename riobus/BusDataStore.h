@@ -3,7 +3,7 @@
 
 @interface BusDataStore : NSObject
 
-+ (BusDataStore*)sharedInstance;
++ (instancetype)sharedInstance;
 
 - (NSOperation*)loadBusDataForLineNumber:(NSString*)lineNumber withCompletionHandler:(void (^)(NSArray *busesData, NSError *error))handler;
 - (NSOperation*)loadBusLineInformationForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSDictionary *, NSError *))handler;

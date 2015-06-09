@@ -28,14 +28,14 @@
         alert.modalPresentationStyle = UIModalPresentationFullScreen;
         
         [self presentViewController:alert animated:YES completion:nil];
-    } else {
+    }
+    else {
         // For iOS 7
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"Limpar cache"
-                              message:@"Limpando o cache você irá remover os trajetos de linhas de ônibus armazenadas."
-                              delegate:self
-                              cancelButtonTitle:@"Cancelar"
-                              otherButtonTitles:@"Limpar", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Limpar cache"
+                                                        message:@"Limpando o cache você irá remover os trajetos de linhas de ônibus armazenadas."
+                                                       delegate:self
+                                              cancelButtonTitle:@"Cancelar"
+                                              otherButtonTitles:@"Limpar", nil];
         
         [alert show];
     }

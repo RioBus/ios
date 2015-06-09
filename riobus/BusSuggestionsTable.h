@@ -5,10 +5,10 @@ IB_DESIGNABLE
 
 - (void)updateUserRecentsList;
 - (void)updateUserFavoritesList;
-- (void)addToRecentTable:(NSString*)newOne;
+- (void)addToRecentTable:(NSString *)busLine;
 
-@property (strong, nonatomic) UISearchBar* searchInput;
-@property (strong, nonatomic) NSMutableArray* favorites;
-@property (strong, nonatomic) NSMutableArray* recents;
+@property (nonatomic) UISearchBar *searchInput;
+@property (nonatomic) NSMutableArray *favorites;
+@property (nonatomic) NSMutableArray *recents;
 
 @end

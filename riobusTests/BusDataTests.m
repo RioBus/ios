@@ -20,6 +20,14 @@
     [super tearDown];
 }
 
+- (void)testInitWithDictionary {
+    XCTFail(@"Unimplemented");
+}
+
+- (void)testDestination {
+    XCTFail(@"Unimplemented");
+}
+
 - (void)testDelayInSeconds {
     self.busData.lastUpdate = [NSDate date];
     XCTAssertEqual([self.busData delayInSeconds], 0);

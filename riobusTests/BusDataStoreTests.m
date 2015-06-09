@@ -3,13 +3,13 @@
 
 #import "BusDataStore.h"
 
-#define TIMEOUT_SECONDS 10
-
 @interface BusDataStoreTests : XCTestCase
 
 @end
 
 @implementation BusDataStoreTests
+
+static const float timeoutInSeconds = 10.0;
 
 - (void)setUp {
     [super setUp];
@@ -30,7 +30,7 @@
  * Tests if the server is responding normally to a request with an empty line number
  */
 - (void)testLoadBusDataEmpty {
-    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
+    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
     [[BusDataStore sharedInstance] loadBusDataForLineNumber:@"" withCompletionHandler:^(NSArray *busesData, NSError *error) {
@@ -53,7 +53,7 @@
  * Tests if the server is responding normally to a request with an fake line number
  */
 - (void)testLoadBusDataFakeLine {
-    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
+    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
     [[BusDataStore sharedInstance] loadBusDataForLineNumber:@"ABCDEFGH" withCompletionHandler:^(NSArray *busesData, NSError *error) {
@@ -76,7 +76,7 @@
  * Tests if the server is responding normally to a request with an existing line number
  */
 - (void)testLoadBusDataRealLine {
-    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
+    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
     [[BusDataStore sharedInstance] loadBusDataForLineNumber:@"485" withCompletionHandler:^(NSArray *busesData, NSError *error) {
@@ -103,7 +103,7 @@
  * Tests if the server is responding normally to a request with an empty line number
  */
 - (void)testLoadBusLineShapeEmpty {
-    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
+    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
     [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:@"" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
@@ -127,7 +127,7 @@
  * Tests if the server is responding normally to a request with an empty line number
  */
 - (void)testLoadBusLineShapeFakeLine {
-    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
+    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
     [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:@"ABCDEFGH" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
@@ -152,7 +152,7 @@
  * Tests if the server is responding normally to a request with an empty line number
  */
 - (void)testLoadBusLineShapeRealLine {
-    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:TIMEOUT_SECONDS];
+    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
     [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:@"485" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {

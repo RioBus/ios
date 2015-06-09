@@ -1,19 +1,32 @@
-RioBus
-======
+# RioBus
 
 O RioBus é um sistema colaborativo de monitoramento de ônibus em tempo real, que utiliza a API aberta de dados de mobilidade urbana fornecida pela parceria entre a Prefeitura do Rio de Janeiro e a FETRANSPOR. Seu objetivo principal é ajudar o cidadão, seja ele morador ou visitante, do Rio de Janeiro a se deslocar pela cidade.
 
 
-Instalação
-----------
+## Instalação
 
-A aplicação utiliza o CocoaPods para gerenciar as dependências
-> sudo gem install cocoapods
+A aplicação utiliza o CocoaPods para gerenciar as dependências. Para instalar o CocoaPods, execute:
 
-Em seguida, instale as dependências
-> pod install
+```bash
+sudo gem install cocoapods
+```
 
-Abra o projeto no Xcode
-> open riobus.xcworkspace
+Em seguida, instale as dependências:
 
-```Obs.: O projeto sempre deve ser carregado à partir do riobus.xcworkspace, já que as dependências do projeto precisam ser carregadas.```
+```bash
+pod install
+```
+
+Abra o projeto no Xcode:
+
+```bash
+open riobus.xcworkspace
+```
+
+O projeto sempre deve ser carregado a partir do `riobus.xcworkspace`, que também carrega as dependências junto com o projeto.
+
+
+## Código
+
+O código deve seguir o guia de estilo de Objective-C do The New York Times, [disponível no GitHub](https://github.com/NYTimes/objective-c-style-guide#dot-notation-syntax).
+

@@ -1,16 +1,18 @@
 #import "BusLineBar.h"
 
 @interface BusLineBar ()
+
 @property (nonatomic, strong) UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIView *busLineBar;
 @property (weak, nonatomic) IBOutlet UIView *directionBar;
 @property (nonatomic, strong) NSMutableArray *customConstraints;
+
 @end
 
 
 @implementation BusLineBar
 
-- (id)initWithCoder:(NSCoder *)aDecoder {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self commonInit];
@@ -18,7 +20,7 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         [self commonInit];
@@ -80,7 +82,8 @@
     CGFloat finalY;
     if (destinationsVisible) {
         finalY = self.containerView.frame.origin.y;
-    } else {
+    }
+    else {
         finalY = self.containerView.frame.origin.y + self.directionBar.frame.size.height;
     }
     
@@ -118,7 +121,8 @@
 - (void)appearWithBusLine:(NSDictionary *)busLineInformation {
     if (busLineInformation[@"name"]) {
         self.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLineInformation[@"line"], busLineInformation[@"name"]];
-    } else {
+    }
+    else {
         self.lineNameLabel.text = [NSString stringWithFormat:@"Linha %@", busLineInformation[@"line"]];
     }
     
@@ -127,7 +131,8 @@
         [self.leftDestinationButton setTitle:places[0] forState:UIControlStateNormal];
         [self.rightDestinationButton setTitle:places[1] forState:UIControlStateNormal];
         [self slideUpWithDestinationsVisible:YES];
-    } else {
+    }
+    else {
         NSLog(@"No destination information");
         [self slideUpWithDestinationsVisible:NO];
     }
@@ -170,7 +175,8 @@
             self.leftDestinationButton.enabled = NO;
             self.rightDestinationButton.enabled = YES;
         }
-    } else if (self.rightDestinationButton.enabled) {
+    }
+    else if (self.rightDestinationButton.enabled) {
         if ([self.delegate busLineBarView:self didSelectDestination:self.rightDestinationButton.titleLabel.text]) {
             self.leftDestinationButton.enabled = YES;
             self.rightDestinationButton.enabled = NO;
