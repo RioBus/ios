@@ -55,8 +55,8 @@ static const CGFloat cameraPaddingRight = 50.0;
     
     self.busLineBar.delegate = self;
     
-    [self.searchInput setBackgroundImage:[UIImage new]];
-    [[UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil] setTintColor:[UIColor whiteColor]];
+    self.searchInput.backgroundImage = [UIImage new];
+    [UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil].tintColor = [UIColor whiteColor];
     
     self.availableColors = @[[UIColor colorWithRed:243.0/255.0 green:102.0/255.0 blue:32.0/255.0 alpha:1.0],
                              [UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
@@ -265,14 +265,14 @@ static const CGFloat cameraPaddingRight = 50.0;
         GMSMarker *marca = self.markerForOrder[busData.order];
         if (!marca) {
             marca = [[GMSMarker alloc] init];
-            [marca setMap:self.mapView];
-            [self.markerForOrder setValue:marca forKey:busData.order];
+            marca.map = self.mapView;
+            marca.icon = [UIImage imageNamed:@"BusMarker"];
+            self.markerForOrder[busData.order] = marca;
         }
         
-        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order, [busData.velocity doubleValue], [busData humanReadableDelay]];
+        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order, busData.velocity.doubleValue, busData.humanReadableDelay];
         marca.title = busData.sense;
         marca.position = busData.location.coordinate;
-        marca.icon = [UIImage imageNamed:@"BusMarker"];
         
         self.mapBounds = [self.mapBounds includingCoordinate:marca.position];
     }
@@ -308,8 +308,8 @@ static const CGFloat cameraPaddingRight = 50.0;
     
     // Escape search input
     NSString* validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    NSCharacterSet* splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
-    self.searchedLines = [[[searchBar.text uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
+    NSCharacterSet* splitCharacters = [NSCharacterSet characterSetWithCharactersInString:validCharacters].invertedSet;
+    self.searchedLines = [[(searchBar.text).uppercaseString componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
     [self.searchedLines removeObject:@""];
     
     // Save search to history
@@ -349,7 +349,7 @@ static const CGFloat cameraPaddingRight = 50.0;
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     [self.locationManager stopUpdatingLocation];
     
-    CLLocation *location = [locations lastObject];
+    CLLocation *location = locations.lastObject;
     [self.mapView animateToLocation:location.coordinate];
     [self.mapView animateToZoom:cameraCurrentLocationZoomLevel];
 }

@@ -155,11 +155,11 @@ static const int recentItemsLimit = 5;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.searchInput) {
         if (indexPath.section == favoritesSectionIndex) {
-            [self.searchInput setText:self.favorites[[indexPath row]]];
+            (self.searchInput).text = self.favorites[indexPath.row];
             [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
         }
         else if (indexPath.section == recentsSectionIndex) {
-            [self.searchInput setText:self.recents[[indexPath row]]];
+            (self.searchInput).text = self.recents[indexPath.row];
             [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
         }
         else if (indexPath.section == optionsSectionIndex) {

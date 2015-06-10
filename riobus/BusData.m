@@ -29,16 +29,16 @@ static const int hoursInDay = 24;
     if (![self.sense isEqualToString:@""] && ![self.sense isEqualToString:@"desconhecido"]) {
         // Tirar informação entre parênteses do nome da linha
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
-        NSString *lineNameWithoutParentheses = [regex stringByReplacingMatchesInString:self.sense options:0 range:NSMakeRange(0, [self.sense length]) withTemplate:@""];
+        NSString *lineNameWithoutParentheses = [regex stringByReplacingMatchesInString:self.sense options:0 range:NSMakeRange(0, self.sense.length) withTemplate:@""];
         lineNameWithoutParentheses = [lineNameWithoutParentheses stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
         NSArray *places = [lineNameWithoutParentheses componentsSeparatedByString:@" X "];
-        if ([places count] == 2) {
+        if (places.count == 2) {
             return places[1];
         }
         // Se não foi possível dividir, tentar com X minúsculo
         places = [lineNameWithoutParentheses componentsSeparatedByString:@" x "];
-        if ([places count] == 2) {
+        if (places.count == 2) {
             return places[1];
         }
 
@@ -48,17 +48,17 @@ static const int hoursInDay = 24;
 }
 
 - (NSString *)humanReadableDelay {
-    return [BusData humanReadableStringForSeconds:[self delayInSeconds]];
+    return [BusData humanReadableStringForSeconds:self.delayInSeconds];
 }
 
 - (NSInteger)delayInMinutes {
-    return [self delayInSeconds] / secondsInMinute;
+    return self.delayInSeconds / secondsInMinute;
 }
 
 - (NSInteger)delayInSeconds {
     NSInteger result = [[NSDate date] timeIntervalSinceDate:self.lastUpdate];
 
-    if ([[[NSCalendar currentCalendar] timeZone] isDaylightSavingTime]) {
+    if ([NSCalendar currentCalendar].timeZone.daylightSavingTime) {
         result -= secondsInMinute * minutesInHour;
     }
 

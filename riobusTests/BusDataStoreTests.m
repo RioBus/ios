@@ -41,7 +41,7 @@ static const float timeoutInSeconds = 10.0;
     }];
     
     // Run the loop
-    while (waitingForBlock && [timeout timeIntervalSinceNow] > 0) {
+    while (waitingForBlock && timeout.timeIntervalSinceNow > 0) {
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -65,12 +65,13 @@ static const float timeoutInSeconds = 10.0;
     }];
     
     // Run the loop
-    while (waitingForBlock && [timeout timeIntervalSinceNow] > 0) {
+    while (waitingForBlock && timeout.timeIntervalSinceNow > 0) {
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     
-    XCTAssertFalse(waitingForBlock, @"Test failed with timeout.");}
+    XCTAssertFalse(waitingForBlock, @"Test failed with timeout.");
+}
 
 /**
  * Tests if the server is responding normally to a request with an existing line number
@@ -89,15 +90,13 @@ static const float timeoutInSeconds = 10.0;
     }];
     
     // Run the loop
-    while (waitingForBlock && [timeout timeIntervalSinceNow] > 0) {
+    while (waitingForBlock && timeout.timeIntervalSinceNow > 0) {
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     
     XCTAssertFalse(waitingForBlock, @"Test failed with timeout.");
 }
-
-
 
 /**
  * Tests if the server is responding normally to a request with an empty line number
@@ -114,14 +113,13 @@ static const float timeoutInSeconds = 10.0;
     }];
     
     // Run the loop
-    while (waitingForBlock && [timeout timeIntervalSinceNow] > 0) {
+    while (waitingForBlock && timeout.timeIntervalSinceNow > 0) {
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     
     XCTAssertFalse(waitingForBlock, @"Test failed with timeout.");
 }
-
 
 /**
  * Tests if the server is responding normally to a request with an empty line number
@@ -140,7 +138,7 @@ static const float timeoutInSeconds = 10.0;
     }];
     
     // Run the loop
-    while (waitingForBlock && [timeout timeIntervalSinceNow] > 0) {
+    while (waitingForBlock && timeout.timeIntervalSinceNow > 0) {
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
@@ -169,13 +167,12 @@ static const float timeoutInSeconds = 10.0;
     }];
     
     // Run the loop
-    while (waitingForBlock && [timeout timeIntervalSinceNow] > 0) {
+    while (waitingForBlock && timeout.timeIntervalSinceNow > 0) {
         [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
                                  beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
     }
     
     XCTAssertFalse(waitingForBlock, @"Test failed with timeout.");
 }
-
 
 @end

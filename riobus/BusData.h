@@ -14,26 +14,25 @@
  * Retorna o destino do ônibus, extraído a partir do sentido no nome da linha.
  * @returns Nome do destino atual do ônibus. Se o destino não pode ser identificado, um objeto nil é retornado.
  */
-- (NSString *)destination;
+@property (nonatomic, readonly, copy) NSString *destination;
 
 /**
  * Retorna o tempo desde o último o update em dias, horas, minutos ou segundos.
  * @returns Tempo desde o último update relativo à hora atual.
  */
-- (NSString *)humanReadableDelay;
+@property (nonatomic, readonly, copy) NSString *humanReadableDelay;
 
 /**
  * Retorna o tempo desde o último o update.
  * @returns Quantos minutos se passaram desde o último update do ônibus.
  */
-- (NSInteger)delayInMinutes;
+@property (nonatomic, readonly) NSInteger delayInMinutes;
 
 /**
  * Retorna o tempo desde o último o update.
  * @returns Quantos segundos se passaram desde o último update do ônibus.
  */
-- (NSInteger)delayInSeconds;
-
+@property (nonatomic, readonly) NSInteger delayInSeconds;
 
 /**
  * Retorna o tempo desde um número de segundos em dias, horas, minutos ou segundos.

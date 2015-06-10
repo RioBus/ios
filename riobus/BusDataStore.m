@@ -40,7 +40,7 @@ static const NSString *host = @"http://rest.riob.us";
     }
     
     // Procura o cache da linha pesquisada
-    __block NSString* jsonData = [buses objectForKey:webSafeNumber];
+    __block NSString* jsonData = buses[webSafeNumber];
     if (!jsonData) {
         NSLog(@"Itinerário para a linha %@ não está no cache.", webSafeNumber);
         NSString *strUrl = [NSString stringWithFormat:@"%@/itinerary/%@", host, webSafeNumber];
@@ -55,7 +55,7 @@ static const NSString *host = @"http://rest.riob.us";
             jsonData = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
             
             if (![jsonData isEqualToString:@"[]"]) {
-                [buses setObject:jsonData forKey:webSafeNumber];
+                buses[webSafeNumber] = jsonData;
                 [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"Rotas de Onibus"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
@@ -105,7 +105,7 @@ static const NSString *host = @"http://rest.riob.us";
         NSMutableArray *shapes = [[NSMutableArray alloc] initWithCapacity:6];
         
         if (pontosDoPercurso.count > 0) {
-            busLineInformation[@"name"] = [(NSString *)pontosDoPercurso[0][@"description"] capitalizedString];
+            busLineInformation[@"name"] = ((NSString *)pontosDoPercurso[0][@"description"]).capitalizedString;
             
             // Tirar informação entre parênteses do nome da linha
             NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
@@ -122,12 +122,12 @@ static const NSString *host = @"http://rest.riob.us";
                 NSString *strLatitude = [dadosDoPonto[@"latitude"] stringByTrimmingCharactersInSet:quoteCharSet];
                 NSString *strLongitude = [dadosDoPonto[@"longitude"] stringByTrimmingCharactersInSet:quoteCharSet];
                 
-                CLLocation *location = [[CLLocation alloc] initWithLatitude:[strLatitude doubleValue] longitude:[strLongitude doubleValue]];
+                CLLocation *location = [[CLLocation alloc] initWithLatitude:strLatitude.doubleValue longitude:strLongitude.doubleValue];
                 NSString *currShapeId = dadosDoPonto[@"shape"];
                 
                 NSMutableArray *currShapeArray;
                 if ([lastShapeId isEqualToString:currShapeId]) {
-                    currShapeArray = [shapes lastObject];
+                    currShapeArray = shapes.lastObject;
                 }
                 else {
                     currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
