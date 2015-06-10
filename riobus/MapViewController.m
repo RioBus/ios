@@ -121,7 +121,7 @@ static const CGFloat cameraPaddingRight = 50.0;
 - (IBAction)favoriteMenuButtonTapped:(id)sender {
     NSLog(@"Favorite manu tapped");
     
-    // TODO: funcionalidade de busca favorita
+    // TODO: Implementar funcionalidade de busca favorita
 }
 
 
@@ -130,8 +130,8 @@ static const CGFloat cameraPaddingRight = 50.0;
 - (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestination:(NSString *)destination {
     NSLog(@"Selecionou destino %@", destination);
     
-    // TODO: filtrar ônibus exibidos no mapa
-    // TODO: salvar no histórico o último sentido selecionado
+    // TODO: Filtrar ônibus exibidos no mapa
+    // TODO: Salvar no histórico o último sentido selecionado
     
     return YES;
 }
@@ -161,6 +161,9 @@ static const CGFloat cameraPaddingRight = 50.0;
         self.updateTimer = nil;
     }
 }
+
+
+#pragma mark Carregamento do marcadores, da rota e do mapa
 
 /**
  * Atualiza os dados para o carregamento do mapa
@@ -224,43 +227,15 @@ static const CGFloat cameraPaddingRight = 50.0;
     }
 }
 
-- (void)setBusesData:(NSArray*)busesData {
+/**
+ * Atualiza a propriedade busesData e os marcadores dos ônibus no mapa.
+ * @param busesData Array de BusData contendo as informações dos ônibus pesquisados.
+ */
+- (void)setBusesData:(NSArray *)busesData {
     _busesData = busesData;
-    [self updateMarkers];
-}
 
-
-#pragma mark Carregamento do marcadores, da rota e do mapa
-
-- (void)insertRouteOfBus:(NSString*)lineName {
-    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:lineName
-                                                 withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
-                                                     if (!error) {
-                                                         [self.busLineBar appearWithBusLine:busLineInformation];
-                                                         
-                                                         NSArray *shapes = busLineInformation[@"shapes"];
-                                                         for (NSMutableArray *shape in shapes) {
-                                                             GMSMutablePath *gmShape = [GMSMutablePath path];
-                                                             
-                                                             for (CLLocation *location in shape) {
-                                                                 [gmShape addCoordinate:location.coordinate];
-                                                             }
-                                                             
-                                                             GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
-                                                             polyLine.strokeColor = self.lineColor[lineName];
-                                                             polyLine.strokeWidth = 2.0;
-                                                             polyLine.map = self.mapView;
-                                                         }
-                                                     }
-                                                     else {
-                                                         self.busLineInformation = nil;
-                                                         NSLog(@"ERRO: Nenhuma rota para exibir");
-                                                     }
-                                                 }];
-}
-
-- (void)updateMarkers {
-    for (BusData *busData in self.busesData) {
+    // Atualizar marcadores
+    for (BusData *busData in busesData) {
         // Busca o marcador no mapa se já existir
         GMSMarker *marca = self.markerForOrder[busData.order];
         if (!marca) {
@@ -292,10 +267,37 @@ static const CGFloat cameraPaddingRight = 50.0;
     }
 }
 
+- (void)insertRouteOfBus:(NSString *)lineName {
+    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:lineName
+                                                 withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+                                                     if (!error) {
+                                                         [self.busLineBar appearWithBusLine:busLineInformation];
+                                                         
+                                                         NSArray *shapes = busLineInformation[@"shapes"];
+                                                         for (NSMutableArray *shape in shapes) {
+                                                             GMSMutablePath *gmShape = [GMSMutablePath path];
+                                                             
+                                                             for (CLLocation *location in shape) {
+                                                                 [gmShape addCoordinate:location.coordinate];
+                                                             }
+                                                             
+                                                             GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
+                                                             polyLine.strokeColor = self.lineColor[lineName];
+                                                             polyLine.strokeWidth = 2.0;
+                                                             polyLine.map = self.mapView;
+                                                         }
+                                                     }
+                                                     else {
+                                                         self.busLineInformation = nil;
+                                                         NSLog(@"ERRO: Nenhuma rota para exibir");
+                                                     }
+                                                 }];
+}
+
 
 #pragma mark UISearchBarDelegate methods
 
-- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar {
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [self.searchInput resignFirstResponder];
     [self.searchInput setShowsCancelButton:NO animated:YES];
     [self.markerForOrder removeAllObjects];
@@ -331,14 +333,14 @@ static const CGFloat cameraPaddingRight = 50.0;
     [self updateSearchedBusesData:self];
 }
 
-- (void)searchBarTextDidBeginEditing:(UISearchBar*)searchBar {
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     [self.searchInput becomeFirstResponder];
     [self setSuggestionsTableVisible:YES];
     [self cancelCurrentRequests];
     [self.view hideToastActivity];
 }
 
-- (void)searchBarCancelButtonClicked:(UISearchBar*)searchBar {
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     [self.searchInput resignFirstResponder];
     [self setSuggestionsTableVisible:NO];
 }
@@ -361,9 +363,9 @@ static const CGFloat cameraPaddingRight = 50.0;
 #pragma mark Segue control
 
 /**
- * Prepara os segues disparados pelo Storyboard
+ * Prepara os segues disparados pelo Storyboard.
  */
-- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"viewOptions"]) {
         OptionsViewController *optionsVC = segue.destinationViewController;
         optionsVC.delegate = self;
@@ -374,7 +376,7 @@ static const CGFloat cameraPaddingRight = 50.0;
 #pragma mark Listeners de notificações
 
 /**
- * Atualiza o tamanho da tabela de acordo com o tamanho do teclado
+ * Atualiza o tamanho da tabela de acordo com o tamanho do teclado.
  */
 - (void)keyboardWillShow:(NSNotification *)sender {
     CGRect keyboardFrame = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
