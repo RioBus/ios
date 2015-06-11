@@ -91,19 +91,6 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                            zoom:cameraDefaultZoomLevel];
 }
 
-- (CLLocationManager *)locationManager {
-    if (!_locationManager) {
-        _locationManager = [[CLLocationManager alloc] init];
-        _locationManager.delegate = self;
-        _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-        
-        // This checks for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
-        if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-            [_locationManager requestWhenInUseAuthorization];
-        }
-    }
-    return _locationManager;
-}
 
 #pragma mark Menu actions
 
@@ -124,7 +111,12 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.favoriteLineMode = !self.favoriteLineMode;
     sender.selected = self.favoriteLineMode;
     
-    // TODO: Implementar funcionalidade de busca favorita
+    if (self.favoriteLineMode) {
+        [self searchForBusLine:@"324"]; // FIXME: Buscar linha favorita da memória
+    }
+    else {
+        [self clearSearch];
+    }
 }
 
 
@@ -157,19 +149,35 @@ static const CGFloat cameraPaddingRight = 30.0;
 #pragma mark Carregamento do marcadores, da rota e do mapa
 
 /**
+ * Limpar marcadores do mapa e últimos parâmetros de pesquisa.
+ */
+- (void)clearSearch {
+    // Clear map and previous search parameters
+    [self.markerForOrder removeAllObjects];
+    [self.mapView clear];
+    [self.updateTimer invalidate];
+    [self cancelCurrentRequests];
+    self.searchInput.text = @"";
+    self.searchedLine = nil;
+    self.searchedDirection = nil;
+}
+
+/**
  * Inicia pesquisa por uma linha de ônibus, buscando o itinerário da linha e os ônibus. Método assíncrono.
  * @param busLine Nome da linha de ônibus.
  */
 - (void)searchForBusLine:(NSString * __nonnull)busLine {
-    self.searchedLine = busLine;
-    
     // Show activity indicator
     [self.view makeToastActivity];
     
     // Clear map and previous search parameters
     [self.markerForOrder removeAllObjects];
     [self.mapView clear];
-    self.searchedDirection = nil; // TODO: Lembrar última direção pesquisada para linha
+    
+    // Set new search parameters
+    self.searchedLine = busLine;
+    self.searchInput.text = busLine;
+    self.searchedDirection = nil; // TODO: self.searchDirection = última direção pesquisada na linha
     
     // Draw itineraries
     [self insertRouteOfBus:self.searchedLine];
@@ -320,13 +328,13 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self setSuggestionsTableVisible:NO];
     
     // Escape search input
-    NSCharacterSet *validCharacters = [NSCharacterSet alphanumericCharacterSet]; // FIXME
+    NSCharacterSet *validCharacters = [NSCharacterSet alphanumericCharacterSet];
     NSString *escapedBusLineString = [[searchBar.text.uppercaseString componentsSeparatedByCharactersInSet:[validCharacters invertedSet]] componentsJoinedByString:@""];
-    searchBar.text = escapedBusLineString;
     
     // Save search to history
     [self.suggestionTable addToRecentTable:escapedBusLineString];
 
+    // Search bus line
     [self searchForBusLine:escapedBusLineString];
 }
 
@@ -345,6 +353,20 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 #pragma mark CLLocationManagerDelegate methods
 
+- (CLLocationManager *)locationManager {
+    if (!_locationManager) {
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        
+        // This checks for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
+        if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [_locationManager requestWhenInUseAuthorization];
+        }
+    }
+    return _locationManager;
+}
+
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     [self.locationManager stopUpdatingLocation];
     
@@ -356,6 +378,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     NSLog(@"Location manager failed with error %@", error.description);
 }
+
 
 #pragma mark Segue control
 
