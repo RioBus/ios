@@ -154,6 +154,8 @@
         return YES;
     }
     
+    self.leftDestinationButton.enabled = YES;
+    self.rightDestinationButton.enabled = YES;
     return NO;
 }
 

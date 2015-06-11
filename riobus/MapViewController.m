@@ -22,6 +22,7 @@
 @property (nonatomic) NSString *favoriteLine;
 @property (nonatomic) BOOL favoriteLineMode;
 @property (nonatomic) CGFloat suggestionTableBottomSpacing;
+@property (nonatomic) BOOL searchBarShouldBeginEditing;
 
 @property (weak, nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchInput;
@@ -65,6 +66,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     
     self.busLineBar.delegate = self;
     
+    self.searchBarShouldBeginEditing = YES;
     self.searchInput.backgroundImage = [UIImage new];
     [UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil].tintColor = [UIColor whiteColor];
     
@@ -113,7 +115,6 @@ static const CGFloat cameraPaddingRight = 30.0;
         [self searchForBusLine:self.favoriteLine];
     }
     else {
-        self.favoriteLineMode = NO;
         [self clearSearch];
     }
 }
@@ -166,11 +167,14 @@ static const CGFloat cameraPaddingRight = 30.0;
     // Clear map and previous search parameters
     [self.markerForOrder removeAllObjects];
     [self.mapView clear];
+    [self.busLineBar hide];
     [self.updateTimer invalidate];
     [self cancelCurrentRequests];
+    [self.view hideToastActivity];
     self.searchInput.text = @"";
     self.searchedLine = nil;
     self.searchedDirection = nil;
+    self.favoriteLineMode = NO;
 }
 
 /**
@@ -189,6 +193,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.searchedLine = busLine;
     self.searchInput.text = busLine;
     self.searchedDirection = nil; // TODO: self.searchDirection = última direção pesquisada na linha
+    [self.busLineBar selectDestination:nil];
     self.favoriteLineMode = [busLine isEqualToString:self.favoriteLine];
     
     // Draw itineraries
@@ -357,16 +362,31 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self searchForBusLine:escapedBusLineString];
 }
 
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-    [self.searchInput becomeFirstResponder];
-    [self setSuggestionsTableVisible:YES];
-    [self cancelCurrentRequests];
-    [self.view hideToastActivity];
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    if(![searchBar isFirstResponder]) {
+        self.searchBarShouldBeginEditing = NO;
+        [self clearSearch];
+    }
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    BOOL boolToReturn = self.searchBarShouldBeginEditing;
+    self.searchBarShouldBeginEditing = YES;
+    
+    if (boolToReturn) {
+        [self setSuggestionsTableVisible:YES];
+    }
+    
+    return boolToReturn;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    [self.searchInput resignFirstResponder];
+    [searchBar resignFirstResponder];
     [self setSuggestionsTableVisible:NO];
+    
+    if (searchBar.text.length == 0) {
+        [self clearSearch];
+    }
 }
 
 
