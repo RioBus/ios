@@ -79,7 +79,7 @@
 		A37A3CEB1B1CD55B006A397C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A37A3CED1B1CD61E006A397C /* BusLineBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusLineBar.h; sourceTree = "<group>"; };
 		A37A3CEE1B1CD61E006A397C /* BusLineBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusLineBar.m; sourceTree = "<group>"; };
-		A3B925A01B290DDF00BEFC9F /* riobus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "riobus-Bridging-Header.h"; sourceTree = "<group>"; };
+		A3B925A01B290DDF00BEFC9F /* riobus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "riobus-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+backgroundColor.swift"; sourceTree = "<group>"; };
 		A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RioBus.swift"; sourceTree = "<group>"; };
 		A3C41BE11B1A7B89004CB63A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
@@ -119,7 +119,6 @@
 				681A7F43196722530006C335 /* Frameworks */,
 				681A7F42196722530006C335 /* Products */,
 				BEC75922FA062B67848E72FA /* Pods */,
-				A3B925A01B290DDF00BEFC9F /* riobus-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 		};
@@ -172,6 +171,7 @@
 				681A7F4D196722530006C335 /* InfoPlist.strings */,
 				681A7F50196722530006C335 /* main.m */,
 				681A7F52196722540006C335 /* riobus-Prefix.pch */,
+				A3B925A01B290DDF00BEFC9F /* riobus-Bridging-Header.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";

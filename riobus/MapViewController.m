@@ -22,6 +22,7 @@
 @property (nonatomic) NSMutableArray *lastRequests;
 @property (nonatomic) int hasRepositionedMapTimes;
 @property (nonatomic) BOOL lastUpdateWasOk;
+@property (nonatomic) CGFloat suggestionTableBottomSpacing;
 @property (weak, nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
@@ -30,7 +31,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuMiddleButton;
 @property (weak, nonatomic) IBOutlet UIButton *menuRightButton;
 @property (weak, nonatomic) IBOutlet UIButton *menuLeftButton;
-
 
 @end
 
@@ -81,6 +81,9 @@ static const CGFloat cameraPaddingRight = 50.0;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:)
                                                  name:UIApplicationDidEnterBackgroundNotification
@@ -347,6 +350,7 @@ static const CGFloat cameraPaddingRight = 50.0;
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     [self.searchInput becomeFirstResponder];
     [self setSuggestionsTableVisible:YES];
+    [self.busLineBar hide];
     [self cancelCurrentRequests];
     [self.view hideToastActivity];
 }
@@ -391,7 +395,13 @@ static const CGFloat cameraPaddingRight = 50.0;
  */
 - (void)keyboardWillShow:(NSNotification *)sender {
     CGRect keyboardFrame = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    self.suggestionTableBottomSpacing = self.keyboardBottomConstraint.constant;
     self.keyboardBottomConstraint.constant = keyboardFrame.size.height;
+    [self.suggestionTable layoutIfNeeded];
+}
+
+- (void)keyboardWillHide:(NSNotification *)sender {
+    self.keyboardBottomConstraint.constant = self.suggestionTableBottomSpacing;
     [self.suggestionTable layoutIfNeeded];
 }
 
