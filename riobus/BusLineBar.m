@@ -116,6 +116,10 @@
     [self hide];
 }
 
+- (IBAction)didTapHideBarButton:(UIButton *)sender {
+    [self hide];
+}
+
 - (void)appearWithBusLine:(NSDictionary *)busLineInformation {
     if (busLineInformation[@"name"]) {
         self.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLineInformation[@"line"], busLineInformation[@"name"]];

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BusLineBar">
@@ -85,9 +87,21 @@
                                 <constraint firstAttribute="height" constant="38" id="uxx-dX-uvH"/>
                             </constraints>
                         </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kuf-ce-eNC" userLabel="Hide Bar Button">
+                            <rect key="frame" x="412" y="20" width="15" height="15"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="Kuf-ce-eNC" secondAttribute="height" multiplier="1:1" id="Kfs-Sr-WuA"/>
+                                <constraint firstAttribute="width" constant="15" id="sN3-23-1ex"/>
+                            </constraints>
+                            <state key="normal" image="ArrowDown"/>
+                            <connections>
+                                <action selector="didTapHideBarButton:" destination="-1" eventType="touchUpInside" id="g1f-OA-Nqv"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="y5X-ex-o2D" secondAttribute="trailing" id="8Nh-NN-abB"/>
+                        <constraint firstItem="Kuf-ce-eNC" firstAttribute="top" secondItem="KYv-rm-N1k" secondAttribute="top" constant="20" id="BQ1-ut-SIW"/>
                         <constraint firstItem="3Yr-es-i85" firstAttribute="top" secondItem="KYv-rm-N1k" secondAttribute="top" constant="50" id="Cgs-sp-A7n"/>
                         <constraint firstAttribute="bottom" secondItem="qnm-aE-a2P" secondAttribute="bottom" id="N6Q-0e-WHW"/>
                         <constraint firstItem="3Yr-es-i85" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KYv-rm-N1k" secondAttribute="leading" constant="20" id="OTr-Jr-GiE"/>
@@ -100,6 +114,7 @@
                         <constraint firstAttribute="centerX" secondItem="3Yr-es-i85" secondAttribute="centerX" id="knP-kv-wg4"/>
                         <constraint firstAttribute="trailing" secondItem="pgM-C2-icK" secondAttribute="trailing" id="kpt-6W-DT8"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="3Yr-es-i85" secondAttribute="trailing" constant="20" id="m9u-fd-HMh"/>
+                        <constraint firstAttribute="trailing" secondItem="Kuf-ce-eNC" secondAttribute="trailing" constant="8" id="xwZ-ep-CaH"/>
                         <constraint firstAttribute="bottom" secondItem="y5X-ex-o2D" secondAttribute="bottom" id="zOe-Aj-Q4g"/>
                     </constraints>
                     <connections>
@@ -128,6 +143,7 @@
         <tapGestureRecognizer id="NsK-FH-Z9A"/>
     </objects>
     <resources>
+        <image name="ArrowDown" width="25" height="25"/>
         <image name="BusLineBar" width="375" height="124"/>
         <image name="DirectionButton" width="15" height="18"/>
     </resources>
