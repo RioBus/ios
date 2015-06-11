@@ -108,7 +108,7 @@ static const NSString *host = @"http://rest.riob.us";
             busLineInformation[@"name"] = ((NSString *)pontosDoPercurso[0][@"description"]).capitalizedString;
             
             // Tirar informação entre parênteses do nome da linha
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
+            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"s/\\[.*?\\]|\\(.*?\\)|\\{.*?\\}//g" options:NSRegularExpressionCaseInsensitive error:nil];
             NSString *lineNameWithoutParentheses = [regex stringByReplacingMatchesInString:busLineInformation[@"name"] options:0 range:NSMakeRange(0, [busLineInformation[@"name"] length]) withTemplate:@""];
             lineNameWithoutParentheses = [lineNameWithoutParentheses stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 

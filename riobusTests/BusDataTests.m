@@ -41,13 +41,13 @@
     BusData *busData = [[BusData alloc] initWithDictionary:dictionary];
     XCTAssertNotNil(busData);
     XCTAssertEqualObjects([jsonDateFormat stringFromDate:busData.lastUpdate], dictionary[@"timeStamp"]);
-    XCTAssertEqual(busData.order, dictionary[@"order"]);
-    XCTAssertEqual(busData.lineNumber, dictionary[@"line"]);
-    XCTAssertEqual(busData.velocity, dictionary[@"speed"]);
+    XCTAssertEqualObjects(busData.order, dictionary[@"order"]);
+    XCTAssertEqualObjects(busData.lineNumber, dictionary[@"line"]);
+    XCTAssertEqualObjects(busData.velocity, dictionary[@"speed"]);
     XCTAssertEqual(busData.location.coordinate.latitude, [dictionary[@"latitude"] doubleValue]);
     XCTAssertEqual(busData.location.coordinate.longitude, [dictionary[@"longitude"] doubleValue]);
-    XCTAssertEqual(busData.direction, dictionary[@"direction"]);
-    XCTAssertEqual(busData.sense, dictionary[@"sense"]);
+    XCTAssertEqualObjects(busData.direction, dictionary[@"direction"]);
+    XCTAssertEqualObjects(busData.sense, ((NSString *)dictionary[@"sense"]).capitalizedString);
 }
 
 /**
@@ -55,16 +55,22 @@
  */
 - (void)testDestination {
     self.busData.sense = @"GENERAL OSORIO (VIA TUNEL SANTA BARBARA) X PENHA";
-    XCTAssertEqualObjects(self.busData.destination, @"PENHA");
+    XCTAssertEqualObjects(self.busData.destination, @"Penha");
     
     self.busData.sense = @"GENERAL OSORIO X PENHA";
-    XCTAssertEqualObjects(self.busData.destination, @"PENHA");
+    XCTAssertEqualObjects(self.busData.destination, @"Penha");
     
     self.busData.sense = @"PENHA X GENERAL OSORIO (VIA TUNEL SANTA BARBARA)";
-    XCTAssertEqualObjects(self.busData.destination, @"GENERAL OSORIO");
+    XCTAssertEqualObjects(self.busData.destination, @"General Osorio");
+    
+    self.busData.sense = @"JARDIM BOTANICO (HORTO) X CENTRAL (VIA COPACABANA)";
+    XCTAssertEqualObjects(self.busData.destination, @"Central");
+    
+    self.busData.sense = @"CENTRAL (VIA COPACABANA) X JARDIM BOTANICO (HORTO)";
+    XCTAssertEqualObjects(self.busData.destination, @"Jardim Botanico");
     
     self.busData.sense = @"PENHA X GENERAL OSORIO";
-    XCTAssertEqualObjects(self.busData.destination, @"GENERAL OSORIO");
+    XCTAssertEqualObjects(self.busData.destination, @"General Osorio");
     
     self.busData.sense = @"Penha x General Osorio";
     XCTAssertEqualObjects(self.busData.destination, @"General Osorio");

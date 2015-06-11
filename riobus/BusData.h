@@ -41,12 +41,12 @@
  */
 + (NSString *)humanReadableStringForSeconds:(NSInteger)seconds;
 
-@property NSDate *lastUpdate;
-@property NSString *order;
-@property NSString *lineNumber;
-@property NSNumber *velocity;
-@property CLLocation *location;
-@property NSNumber *direction;
-@property NSString *sense;
+@property (nonatomic) NSDate *lastUpdate;
+@property (nonatomic) NSString *order;
+@property (nonatomic) NSString *lineNumber;
+@property (nonatomic) NSNumber *velocity;
+@property (nonatomic) CLLocation *location;
+@property (nonatomic) NSNumber *direction;
+@property (nonatomic) NSString *sense;
 
 @end

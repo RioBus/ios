@@ -93,9 +93,7 @@
                                            finalY,
                                            self.busLineBar.frame.size.width,
                                            self.busLineBar.frame.size.height);
-    } completion:^(BOOL finished){
-        
-    }];
+    } completion:nil];
 }
 
 - (void)hide {
@@ -133,7 +131,7 @@
         [self slideUpWithDestinationsVisible:YES];
     }
     else {
-        NSLog(@"No destination information");
+        NSLog(@"Bus Line Bar: No destination information");
         [self slideUpWithDestinationsVisible:NO];
     }
 

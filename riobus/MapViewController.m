@@ -15,14 +15,15 @@
 @property (nonatomic) NSArray *busesData;
 @property (nonatomic) NSDictionary *busLineInformation;
 @property (nonatomic) NSMutableArray *searchedLines;
+@property (nonatomic) NSString *searchedDirection;
 @property (nonatomic) NSTimer *updateTimer;
 @property (nonatomic) NSArray *availableColors;
 @property (nonatomic) NSMutableDictionary *lineColor;
 @property (nonatomic) GMSCoordinateBounds *mapBounds;
 @property (nonatomic) NSMutableArray *lastRequests;
-@property (nonatomic) int hasRepositionedMapTimes;
 @property (nonatomic) BOOL lastUpdateWasOk;
 @property (nonatomic) CGFloat suggestionTableBottomSpacing;
+
 @property (weak, nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchInput;
 @property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
@@ -38,10 +39,10 @@ static const CGFloat cameraDefaultLatitude = -22.9043527;
 static const CGFloat cameraDefaultLongitude = -43.1912805;
 static const CGFloat cameraDefaultZoomLevel = 12.0;
 static const CGFloat cameraCurrentLocationZoomLevel = 14.0;
-static const CGFloat cameraPaddingTop = 80.0;
-static const CGFloat cameraPaddingLeft = 50.0;
-static const CGFloat cameraPaddingBottom = 120.0;
-static const CGFloat cameraPaddingRight = 50.0;
+static const CGFloat cameraPaddingTop = 30.0;
+static const CGFloat cameraPaddingLeft = 30.0;
+static const CGFloat cameraPaddingBottom = 100.0;
+static const CGFloat cameraPaddingRight = 30.0;
 
 @implementation MapViewController
 
@@ -142,10 +143,8 @@ static const CGFloat cameraPaddingRight = 50.0;
 #pragma mark BusLineBarViewDelegate methods
 
 - (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestination:(NSString *)destination {
-    NSLog(@"Selecionou destino %@", destination);
-    
-    // TODO: Filtrar ônibus exibidos no mapa
-    // TODO: Salvar no histórico o último sentido selecionado
+    self.searchedDirection = destination;
+    [self updateBusMarkers];
     
     return YES;
 }
@@ -241,51 +240,51 @@ static const CGFloat cameraPaddingRight = 50.0;
     }
 }
 
-/**
- * Atualiza a propriedade busesData e os marcadores dos ônibus no mapa.
- * @param busesData Array de BusData contendo as informações dos ônibus pesquisados.
- */
 - (void)setBusesData:(NSArray *)busesData {
     _busesData = busesData;
+    [self updateBusMarkers];
+}
 
+/**
+ * Atualiza os marcadores dos ônibus no mapa de acordo com últimos dados e última direção.
+ */
+- (void)updateBusMarkers {
     // Atualizar marcadores
-    for (BusData *busData in busesData) {
+    for (BusData *busData in self.busesData) {
         // Busca o marcador no mapa se já existir
-        GMSMarker *marca = self.markerForOrder[busData.order];
-        if (!marca) {
-            marca = [[GMSMarker alloc] init];
-            marca.map = self.mapView;
-            marca.icon = [UIImage imageNamed:@"BusMarker"];
-            self.markerForOrder[busData.order] = marca;
+        GMSMarker *marker = self.markerForOrder[busData.order];
+        
+        // Se o ônibus for para a direção desejada, adicioná-lo no mapa
+        if (!self.searchedDirection || [busData.destination isEqualToString:self.searchedDirection]) {
+            if (!marker) {
+                marker = [[GMSMarker alloc] init];
+                marker.map = self.mapView;
+                marker.icon = [UIImage imageNamed:@"BusMarker"];
+                self.markerForOrder[busData.order] = marker;
+            }
+            
+            marker.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order, busData.velocity.doubleValue, busData.humanReadableDelay];
+            marker.title = busData.sense;
+            marker.position = busData.location.coordinate;
         }
-        
-        marca.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order, busData.velocity.doubleValue, busData.humanReadableDelay];
-        marca.title = busData.sense;
-        marca.position = busData.location.coordinate;
-        
-        self.mapBounds = [self.mapBounds includingCoordinate:marca.position];
+        // Se o ônibus for para a direção contrária e já estiver no mapa
+        else if (marker) {
+            marker.map = nil;
+            [self.markerForOrder removeObjectForKey:busData.order];
+        }
     }
     
-    if (self.hasRepositionedMapTimes < self.searchedLines.count) {
-        UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
-                                                        cameraPaddingRight,
-                                                        cameraPaddingBottom,
-                                                        cameraPaddingLeft);
-        [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
-        
-        self.hasRepositionedMapTimes++;
-    }
-    
-    if (self.hasRepositionedMapTimes == self.searchedLines.count) {
-        [self.view hideToastActivity];
-    }
+    [self.view hideToastActivity];
 }
 
 - (void)insertRouteOfBus:(NSString *)lineName {
     [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:lineName
                                                  withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
-                                                     if (!error) {
-                                                         [self.busLineBar appearWithBusLine:busLineInformation];
+                                                     NSArray *shapes = busLineInformation[@"shapes"];
+                                                     [self.busLineBar appearWithBusLine:busLineInformation];
+                                                
+                                                     if (!error && shapes.count > 0) {
+                                                         self.mapBounds = [[GMSCoordinateBounds alloc] init];
                                                          
                                                          NSArray *shapes = busLineInformation[@"shapes"];
                                                          for (NSMutableArray *shape in shapes) {
@@ -293,6 +292,7 @@ static const CGFloat cameraPaddingRight = 50.0;
                                                              
                                                              for (CLLocation *location in shape) {
                                                                  [gmShape addCoordinate:location.coordinate];
+                                                                 self.mapBounds = [self.mapBounds includingCoordinate:location.coordinate];
                                                              }
                                                              
                                                              GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
@@ -300,9 +300,22 @@ static const CGFloat cameraPaddingRight = 50.0;
                                                              polyLine.strokeWidth = 2.0;
                                                              polyLine.map = self.mapView;
                                                          }
+                                                         
+                                                         // Realinhar mapa
+                                                         UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
+                                                                                                         cameraPaddingRight,
+                                                                                                         cameraPaddingBottom,
+                                                                                                         cameraPaddingLeft);
+                                                         NSLog(@"Bounds insets: %@", NSStringFromUIEdgeInsets(mapBoundsInsets));
+                                                         [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
                                                      }
                                                      else {
                                                          self.busLineInformation = nil;
+                                                         
+                                                         [self.mapView animateToCameraPosition: [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
+                                                                                                                           longitude:cameraDefaultLongitude
+                                                                                                                                zoom:cameraDefaultZoomLevel]];
+
                                                          NSLog(@"ERRO: Nenhuma rota para exibir");
                                                      }
                                                  }];
@@ -316,9 +329,8 @@ static const CGFloat cameraPaddingRight = 50.0;
     [self.searchInput setShowsCancelButton:NO animated:YES];
     [self.markerForOrder removeAllObjects];
     [self.mapView clear];
-    self.mapBounds = [[GMSCoordinateBounds alloc] init];
     [self setSuggestionsTableVisible:NO];
-    self.hasRepositionedMapTimes = 0;
+    self.searchedDirection = nil; // TODO: Lembrar última direção pesquisada para linha
     
     [self.view makeToastActivity];
     
@@ -350,7 +362,6 @@ static const CGFloat cameraPaddingRight = 50.0;
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
     [self.searchInput becomeFirstResponder];
     [self setSuggestionsTableVisible:YES];
-    [self.busLineBar hide];
     [self cancelCurrentRequests];
     [self.view hideToastActivity];
 }

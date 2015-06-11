@@ -28,7 +28,7 @@ static const int hoursInDay = 24;
     // Verifica se a linha possui informação de sentido
     if (![self.sense isEqualToString:@""] && ![self.sense isEqualToString:@"desconhecido"]) {
         // Tirar informação entre parênteses do nome da linha
-        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(.*\\)" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"s/\\[.*?\\]|\\(.*?\\)|\\{.*?\\}//g" options:NSRegularExpressionCaseInsensitive error:nil];
         NSString *lineNameWithoutParentheses = [regex stringByReplacingMatchesInString:self.sense options:0 range:NSMakeRange(0, self.sense.length) withTemplate:@""];
         lineNameWithoutParentheses = [lineNameWithoutParentheses stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
@@ -36,19 +36,13 @@ static const int hoursInDay = 24;
         if (places.count == 2) {
             return places[1];
         }
-        // Se não foi possível dividir, tentar com X minúsculo
-        places = [lineNameWithoutParentheses componentsSeparatedByString:@" x "];
-        if (places.count == 2) {
-            return places[1];
-        }
-
     }
     
     return nil;
 }
 
-- (NSString *)humanReadableDelay {
-    return [BusData humanReadableStringForSeconds:self.delayInSeconds];
+- (void)setSense:(NSString *)sense {
+    _sense = sense.capitalizedString;
 }
 
 - (NSInteger)delayInMinutes {

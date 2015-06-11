@@ -26,6 +26,9 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="settings.myLocationButton" value="NO"/>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="myLocationEnabled" value="YES"/>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="5Od-EK-s7Y"/>
+                                </connections>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
                                 <rect key="frame" x="0.0" y="70" width="320" height="453"/>
