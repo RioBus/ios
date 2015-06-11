@@ -289,7 +289,7 @@
 				ORGANIZATIONNAME = "Rio Bus";
 				TargetAttributes = {
 					681A7F40196722530006C335 = {
-						DevelopmentTeam = 5JHLCV2DBL;
+						DevelopmentTeam = CP4TSFS822;
 					};
 					681A7F61196722540006C335 = {
 						TestTargetID = 681A7F40196722530006C335;

@@ -16,7 +16,7 @@ static const int recentItemsLimit = 5;
         self.delegate = self;
         self.dataSource = self;
         
-        NSArray* savedFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:@"Favorites"];
+        NSArray *savedFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:@"Favorites"];
         if (savedFavorites) {
            self.favorites = [savedFavorites mutableCopy];
         }
@@ -24,7 +24,7 @@ static const int recentItemsLimit = 5;
             self.favorites = [[NSMutableArray alloc] init];
         }
         
-        NSArray* savedRecents = [[NSUserDefaults standardUserDefaults] objectForKey:@"Recents"];
+        NSArray *savedRecents = [[NSUserDefaults standardUserDefaults] objectForKey:@"Recents"];
         if (savedRecents) {
             self.recents = [savedRecents mutableCopy];
         }
@@ -61,7 +61,7 @@ static const int recentItemsLimit = 5;
 
 - (void)moveFromRecentToFavoriteTable:(UITapGestureRecognizer *)sender {
     NSInteger itemIndexRecents = sender.view.tag;
-    NSString* newItem = self.recents[itemIndexRecents];
+    NSString *newItem = self.recents[itemIndexRecents];
     [self.recents removeObjectAtIndex:itemIndexRecents];
 
     [self updateUserRecentsList];
