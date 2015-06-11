@@ -19,6 +19,7 @@
 @property (nonatomic) NSTimer *updateTimer;
 @property (nonatomic) GMSCoordinateBounds *mapBounds;
 @property (nonatomic) NSMutableArray *lastRequests;
+@property (nonatomic) NSString *favoriteLine;
 @property (nonatomic) BOOL favoriteLineMode;
 @property (nonatomic) CGFloat suggestionTableBottomSpacing;
 
@@ -47,7 +48,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
+    self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:20];
     self.lastRequests = [[NSMutableArray alloc] init];
     
     self.mapView.mapType = kGMSTypeNormal;
@@ -108,15 +109,25 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 - (IBAction)favoriteMenuButtonTapped:(UIButton *)sender {
-    self.favoriteLineMode = !self.favoriteLineMode;
-    sender.selected = self.favoriteLineMode;
-    
-    if (self.favoriteLineMode) {
-        [self searchForBusLine:@"324"]; // FIXME: Buscar linha favorita da memória
+    if (!self.favoriteLineMode) {
+        [self searchForBusLine:self.favoriteLine];
     }
     else {
+        self.favoriteLineMode = NO;
         [self clearSearch];
     }
+}
+
+
+#pragma mark Favorite line methods
+
+- (NSString *)favoriteLine {
+    return @"324"; // FIXME: ler da memória
+}
+
+- (void)setFavoriteLineMode:(BOOL)enabled {
+    _favoriteLineMode = enabled;
+    self.favoriteMenuButton.selected = enabled;
 }
 
 
@@ -178,6 +189,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.searchedLine = busLine;
     self.searchInput.text = busLine;
     self.searchedDirection = nil; // TODO: self.searchDirection = última direção pesquisada na linha
+    self.favoriteLineMode = [busLine isEqualToString:self.favoriteLine];
     
     // Draw itineraries
     [self insertRouteOfBus:self.searchedLine];
@@ -305,8 +317,15 @@ static const CGFloat cameraPaddingRight = 30.0;
                 self.markerForOrder[busData.order] = marker;
             }
             
-            marker.snippet = [NSString stringWithFormat:@"Ordem: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.order, busData.velocity.doubleValue, busData.humanReadableDelay];
-            marker.title = busData.sense;
+            if (busData.destination) {
+                marker.title = [NSString stringWithFormat:@"%@ - %@", busData.order, busData.destination];
+                marker.snippet = [NSString stringWithFormat:@"Destino: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.destination, busData.velocity.doubleValue, busData.humanReadableDelay];
+            }
+            else {
+                marker.title = busData.order;
+                marker.snippet = [NSString stringWithFormat:@"Velocidade: %.0f km/h\nAtualizado há %@", busData.velocity.doubleValue, busData.humanReadableDelay];
+            }
+            
             marker.position = busData.location.coordinate;
         }
         // Se o ônibus for para a direção contrária e já estiver no mapa

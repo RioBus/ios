@@ -45,6 +45,10 @@ static const int hoursInDay = 24;
     _sense = sense.capitalizedString;
 }
 
+- (NSString *)humanReadableDelay {
+    return [BusData humanReadableStringForSeconds:self.delayInSeconds];
+}
+
 - (NSInteger)delayInMinutes {
     return self.delayInSeconds / secondsInMinute;
 }
