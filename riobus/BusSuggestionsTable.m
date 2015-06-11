@@ -1,4 +1,5 @@
 #import "BusSuggestionsTable.h"
+#import "riobus-Swift.h"
 
 @implementation BusSuggestionsTable
 
@@ -121,7 +122,8 @@ static const int recentItemsLimit = 5;
     cell.imageView.tag = indexPath.item;
 
     if (indexPath.section == favoritesSectionIndex) {
-        cell.imageView.image = [[UIImage imageNamed:@"FavoriteMarker"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imageView.image = [UIImage imageNamed:@"FavoriteMarker"];
+        cell.tintColor = [UIColor appGoldColor];
         cell.textLabel.text = self.favorites[indexPath.item];
         cell.textLabel.textColor = [UIColor darkGrayColor];
         UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeFromFavoriteTable:)];
@@ -130,6 +132,7 @@ static const int recentItemsLimit = 5;
     }
     else if (indexPath.section == recentsSectionIndex) {
         cell.imageView.image = [UIImage imageNamed:@"FavoriteMarker"];
+        cell.tintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
         cell.textLabel.text = self.recents[indexPath.item];
         cell.textLabel.textColor = [UIColor darkGrayColor];
         UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(moveFromRecentToFavoriteTable:)];

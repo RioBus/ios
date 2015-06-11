@@ -14,14 +14,12 @@
 @property (nonatomic) NSMutableDictionary *markerForOrder;
 @property (nonatomic) NSArray *busesData;
 @property (nonatomic) NSDictionary *busLineInformation;
-@property (nonatomic) NSMutableArray *searchedLines;
+@property (nonatomic) NSString *searchedLine;
 @property (nonatomic) NSString *searchedDirection;
 @property (nonatomic) NSTimer *updateTimer;
-@property (nonatomic) NSArray *availableColors;
-@property (nonatomic) NSMutableDictionary *lineColor;
 @property (nonatomic) GMSCoordinateBounds *mapBounds;
 @property (nonatomic) NSMutableArray *lastRequests;
-@property (nonatomic) BOOL lastUpdateWasOk;
+@property (nonatomic) BOOL favoriteLineMode;
 @property (nonatomic) CGFloat suggestionTableBottomSpacing;
 
 @property (weak, nonatomic) IBOutlet GMSMapView *mapView;
@@ -29,9 +27,9 @@
 @property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (weak, nonatomic) IBOutlet BusLineBar *busLineBar;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
-@property (weak, nonatomic) IBOutlet UIButton *menuMiddleButton;
-@property (weak, nonatomic) IBOutlet UIButton *menuRightButton;
-@property (weak, nonatomic) IBOutlet UIButton *menuLeftButton;
+@property (weak, nonatomic) IBOutlet UIButton *locationMenuButton;
+@property (weak, nonatomic) IBOutlet UIButton *favoriteMenuButton;
+@property (weak, nonatomic) IBOutlet UIButton *informationMenuButton;
 
 @end
 
@@ -39,7 +37,7 @@ static const CGFloat cameraDefaultLatitude = -22.9043527;
 static const CGFloat cameraDefaultLongitude = -43.1912805;
 static const CGFloat cameraDefaultZoomLevel = 12.0;
 static const CGFloat cameraCurrentLocationZoomLevel = 14.0;
-static const CGFloat cameraPaddingTop = 30.0;
+static const CGFloat cameraPaddingTop = 50.0;
 static const CGFloat cameraPaddingLeft = 30.0;
 static const CGFloat cameraPaddingBottom = 100.0;
 static const CGFloat cameraPaddingRight = 30.0;
@@ -50,8 +48,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     [super viewDidLoad];
     
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:100];
-    self.lineColor = [[NSMutableDictionary alloc] init];
-    self.searchedLines = [[NSMutableArray alloc] init];
     self.lastRequests = [[NSMutableArray alloc] init];
     
     self.mapView.mapType = kGMSTypeNormal;
@@ -60,25 +56,16 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
     
-    [self.menuLeftButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
-    [self.menuRightButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
-    [self.menuMiddleButton setBackgroundTintColor:[UIColor appLightBlueColor] state:UIControlStateHighlighted];
-    [self.menuMiddleButton setBackgroundTintColor:[UIColor appDarkBlueColor] state:UIControlStateNormal];
+    [self.informationMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
+    [self.favoriteMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
+    [self.favoriteMenuButton setImageTintColor:[UIColor appGoldColor] forUIControlState:UIControlStateSelected];
+    [self.locationMenuButton setBackgroundTintColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
+    [self.locationMenuButton setBackgroundTintColor:[UIColor appDarkBlueColor] forUIControlState:UIControlStateNormal];
     
     self.busLineBar.delegate = self;
     
     self.searchInput.backgroundImage = [UIImage new];
     [UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil].tintColor = [UIColor whiteColor];
-    
-    self.availableColors = @[[UIColor appOrangeColor],
-                             [UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
-                             [UIColor orangeColor],
-                             [UIColor purpleColor],
-                             [UIColor brownColor],
-                             [UIColor cyanColor],
-                             [UIColor magentaColor],
-                             [UIColor blackColor],
-                             [UIColor blueColor]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -120,11 +107,11 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 #pragma mark Menu actions
 
-- (IBAction)informationMenuButtonTapped:(id)sender {
+- (IBAction)informationMenuButtonTapped:(UIButton *)sender {
     [self performSegueWithIdentifier:@"viewOptions" sender:self];
 }
 
-- (IBAction)locationMenuButtonTapped:(id)sender {
+- (IBAction)locationMenuButtonTapped:(UIButton *)sender {
     if ([CLLocationManager locationServicesEnabled]) {
         [self.locationManager startUpdatingLocation];
     }
@@ -133,8 +120,9 @@ static const CGFloat cameraPaddingRight = 30.0;
     }
 }
 
-- (IBAction)favoriteMenuButtonTapped:(id)sender {
-    NSLog(@"Favorite manu tapped");
+- (IBAction)favoriteMenuButtonTapped:(UIButton *)sender {
+    self.favoriteLineMode = !self.favoriteLineMode;
+    sender.selected = self.favoriteLineMode;
     
     // TODO: Implementar funcionalidade de busca favorita
 }
@@ -165,84 +153,130 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.lastRequests removeAllObjects];
 }
 
-/**
- * Cancelar todos os timers ativos
- */
-- (void)cancelActiveTimers {
-    if (self.updateTimer) {
-        [self.updateTimer invalidate];
-        self.updateTimer = nil;
-    }
-}
-
 
 #pragma mark Carregamento do marcadores, da rota e do mapa
 
 /**
- * Atualiza os dados para o carregamento do mapa
+ * Inicia pesquisa por uma linha de ônibus, buscando o itinerário da linha e os ônibus. Método assíncrono.
+ * @param busLine Nome da linha de ônibus.
  */
-- (void)updateSearchedBusesData:(id)sender {
-    if ([self.searchInput isFirstResponder] || !self.searchedLines.count) {
+- (void)searchForBusLine:(NSString * __nonnull)busLine {
+    self.searchedLine = busLine;
+    
+    // Show activity indicator
+    [self.view makeToastActivity];
+    
+    // Clear map and previous search parameters
+    [self.markerForOrder removeAllObjects];
+    [self.mapView clear];
+    self.searchedDirection = nil; // TODO: Lembrar última direção pesquisada para linha
+    
+    // Draw itineraries
+    [self insertRouteOfBus:self.searchedLine];
+    
+    // Call updater
+    [self updateSearchedBusesData];
+}
+
+/**
+ * Busca e insere no mapa as informações de itinerário da linha. Método assíncrono.
+ * @param busLine Nome da linha de ônibus.
+ */
+- (void)insertRouteOfBus:(NSString * __nonnull)busLine {
+    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:busLine
+                                                 withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+                                                     NSArray *shapes = busLineInformation[@"shapes"];
+                                                     [self.busLineBar appearWithBusLine:busLineInformation];
+                                                     
+                                                     if (!error && shapes.count > 0) {
+                                                         self.mapBounds = [[GMSCoordinateBounds alloc] init];
+                                                         
+                                                         NSArray *shapes = busLineInformation[@"shapes"];
+                                                         for (NSMutableArray *shape in shapes) {
+                                                             GMSMutablePath *gmShape = [GMSMutablePath path];
+                                                             
+                                                             for (CLLocation *location in shape) {
+                                                                 [gmShape addCoordinate:location.coordinate];
+                                                                 self.mapBounds = [self.mapBounds includingCoordinate:location.coordinate];
+                                                             }
+                                                             
+                                                             GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
+                                                             polyLine.strokeColor = [UIColor appOrangeColor];
+                                                             polyLine.strokeWidth = 2.0;
+                                                             polyLine.map = self.mapView;
+                                                         }
+                                                         
+                                                         // Realinhar mapa
+                                                         UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
+                                                                                                         cameraPaddingRight,
+                                                                                                         cameraPaddingBottom,
+                                                                                                         cameraPaddingLeft);
+                                                         [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
+                                                     }
+                                                     else {
+                                                         self.busLineInformation = nil;
+                                                         
+                                                         [self.mapView animateToCameraPosition: [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
+                                                                                                                            longitude:cameraDefaultLongitude
+                                                                                                                                 zoom:cameraDefaultZoomLevel]];
+                                                         
+                                                         NSLog(@"ERRO: Nenhuma rota para exibir");
+                                                     }
+                                                 }];
+}
+
+/**
+ * Atualiza os dados dos ônibus para o carregamento do mapa. Método assíncrono.
+ */
+- (void)updateSearchedBusesData {
+    if ([self.searchInput isFirstResponder] || !self.searchedLine) {
         return;
     }
     
-    [self cancelActiveTimers];
+    [self.updateTimer invalidate];
     [self cancelCurrentRequests];
     
-    // Load bus data for each searched line
-    for (NSString *busLineNumber in self.searchedLines) {
-        NSOperation *request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:busLineNumber
-                                                                 withCompletionHandler:^(NSArray *busesData, NSError *error) {
-                                                                     if (error) {
+    // Load bus data for searched line
+    NSOperation *request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:self.searchedLine
+                                                             withCompletionHandler:^(NSArray *busesData, NSError *error) {
+                                                                 if (error) {
+                                                                     [self.busLineBar hide];
+                                                                     [self.view hideToastActivity];
+                                                                     
+                                                                     if (error.code != NSURLErrorCancelled) {                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:@"Não foi possível buscar a posição dos ônibus."];
+                                                                         [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
+                                                                         [alertController showWithSender:self controller:self animated:YES completion:nil];
+                                                                     }
+                                                                     
+                                                                     self.busesData = nil;
+                                                                 }
+                                                                 else {
+                                                                     if (busesData.count > 0) {
+                                                                         self.busesData = busesData;
+                                                                         [self updateBusMarkers];
+                                                                         
+                                                                         self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15
+                                                                                                                             target:self
+                                                                                                                           selector:@selector(updateSearchedBusesData)
+                                                                                                                           userInfo:nil
+                                                                                                                            repeats:NO];
+                                                                     }
+                                                                     else {
+                                                                         self.busesData = nil;
+                                                                         
                                                                          [self.busLineBar hide];
                                                                          [self.view hideToastActivity];
                                                                          
-                                                                         if (error.code != NSURLErrorCancelled) { // Erro ao cancelar um request
-                                                                             
-                                                                             PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:@"Não foi possível buscar a posição dos ônibus."];
-                                                                             [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
-                                                                             [alertController showWithSender:sender controller:self animated:YES completion:nil];
-                                                                             
-                                                                             self.lastUpdateWasOk = NO;
-                                                                         }
+                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@. ", self.searchedLine]];
+                                                                         [alertController addAction:[PSTAlertAction actionWithTitle:@"Ok" style:PSTAlertActionStyleDefault handler:nil]];
+                                                                         [alertController showWithSender:self controller:self animated:YES completion:nil];
                                                                          
-                                                                         self.busesData = nil;
+                                                                         [self.updateTimer invalidate];
                                                                      }
-                                                                     else {
-                                                                         if (busesData.count > 0) {
-                                                                             self.busesData = busesData;
-                                                                         }
-                                                                         else {
-                                                                             self.busesData = nil;
-                                                                             [self.busLineBar hide];
-                                                                             [self.view hideToastActivity];
-                                                                             
-                                                                             PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@. ", busLineNumber]];
-                                                                             [alertController addAction:[PSTAlertAction actionWithTitle:@"Ok" style:PSTAlertActionStyleDefault handler:nil]];
-                                                                             [alertController showWithSender:sender controller:self animated:YES completion:nil];
-                                                                             
-                                                                             self.lastUpdateWasOk = NO;
-                                                                         }
-                                                                     }
-                                                                 }];
-        
-        [self.lastRequests addObject:request];
-    }
+                                                                 }
+                                                             }];
     
-    [self cancelActiveTimers];
-    
-    if (self.lastUpdateWasOk) {
-        self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15
-                                                            target:self
-                                                          selector:@selector(updateSearchedBusesData:)
-                                                          userInfo:nil
-                                                           repeats:NO];
-    }
-}
-
-- (void)setBusesData:(NSArray *)busesData {
-    _busesData = busesData;
-    [self updateBusMarkers];
+    [self.lastRequests addObject:request];
 }
 
 /**
@@ -277,86 +311,23 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.view hideToastActivity];
 }
 
-- (void)insertRouteOfBus:(NSString *)lineName {
-    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:lineName
-                                                 withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
-                                                     NSArray *shapes = busLineInformation[@"shapes"];
-                                                     [self.busLineBar appearWithBusLine:busLineInformation];
-                                                
-                                                     if (!error && shapes.count > 0) {
-                                                         self.mapBounds = [[GMSCoordinateBounds alloc] init];
-                                                         
-                                                         NSArray *shapes = busLineInformation[@"shapes"];
-                                                         for (NSMutableArray *shape in shapes) {
-                                                             GMSMutablePath *gmShape = [GMSMutablePath path];
-                                                             
-                                                             for (CLLocation *location in shape) {
-                                                                 [gmShape addCoordinate:location.coordinate];
-                                                                 self.mapBounds = [self.mapBounds includingCoordinate:location.coordinate];
-                                                             }
-                                                             
-                                                             GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
-                                                             polyLine.strokeColor = self.lineColor[lineName];
-                                                             polyLine.strokeWidth = 2.0;
-                                                             polyLine.map = self.mapView;
-                                                         }
-                                                         
-                                                         // Realinhar mapa
-                                                         UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
-                                                                                                         cameraPaddingRight,
-                                                                                                         cameraPaddingBottom,
-                                                                                                         cameraPaddingLeft);
-                                                         NSLog(@"Bounds insets: %@", NSStringFromUIEdgeInsets(mapBoundsInsets));
-                                                         [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
-                                                     }
-                                                     else {
-                                                         self.busLineInformation = nil;
-                                                         
-                                                         [self.mapView animateToCameraPosition: [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
-                                                                                                                           longitude:cameraDefaultLongitude
-                                                                                                                                zoom:cameraDefaultZoomLevel]];
-
-                                                         NSLog(@"ERRO: Nenhuma rota para exibir");
-                                                     }
-                                                 }];
-}
-
 
 #pragma mark UISearchBarDelegate methods
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [self.searchInput resignFirstResponder];
     [self.searchInput setShowsCancelButton:NO animated:YES];
-    [self.markerForOrder removeAllObjects];
-    [self.mapView clear];
     [self setSuggestionsTableVisible:NO];
-    self.searchedDirection = nil; // TODO: Lembrar última direção pesquisada para linha
-    
-    [self.view makeToastActivity];
     
     // Escape search input
-    NSString* validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    NSCharacterSet* splitCharacters = [NSCharacterSet characterSetWithCharactersInString:validCharacters].invertedSet;
-    self.searchedLines = [[(searchBar.text).uppercaseString componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
-    [self.searchedLines removeObject:@""];
+    NSCharacterSet *validCharacters = [NSCharacterSet alphanumericCharacterSet]; // FIXME
+    NSString *escapedBusLineString = [[searchBar.text.uppercaseString componentsSeparatedByCharactersInSet:[validCharacters invertedSet]] componentsJoinedByString:@""];
+    searchBar.text = escapedBusLineString;
     
     // Save search to history
-    [self.suggestionTable addToRecentTable:[self.searchedLines componentsJoinedByString:@", "]];
-    
-    // Draw itineraries
-    [self.lineColor removeAllObjects];
-    
-    int colorIndex = -1;
-    for (NSString* busLineNumber in self.searchedLines) {
-        colorIndex = (colorIndex+1) % self.availableColors.count;
-        self.lineColor[busLineNumber] = self.availableColors[colorIndex];
-        
-        [self insertRouteOfBus:busLineNumber];
-    }
-    
-    // Call updater
-    self.lastUpdateWasOk = YES;
-    [self updateSearchedBusesData:self];
+    [self.suggestionTable addToRecentTable:escapedBusLineString];
+
+    [self searchForBusLine:escapedBusLineString];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
@@ -402,7 +373,9 @@ static const CGFloat cameraPaddingRight = 30.0;
 #pragma mark Listeners de notificações
 
 /**
- * Atualiza o tamanho da tabela de acordo com o tamanho do teclado.
+ * Método chamado quando o teclado será exibido na tela. Atualiza o tamanho da 
+ * tabela de acordo com o tamanho do teclado.
+ * @param sender Notificação que ativou o método.
  */
 - (void)keyboardWillShow:(NSNotification *)sender {
     CGRect keyboardFrame = [sender.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
@@ -411,23 +384,42 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.suggestionTable layoutIfNeeded];
 }
 
+/**
+ * Método chamado quando o teclado será escondido na tela. Atualiza o tamanho da
+ * tabela de acordo com o tamanho do teclado.
+ * @param sender Notificação que ativou o método.
+ */
 - (void)keyboardWillHide:(NSNotification *)sender {
     self.keyboardBottomConstraint.constant = self.suggestionTableBottomSpacing;
     [self.suggestionTable layoutIfNeeded];
 }
 
+/**
+ * Método chamado quando o aplicativo entra em segundo plano. Cancela a atualização
+ * dos dados para economizar bateria quando no background.
+ * @param sender Notificação que ativou o método.
+ */
 - (void)appDidEnterBackground:(NSNotification *)sender {
     // Cancela o timer para não ficar gastando bateria no background
-    [self cancelActiveTimers];
+    [self.updateTimer invalidate];
 }
 
+/**
+ * Método chamado quando o aplicativo entra volta para primeiro plano. Reativa a 
+ * atualização dos ônibus caso tenha sido interrompida.
+ * @param sender Notificação que ativou o método.
+ */
 - (void)appWillEnterForeground:(NSNotification *)sender {
-    [self performSelector:@selector(updateSearchedBusesData:) withObject:self];
+    [self performSelector:@selector(updateSearchedBusesData)];
 }
 
 
 #pragma mark Funções utilitárias
 
+/**
+ * Mostra ou esconde com uma animação a tabela de sugestões.
+ * @param visible BOOL se deve tornar a tabela visível ou não.
+ */
 - (void)setSuggestionsTableVisible:(BOOL)visible {
     static const float animationDuration = 0.2;
     

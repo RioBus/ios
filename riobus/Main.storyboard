@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -29,10 +29,6 @@
                                 <connections>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="5Od-EK-s7Y"/>
                                 </connections>
-                            </view>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
-                                <rect key="frame" x="0.0" y="70" width="320" height="453"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qj4-Wq-QPi" userLabel="Top Bar View">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
@@ -122,6 +118,10 @@
                                     <constraint firstAttribute="height" constant="124" id="Jyt-Pa-n5y"/>
                                 </constraints>
                             </view>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
+                                <rect key="frame" x="0.0" y="70" width="320" height="498"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -129,7 +129,7 @@
                             <constraint firstAttribute="trailing" secondItem="qj4-Wq-QPi" secondAttribute="trailing" id="1yr-d0-6D5"/>
                             <constraint firstItem="lsP-IF-CM0" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="Aqd-Y3-EfR"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="8Zz-pQ-lWZ" secondAttribute="bottom" id="D6A-Ze-Vcx"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lsP-IF-CM0" secondAttribute="bottom" constant="45" id="GX1-bd-vh2" userLabel="Keyboard Bottom Constraint"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="lsP-IF-CM0" secondAttribute="bottom" id="GX1-bd-vh2" userLabel="Keyboard Bottom Constraint"/>
                             <constraint firstAttribute="trailing" secondItem="lsP-IF-CM0" secondAttribute="trailing" id="L35-SY-wad"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="Lfw-bq-mSB" secondAttribute="bottom" constant="45" id="O1T-xq-S6K"/>
                             <constraint firstItem="Lfw-bq-mSB" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="-20" id="Vz5-GC-JFu"/>
@@ -151,11 +151,11 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="busLineBar" destination="oXi-dn-3U5" id="BIo-lq-9vV"/>
+                        <outlet property="favoriteMenuButton" destination="7nS-lB-gHS" id="7jb-Ea-zHK"/>
+                        <outlet property="informationMenuButton" destination="eQr-1u-aMf" id="91D-R2-f6o"/>
                         <outlet property="keyboardBottomConstraint" destination="GX1-bd-vh2" id="CQB-Z9-GjU"/>
+                        <outlet property="locationMenuButton" destination="koQ-fU-bdw" id="WN0-XX-vFX"/>
                         <outlet property="mapView" destination="Lfw-bq-mSB" id="IVe-WC-4Ar"/>
-                        <outlet property="menuLeftButton" destination="eQr-1u-aMf" id="At9-x2-wNK"/>
-                        <outlet property="menuMiddleButton" destination="koQ-fU-bdw" id="1ma-Re-CUU"/>
-                        <outlet property="menuRightButton" destination="7nS-lB-gHS" id="qEX-Ma-jmA"/>
                         <outlet property="searchDisplayController" destination="SXP-NW-eBt" id="1of-vD-bwM"/>
                         <outlet property="searchInput" destination="7Gl-dC-szk" id="SUm-y6-ddu"/>
                         <outlet property="suggestionTable" destination="lsP-IF-CM0" id="vlk-aV-VkW"/>

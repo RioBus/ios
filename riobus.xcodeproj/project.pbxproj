@@ -202,8 +202,6 @@
 				681A7F9D196824890006C335 /* BusData.m */,
 				681A7F9F196824FC0006C335 /* BusDataStore.h */,
 				681A7FA0196824FC0006C335 /* BusDataStore.m */,
-				6392614F1A06A88400B9A53C /* BusSuggestionsTable.h */,
-				639261501A06A88400B9A53C /* BusSuggestionsTable.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -224,6 +222,8 @@
 				A37A3CED1B1CD61E006A397C /* BusLineBar.h */,
 				A37A3CEE1B1CD61E006A397C /* BusLineBar.m */,
 				A37A3CE91B1CD425006A397C /* BusLineBar.xib */,
+				6392614F1A06A88400B9A53C /* BusSuggestionsTable.h */,
+				639261501A06A88400B9A53C /* BusSuggestionsTable.m */,
 			);
 			name = View;
 			sourceTree = "<group>";

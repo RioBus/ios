@@ -19,14 +19,14 @@ extension UIButton {
         self.setBackgroundImage(imageWithColor(color), forState: state)
     }
     
-    public func setImageTintColor(color: UIColor, state: UIControlState) {
+    public func setImageTintColor(color: UIColor, forUIControlState state: UIControlState) {
         let image = self.imageForState(state)
         if image != nil {
             self.setImage(self.tintedImageWithColor(color, image: image!), forState: state)
         }
     }
     
-    public func setBackgroundTintColor(color: UIColor, state: UIControlState) {
+    public func setBackgroundTintColor(color: UIColor, forUIControlState state: UIControlState) {
         let backgroundImage = self.backgroundImageForState(state)
         if backgroundImage != nil {
             self.setBackgroundImage(self.tintedImageWithColor(color, image: backgroundImage!), forState: state)

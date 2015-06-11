@@ -12,4 +12,8 @@ extension UIColor {
     class func appDarkBlueColor() -> UIColor {
         return UIColor(red: 34.0/255.0, green: 127.0/255.0, blue: 238.0/255.0, alpha: 1.0)
     }
+    
+    class func appGoldColor() -> UIColor {
+        return UIColor(red: 255.0, green: 215.0/255.0, blue: 0.0, alpha: 1.0)
+    }
 }
