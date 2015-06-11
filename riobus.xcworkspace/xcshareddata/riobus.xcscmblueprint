@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "E97FCC62D3DA6FCE25266A92BDEF0D7767CD78FE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "E97FCC62D3DA6FCE25266A92BDEF0D7767CD78FE" : 0,
+    "BFCF8E2A-E94C-47BC-8461-ED585041C3CE" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "E620AED9-DECD-4C0C-8727-C0844FF03776",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "E97FCC62D3DA6FCE25266A92BDEF0D7767CD78FE" : "riobus-ios",
+    "BFCF8E2A-E94C-47BC-8461-ED585041C3CE" : "riobus"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "riobus",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 203,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "riobus.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "ssh:\/\/git.rootshell.privatedns.org\/brunoamaral\/riobus-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BFCF8E2A-E94C-47BC-8461-ED585041C3CE"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/vitor251093\/riobus-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E97FCC62D3DA6FCE25266A92BDEF0D7767CD78FE"
+    }
+  ]
+}

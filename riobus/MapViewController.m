@@ -6,6 +6,7 @@
 #import "OptionsViewController.h"
 #import "BusSuggestionsTable.h"
 #import "BusLineBar.h"
+#import "riobus-Swift.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate, BusLineBarDelegate>
 
@@ -26,6 +27,11 @@
 @property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (weak, nonatomic) IBOutlet BusLineBar *busLineBar;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *menuMiddleButton;
+@property (weak, nonatomic) IBOutlet UIButton *menuRightButton;
+@property (weak, nonatomic) IBOutlet UIButton *menuLeftButton;
+
+
 @end
 
 static const CGFloat cameraDefaultLatitude = -22.9043527;
@@ -53,12 +59,17 @@ static const CGFloat cameraPaddingRight = 50.0;
     self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
     
+    [self.menuLeftButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
+    [self.menuRightButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
+    [self.menuMiddleButton setBackgroundTintColor:[UIColor appLightBlueColor] state:UIControlStateHighlighted];
+    [self.menuMiddleButton setBackgroundTintColor:[UIColor appDarkBlueColor] state:UIControlStateNormal];
+    
     self.busLineBar.delegate = self;
     
     self.searchInput.backgroundImage = [UIImage new];
     [UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil].tintColor = [UIColor whiteColor];
     
-    self.availableColors = @[[UIColor colorWithRed:243.0/255.0 green:102.0/255.0 blue:32.0/255.0 alpha:1.0],
+    self.availableColors = @[[UIColor appOrangeColor],
                              [UIColor colorWithRed:0.0 green:152.0/255.0 blue:211.0/255.0 alpha:1.0],
                              [UIColor orangeColor],
                              [UIColor purpleColor],
