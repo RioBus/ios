@@ -144,46 +144,48 @@
 - (BOOL)selectDestination:(NSString *)destination {
     if ([self.leftDestinationButton.titleLabel.text isEqualToString:destination]) {
         self.leftDestinationButton.enabled = NO;
+        self.leftDestinationButton.selected = YES;
         self.rightDestinationButton.enabled = YES;
+        self.rightDestinationButton.selected = NO;
         return YES;
     }
     
     if ([self.rightDestinationButton.titleLabel.text isEqualToString:destination]) {
         self.leftDestinationButton.enabled = YES;
+        self.leftDestinationButton.selected = NO;
         self.rightDestinationButton.enabled = NO;
+        self.rightDestinationButton.selected = YES;
         return YES;
     }
     
     self.leftDestinationButton.enabled = YES;
+    self.leftDestinationButton.selected = NO;
     self.rightDestinationButton.enabled = YES;
+    self.rightDestinationButton.selected = NO;
     return NO;
 }
 
 - (IBAction)didTapLeftDestinationButton:(UIButton *)sender {
     if ([self.delegate busLineBarView:self didSelectDestination:sender.titleLabel.text]) {
-        sender.enabled = NO;
-        self.rightDestinationButton.enabled = YES;
+        [self selectDestination:sender.titleLabel.text];
     }
 }
 
 - (IBAction)didTapRightDestinationButton:(UIButton *)sender {
     if ([self.delegate busLineBarView:self didSelectDestination:sender.titleLabel.text]) {
-        sender.enabled = NO;
-        self.leftDestinationButton.enabled = YES;
+        [self selectDestination:sender.titleLabel.text];
     }
 }
 
 - (IBAction)didTapDirectionButton:(UIButton *)sender {
     if (self.leftDestinationButton.enabled) {
         if ([self.delegate busLineBarView:self didSelectDestination:self.leftDestinationButton.titleLabel.text]) {
-            self.leftDestinationButton.enabled = NO;
-            self.rightDestinationButton.enabled = YES;
+            [self selectDestination:self.leftDestinationButton.titleLabel.text];
         }
     }
     else if (self.rightDestinationButton.enabled) {
         if ([self.delegate busLineBarView:self didSelectDestination:self.rightDestinationButton.titleLabel.text]) {
-            self.leftDestinationButton.enabled = YES;
-            self.rightDestinationButton.enabled = NO;
+            [self selectDestination:self.rightDestinationButton.titleLabel.text];
         }
     }
 }

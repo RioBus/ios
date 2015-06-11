@@ -1,4 +1,3 @@
-#import <Toast/UIView+Toast.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import <PSTAlertController/PSTAlertController.h>
 #import "MapViewController.h"
@@ -7,6 +6,7 @@
 #import "BusSuggestionsTable.h"
 #import "BusLineBar.h"
 #import "riobus-Swift.h"
+#import "SVProgressHUD/SVProgressHUD.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate, BusLineBarDelegate>
 
@@ -69,6 +69,8 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.searchBarShouldBeginEditing = YES;
     self.searchInput.backgroundImage = [UIImage new];
     [UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil].tintColor = [UIColor whiteColor];
+    
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.8]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -170,7 +172,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.busLineBar hide];
     [self.updateTimer invalidate];
     [self cancelCurrentRequests];
-    [self.view hideToastActivity];
+    [SVProgressHUD dismiss];
     self.searchInput.text = @"";
     self.searchedLine = nil;
     self.searchedDirection = nil;
@@ -183,7 +185,7 @@ static const CGFloat cameraPaddingRight = 30.0;
  */
 - (void)searchForBusLine:(NSString * __nonnull)busLine {
     // Show activity indicator
-    [self.view makeToastActivity];
+    [SVProgressHUD show];
     
     // Clear map and previous search parameters
     [self.markerForOrder removeAllObjects];
@@ -266,7 +268,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                              withCompletionHandler:^(NSArray *busesData, NSError *error) {
                                                                  if (error) {
                                                                      [self.busLineBar hide];
-                                                                     [self.view hideToastActivity];
+                                                                     [SVProgressHUD dismiss];
                                                                      
                                                                      if (error.code != NSURLErrorCancelled) {                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:@"Não foi possível buscar a posição dos ônibus."];
                                                                          [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
@@ -290,7 +292,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                          self.busesData = nil;
                                                                          
                                                                          [self.busLineBar hide];
-                                                                         [self.view hideToastActivity];
+                                                                         [SVProgressHUD dismiss];
                                                                          
                                                                          PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@. ", self.searchedLine]];
                                                                          [alertController addAction:[PSTAlertAction actionWithTitle:@"Ok" style:PSTAlertActionStyleDefault handler:nil]];
@@ -340,7 +342,7 @@ static const CGFloat cameraPaddingRight = 30.0;
         }
     }
     
-    [self.view hideToastActivity];
+    [SVProgressHUD dismiss];
 }
 
 
