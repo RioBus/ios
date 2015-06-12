@@ -1,12 +1,12 @@
 #import <GoogleMaps/GoogleMaps.h>
-#import <PSTAlertController/PSTAlertController.h>
+#import <PSTAlertController.h>
+#import <SVProgressHUD.h>
 #import "MapViewController.h"
 #import "BusDataStore.h"
 #import "OptionsViewController.h"
 #import "BusSuggestionsTable.h"
 #import "BusLineBar.h"
 #import "riobus-Swift.h"
-#import "SVProgressHUD/SVProgressHUD.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate, BusLineBarDelegate>
 
@@ -184,9 +184,6 @@ static const CGFloat cameraPaddingRight = 30.0;
  * @param busLine Nome da linha de ônibus.
  */
 - (void)searchForBusLine:(NSString * __nonnull)busLine {
-    // Show activity indicator
-    [SVProgressHUD show];
-    
     // Clear map and previous search parameters
     [self.markerForOrder removeAllObjects];
     [self.mapView clear];
@@ -210,8 +207,12 @@ static const CGFloat cameraPaddingRight = 30.0;
  * @param busLine Nome da linha de ônibus.
  */
 - (void)insertRouteOfBus:(NSString * __nonnull)busLine {
+    [SVProgressHUD showWithStatus:@"Carregando linha..." maskType:SVProgressHUDMaskTypeNone];
+    
     [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:busLine
                                                  withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+                                                     [SVProgressHUD popActivity];
+                                                     
                                                      NSArray *shapes = busLineInformation[@"shapes"];
                                                      [self.busLineBar appearWithBusLine:busLineInformation];
                                                      
@@ -263,6 +264,8 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.updateTimer invalidate];
     [self cancelCurrentRequests];
     
+    [SVProgressHUD show];
+    
     // Load bus data for searched line
     NSOperation *request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:self.searchedLine
                                                              withCompletionHandler:^(NSArray *busesData, NSError *error) {
@@ -281,6 +284,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                      if (busesData.count > 0) {
                                                                          self.busesData = busesData;
                                                                          [self updateBusMarkers];
+                                                                         [SVProgressHUD popActivity];
                                                                          
                                                                          self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15
                                                                                                                              target:self
@@ -341,8 +345,6 @@ static const CGFloat cameraPaddingRight = 30.0;
             [self.markerForOrder removeObjectForKey:busData.order];
         }
     }
-    
-    [SVProgressHUD dismiss];
 }
 
 
@@ -377,6 +379,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     
     if (boolToReturn) {
         [self setSuggestionsTableVisible:YES];
+        [SVProgressHUD dismiss];
     }
     
     return boolToReturn;
