@@ -169,7 +169,26 @@ static const int recentItemsLimit = 5;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
+    return indexPath.section != optionsSectionIndex;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [tableView beginUpdates];
+        
+        if (indexPath.section == favoritesSectionIndex) {
+            self.favoriteLine = nil;
+        }
+        else {
+            [self.recentLines removeObjectAtIndex:indexPath.row];
+        }
+        
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        [self syncrhonizePreferences];
+        
+        [tableView endUpdates]; // FIXME: endUpdates não atualiza tag da célula
+    }
 }
 
 

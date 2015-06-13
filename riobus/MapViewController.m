@@ -60,7 +60,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     
     [self.informationMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
     [self.favoriteMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
-    [self.favoriteMenuButton setImageTintColor:[UIColor appGoldColor] forUIControlState:UIControlStateSelected];
     [self.locationMenuButton setBackgroundTintColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
     [self.locationMenuButton setBackgroundTintColor:[UIColor appDarkBlueColor] forUIControlState:UIControlStateNormal];
     
@@ -306,7 +305,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                          [self.busLineBar hide];
                                                                          [SVProgressHUD dismiss];
                                                                          
-                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@. ", self.searchedLine]];
+                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Nenhum ônibus encontrado" message:[NSString stringWithFormat:@"Não encontramos nenhum ônibus para a linha %@.\n\nEssa linha pode não ser monitorada pela Prefeitura, não possuir nenhum ônibus neste horário ou não existir.", self.searchedLine]];
                                                                          [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
                                                                          [alertController showWithSender:self controller:self animated:YES completion:nil];
                                                                          

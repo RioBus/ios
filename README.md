@@ -30,3 +30,7 @@ O projeto sempre deve ser carregado a partir do `riobus.xcworkspace`, que també
 
 O código deve seguir o guia de estilo de Objective-C do The New York Times, [disponível no GitHub](https://github.com/NYTimes/objective-c-style-guide#dot-notation-syntax).
 
+
+## Créditos
+
+Alguns ícones utilizados no aplicativo foram obtidos através do site [Icons8](https://icons8.com).
