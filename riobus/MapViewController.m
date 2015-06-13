@@ -19,7 +19,7 @@
 @property (nonatomic) NSTimer *updateTimer;
 @property (nonatomic) GMSCoordinateBounds *mapBounds;
 @property (nonatomic) NSMutableArray *lastRequests;
-@property (nonatomic) NSString *favoriteLine;
+@property (nonatomic, readonly, copy) NSString *favoriteLine;
 @property (nonatomic) BOOL favoriteLineMode;
 @property (nonatomic) CGFloat suggestionTableBottomSpacing;
 @property (nonatomic) BOOL searchBarShouldBeginEditing;
@@ -126,7 +126,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 #pragma mark Favorite line methods
 
 - (NSString *)favoriteLine {
-    return @"324"; // FIXME: ler da memória
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"favorite_line"];
 }
 
 - (void)setFavoriteLineMode:(BOOL)enabled {

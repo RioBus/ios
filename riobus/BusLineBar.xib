@@ -47,7 +47,7 @@
                             <rect key="frame" x="0.0" y="86" width="435" height="38"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uUW-Bq-UfH" userLabel="Direction Button">
-                                    <rect key="frame" x="210" y="11" width="15" height="18"/>
+                                    <rect key="frame" x="210" y="10" width="15" height="18"/>
                                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <state key="normal" image="DirectionButton"/>
                                     <connections>
@@ -55,7 +55,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eta-JV-XkO">
-                                    <rect key="frame" x="20" y="3" width="182" height="33"/>
+                                    <rect key="frame" x="20" y="2" width="182" height="33"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <state key="normal" title="Origem">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -69,7 +69,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VwV-WY-5PP">
-                                    <rect key="frame" x="233" y="3" width="182" height="33"/>
+                                    <rect key="frame" x="233" y="2" width="182" height="33"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <state key="normal" title="Destino">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -93,7 +93,7 @@
                                 <constraint firstAttribute="centerX" secondItem="uUW-Bq-UfH" secondAttribute="centerX" id="JIB-iz-YR8"/>
                                 <constraint firstAttribute="centerY" secondItem="Eta-JV-XkO" secondAttribute="centerY" id="XUQ-Su-b9F"/>
                                 <constraint firstItem="VwV-WY-5PP" firstAttribute="leading" secondItem="uUW-Bq-UfH" secondAttribute="trailing" constant="8" id="chb-iJ-ECp"/>
-                                <constraint firstAttribute="centerY" secondItem="uUW-Bq-UfH" secondAttribute="centerY" constant="-1" id="uX1-UJ-3Wx"/>
+                                <constraint firstAttribute="centerY" secondItem="uUW-Bq-UfH" secondAttribute="centerY" id="uX1-UJ-3Wx"/>
                                 <constraint firstAttribute="height" constant="38" id="uxx-dX-uvH"/>
                             </constraints>
                         </view>
