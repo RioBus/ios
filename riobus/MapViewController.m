@@ -115,7 +115,15 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (IBAction)favoriteMenuButtonTapped:(UIButton *)sender {
     if (!self.favoriteLineMode) {
-        [self searchForBusLine:self.favoriteLine];
+        // Se o usuário definiu uma linha favorita
+        if (self.favoriteLine) {
+            [self searchForBusLine:self.favoriteLine];
+        }
+        else {
+            PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Você não possui nenhuma linha favorita." message:@"Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela."];
+            [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
+            [alertController showWithSender:self controller:self animated:YES completion:nil];
+        }
     }
     else {
         [self clearSearch];
@@ -200,6 +208,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self insertRouteOfBus:self.searchedLine];
     
     // Call updater
+    [SVProgressHUD show];
     [self updateSearchedBusesData];
 }
 
@@ -208,7 +217,7 @@ static const CGFloat cameraPaddingRight = 30.0;
  * @param busLine Nome da linha de ônibus.
  */
 - (void)insertRouteOfBus:(NSString * __nonnull)busLine {
-    [SVProgressHUD showWithStatus:@"Carregando linha..." maskType:SVProgressHUDMaskTypeNone];
+    [SVProgressHUD show];
     
     [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:busLine
                                                  withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
@@ -230,7 +239,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                              }
                                                              
                                                              GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
-                                                             polyLine.strokeColor = self.favoriteLineMode ? [UIColor appGoldColor] : [UIColor appOrangeColor];
+                                                             polyLine.strokeColor = [UIColor appOrangeColor];
                                                              polyLine.strokeWidth = 2.0;
                                                              polyLine.map = self.mapView;
                                                          }
@@ -265,8 +274,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.updateTimer invalidate];
     [self cancelCurrentRequests];
     
-    [SVProgressHUD show];
-    
     // Load bus data for searched line
     NSOperation *request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:self.searchedLine
                                                              withCompletionHandler:^(NSArray *busesData, NSError *error) {
@@ -300,7 +307,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                          [SVProgressHUD dismiss];
                                                                          
                                                                          PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@. ", self.searchedLine]];
-                                                                         [alertController addAction:[PSTAlertAction actionWithTitle:@"Ok" style:PSTAlertActionStyleDefault handler:nil]];
+                                                                         [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
                                                                          [alertController showWithSender:self controller:self animated:YES completion:nil];
                                                                          
                                                                          [self.updateTimer invalidate];
@@ -325,8 +332,9 @@ static const CGFloat cameraPaddingRight = 30.0;
             if (!marker) {
                 marker = [[GMSMarker alloc] init];
                 marker.map = self.mapView;
-                marker.icon = [UIImage imageNamed:@"BusMarker"];
+                marker.icon = self.favoriteLineMode ? [UIImage imageNamed:@"BusMarkerFavorite"] : [UIImage imageNamed:@"BusMarker"];
                 self.markerForOrder[busData.order] = marker;
+                
             }
             
             if (busData.destination) {

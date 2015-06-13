@@ -1,3 +1,4 @@
+#import <PSTAlertController.h>
 #import "BusSuggestionsTable.h"
 #import "riobus-Swift.h"
 
@@ -63,22 +64,41 @@ static const int recentItemsLimit = 5;
     NSInteger itemIndexRecents = sender.view.tag;
     NSString *busLine = self.recentLines[itemIndexRecents];
     
-    // TODO: Exibir confirmação antes de definir como favorita
-    [self.recentLines removeObjectAtIndex:itemIndexRecents];
-    
-    [self removeLineFromFavorite:nil];
-    self.favoriteLine = busLine;
-    [self syncrhonizePreferences];
-    
-    [self reloadData];
+    if (self.favoriteLine) {
+        PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:@"Definir a linha %@ como favorita?", busLine] message:[NSString stringWithFormat:@"Isto irá remover a linha %@ dos favoritos.", self.favoriteLine]];
+        [alertController addAction:[PSTAlertAction actionWithTitle:@"Cancelar" style:PSTAlertActionStyleCancel handler:nil]];
+        [alertController addAction:[PSTAlertAction actionWithTitle:@"Redefinir" style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
+            [self.recentLines removeObjectAtIndex:itemIndexRecents];
+            [self.recentLines addObject:self.favoriteLine];
+            self.favoriteLine = busLine;
+            [self syncrhonizePreferences];
+            [self reloadData];
+        }]];
+        
+        [alertController showWithSender:self controller:nil animated:YES completion:nil];
+    }
+    else {
+        self.favoriteLine = busLine;
+        [self.recentLines removeObjectAtIndex:itemIndexRecents];
+        [self syncrhonizePreferences];
+        [self reloadData];
+    }
 }
 
 - (void)removeLineFromFavorite:(UITapGestureRecognizer *)sender {
-    // TODO: Exibir confirmação antes de definir como favorita
-    [self.recentLines addObject:self.favoriteLine];
-    self.favoriteLine = nil;
-    [self syncrhonizePreferences];
-    [self reloadData];
+    NSString *confirmMessage = [NSString stringWithFormat:@"Você deseja mesmo remover a linha %@ dos favoritos?", self.favoriteLine];
+    PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Excluir favorito" message:confirmMessage];
+    [alertController addAction:[PSTAlertAction actionWithTitle:@"Cancelar" style:PSTAlertActionStyleCancel handler:nil]];
+    [alertController addAction:[PSTAlertAction actionWithTitle:@"Excluir" style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
+        if (self.favoriteLine) {
+            [self.recentLines addObject:self.favoriteLine];
+        }
+        self.favoriteLine = nil;
+        [self syncrhonizePreferences];
+        [self reloadData];
+    }]];
+    
+    [alertController showWithSender:self controller:nil animated:YES completion:nil];
 }
 
 - (void)clearRecentSearches {
