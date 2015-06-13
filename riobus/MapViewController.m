@@ -71,6 +71,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     [UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil].tintColor = [UIColor whiteColor];
     
     [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.8]];
+    [SVProgressHUD setForegroundColor:[UIColor appDarkBlueColor]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
@@ -229,7 +230,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                              }
                                                              
                                                              GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
-                                                             polyLine.strokeColor = [UIColor appOrangeColor];
+                                                             polyLine.strokeColor = self.favoriteLineMode ? [UIColor appGoldColor] : [UIColor appOrangeColor];
                                                              polyLine.strokeWidth = 2.0;
                                                              polyLine.map = self.mapView;
                                                          }

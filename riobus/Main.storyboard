@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -91,7 +91,8 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="vfn-dB-bea"/>
                                         </constraints>
-                                        <state key="normal" image="FavoriteLineButton"/>
+                                        <state key="normal" image="Star"/>
+                                        <state key="selected" image="StarFilled"/>
                                         <connections>
                                             <action selector="favoriteMenuButtonTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="TXN-mT-TqB"/>
                                         </connections>
@@ -406,10 +407,11 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
         </scene>
     </scenes>
     <resources>
-        <image name="FavoriteLineButton" width="32" height="32"/>
         <image name="InfoButton" width="32" height="32"/>
         <image name="LocationButton" width="29" height="38"/>
         <image name="MiddleButton" width="107" height="61"/>
+        <image name="Star" width="32" height="32"/>
+        <image name="StarFilled" width="32" height="32"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
