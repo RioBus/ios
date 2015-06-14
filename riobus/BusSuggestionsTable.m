@@ -15,7 +15,7 @@ static const int favoritesSectionIndex = 0;
 static const int recentsSectionIndex = 1;
 static const int optionsSectionIndex = 2;
 static const int totalSections = 3;
-static const int recentItemsLimit = 5;
+static const int recentItemsLimit = 10;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -60,51 +60,104 @@ static const int recentItemsLimit = 5;
     }
 }
 
-- (void)makeLineFavorite:(UITapGestureRecognizer *)sender {
-    NSInteger itemIndexRecents = sender.view.tag;
-    NSString *busLine = self.recentLines[itemIndexRecents];
+- (void)makeLineFavorite:(UITapGestureRecognizer *)gestureRecognizer {
+    NSIndexPath *indexPath = [self indexPathForRowAtPoint:[gestureRecognizer locationInView:self]];
+    NSIndexPath *favoriteIndexPath = [NSIndexPath indexPathForRow:0 inSection:favoritesSectionIndex];
+    UITableViewCell *cell = [self cellForRowAtIndexPath:indexPath];
+    NSString *busLine = cell.textLabel.text;
     
+    // Se já existe uma linha favorita definida
     if (self.favoriteLine) {
         PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:@"Definir a linha %@ como favorita?", busLine] message:[NSString stringWithFormat:@"Isto irá remover a linha %@ dos favoritos.", self.favoriteLine]];
         [alertController addAction:[PSTAlertAction actionWithTitle:@"Cancelar" style:PSTAlertActionStyleCancel handler:nil]];
         [alertController addAction:[PSTAlertAction actionWithTitle:@"Redefinir" style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
-            [self.recentLines removeObjectAtIndex:itemIndexRecents];
+            // Atualizar modelo
+            [self.recentLines removeObject:busLine];
             [self.recentLines addObject:self.favoriteLine];
             self.favoriteLine = busLine;
             [self syncrhonizePreferences];
-            [self reloadData];
+            
+            // Atualizar view
+            [self beginUpdates];
+            NSIndexPath *recentsIndexPath = [NSIndexPath indexPathForRow:0 inSection:recentsSectionIndex];
+            [self moveRowAtIndexPath:favoriteIndexPath toIndexPath:recentsIndexPath];
+            [self moveRowAtIndexPath:indexPath toIndexPath:favoriteIndexPath];
+            [self endUpdates];
+            [self configureCell:[self cellForRowAtIndexPath:favoriteIndexPath] forRowAtIndexPath:favoriteIndexPath];
+            [self configureCell:[self cellForRowAtIndexPath:recentsIndexPath] forRowAtIndexPath:recentsIndexPath];
         }]];
         
         [alertController showWithSender:self controller:nil animated:YES completion:nil];
     }
+    // Caso não exista uma linha favorita já definida
     else {
+        // Atualizar modelo
         self.favoriteLine = busLine;
-        [self.recentLines removeObjectAtIndex:itemIndexRecents];
+        [self.recentLines removeObject:busLine];
         [self syncrhonizePreferences];
-        [self reloadData];
+        
+        // Atualizar view
+        [self beginUpdates];
+        [self moveRowAtIndexPath:indexPath toIndexPath:favoriteIndexPath];
+        if (self.recentLines.count == 0) {
+            [self deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:optionsSectionIndex]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        [self endUpdates];
+        [self configureCell:[self cellForRowAtIndexPath:favoriteIndexPath] forRowAtIndexPath:favoriteIndexPath];
     }
 }
 
-- (void)removeLineFromFavorite:(UITapGestureRecognizer *)sender {
+- (void)removeLineFromFavorite:(UITapGestureRecognizer *)gestureRecognizer {
     NSString *confirmMessage = [NSString stringWithFormat:@"Você deseja mesmo remover a linha %@ dos favoritos?", self.favoriteLine];
     PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Excluir favorito" message:confirmMessage];
     [alertController addAction:[PSTAlertAction actionWithTitle:@"Cancelar" style:PSTAlertActionStyleCancel handler:nil]];
     [alertController addAction:[PSTAlertAction actionWithTitle:@"Excluir" style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
+        // Atualizar modelo
         if (self.favoriteLine) {
             [self.recentLines addObject:self.favoriteLine];
         }
         self.favoriteLine = nil;
         [self syncrhonizePreferences];
-        [self reloadData];
+        
+        // Atualizar view
+        NSIndexPath *favoriteIndexPath = [NSIndexPath indexPathForRow:0 inSection:favoritesSectionIndex];
+        NSIndexPath *recentsIndexPath = [NSIndexPath indexPathForRow:0 inSection:recentsSectionIndex];
+
+        [self beginUpdates];
+        [self moveRowAtIndexPath:favoriteIndexPath toIndexPath:recentsIndexPath];
+        if (self.recentLines.count == 1) {
+            [self insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:optionsSectionIndex]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        [self endUpdates];
+        [self configureCell:[self cellForRowAtIndexPath:recentsIndexPath] forRowAtIndexPath:recentsIndexPath];
     }]];
     
     [alertController showWithSender:self controller:nil animated:YES completion:nil];
 }
 
 - (void)clearRecentSearches {
-    [self.recentLines removeAllObjects];
-    [self syncrhonizePreferences];
-    [self reloadData];
+    PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Limpar histórico" message:@"Deseja mesmo excluir todas as linhas recentes?"];
+    [alertController addAction:[PSTAlertAction actionWithTitle:@"Cancelar" style:PSTAlertActionStyleCancel handler:nil]];
+    [alertController addAction:[PSTAlertAction actionWithTitle:@"Excluir" style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
+        NSInteger recentsToDelete = self.recentLines.count;
+        
+        // Atualizar modelo
+        [self.recentLines removeAllObjects];
+        [self syncrhonizePreferences];
+        
+        // Atualizar view
+        [self beginUpdates];
+
+        NSMutableArray *rowsToDelete = [NSMutableArray arrayWithCapacity:recentsToDelete];
+        for (int i=0; i<recentsToDelete; i++) {
+            [rowsToDelete addObject:[NSIndexPath indexPathForRow:i inSection:recentsSectionIndex]];
+        }
+        [rowsToDelete addObject:[NSIndexPath indexPathForRow:0 inSection:optionsSectionIndex]];
+        [self deleteRowsAtIndexPaths:rowsToDelete withRowAnimation:UITableViewRowAnimationFade];
+        [self endUpdates];
+    }]];
+    
+    [alertController showWithSender:self controller:nil animated:YES completion:nil];
 }
 
 
@@ -141,6 +194,12 @@ static const int recentItemsLimit = 5;
     cell.imageView.userInteractionEnabled = YES;
     cell.imageView.tag = indexPath.item;
 
+    [self configureCell:cell forRowAtIndexPath:indexPath];
+    
+    return cell;
+}
+
+- (void)configureCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == favoritesSectionIndex) {
         cell.imageView.image = [UIImage imageNamed:@"StarFilled"];
         cell.tintColor = [UIColor appGoldColor];
@@ -153,7 +212,7 @@ static const int recentItemsLimit = 5;
     else if (indexPath.section == recentsSectionIndex) {
         cell.imageView.image = [UIImage imageNamed:@"Star"];
         cell.tintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
-        cell.textLabel.text = self.recentLines[indexPath.item];
+        cell.textLabel.text = self.recentLines[self.recentLines.count - indexPath.row - 1];
         cell.textLabel.textColor = [UIColor darkGrayColor];
         UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(makeLineFavorite:)];
         tapped.numberOfTapsRequired = 1;
@@ -161,11 +220,9 @@ static const int recentItemsLimit = 5;
     }
     else if (indexPath.section == optionsSectionIndex) {
         cell.imageView.image = nil;
-        cell.textLabel.text = @"Limpar recentes";
+        cell.textLabel.text = @"Limpar...";
         cell.textLabel.textColor = [UIColor lightGrayColor];
     }
-    
-    return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -174,20 +231,22 @@ static const int recentItemsLimit = 5;
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [tableView beginUpdates];
-        
+        // Atualizar modelo
         if (indexPath.section == favoritesSectionIndex) {
             self.favoriteLine = nil;
         }
         else {
-            [self.recentLines removeObjectAtIndex:indexPath.row];
+            [self.recentLines removeObjectAtIndex:self.recentLines.count - indexPath.row - 1];
         }
-        
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        
         [self syncrhonizePreferences];
         
-        [tableView endUpdates]; // FIXME: endUpdates não atualiza tag da célula
+        // Atualizar view
+        [tableView beginUpdates];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        if (indexPath.section == recentsSectionIndex && self.recentLines.count == 0) {
+            [tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:optionsSectionIndex]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        [tableView endUpdates];
     }
 }
 
@@ -201,7 +260,7 @@ static const int recentItemsLimit = 5;
             [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
         }
         else if (indexPath.section == recentsSectionIndex) {
-            (self.searchInput).text = self.recentLines[indexPath.row];
+            (self.searchInput).text = self.recentLines[self.recentLines.count - indexPath.row - 1];
             [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
         }
         else if (indexPath.section == optionsSectionIndex) {
@@ -211,5 +270,16 @@ static const int recentItemsLimit = 5;
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+//- (nullable NSString *)tableView:(nonnull UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+//    if (section == favoritesSectionIndex && self.favoriteLine) {
+//        return @"Linha favorita";
+//    }
+//    else if (section == recentsSectionIndex && self.recentLines.count > 0) {
+//        return @"Pesquisas recentes";
+//    }
+//    
+//    return @"";
+//}
 
 @end
