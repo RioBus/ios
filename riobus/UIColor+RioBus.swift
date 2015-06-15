@@ -2,7 +2,7 @@ import UIKit
 
 extension UIColor {
     class func appOrangeColor() -> UIColor {
-        return UIColor(red: 243.0/255.0, green: 102.0/255.0, blue: 32.0/255.0, alpha: 1.0)
+        return UIColor(red: 249.0/255.0, green: 60.0/255.0, blue: 9.0/255.0, alpha: 1.0)
     }
     
     class func appLightBlueColor() -> UIColor {

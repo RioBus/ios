@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:riobus.xcodeproj">
+      location = "group:/Users/macecchi/Projects/riobus/ios/riobus.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
