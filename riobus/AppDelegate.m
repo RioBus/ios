@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @implementation AppDelegate
 
@@ -10,6 +11,7 @@
     
     // Configura AFNetworking
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
     
     return YES;
 }

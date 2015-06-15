@@ -1,6 +1,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <PSTAlertController.h>
 #import <SVProgressHUD.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "MapViewController.h"
 #import "BusDataStore.h"
 #import "OptionsViewController.h"
@@ -83,6 +84,9 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:)
                                                  name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachabilityDidChange:)
+                                                 name:AFNetworkingReachabilityDidChangeNotification
                                                object:nil];
 }
 
@@ -467,6 +471,31 @@ static const CGFloat cameraPaddingRight = 30.0;
 - (void)keyboardWillHide:(NSNotification *)sender {
     self.keyboardBottomConstraint.constant = self.suggestionTableBottomSpacing;
     [self.suggestionTable layoutIfNeeded];
+}
+
+- (void)networkReachabilityDidChange:(NSNotification *)notification {
+    NSLog(@"Rechability Changed: %@", notification.userInfo);
+    BOOL reachable;
+    NSInteger status = [[notification.userInfo objectForKey:@"AFNetworkReachabilityNotificationStatusItem"] integerValue];
+    switch(status) {
+        case AFNetworkReachabilityStatusNotReachable:
+            NSLog(@"No Internet Connection");
+            reachable = NO;
+            break;
+        case AFNetworkReachabilityStatusReachableViaWiFi:
+            NSLog(@"WIFI");
+            reachable = YES;
+            break;
+        case AFNetworkReachabilityStatusReachableViaWWAN:
+            NSLog(@"3G");
+            reachable = YES;
+            break;
+        default:
+            NSLog(@"Unkown network status");
+            reachable = NO;
+            break;
+    }
+    // do stuff with reachable
 }
 
 /**
