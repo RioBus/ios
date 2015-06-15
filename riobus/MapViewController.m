@@ -280,7 +280,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                      [self.busLineBar hide];
                                                                      [SVProgressHUD dismiss];
                                                                      
-                                                                     if (error.code != NSURLErrorCancelled) {                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro" message:@"Não foi possível buscar a posição dos ônibus."];
+                                                                     if (error.code != NSURLErrorCancelled) {                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro comunicando com o servidor" message:@"Não foi possível buscar a posição dos ônibus. Verifique sua conexão com a internet e tente novamente."];
                                                                          [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
                                                                          [alertController showWithSender:self controller:self animated:YES completion:nil];
                                                                      }
@@ -305,7 +305,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                          [self.busLineBar hide];
                                                                          [SVProgressHUD dismiss];
                                                                          
-                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Nenhum ônibus encontrado" message:[NSString stringWithFormat:@"Não encontramos nenhum ônibus para a linha %@.\n\nEssa linha pode não ser monitorada pela Prefeitura, não possuir nenhum ônibus neste horário ou não existir.", self.searchedLine]];
+                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@", self.searchedLine] message:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento ou não existir."];
                                                                          [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
                                                                          [alertController showWithSender:self controller:self animated:YES completion:nil];
                                                                          
