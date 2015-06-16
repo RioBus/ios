@@ -51,15 +51,32 @@ static const int recentItemsLimit = 10;
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+/**
+ * Adiciona uma linha no histórico caso ainda não tenha sido pesquisada.
+ * Caso a linha já esteja no histórico, atualiza sua posição para lembrar que 
+ * foi a última pesquisada.
+ * @param busLine Uma string com o número da linha.
+ */
 - (void)addToRecentTable:(NSString *)busLine {
-    // Verifica se a linha já não está salva
-    if (![self.recentLines containsObject:busLine] && ![self.favoriteLine isEqualToString:busLine]) {
-        
+    NSIndexPath *recentsIndexPath = [NSIndexPath indexPathForRow:0 inSection:recentsSectionIndex];
+    [self beginUpdates];
+    
+    if ([self.recentLines containsObject:busLine]) {
+        NSInteger index = [self.recentLines indexOfObject:busLine];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.recentLines.count - index - 1 inSection:recentsSectionIndex];
+        [self.recentLines removeObject:busLine];
         [self.recentLines addObject:busLine];
-        [self syncrhonizePreferences];
         
-        [self reloadData];
+        [self moveRowAtIndexPath:indexPath toIndexPath:recentsIndexPath];
     }
+    else if (![self.favoriteLine isEqualToString:busLine]) {
+        [self.recentLines addObject:busLine];
+        [self insertRowsAtIndexPaths:@[recentsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    
+    [self endUpdates];
+    [self syncrhonizePreferences];
+
 }
 
 - (void)makeLineFavorite:(UITapGestureRecognizer *)gestureRecognizer {
@@ -261,6 +278,8 @@ static const int recentItemsLimit = 10;
 #pragma mark UITableViewDelegate methods
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     if (self.searchInput) {
         if (indexPath.section == favoritesSectionIndex) {
             (self.searchInput).text = self.favoriteLine;
@@ -274,8 +293,6 @@ static const int recentItemsLimit = 10;
             [self clearRecentSearches];
         }
     }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 //- (nullable NSString *)tableView:(nonnull UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
