@@ -108,7 +108,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 #pragma mark Menu actions
 
 - (IBAction)informationMenuButtonTapped:(UIButton *)sender {
-    [self performSegueWithIdentifier:@"viewOptions" sender:self];
+    [self performSegueWithIdentifier:@"ViewAboutScreen" sender:self];
 }
 
 - (IBAction)locationMenuButtonTapped:(UIButton *)sender {
@@ -439,7 +439,7 @@ static const CGFloat cameraPaddingRight = 30.0;
  * Prepara os segues disparados pelo Storyboard.
  */
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"viewOptions"]) {
+    if ([segue.identifier isEqualToString:@"ViewAboutScreen"]) {
         OptionsViewController *optionsVC = segue.destinationViewController;
         optionsVC.delegate = self;
     }

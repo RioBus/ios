@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8121.17" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="8Yh-BV-TBK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8121.17" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8101.14"/>
@@ -15,11 +15,11 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lfw-bq-mSB" customClass="GMSMapView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="523"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="622"/>
                                 <gestureRecognizers/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="settings.compassButton" value="NO"/>
@@ -31,17 +31,17 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qj4-Wq-QPi" userLabel="Top Bar">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2j4-0q-DaP" userLabel="Status Bar Background View">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
                                         <color key="backgroundColor" red="0.2627450980392157" green="0.63529411764705879" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="TXx-uM-JEO"/>
                                         </constraints>
                                     </view>
                                     <searchBar opaque="NO" contentMode="redraw" text="" placeholder="Pesquisar linha de ônibus" translatesAutoresizingMaskIntoConstraints="NO" id="7Gl-dC-szk">
-                                        <rect key="frame" x="0.0" y="23" width="320" height="44"/>
+                                        <rect key="frame" x="0.0" y="23" width="375" height="44"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="barTintColor" red="0.2630089015" green="0.63410336320000005" blue="0.95744694180000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="search"/>
@@ -62,10 +62,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Zz-pQ-lWZ" userLabel="Menu Bar">
-                                <rect key="frame" x="0.0" y="508" width="320" height="60"/>
+                                <rect key="frame" x="0.0" y="607" width="375" height="60"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQr-1u-aMf" userLabel="Left Button">
-                                        <rect key="frame" x="0.0" y="14" width="105" height="46"/>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQr-1u-aMf" userLabel="Left Button">
+                                        <rect key="frame" x="0.0" y="14" width="106" height="46"/>
                                         <color key="backgroundColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="eyd-BU-hly"/>
@@ -75,8 +75,8 @@
                                             <action selector="informationMenuButtonTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="6Nl-eg-IzX"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koQ-fU-bdw" userLabel="Middle Button">
-                                        <rect key="frame" x="105" y="0.0" width="110" height="60"/>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koQ-fU-bdw" userLabel="Middle Button">
+                                        <rect key="frame" x="106" y="0.0" width="110" height="60"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="7LX-6G-I7k"/>
                                         </constraints>
@@ -85,8 +85,8 @@
                                             <action selector="locationMenuButtonTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Aea-v5-9iF"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nS-lB-gHS" userLabel="Right Button">
-                                        <rect key="frame" x="215" y="14" width="105" height="46"/>
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nS-lB-gHS" userLabel="Right Button">
+                                        <rect key="frame" x="216" y="14" width="104" height="46"/>
                                         <color key="backgroundColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="vfn-dB-bea"/>
@@ -114,13 +114,13 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oXi-dn-3U5" customClass="BusLineBar">
-                                <rect key="frame" x="0.0" y="444" width="320" height="124"/>
+                                <rect key="frame" x="0.0" y="543" width="375" height="124"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="124" id="Jyt-Pa-n5y"/>
                                 </constraints>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
-                                <rect key="frame" x="0.0" y="70" width="320" height="498"/>
+                                <rect key="frame" x="0.0" y="70" width="375" height="597"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
@@ -150,6 +150,7 @@
                         <nil key="title"/>
                     </navigationItem>
                     <nil key="simulatedTopBarMetrics"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="busLineBar" destination="oXi-dn-3U5" id="BIo-lq-9vV"/>
                         <outlet property="favoriteMenuButton" destination="7nS-lB-gHS" id="7jb-Ea-zHK"/>
@@ -160,7 +161,7 @@
                         <outlet property="searchDisplayController" destination="SXP-NW-eBt" id="1of-vD-bwM"/>
                         <outlet property="searchInput" destination="7Gl-dC-szk" id="SUm-y6-ddu"/>
                         <outlet property="suggestionTable" destination="lsP-IF-CM0" id="vlk-aV-VkW"/>
-                        <segue destination="TAr-9s-PmU" kind="push" identifier="viewOptions" id="iBa-IA-nTE"/>
+                        <segue destination="8Yh-BV-TBK" kind="modal" identifier="ViewAboutScreen" id="i99-ef-1bq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -173,13 +174,14 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="156" y="-55"/>
+            <point key="canvasLocation" x="143.5" y="-55.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="MsF-Ft-6bt">
             <objects>
                 <navigationController definesPresentationContext="YES" id="8Yh-BV-TBK" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="t8b-Y1-f6V">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -190,12 +192,12 @@
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="NeJ-go-FgT"/>
+                        <segue destination="TAr-9s-PmU" kind="relationship" relationship="rootViewController" id="jWA-nP-3XL"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="amU-4d-TCX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-376" y="-54.43333333333333"/>
+            <point key="canvasLocation" x="633.5" y="-874.5"/>
         </scene>
         <!--RioBus-->
         <scene sceneID="uLg-Wb-IE0">
@@ -206,11 +208,11 @@
                         <viewControllerLayoutGuide type="bottom" id="CKf-uL-pEv"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3m3-QU-KYY">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-DC-OOX">
-                                <rect key="frame" x="16" y="28" width="288" height="490"/>
+                                <rect key="frame" x="16" y="0.0" width="343" height="553"/>
                                 <attributedString key="attributedText">
                                     <fragment content="O ">
                                         <attributes>
@@ -307,7 +309,7 @@
                                         </attributes>
                                     </fragment>
                                     <fragment>
-                                        <string key="content">Basta digitar a linha do ônibus que você deseja encontrar na caixa de busca e a posição de cada carro aparecerá no mapa. Além disso, você pode ver mais informações sobre o ônibus ao clicar sobre o marcador.
+                                        <string key="content">Basta digitar a linha do ônibus que você deseja encontrar na caixa de busca e a posição de cada carro aparecerá no mapa. Na parte inferior da tela, você poderá ver informações como o nome da linha e selecionar apenas o destino desejado. Além disso, você pode ver mais informações sobre o ônibus ao clicar sobre o marcador.
 
 </string>
                                         <attributes>
@@ -320,7 +322,7 @@
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
-                                    <fragment content="Gostou do projeto?">
+                                    <fragment content="Quer contribuir?">
                                         <attributes>
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="20" name="HelveticaNeue"/>
@@ -333,7 +335,7 @@
                                     </fragment>
                                     <fragment>
                                         <string key="content">
-Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestões através da nossa página no Facebook. Ou então, caso você seja o tipo que prefere pôr a mão na massa, pode nos ajudar a aprimorar o nosso código, que está hospedado publicamente no Github. O código está licenciado sob a licença GNU GPL v2, isso quer dizer que você pode alterar e reutilizar à vontade!</string>
+Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestões através da nossa página no Facebook. Ou então, caso você seja o tipo que prefere pôr a mão na massa, pode nos ajudar a aprimorar o nosso código, que está hospedado publicamente no GitHub. O código está licenciado sob a licença GNU GPL v2, isso quer dizer que você pode alterar e reutilizar à vontade!</string>
                                         <attributes>
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue"/>
@@ -349,12 +351,12 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FWK-Od-CVk">
-                                <rect key="frame" x="16" y="530" width="96" height="30"/>
+                                <rect key="frame" x="16" y="565" width="96" height="30"/>
                                 <state key="normal" title="Limpar Cache">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="clickedClearCacheButton:" destination="TAr-9s-PmU" eventType="touchUpInside" id="l5I-GC-n9k"/>
+                                    <action selector="didTapClearCacheButton:" destination="TAr-9s-PmU" eventType="touchUpInside" id="B5C-O8-CrB"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -364,16 +366,22 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                             <constraint firstItem="CKf-uL-pEv" firstAttribute="top" secondItem="FWK-Od-CVk" secondAttribute="bottom" constant="8" id="3uX-Au-X9b"/>
                             <constraint firstAttribute="bottom" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="50" id="AZh-49-H1m"/>
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="leading" secondItem="3m3-QU-KYY" secondAttribute="leadingMargin" id="CcG-RH-fL9"/>
-                            <constraint firstItem="YkP-DC-OOX" firstAttribute="top" secondItem="kB7-cd-FK6" secondAttribute="bottom" constant="8" symbolic="YES" id="FFP-h6-7FD"/>
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="trailing" secondItem="3m3-QU-KYY" secondAttribute="trailingMargin" id="RnI-04-90n"/>
+                            <constraint firstItem="YkP-DC-OOX" firstAttribute="top" secondItem="kB7-cd-FK6" secondAttribute="bottom" id="cBJ-FM-Kez"/>
                             <constraint firstItem="FWK-Od-CVk" firstAttribute="leading" secondItem="YkP-DC-OOX" secondAttribute="leading" id="iBX-tQ-GAt"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="RioBus" id="lds-IN-wQg"/>
+                    <navigationItem key="navigationItem" title="RioBus" id="lds-IN-wQg">
+                        <barButtonItem key="rightBarButtonItem" title="Fechar" id="a4o-aP-bQb">
+                            <connections>
+                                <action selector="didTapCloseButton:" destination="TAr-9s-PmU" id="SQC-Kr-Cym"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sIx-zc-D3X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="624" y="-55"/>
+            <point key="canvasLocation" x="633.5" y="-55.5"/>
         </scene>
     </scenes>
     <resources>
