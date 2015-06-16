@@ -2,7 +2,10 @@ import Foundation
 import XCTest
 
 class RioBus_UI_Tests: XCTestCase {
-        
+    
+    let app = XCUIApplication()
+    let searchField = XCUIApplication().searchFields.element
+    
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
@@ -20,9 +23,6 @@ class RioBus_UI_Tests: XCTestCase {
     }
     
     func testAddSearchToTable() {
-        let app = XCUIApplication()
-        let searchField = app.searchFields["Pesquisar linha de ônibus"]
-
         searchField.tap()
         
         searchField.typeText("324")
@@ -37,8 +37,6 @@ class RioBus_UI_Tests: XCTestCase {
     }
     
     func testMarkBusLineAsFavorite() {
-        let app = XCUIApplication()
-        let searchField = app.searchFields["Pesquisar linha de ônibus"]
         searchField.tap()
         
         let favoriteCell = app.tables.cells.containingType(.Button, identifier: "StarFilled").element
@@ -62,6 +60,11 @@ class RioBus_UI_Tests: XCTestCase {
             
             // Adicionar segunda
             if (normalCells.count < 2) {
+                let deleteKey = XCUIApplication().keys["Delete"]
+                deleteKey.tap()
+                deleteKey.tap()
+                deleteKey.tap()
+                
                 searchField.typeText("485")
                 app.typeText("\r")
                 // Ignorar possíveis erros da pesquisa que não são relevantes neste caso
@@ -87,12 +90,11 @@ class RioBus_UI_Tests: XCTestCase {
     }
     
     func testBusLineSearchScreen() {
-        let app = XCUIApplication()
-        app.searchFields["Pesquisar linha de ônibus"].tap()
-        
-        let searchField = app.searchFields["Pesquisar linha de ônibus"]
+        searchField.tap()
         searchField.typeText("324")
         app.typeText("\r")
+        
+        XCTAssertEqual(app.alerts.count, 0, "Ocorreu um erro fazendo uma pesquisa")
         
         XCTAssert(app.staticTexts["324 - Ribeira X Castelo (Circular)"].exists, "Não exibiu a barra de informações")
         XCTAssert(app.buttons["Ribeira"].exists, "Não exibiu o botão do sentido 1")
@@ -107,8 +109,6 @@ class RioBus_UI_Tests: XCTestCase {
     }
     
     func testOptionsScreen() {
-        let app = XCUIApplication()
-
         app.buttons["InfoButton"].tap()
         
         let limparCacheButton = app.buttons["Limpar Cache"]
