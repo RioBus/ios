@@ -223,6 +223,9 @@ static const int recentItemsLimit = 10;
         cell.textLabel.text = @"Limpar...";
         cell.textLabel.textColor = [UIColor lightGrayColor];
     }
+    cell.imageView.isAccessibilityElement = YES;
+    cell.imageView.accessibilityTraits = UIAccessibilityTraitButton;
+    cell.accessibilityElements = @[cell.textLabel, cell.imageView];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
