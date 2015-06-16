@@ -59,8 +59,12 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
     
+    [self.informationMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
     [self.informationMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
+    [self.favoriteMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
+    [self.favoriteMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateSelected];
     [self.favoriteMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
+    [self.locationMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
     [self.locationMenuButton setBackgroundTintColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
     [self.locationMenuButton setBackgroundTintColor:[UIColor appDarkBlueColor] forUIControlState:UIControlStateNormal];
     
@@ -340,15 +344,8 @@ static const CGFloat cameraPaddingRight = 30.0;
                 
             }
             
-            if (busData.destination) {
-                marker.title = [NSString stringWithFormat:@"%@ - %@", busData.order, busData.destination];
-                marker.snippet = [NSString stringWithFormat:@"Destino: %@\nVelocidade: %.0f km/h\nAtualizado há %@", busData.destination, busData.velocity.doubleValue, busData.humanReadableDelay];
-            }
-            else {
-                marker.title = busData.order;
-                marker.snippet = [NSString stringWithFormat:@"Velocidade: %.0f km/h\nAtualizado há %@", busData.velocity.doubleValue, busData.humanReadableDelay];
-            }
-            
+            marker.title = busData.destination ? [NSString stringWithFormat:@"%@ - %@", busData.order, busData.destination] : busData.order;
+            marker.snippet = [NSString stringWithFormat:@"Velocidade: %.0f km/h\nAtualizado há %@", busData.velocity.doubleValue, busData.humanReadableDelay];
             marker.position = busData.location.coordinate;
         }
         // Se o ônibus for para a direção contrária e já estiver no mapa

@@ -22,6 +22,7 @@ static const int recentItemsLimit = 10;
     
     if (self) {
         self.rowHeight = 45;
+        self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         self.delegate = self;
         self.dataSource = self;
         
@@ -44,6 +45,7 @@ static const int recentItemsLimit = 10;
     while (self.recentLines.count >= recentItemsLimit) {
         [self.recentLines removeObjectAtIndex:0];
     }
+    
     [[NSUserDefaults standardUserDefaults] setObject:self.recentLines forKey:@"Recents"];
     [[NSUserDefaults standardUserDefaults] setObject:self.favoriteLine forKey:@"favorite_line"];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -201,7 +203,7 @@ static const int recentItemsLimit = 10;
 
 - (void)configureCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == favoritesSectionIndex) {
-        cell.imageView.image = [UIImage imageNamed:@"StarFilled"];
+        cell.imageView.image = [[UIImage imageNamed:@"StarFilled"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.tintColor = [UIColor appGoldColor];
         cell.textLabel.text = self.favoriteLine;
         cell.textLabel.textColor = [UIColor darkGrayColor];
@@ -210,7 +212,7 @@ static const int recentItemsLimit = 10;
         [cell.imageView addGestureRecognizer:tapped];
     }
     else if (indexPath.section == recentsSectionIndex) {
-        cell.imageView.image = [UIImage imageNamed:@"Star"];
+        cell.imageView.image = [[UIImage imageNamed:@"Star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.tintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
         cell.textLabel.text = self.recentLines[self.recentLines.count - indexPath.row - 1];
         cell.textLabel.textColor = [UIColor darkGrayColor];
@@ -225,7 +227,9 @@ static const int recentItemsLimit = 10;
     }
     cell.imageView.isAccessibilityElement = YES;
     cell.imageView.accessibilityTraits = UIAccessibilityTraitButton;
-    cell.accessibilityElements = @[cell.textLabel, cell.imageView];
+    if ([cell respondsToSelector:NSSelectorFromString(@"setAcessibilityElements")]) {
+        cell.accessibilityElements = @[cell.textLabel, cell.imageView];
+    }
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
