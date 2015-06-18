@@ -2,6 +2,9 @@
 #import "OptionsViewController.h"
 
 @interface OptionsViewController ()
+
+@property (weak, nonatomic) IBOutlet UITextView *aboutTextView;
+
 @end
 
 @implementation OptionsViewController
@@ -13,7 +16,19 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+
+    NSMutableAttributedString *mutable = self.aboutTextView.attributedText.mutableCopy;
+    [mutable.mutableString replaceOccurrencesOfString:@"$VERSION" withString:version options:NSCaseInsensitiveSearch range:NSMakeRange(0, mutable.length)];
+    [mutable.mutableString replaceOccurrencesOfString:@"$BUILD" withString:build options:NSCaseInsensitiveSearch range:NSMakeRange(0, mutable.length)];
+    self.aboutTextView.attributedText = mutable;
+    self.aboutTextView.selectable = NO;
+}
+
+- (void)viewWillLayoutSubviews {
+    // Corrige a posição do scroll que é alterada quando atualiza o texto
+    [self.aboutTextView setContentOffset:CGPointZero animated:NO];
 }
 
 - (IBAction)didTapCloseButton:(id)sender {

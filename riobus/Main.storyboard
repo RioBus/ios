@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Delegate-->
+        <!--Map View Controller -->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="MapViewController" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" userLabel="Map View Controller " customClass="MapViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -199,10 +199,10 @@
             </objects>
             <point key="canvasLocation" x="633.5" y="-874.5"/>
         </scene>
-        <!--RioBus-->
+        <!--Options View Controller-->
         <scene sceneID="uLg-Wb-IE0">
             <objects>
-                <viewController id="TAr-9s-PmU" customClass="OptionsViewController" sceneMemberID="viewController">
+                <viewController id="TAr-9s-PmU" userLabel="Options View Controller" customClass="OptionsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kB7-cd-FK6"/>
                         <viewControllerLayoutGuide type="bottom" id="CKf-uL-pEv"/>
@@ -211,9 +211,63 @@
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-DC-OOX">
-                                <rect key="frame" x="16" y="0.0" width="343" height="553"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FWK-Od-CVk">
+                                <rect key="frame" x="13" y="565" width="95" height="30"/>
+                                <state key="normal" title="Limpar Cache">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapClearCacheButton:" destination="TAr-9s-PmU" eventType="touchUpInside" id="B5C-O8-CrB"/>
+                                </connections>
+                            </button>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-DC-OOX">
+                                <rect key="frame" x="13" y="5" width="348" height="552"/>
                                 <attributedString key="attributedText">
+                                    <fragment content="RioBus ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="40" name="HelveticaNeue-Bold"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="Versão $VERSION ($BUILD)">
+                                        <attributes>
+                                            <color key="NSColor" red="0.60838857323232332" green="0.60838857323232332" blue="0.60838857323232332" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <font key="NSOriginalFont" size="14" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
                                     <fragment content="O ">
                                         <attributes>
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -350,25 +404,16 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FWK-Od-CVk">
-                                <rect key="frame" x="16" y="565" width="96" height="30"/>
-                                <state key="normal" title="Limpar Cache">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="didTapClearCacheButton:" destination="TAr-9s-PmU" eventType="touchUpInside" id="B5C-O8-CrB"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="CKf-uL-pEv" firstAttribute="top" secondItem="FWK-Od-CVk" secondAttribute="bottom" constant="8" id="3uX-Au-X9b"/>
-                            <constraint firstAttribute="bottom" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="50" id="AZh-49-H1m"/>
-                            <constraint firstItem="YkP-DC-OOX" firstAttribute="leading" secondItem="3m3-QU-KYY" secondAttribute="leadingMargin" id="CcG-RH-fL9"/>
-                            <constraint firstItem="YkP-DC-OOX" firstAttribute="trailing" secondItem="3m3-QU-KYY" secondAttribute="trailingMargin" id="RnI-04-90n"/>
-                            <constraint firstItem="YkP-DC-OOX" firstAttribute="top" secondItem="kB7-cd-FK6" secondAttribute="bottom" id="cBJ-FM-Kez"/>
+                            <constraint firstItem="YkP-DC-OOX" firstAttribute="leading" secondItem="3m3-QU-KYY" secondAttribute="leadingMargin" constant="-3" id="CcG-RH-fL9"/>
+                            <constraint firstItem="CKf-uL-pEv" firstAttribute="top" secondItem="YkP-DC-OOX" secondAttribute="bottom" constant="46" id="UB7-Wx-2f6"/>
+                            <constraint firstItem="YkP-DC-OOX" firstAttribute="trailing" secondItem="3m3-QU-KYY" secondAttribute="trailingMargin" constant="2" id="coW-Kx-1NB"/>
                             <constraint firstItem="FWK-Od-CVk" firstAttribute="leading" secondItem="YkP-DC-OOX" secondAttribute="leading" id="iBX-tQ-GAt"/>
+                            <constraint firstItem="YkP-DC-OOX" firstAttribute="top" secondItem="kB7-cd-FK6" secondAttribute="bottom" constant="5" id="j7I-fv-aMv"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="RioBus" id="lds-IN-wQg">
@@ -378,6 +423,9 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="aboutTextView" destination="YkP-DC-OOX" id="zru-Vn-9Os"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sIx-zc-D3X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
