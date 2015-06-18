@@ -59,6 +59,7 @@ static const int recentItemsLimit = 10;
  */
 - (void)addToRecentTable:(NSString *)busLine {
     NSIndexPath *recentsIndexPath = [NSIndexPath indexPathForRow:0 inSection:recentsSectionIndex];
+    NSIndexPath *optionsIndexPath = [NSIndexPath indexPathForRow:0 inSection:optionsSectionIndex];
     [self beginUpdates];
     
     if ([self.recentLines containsObject:busLine]) {
@@ -72,6 +73,9 @@ static const int recentItemsLimit = 10;
     else if (![self.favoriteLine isEqualToString:busLine]) {
         [self.recentLines addObject:busLine];
         [self insertRowsAtIndexPaths:@[recentsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        if (self.recentLines.count == 1) {
+            [self insertRowsAtIndexPaths:@[optionsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
     
     [self endUpdates];
@@ -141,11 +145,12 @@ static const int recentItemsLimit = 10;
         // Atualizar view
         NSIndexPath *favoriteIndexPath = [NSIndexPath indexPathForRow:0 inSection:favoritesSectionIndex];
         NSIndexPath *recentsIndexPath = [NSIndexPath indexPathForRow:0 inSection:recentsSectionIndex];
+        NSIndexPath *optionsIndexPath = [NSIndexPath indexPathForRow:0 inSection:optionsSectionIndex];
 
         [self beginUpdates];
         [self moveRowAtIndexPath:favoriteIndexPath toIndexPath:recentsIndexPath];
         if (self.recentLines.count == 1) {
-            [self insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:optionsSectionIndex]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self insertRowsAtIndexPaths:@[optionsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         [self endUpdates];
         [self configureCell:[self cellForRowAtIndexPath:recentsIndexPath] forRowAtIndexPath:recentsIndexPath];
@@ -239,7 +244,7 @@ static const int recentItemsLimit = 10;
     }
     else if (indexPath.section == optionsSectionIndex) {
         cell.imageView.image = nil;
-        cell.textLabel.text = @"Limpar...";
+        cell.textLabel.text = @"Limpar pesquisas";
         cell.textLabel.textColor = [UIColor lightGrayColor];
     }
     cell.imageView.isAccessibilityElement = YES;

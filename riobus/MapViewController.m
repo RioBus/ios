@@ -9,7 +9,7 @@
 #import "BusLineBar.h"
 #import "riobus-Swift.h"
 
-@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, OptionsViewControllerDelegate, UISearchBarDelegate, BusLineBarDelegate>
+@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, UISearchBarDelegate, BusLineBarDelegate>
 
 @property (nonatomic) CLLocationManager *locationManager;
 @property (nonatomic) NSMutableDictionary *markerForOrder;
@@ -88,9 +88,6 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:)
                                                  name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkReachabilityDidChange:)
-                                                 name:AFNetworkingReachabilityDidChangeNotification
                                                object:nil];
 }
 
@@ -288,7 +285,16 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                      [self.busLineBar hide];
                                                                      [SVProgressHUD dismiss];
                                                                      
-                                                                     if (error.code != NSURLErrorCancelled) {                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Erro comunicando com o servidor" message:@"Não foi possível buscar a posição dos ônibus. Verifique sua conexão com a internet e tente novamente."];
+                                                                     if (error.code != NSURLErrorCancelled) {
+                                                                         PSTAlertController *alertController;
+                                                                         
+                                                                         if ([AFNetworkReachabilityManager sharedManager].isReachable) {
+                                                                             alertController = [PSTAlertController alertWithTitle:@"Erro comunicando com o servidor" message:@"Não foi possível buscar as posições dos ônibus. Por favor, tente novamente."];
+                                                                         }
+                                                                         else {
+                                                                             alertController = [PSTAlertController alertWithTitle:@"Sem conexão com a internet" message:@"Não foi possível buscar as posições dos ônibus pois parece não haver conexão com a internet."];
+                                                                         }
+                                                                         
                                                                          [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
                                                                          [alertController showWithSender:self controller:self animated:YES completion:nil];
                                                                      }
@@ -433,19 +439,6 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark Segue control
-
-/**
- * Prepara os segues disparados pelo Storyboard.
- */
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"ViewAboutScreen"]) {
-        OptionsViewController *optionsVC = segue.destinationViewController;
-        optionsVC.delegate = self;
-    }
-}
-
-
 #pragma mark Listeners de notificações
 
 /**
@@ -468,31 +461,6 @@ static const CGFloat cameraPaddingRight = 30.0;
 - (void)keyboardWillHide:(NSNotification *)sender {
     self.keyboardBottomConstraint.constant = self.suggestionTableBottomSpacing;
     [self.suggestionTable layoutIfNeeded];
-}
-
-- (void)networkReachabilityDidChange:(NSNotification *)notification {
-    NSLog(@"Rechability Changed: %@", notification.userInfo);
-    BOOL reachable;
-    NSInteger status = [[notification.userInfo objectForKey:@"AFNetworkReachabilityNotificationStatusItem"] integerValue];
-    switch(status) {
-        case AFNetworkReachabilityStatusNotReachable:
-            NSLog(@"No Internet Connection");
-            reachable = NO;
-            break;
-        case AFNetworkReachabilityStatusReachableViaWiFi:
-            NSLog(@"WIFI");
-            reachable = YES;
-            break;
-        case AFNetworkReachabilityStatusReachableViaWWAN:
-            NSLog(@"3G");
-            reachable = YES;
-            break;
-        default:
-            NSLog(@"Unkown network status");
-            reachable = NO;
-            break;
-    }
-    // do stuff with reachable
 }
 
 /**
