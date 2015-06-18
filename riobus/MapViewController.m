@@ -93,9 +93,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
-    
+        
     self.mapView.camera = [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
                                                       longitude:cameraDefaultLongitude
                                                            zoom:cameraDefaultZoomLevel];

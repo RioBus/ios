@@ -1,17 +1,7 @@
 #import <PSTAlertController/PSTAlertController.h>
 #import "OptionsViewController.h"
 
-@interface OptionsViewController ()
-
-@property (weak, nonatomic) IBOutlet UITextView *aboutTextView;
-
-@end
-
 @implementation OptionsViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -29,6 +19,16 @@
 - (void)viewWillLayoutSubviews {
     // Corrige a posição do scroll que é alterada quando atualiza o texto
     [self.aboutTextView setContentOffset:CGPointZero animated:NO];
+}
+
+- (IBAction)didTapFacebookButton:(id)sender {
+    NSURL *fbURL = [[NSURL alloc] initWithString:@"fb://profile/1408367169433222"];
+    // Verifica se o usuário possui o app do Facebook instalado. Caso contrário, abre a página normalmente no Safari.
+    if (![[UIApplication sharedApplication] canOpenURL:fbURL]) {
+        fbURL = [[NSURL alloc] initWithString:@"https://www.facebook.com/RioBusOficial"];
+    }
+    
+    [[UIApplication sharedApplication] openURL:fbURL];
 }
 
 - (IBAction)didTapCloseButton:(id)sender {

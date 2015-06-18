@@ -2,4 +2,6 @@
 
 @interface OptionsViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UITextView *aboutTextView;
+
 @end
