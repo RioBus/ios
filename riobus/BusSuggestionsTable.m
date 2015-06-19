@@ -80,7 +80,6 @@ static const int recentItemsLimit = 10;
     
     [self endUpdates];
     [self syncrhonizePreferences];
-
 }
 
 - (void)makeLineFavorite:(UITapGestureRecognizer *)gestureRecognizer {

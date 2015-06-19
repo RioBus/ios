@@ -145,9 +145,7 @@ static const CGFloat cameraPaddingRight = 30.0;
             [self searchForBusLine:self.favoriteLine];
         }
         else {
-            PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Você não possui nenhuma linha favorita." message:@"Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela."];
-            [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
-            [alertController showWithSender:self controller:self animated:YES completion:nil];
+            [PSTAlertController presentOkAlertWithTitle:@"Você não possui nenhuma linha favorita" andMessage:@"Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela."];
         }
     }
     else {
@@ -307,17 +305,12 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                      [SVProgressHUD dismiss];
                                                                      
                                                                      if (error.code != NSURLErrorCancelled) {
-                                                                         PSTAlertController *alertController;
-                                                                         
                                                                          if ([AFNetworkReachabilityManager sharedManager].isReachable) {
-                                                                             alertController = [PSTAlertController alertWithTitle:@"Erro comunicando com o servidor" message:@"Não foi possível buscar as posições dos ônibus. Por favor, tente novamente."];
+                                                                             [PSTAlertController presentOkAlertWithTitle:@"Erro comunicando com o servidor" andMessage:@"Não foi possível buscar as posições dos ônibus. Por favor, tente novamente."];
                                                                          }
                                                                          else {
-                                                                             alertController = [PSTAlertController alertWithTitle:@"Sem conexão com a internet" message:@"Não foi possível buscar as posições dos ônibus pois parece não haver conexão com a internet."];
+                                                                             [PSTAlertController presentOkAlertWithTitle:@"Sem conexão com a internet" andMessage:@"Não foi possível buscar as posições dos ônibus pois parece não haver conexão com a internet."];
                                                                          }
-                                                                         
-                                                                         [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
-                                                                         [alertController showWithSender:self controller:self animated:YES completion:nil];
                                                                      }
                                                                      
                                                                      self.busesData = nil;
@@ -340,9 +333,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                          [self.busLineBar hide];
                                                                          [SVProgressHUD dismiss];
                                                                          
-                                                                         PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@", self.searchedLine] message:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento ou não existir."];
-                                                                         [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
-                                                                         [alertController showWithSender:self controller:self animated:YES completion:nil];
+                                                                         [PSTAlertController presentOkAlertWithTitle:@"Nenhum ônibus encontrado para a linha %@" andMessage:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento ou não existir."];
                                                                          
                                                                          [self.updateTimer invalidate];
                                                                      }
@@ -444,9 +435,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (void)locationManager:(nonnull CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
-        PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Uso da localização não autorizado" message:@"Para alterar esta configuração no futuro, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e autorize o uso da sua localização."];
-        [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
-        [alertController showWithSender:self controller:self animated:YES completion:nil];
+        [PSTAlertController presentOkAlertWithTitle:@"Uso da localização não autorizado" andMessage:@"Para alterar esta configuração no futuro, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e autorize o uso da sua localização."];
     }
     else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
         [self.locationManager startUpdatingLocation];
