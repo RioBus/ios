@@ -54,7 +54,9 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.lastRequests = [[NSMutableArray alloc] init];
     
     self.mapView.mapType = kGMSTypeNormal;
-    self.mapView.myLocationEnabled = YES;
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        self.mapView.myLocationEnabled = YES;
+    }
     
     self.suggestionTable.searchInput = self.searchInput;
     self.suggestionTable.alpha = 0;
@@ -107,11 +109,32 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 - (IBAction)locationMenuButtonTapped:(UIButton *)sender {
+    // Verifica se o usuário possui os Serviços de Localização habilitados no aparelho
     if ([CLLocationManager locationServicesEnabled]) {
-        [self.locationManager startUpdatingLocation];
+        // Verifica se autorizou o uso da localização no app
+        CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+        switch (authorizationStatus) {
+            case kCLAuthorizationStatusAuthorizedWhenInUse:
+                [self.locationManager startUpdatingLocation];
+                break;
+            case kCLAuthorizationStatusNotDetermined:
+            case kCLAuthorizationStatusRestricted:
+                if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+                    [self.locationManager requestWhenInUseAuthorization];
+                }
+                else {
+                    [self.locationManager startUpdatingLocation];
+                }
+                break;
+            case kCLAuthorizationStatusDenied:
+                [PSTAlertController presentOkAlertWithTitle:@"Uso da localização não autorizado" andMessage:@"Você não autorizou o uso da sua localização para o RioBus. Para alterar esta configuração, vá em Ajustes > Rio Bus e habilite esta configuração."];
+                break;
+            default:
+                break;
+        }
     }
     else {
-        NSLog(@"Location services not enabled");
+        [PSTAlertController presentOkAlertWithTitle:@"Serviços de localização desabilitados" andMessage:@"O uso da sua localização está desativado nas configurações do seu aparelho. Você pode ativá-lo em Ajustes > Privacidade > Serv. Localização."];
     }
 }
 
@@ -415,13 +438,20 @@ static const CGFloat cameraPaddingRight = 30.0;
         _locationManager = [[CLLocationManager alloc] init];
         _locationManager.delegate = self;
         _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-        
-        // This checks for iOS 8. Without this guard the code will crash with "unknown selector" on iOS 7.
-        if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-            [_locationManager requestWhenInUseAuthorization];
-        }
     }
     return _locationManager;
+}
+
+- (void)locationManager:(nonnull CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
+        PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Uso da localização não autorizado" message:@"Para alterar esta configuração no futuro, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e autorize o uso da sua localização."];
+        [alertController addAction:[PSTAlertAction actionWithTitle:@"OK" style:PSTAlertActionStyleDefault handler:nil]];
+        [alertController showWithSender:self controller:self animated:YES completion:nil];
+    }
+    else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        [self.locationManager startUpdatingLocation];
+        self.mapView.myLocationEnabled = YES;
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {

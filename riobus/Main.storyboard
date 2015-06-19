@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8121.17" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8121.17" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8101.14"/>
@@ -21,11 +21,6 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lfw-bq-mSB" customClass="GMSMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="622"/>
                                 <gestureRecognizers/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="settings.compassButton" value="NO"/>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="settings.myLocationButton" value="NO"/>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="myLocationEnabled" value="YES"/>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="5Od-EK-s7Y"/>
                                 </connections>

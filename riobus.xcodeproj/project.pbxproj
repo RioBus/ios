@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -31,6 +31,7 @@
 		A37A3CEF1B1CD61E006A397C /* BusLineBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A37A3CEE1B1CD61E006A397C /* BusLineBar.m */; };
 		A3B925A21B290DE000BEFC9F /* UIButton+backgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */; };
 		A3B925A41B29166800BEFC9F /* UIColor+RioBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */; };
+		A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */; };
 		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
 /* End PBXBuildFile section */
 
@@ -94,6 +95,7 @@
 		A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+backgroundColor.swift"; sourceTree = "<group>"; };
 		A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RioBus.swift"; sourceTree = "<group>"; };
 		A3C41BE11B1A7B89004CB63A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PSTAlertController+okAlert.swift"; sourceTree = "<group>"; };
 		E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -240,6 +242,7 @@
 			children = (
 				A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */,
 				A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */,
+				A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -337,7 +340,7 @@
 				ORGANIZATIONNAME = "Rio Bus";
 				TargetAttributes = {
 					681A7F40196722530006C335 = {
-						DevelopmentTeam = SSYVN73XF2;
+						DevelopmentTeam = Z6F88ESBP4;
 					};
 					681A7F61196722540006C335 = {
 						TestTargetID = 681A7F40196722530006C335;
@@ -349,7 +352,7 @@
 				};
 			};
 			buildConfigurationList = 681A7F3C196722530006C335 /* Build configuration list for PBXProject "riobus" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -468,6 +471,7 @@
 				681A7F7C196727C60006C335 /* MapViewController.m in Sources */,
 				A3B925A41B29166800BEFC9F /* UIColor+RioBus.swift in Sources */,
 				681A7F55196722540006C335 /* AppDelegate.m in Sources */,
+				A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */,
 				681A7F51196722530006C335 /* main.m in Sources */,
 				639261511A06A88400B9A53C /* BusSuggestionsTable.m in Sources */,
 				681A7FA1196824FC0006C335 /* BusDataStore.m in Sources */,
@@ -583,7 +587,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
+				COPY_PHASE_STRIP = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
