@@ -62,7 +62,6 @@
 		681A7F46196722530006C335 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		681A7F48196722530006C335 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		681A7F4C196722530006C335 /* riobus-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "riobus-Info.plist"; sourceTree = "<group>"; };
-		681A7F4E196722530006C335 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		681A7F50196722530006C335 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		681A7F52196722540006C335 /* riobus-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "riobus-Prefix.pch"; sourceTree = "<group>"; };
 		681A7F53196722540006C335 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -71,7 +70,6 @@
 		681A7F62196722540006C335 /* riobusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = riobusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		681A7F63196722540006C335 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		681A7F6B196722540006C335 /* riobusTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "riobusTests-Info.plist"; sourceTree = "<group>"; };
-		681A7F6D196722540006C335 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		681A7F7A196727C60006C335 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		681A7F7B196727C60006C335 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		681A7F7D19672ACF0006C335 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -96,6 +94,8 @@
 		A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RioBus.swift"; sourceTree = "<group>"; };
 		A3C41BE11B1A7B89004CB63A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PSTAlertController+okAlert.swift"; sourceTree = "<group>"; };
+		A3EE10171B34927F0092BE99 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A3EE10181B34927F0092BE99 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -356,8 +356,8 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				pt,
 			);
 			mainGroup = 681A7F38196722530006C335;
 			productRefGroup = 681A7F42196722530006C335 /* Products */;
@@ -516,7 +516,7 @@
 		681A7F4D196722530006C335 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				681A7F4E196722530006C335 /* en */,
+				A3EE10171B34927F0092BE99 /* pt */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -524,7 +524,7 @@
 		681A7F6C196722540006C335 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				681A7F6D196722540006C335 /* en */,
+				A3EE10181B34927F0092BE99 /* pt */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

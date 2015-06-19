@@ -54,7 +54,8 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.lastRequests = [[NSMutableArray alloc] init];
     
     self.mapView.mapType = kGMSTypeNormal;
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse) {
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
+        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
         self.mapView.myLocationEnabled = YES;
     }
     
@@ -115,6 +116,7 @@ static const CGFloat cameraPaddingRight = 30.0;
         CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
         switch (authorizationStatus) {
             case kCLAuthorizationStatusAuthorizedWhenInUse:
+            case kCLAuthorizationStatusAuthorized:
                 [self.locationManager startUpdatingLocation];
                 break;
             case kCLAuthorizationStatusNotDetermined:
@@ -436,8 +438,9 @@ static const CGFloat cameraPaddingRight = 30.0;
 - (void)locationManager:(nonnull CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
         [PSTAlertController presentOkAlertWithTitle:@"Uso da localização não autorizado" andMessage:@"Para alterar esta configuração no futuro, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e autorize o uso da sua localização."];
+        self.mapView.myLocationEnabled = NO;
     }
-    else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+    else if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorized) {
         [self.locationManager startUpdatingLocation];
         self.mapView.myLocationEnabled = YES;
     }
