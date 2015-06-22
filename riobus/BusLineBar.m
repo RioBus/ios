@@ -135,7 +135,6 @@
         [self slideUpWithDestinationsVisible:YES];
     }
     else {
-        NSLog(@"Bus Line Bar: No destination information");
         [self slideUpWithDestinationsVisible:NO];
     }
 

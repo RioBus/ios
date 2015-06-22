@@ -335,7 +335,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                          [self.busLineBar hide];
                                                                          [SVProgressHUD dismiss];
                                                                          
-                                                                         [PSTAlertController presentOkAlertWithTitle:@"Nenhum ônibus encontrado para a linha %@" andMessage:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento ou não existir."];
+                                                                         [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@", self.searchedLine] andMessage:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento ou não existir."];
                                                                          
                                                                          [self.updateTimer invalidate];
                                                                      }
