@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8121.17" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8101.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BusLineBar">
             <connections>
+                <outlet property="avisoSentidoLabel" destination="glA-FY-doE" id="27y-7D-Y3Q"/>
                 <outlet property="busLineBar" destination="KYv-rm-N1k" id="3cQ-O9-wah"/>
                 <outlet property="directionBar" destination="qnm-aE-a2P" id="Ku8-Rc-roh"/>
+                <outlet property="directionButton" destination="uUW-Bq-UfH" id="FVR-Rj-De6"/>
                 <outlet property="leftDestinationButton" destination="Eta-JV-XkO" id="ReR-Cz-rlL"/>
                 <outlet property="lineNameLabel" destination="3Yr-es-i85" id="jx6-tD-f2m"/>
                 <outlet property="rightDestinationButton" destination="VwV-WY-5PP" id="rEV-Ot-Pon"/>
@@ -37,7 +39,7 @@
                                 <constraint firstAttribute="height" constant="124" id="vB6-0g-nz5"/>
                             </constraints>
                         </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="123 - Origem X Destino" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Yr-es-i85" userLabel="Line Name">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="123 - Origem X Destino" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Yr-es-i85" userLabel="Line Name">
                             <rect key="frame" x="123" y="50" width="189" height="22"/>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -82,12 +84,20 @@
                                         <action selector="didTapRightDestinationButton:" destination="-1" eventType="touchUpInside" id="L6h-2e-LWK"/>
                                     </connections>
                                 </button>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sentido não informado pela Prefeitura" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="glA-FY-doE" userLabel="Aviso sentido">
+                                    <rect key="frame" x="72" y="8" width="291" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" red="0.14117647059999999" green="0.49803921569999998" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="tintColor" red="0.31372549020000001" green="0.65490196079999996" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstItem="Eta-JV-XkO" firstAttribute="leading" secondItem="qnm-aE-a2P" secondAttribute="leading" constant="20" id="10t-Jn-5Zp"/>
                                 <constraint firstAttribute="trailing" secondItem="VwV-WY-5PP" secondAttribute="trailing" constant="20" id="583-Sb-1aD"/>
+                                <constraint firstAttribute="centerX" secondItem="glA-FY-doE" secondAttribute="centerX" constant="0.5" id="9qw-Ql-NJ9"/>
+                                <constraint firstAttribute="centerY" secondItem="glA-FY-doE" secondAttribute="centerY" constant="1.5" id="BmB-Nx-u2X"/>
                                 <constraint firstAttribute="centerY" secondItem="VwV-WY-5PP" secondAttribute="centerY" id="EOi-jY-LBU"/>
                                 <constraint firstItem="uUW-Bq-UfH" firstAttribute="leading" secondItem="Eta-JV-XkO" secondAttribute="trailing" constant="8" id="J01-fs-UXR"/>
                                 <constraint firstAttribute="centerX" secondItem="uUW-Bq-UfH" secondAttribute="centerX" id="JIB-iz-YR8"/>
@@ -157,4 +167,9 @@
         <image name="BusLineBar" width="375" height="124"/>
         <image name="DirectionButton" width="15" height="18"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

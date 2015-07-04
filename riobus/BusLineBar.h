@@ -35,7 +35,6 @@
 - (BOOL)selectDestination:(NSString *)destination;
 
 @property (weak, nonatomic) IBOutlet UILabel *lineNameLabel;
-@property (weak, nonatomic) IBOutlet UIButton *leftDestinationLabel;
 @property (weak, nonatomic) IBOutlet UIButton *rightDestinationButton;
 @property (weak, nonatomic) IBOutlet UIButton *leftDestinationButton;
 @property id<BusLineBarDelegate> delegate;

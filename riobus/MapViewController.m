@@ -114,11 +114,6 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (IBAction)informationMenuButtonTapped:(UIButton *)sender {
     [self performSegueWithIdentifier:@"ViewAboutScreen" sender:self];
-    
-    [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UI"
-                                                               action:@"Clicou menu info"
-                                                                label:@""
-                                                                value:nil] build]];
 }
 
 - (IBAction)locationMenuButtonTapped:(UIButton *)sender {
@@ -154,21 +149,18 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (IBAction)favoriteMenuButtonTapped:(UIButton *)sender {
     if (!self.favoriteLineMode) {
-        NSString *trackerLabel;
         // Se o usuário definiu uma linha favorita
         if (self.favoriteLine) {
             [self searchForBusLine:self.favoriteLine];
-            trackerLabel = self.favoriteLine;
+            
+            [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UI"
+                                                                       action:@"Clicou menu favorito"
+                                                                        label:[NSString stringWithFormat:@"Pesquisou linha favorita %@", self.favoriteLine]
+                                                                        value:nil] build]];
         }
         else {
             [PSTAlertController presentOkAlertWithTitle:@"Você não possui nenhuma linha favorita" andMessage:@"Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela."];
-            trackerLabel = @"Não definido";
         }
-        
-        [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UI"
-                                                                   action:@"Clicou menu favorito"
-                                                                    label:trackerLabel
-                                                                    value:nil] build]];
     }
     else {
         [self clearSearch];

@@ -5,6 +5,8 @@
 @property (nonatomic, strong) UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIView *busLineBar;
 @property (weak, nonatomic) IBOutlet UIView *directionBar;
+@property (weak, nonatomic) IBOutlet UILabel *avisoSentidoLabel;
+@property (weak, nonatomic) IBOutlet UIButton *directionButton;
 @property (nonatomic, strong) NSMutableArray *customConstraints;
 
 @end
@@ -75,22 +77,27 @@
     [super updateConstraints];
 }
 
-- (void)slideUpWithDestinationsVisible:(BOOL)destinationsVisible {
+- (void)slideUpWithDestinationsAvailable:(BOOL)destinationsAvailable {
     self.busLineBar.alpha = 1.0;
     self.lineNameLabel.alpha = 1.0;
 
-    CGFloat finalY;
-    if (destinationsVisible) {
-        finalY = self.containerView.frame.origin.y;
+    if (destinationsAvailable) {
+        self.avisoSentidoLabel.hidden = YES;
+        self.directionButton.hidden = NO;
+        self.leftDestinationButton.hidden = NO;
+        self.rightDestinationButton.hidden = NO;
     }
     else {
-        finalY = self.containerView.frame.origin.y + self.directionBar.frame.size.height;
+        self.avisoSentidoLabel.hidden = NO;
+        self.directionButton.hidden = YES;
+        self.leftDestinationButton.hidden = YES;
+        self.rightDestinationButton.hidden = YES;
     }
     
     [UIView animateWithDuration:0.1 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.userInteractionEnabled = YES;
         self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
-                                           finalY,
+                                           self.containerView.frame.origin.y,
                                            self.busLineBar.frame.size.width,
                                            self.busLineBar.frame.size.height);
     } completion:nil];
@@ -132,10 +139,10 @@
     if (places.count == 2) {
         [self.leftDestinationButton setTitle:places[0] forState:UIControlStateNormal];
         [self.rightDestinationButton setTitle:places[1] forState:UIControlStateNormal];
-        [self slideUpWithDestinationsVisible:YES];
+        [self slideUpWithDestinationsAvailable:YES];
     }
     else {
-        [self slideUpWithDestinationsVisible:NO];
+        [self slideUpWithDestinationsAvailable:NO];
     }
 
 }
