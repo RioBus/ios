@@ -1,3 +1,4 @@
+#import <Google/Analytics.h>
 #import <PSTAlertController/PSTAlertController.h>
 #import "OptionsViewController.h"
 
@@ -14,6 +15,10 @@
     [mutable.mutableString replaceOccurrencesOfString:@"$BUILD" withString:build options:NSCaseInsensitiveSearch range:NSMakeRange(0, mutable.length)];
     self.aboutTextView.attributedText = mutable;
     self.aboutTextView.selectable = NO;
+    
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName value:@"Informações"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)viewWillLayoutSubviews {

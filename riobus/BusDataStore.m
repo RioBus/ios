@@ -75,7 +75,6 @@ static const NSString *host = @"http://rest.riob.us";
         }];
         
         [operation start];
-        
     }
     else {
         NSLog(@"Itinerário para a linha %@ encontrado no cache.", webSafeNumber);

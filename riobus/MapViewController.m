@@ -1,4 +1,5 @@
 #import <GoogleMaps/GoogleMaps.h>
+#import <Google/Analytics.h>
 #import <PSTAlertController.h>
 #import <SVProgressHUD.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
@@ -100,6 +101,10 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.mapView.camera = [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
                                                       longitude:cameraDefaultLongitude
                                                            zoom:cameraDefaultZoomLevel];
+    
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName value:@"Mapa"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 

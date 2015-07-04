@@ -2,16 +2,27 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import <Google/Analytics.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Configura chave do Google Maps
+    // Configure Google Maps
     [GMSServices provideAPIKey:@"AIzaSyAOXbZQbs0_scRqMWj83eDc8snV54yfF5I"];
     
-    // Configura AFNetworking
+    // Configure AFNetworking
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    
+    // Configure Google Analytics
+    NSError *configureError;
+    [[GGLContext sharedInstance] configureWithError:&configureError];
+    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+    
+    // Optional: configure GAI options.
+    GAI *gai = [GAI sharedInstance];
+    gai.trackUncaughtExceptions = YES;  // report uncaught exceptions
+    gai.logger.logLevel = kGAILogLevelWarning;  // TODO: remove before app release
     
     return YES;
 }

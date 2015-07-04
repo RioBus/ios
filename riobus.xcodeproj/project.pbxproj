@@ -23,6 +23,7 @@
 		681A7F9E196824890006C335 /* BusData.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F9D196824890006C335 /* BusData.m */; };
 		681A7FA1196824FC0006C335 /* BusDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA0196824FC0006C335 /* BusDataStore.m */; };
 		681A7FA819684A6C0006C335 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA719684A6C0006C335 /* OptionsViewController.m */; };
+		A3174F961B48706F000635B6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A3174F951B48706F000635B6 /* GoogleService-Info.plist */; };
 		A31D90EE1AFA950E00AD3B35 /* BusDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */; };
 		A31D90F51AFAADE100AD3B35 /* BusDataStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */; };
 		A35072F91B2D021200F91A2F /* RioBus_UI_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35072F81B2D021200F91A2F /* RioBus_UI_Tests.swift */; };
@@ -80,6 +81,7 @@
 		681A7FA619684A6C0006C335 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		681A7FA719684A6C0006C335 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		8D9CA8F077F246CFBA653042 /* libPods-riobus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-riobus.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3174F951B48706F000635B6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataTests.m; sourceTree = "<group>"; };
 		A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataStoreTests.m; sourceTree = "<group>"; };
 		A35072F61B2D021200F91A2F /* RioBus UI Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RioBus UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -190,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				681A7F4C196722530006C335 /* riobus-Info.plist */,
+				A3174F951B48706F000635B6 /* GoogleService-Info.plist */,
 				681A7F4D196722530006C335 /* InfoPlist.strings */,
 				681A7F50196722530006C335 /* main.m */,
 				681A7F52196722540006C335 /* riobus-Prefix.pch */,
@@ -378,6 +381,7 @@
 			files = (
 				A37A3CEA1B1CD425006A397C /* BusLineBar.xib in Resources */,
 				681A7F5D196722540006C335 /* Images.xcassets in Resources */,
+				A3174F961B48706F000635B6 /* GoogleService-Info.plist in Resources */,
 				681A7F4F196722530006C335 /* InfoPlist.strings in Resources */,
 				A37A3CEC1B1CD55C006A397C /* Main.storyboard in Resources */,
 			);
