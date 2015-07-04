@@ -121,7 +121,7 @@
 }
 
 - (void)appearWithBusLine:(NSDictionary *)busLineInformation {
-    if (busLineInformation[@"name"]) {
+    if (busLineInformation[@"name"] && ![busLineInformation[@"name"] isEqualToString:@""]) {
         self.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLineInformation[@"line"], busLineInformation[@"name"]];
     }
     else {

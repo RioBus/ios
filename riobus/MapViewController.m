@@ -25,6 +25,7 @@
 @property (nonatomic) BOOL favoriteLineMode;
 @property (nonatomic) CGFloat suggestionTableBottomSpacing;
 @property (nonatomic) BOOL searchBarShouldBeginEditing;
+@property (nonatomic) id<GAITracker> tracker;
 
 @property (weak, nonatomic) IBOutlet GMSMapView *mapView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchInput;
@@ -81,6 +82,8 @@ static const CGFloat cameraPaddingRight = 30.0;
     [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.8]];
     [SVProgressHUD setForegroundColor:[UIColor appDarkBlueColor]];
     
+    self.tracker = [[GAI sharedInstance] defaultTracker];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:)
                                                  name:UIKeyboardWillShowNotification
                                                object:nil];
@@ -102,9 +105,8 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                       longitude:cameraDefaultLongitude
                                                            zoom:cameraDefaultZoomLevel];
     
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker set:kGAIScreenName value:@"Mapa"];
-    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+    [self.tracker set:kGAIScreenName value:@"Mapa"];
+    [self.tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 
@@ -112,6 +114,11 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (IBAction)informationMenuButtonTapped:(UIButton *)sender {
     [self performSegueWithIdentifier:@"ViewAboutScreen" sender:self];
+    
+    [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UI"
+                                                               action:@"Clicou menu info"
+                                                                label:@""
+                                                                value:nil] build]];
 }
 
 - (IBAction)locationMenuButtonTapped:(UIButton *)sender {
@@ -147,17 +154,26 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (IBAction)favoriteMenuButtonTapped:(UIButton *)sender {
     if (!self.favoriteLineMode) {
+        NSString *trackerLabel;
         // Se o usuário definiu uma linha favorita
         if (self.favoriteLine) {
             [self searchForBusLine:self.favoriteLine];
+            trackerLabel = self.favoriteLine;
         }
         else {
             [PSTAlertController presentOkAlertWithTitle:@"Você não possui nenhuma linha favorita" andMessage:@"Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela."];
+            trackerLabel = @"Não definido";
         }
+        
+        [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UI"
+                                                                   action:@"Clicou menu favorito"
+                                                                    label:trackerLabel
+                                                                    value:nil] build]];
     }
     else {
         [self clearSearch];
     }
+    
 }
 
 
@@ -230,7 +246,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     // Set new search parameters
     self.searchedLine = busLine;
     self.searchInput.text = busLine;
-    self.searchedDirection = nil; // TODO: self.searchDirection = última direção pesquisada na linha
+    self.searchedDirection = nil;
     [self.busLineBar selectDestination:nil];
     self.favoriteLineMode = [busLine isEqualToString:self.favoriteLine];
     
@@ -287,8 +303,11 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                          [self.mapView animateToCameraPosition: [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
                                                                                                                             longitude:cameraDefaultLongitude
                                                                                                                                  zoom:cameraDefaultZoomLevel]];
-                                                         
-                                                         NSLog(@"ERRO: Nenhuma rota para exibir");
+                                                                                                                  
+                                                         [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                                                                    action:@"Erro atualizando BusData"
+                                                                                                                     label:[NSString stringWithFormat:@"Itinerário indisponível (%@)", self.searchedLine]
+                                                                                                                     value:nil] build]];
                                                      }
                                                  }];
 }
@@ -314,9 +333,19 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                      if (error.code != NSURLErrorCancelled) {
                                                                          if ([AFNetworkReachabilityManager sharedManager].isReachable) {
                                                                              [PSTAlertController presentOkAlertWithTitle:@"Erro comunicando com o servidor" andMessage:@"Não foi possível buscar as posições dos ônibus. Por favor, tente novamente."];
+                                                                             
+                                                                             [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                                                                                        action:@"Erro atualizando BusData"
+                                                                                                                                         label:@"Erro comunicando com o servidor"
+                                                                                                                                         value:nil] build]];
                                                                          }
                                                                          else {
                                                                              [PSTAlertController presentOkAlertWithTitle:@"Sem conexão com a internet" andMessage:@"Não foi possível buscar as posições dos ônibus pois parece não haver conexão com a internet."];
+                                                                             
+                                                                             [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                                                                                        action:@"Erro atualizando BusData"
+                                                                                                                                         label:@"Sem conexão com a internet"
+                                                                                                                                         value:nil] build]];
                                                                          }
                                                                      }
                                                                      
@@ -341,6 +370,11 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                          [SVProgressHUD dismiss];
                                                                          
                                                                          [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@", self.searchedLine] andMessage:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento ou não existir."];
+                                                                         
+                                                                         [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                                                                                    action:@"Erro atualizando BusData"
+                                                                                                                                     label:[NSString stringWithFormat:@"Nenhum ônibus encontrado (%@)", self.searchedLine]
+                                                                                                                                     value:nil] build]];
                                                                          
                                                                          [self.updateTimer invalidate];
                                                                      }
@@ -393,11 +427,13 @@ static const CGFloat cameraPaddingRight = 30.0;
     NSCharacterSet *validCharacters = [NSCharacterSet alphanumericCharacterSet];
     NSString *escapedBusLineString = [[searchBar.text.uppercaseString componentsSeparatedByCharactersInSet:[validCharacters invertedSet]] componentsJoinedByString:@""];
     
-    // Save search to history
-    [self.suggestionTable addToRecentTable:escapedBusLineString];
+    if (![escapedBusLineString isEqualToString:@""]) {
+        // Save search to history
+        [self.suggestionTable addToRecentTable:escapedBusLineString];
 
-    // Search bus line
-    [self searchForBusLine:escapedBusLineString];
+        // Search bus line
+        [self searchForBusLine:escapedBusLineString];
+    }
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
@@ -443,6 +479,12 @@ static const CGFloat cameraPaddingRight = 30.0;
 - (void)locationManager:(nonnull CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
         [PSTAlertController presentOkAlertWithTitle:@"Uso da localização não autorizado" andMessage:@"Para alterar esta configuração no futuro, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e autorize o uso da sua localização."];
+        
+        [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                   action:@"Usuário não atualizou localização"
+                                                                    label:@""
+                                                                    value:nil] build]];
+        
         self.mapView.myLocationEnabled = NO;
     }
     else if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorized) {
