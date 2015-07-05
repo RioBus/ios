@@ -60,25 +60,32 @@ static const int recentItemsLimit = 10;
 - (void)addToRecentTable:(NSString *)busLine {
     NSIndexPath *recentsIndexPath = [NSIndexPath indexPathForRow:0 inSection:recentsSectionIndex];
     NSIndexPath *optionsIndexPath = [NSIndexPath indexPathForRow:0 inSection:optionsSectionIndex];
-    [self beginUpdates];
     
-    if ([self.recentLines containsObject:busLine]) {
-        NSInteger index = [self.recentLines indexOfObject:busLine];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.recentLines.count - index - 1 inSection:recentsSectionIndex];
-        [self.recentLines removeObject:busLine];
-        [self.recentLines addObject:busLine];
+    @try {
+        [self beginUpdates];
         
-        [self moveRowAtIndexPath:indexPath toIndexPath:recentsIndexPath];
-    }
-    else if (![self.favoriteLine isEqualToString:busLine]) {
-        [self.recentLines addObject:busLine];
-        [self insertRowsAtIndexPaths:@[recentsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        if (self.recentLines.count == 1) {
-            [self insertRowsAtIndexPaths:@[optionsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        if ([self.recentLines containsObject:busLine]) {
+            NSInteger index = [self.recentLines indexOfObject:busLine];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.recentLines.count - index - 1 inSection:recentsSectionIndex];
+            [self.recentLines removeObject:busLine];
+            [self.recentLines addObject:busLine];
+            
+            [self moveRowAtIndexPath:indexPath toIndexPath:recentsIndexPath];
         }
+        else if (![self.favoriteLine isEqualToString:busLine]) {
+            [self.recentLines addObject:busLine];
+            [self insertRowsAtIndexPaths:@[recentsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            if (self.recentLines.count == 1) {
+                [self insertRowsAtIndexPaths:@[optionsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+        }
+        
+        [self endUpdates];
+    }
+    @catch (NSException *e) {
+        NSLog(@"Exception atualizando tabela");
     }
     
-    [self endUpdates];
     [self syncrhonizePreferences];
 }
 

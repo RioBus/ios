@@ -52,6 +52,11 @@
 - (void)clearCache {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Rotas de Onibus"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[[GAI sharedInstance] defaultTracker] send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                               action:@"Usuário limpou o cache"
+                                                                label:@""
+                                                                value:nil] build]];
 }
 
 @end
