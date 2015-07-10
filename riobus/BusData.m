@@ -67,7 +67,7 @@ static const int hoursInDay = 24;
     if ([type isEqualToString:@"segundo"] || ([type isEqualToString:@"minuto"] && value == 1)) {
         return @"agora";
     }
-    return [NSString stringWithFormat:@"há %ld %@", (long)value, (value == 1 ? type : [type stringByAppendingString:@"s"])];
+    return [NSString stringWithFormat:@"%ld %@ atrás", (long)value, (value == 1 ? type : [type stringByAppendingString:@"s"])];
 }
 
 + (NSString *)humanReadableStringForSeconds:(NSInteger)seconds {

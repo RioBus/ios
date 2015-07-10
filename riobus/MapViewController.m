@@ -395,9 +395,12 @@ static const CGFloat cameraPaddingRight = 30.0;
                 
             }
             
-            marker.title = busData.destination ? [NSString stringWithFormat:@"%@ - %@", busData.order, busData.destination] : busData.order;
+            marker.title = busData.destination ? [NSString stringWithFormat:@"%@ → %@", busData.order, busData.destination] : busData.order;
             marker.snippet = [NSString stringWithFormat:@"Velocidade: %.0f km/h\nAtualizado %@", busData.velocity.doubleValue, busData.humanReadableDelay];
             marker.position = busData.location.coordinate;
+            if (busData.delayInMinutes >= 5) {
+                marker.opacity = 0.5;
+            }
         }
         // Se o ônibus for para a direção contrária e já estiver no mapa
         else if (marker) {
