@@ -98,6 +98,7 @@
 		A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RioBus.swift"; sourceTree = "<group>"; };
 		A3C19DC41B5452D70085B897 /* ReportDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportDetailViewController.h; sourceTree = "<group>"; };
 		A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportDetailViewController.m; sourceTree = "<group>"; };
+		A3C19DC71B545D8E0085B897 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; name = .travis.yml; path = ../.travis.yml; sourceTree = "<group>"; };
 		A3C41BE11B1A7B89004CB63A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A3D3D6931B500E4200D9A83C /* ReportProblemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportProblemViewController.h; sourceTree = "<group>"; };
 		A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportProblemViewController.m; sourceTree = "<group>"; };
@@ -207,6 +208,7 @@
 				681A7F50196722530006C335 /* main.m */,
 				681A7F52196722540006C335 /* riobus-Prefix.pch */,
 				A3B925A01B290DDF00BEFC9F /* riobus-Bridging-Header.h */,
+				A3C19DC71B545D8E0085B897 /* .travis.yml */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
