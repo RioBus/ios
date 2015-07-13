@@ -1,12 +1,5 @@
-//
-//  ReportProblemViewController.m
-//  riobus
-//
-//  Created by Mario Cecchi on 7/10/15.
-//  Copyright (c) 2015 Rio Bus. All rights reserved.
-//
-
 #import "ReportProblemViewController.h"
+#import "ReportDetailViewController.h"
 
 @interface ReportProblemViewController ()
 
@@ -19,22 +12,33 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.problems = @[@"Problema no ônibus", @"Localização no mapa errada", @"Itinerário errado", @"Problemas com o app", @"Outros"];
-    
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.problems = @[@{ @"descricao": @"Não encontrei uma linha", @"tipo": @"prefeitura" },
+                      @{ @"descricao": @"Localização incorreta no mapa", @"tipo": @"prefeitura" },
+                      @{ @"descricao": @"Itinerário incorreto", @"tipo": @"prefeitura" },
+                      @{ @"descricao": @"Problema no ônibus", @"tipo": @"prefeitura" },
+                      @{ @"descricao": @"Problemas com o aplicativo", @"tipo": @"app" },
+                      @{ @"descricao": @"Outro", @"tipo": @"outro" }];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)didTapCloseButton:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"ShowReportDetail"]) {
+        ReportDetailViewController *detailViewController = segue.destinationViewController;
+
+        NSIndexPath *problemIndexPath = [self.tableView indexPathForSelectedRow];
+        detailViewController.problem = self.problems[problemIndexPath.row];
+    }
 }
 
 
 #pragma mark UITableViewDataSource methods
-
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-//    return 1;
-//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.problems.count;
@@ -48,7 +52,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    cell.textLabel.text = self.problems[indexPath.row];
+    cell.textLabel.text = self.problems[indexPath.row][@"descricao"];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
@@ -80,14 +84,12 @@
     lblSectionName.numberOfLines = 0;
     lblSectionName.lineBreakMode = NSLineBreakByWordWrapping;
     lblSectionName.textColor = [UIColor colorWithWhite:0.36 alpha:1.0];
+    lblSectionName.backgroundColor = self.tableView.backgroundColor;
 
     return lblSectionName;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-
+    [self performSegueWithIdentifier:@"ShowReportDetail" sender:self];
 }
-
 @end

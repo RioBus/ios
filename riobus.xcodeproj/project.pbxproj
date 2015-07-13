@@ -32,6 +32,7 @@
 		A37A3CEF1B1CD61E006A397C /* BusLineBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A37A3CEE1B1CD61E006A397C /* BusLineBar.m */; };
 		A3B925A21B290DE000BEFC9F /* UIButton+backgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */; };
 		A3B925A41B29166800BEFC9F /* UIColor+RioBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */; };
+		A3C19DC61B5452D70085B897 /* ReportDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */; };
 		A3D3D6951B500E4200D9A83C /* ReportProblemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */; };
 		A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */; };
 		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
@@ -95,6 +96,8 @@
 		A3B925A01B290DDF00BEFC9F /* riobus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "riobus-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+backgroundColor.swift"; sourceTree = "<group>"; };
 		A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RioBus.swift"; sourceTree = "<group>"; };
+		A3C19DC41B5452D70085B897 /* ReportDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportDetailViewController.h; sourceTree = "<group>"; };
+		A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportDetailViewController.m; sourceTree = "<group>"; };
 		A3C41BE11B1A7B89004CB63A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A3D3D6931B500E4200D9A83C /* ReportProblemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportProblemViewController.h; sourceTree = "<group>"; };
 		A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportProblemViewController.m; sourceTree = "<group>"; };
@@ -187,6 +190,8 @@
 				681A7FA719684A6C0006C335 /* OptionsViewController.m */,
 				A3D3D6931B500E4200D9A83C /* ReportProblemViewController.h */,
 				A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */,
+				A3C19DC41B5452D70085B897 /* ReportDetailViewController.h */,
+				A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */,
 				681A7F5C196722540006C335 /* Images.xcassets */,
 				681A7F4B196722530006C335 /* Supporting Files */,
 			);
@@ -483,6 +488,7 @@
 				681A7F55196722540006C335 /* AppDelegate.m in Sources */,
 				A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */,
 				681A7F51196722530006C335 /* main.m in Sources */,
+				A3C19DC61B5452D70085B897 /* ReportDetailViewController.m in Sources */,
 				639261511A06A88400B9A53C /* BusSuggestionsTable.m in Sources */,
 				681A7FA1196824FC0006C335 /* BusDataStore.m in Sources */,
 				A3B925A21B290DE000BEFC9F /* UIButton+backgroundColor.swift in Sources */,

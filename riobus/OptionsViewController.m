@@ -26,10 +26,6 @@
     [self.aboutTextView setContentOffset:CGPointZero animated:NO];
 }
 
-- (IBAction)didTapReportButton:(id)sender {
-    
-}
-
 - (IBAction)didTapFacebookButton:(id)sender {
     NSURL *fbURL = [[NSURL alloc] initWithString:@"fb://profile/1408367169433222"];
     // Verifica se o usuário possui o app do Facebook instalado. Caso contrário, abre a página normalmente no Safari.

@@ -450,6 +450,14 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eIo-3m-jYP" id="T3o-mR-zyn">
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Problema" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vW5-0D-yiR">
+                                            <rect key="frame" x="15" y="11" width="74" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -458,11 +466,72 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                             <outlet property="delegate" destination="37H-yd-k75" id="o5w-nU-9pe"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Reportar problema" id="jYU-sD-bg8"/>
+                    <navigationItem key="navigationItem" title="Reportar problema" id="jYU-sD-bg8">
+                        <barButtonItem key="backBarButtonItem" title="Problemas" id="eoH-5l-4fX"/>
+                        <barButtonItem key="rightBarButtonItem" title="Fechar" id="uZp-xA-bqh">
+                            <connections>
+                                <action selector="didTapCloseButton:" destination="37H-yd-k75" id="7CU-uD-xfF"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="9UO-CH-7LB" kind="push" identifier="ShowReportDetail" id="rmR-3i-LRY"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rSy-zn-Jmg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1142.5" y="-55.5"/>
+            <point key="canvasLocation" x="1174.5" y="-55.5"/>
+        </scene>
+        <!--Problema-->
+        <scene sceneID="u3n-cN-Kmr">
+            <objects>
+                <viewController id="9UO-CH-7LB" customClass="ReportDetailViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bv4-jw-va6"/>
+                        <viewControllerLayoutGuide type="bottom" id="lPM-0z-Zjn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Lb1-zG-MSk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TtM-oB-F7b">
+                                <rect key="frame" x="13" y="5" width="344" height="590"/>
+                                <inset key="scrollIndicatorInsets" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
+                                <mutableString key="text">Este problema é de responsabilidade da Prefeitura do Rio de Janeiro e da FETRANSPOR.
+
+O RioBus funciona apenas como um ponto de acesso às informações de ônibus fornecidas pela própria Prefeitura, que é responsável pela corretude dos dados dos ônibus e a qualidade dos serviços de transporte oferecidos.
+
+Se você não conseguiu encontrar os ônibus de uma linha, pode ser que ela não seja monitorada pela Prefeitura ou que o serviço esteja temporariamente com problemas.
+
+Você pode enviar uma reclamação sobre seu problema através do 1746 (http://1746.rio), serviço da Prefeitura, ou pelo site da FETRANSPOR (http://fetranspor.com.br).</mutableString>
+                                <color key="textColor" red="0.36470588240000001" green="0.36470588240000001" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.90588235289999997" green="0.90588235289999997" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="TtM-oB-F7b" secondAttribute="trailing" constant="2" id="BWf-Ij-RGA"/>
+                            <constraint firstItem="TtM-oB-F7b" firstAttribute="leading" secondItem="Lb1-zG-MSk" secondAttribute="leadingMargin" constant="-3" id="V9l-hc-ZVQ"/>
+                            <constraint firstItem="TtM-oB-F7b" firstAttribute="top" secondItem="bv4-jw-va6" secondAttribute="bottom" constant="5" id="dhW-oo-aRC"/>
+                            <constraint firstItem="lPM-0z-Zjn" firstAttribute="top" secondItem="TtM-oB-F7b" secondAttribute="bottom" constant="8" symbolic="YES" id="zuK-iq-WTn"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Problema" id="lL4-Zr-HuO">
+                        <barButtonItem key="rightBarButtonItem" title="Fechar" id="2ms-xF-zH4">
+                            <connections>
+                                <action selector="didTapCloseButton:" destination="9UO-CH-7LB" id="f0a-Xd-syk"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="detailTextView" destination="TtM-oB-F7b" id="9T5-Jd-1Ls"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dnW-yf-6H1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1655.5" y="-55.5"/>
         </scene>
     </scenes>
     <resources>
