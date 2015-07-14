@@ -22,7 +22,7 @@
 @property (nonatomic) GMSCoordinateBounds *mapBounds;
 @property (nonatomic) NSMutableArray *lastRequests;
 @property (nonatomic, readonly, copy) NSString *favoriteLine;
-@property (nonatomic) BOOL favoriteLineMode;
+@property (nonatomic, readonly) BOOL favoriteLineMode;
 @property (nonatomic) CGFloat suggestionTableBottomSpacing;
 @property (nonatomic) BOOL searchBarShouldBeginEditing;
 @property (nonatomic) id<GAITracker> tracker;
@@ -35,6 +35,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *locationMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *informationMenuButton;
+@property (weak, nonatomic) IBOutlet UIButton *arrowUpMenuButton;
 
 @end
 
@@ -67,7 +68,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.informationMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
     [self.informationMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
     [self.favoriteMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
-    [self.favoriteMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateSelected];
+//    [self.favoriteMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateSelected];
     [self.favoriteMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
     [self.locationMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
     [self.locationMenuButton setBackgroundTintColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
@@ -147,8 +148,8 @@ static const CGFloat cameraPaddingRight = 30.0;
     }
 }
 
-- (IBAction)favoriteMenuButtonTapped:(UIButton *)sender {
-    if (!self.favoriteLineMode) {
+- (IBAction)rightMenuButtonTapped:(UIButton *)sender {
+    if (!self.searchedLine) {
         // Se o usuário definiu uma linha favorita
         if (self.favoriteLine) {
             [self searchForBusLine:self.favoriteLine];
@@ -163,9 +164,13 @@ static const CGFloat cameraPaddingRight = 30.0;
         }
     }
     else {
-        [self clearSearch];
+        [self.busLineBar appearWithBusLine:self.busLineInformation];
     }
     
+}
+
+- (IBAction)arrowMenuButtonTapped:(UIButton *)sender {
+    [self.busLineBar appearWithBusLine:self.busLineInformation];
 }
 
 
@@ -175,9 +180,23 @@ static const CGFloat cameraPaddingRight = 30.0;
     return [[NSUserDefaults standardUserDefaults] objectForKey:@"favorite_line"];
 }
 
-- (void)setFavoriteLineMode:(BOOL)enabled {
-    _favoriteLineMode = enabled;
-    self.favoriteMenuButton.selected = enabled;
+- (BOOL)favoriteLineMode {
+    return [self.searchedLine isEqualToString:self.favoriteLine];
+}
+
+- (void)setSearchedLine:(NSString *)searchedLine {
+    _searchedLine = searchedLine;
+    if (searchedLine) {
+        self.arrowUpMenuButton.hidden = NO;
+        [self.favoriteMenuButton setTitle:searchedLine forState:UIControlStateNormal];
+        [self.favoriteMenuButton setImage:[UIImage imageNamed:@"Bus"] forState:UIControlStateNormal];
+        self.favoriteMenuButton.imageEdgeInsets = UIEdgeInsetsMake(5, 0, 5, 5);
+    }
+    else {
+        self.arrowUpMenuButton.hidden = YES;
+        [self.favoriteMenuButton setTitle:nil forState:UIControlStateNormal];
+        [self.favoriteMenuButton setImage:[UIImage imageNamed:@"Star"] forState:UIControlStateNormal];
+    }
 }
 
 
@@ -223,7 +242,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.searchInput.text = @"";
     self.searchedLine = nil;
     self.searchedDirection = nil;
-    self.favoriteLineMode = NO;
+    self.busLineInformation = nil;
 }
 
 /**
@@ -240,7 +259,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.searchInput.text = busLine;
     self.searchedDirection = nil;
     [self.busLineBar selectDestination:nil];
-    self.favoriteLineMode = [busLine isEqualToString:self.favoriteLine];
     
     // Draw itineraries
     [self insertRouteOfBus:self.searchedLine];
@@ -261,6 +279,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                  withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
                                                      [SVProgressHUD popActivity];
                                                      
+                                                     self.busLineInformation = busLineInformation;
                                                      NSArray *shapes = busLineInformation[@"shapes"];
                                                      [self.busLineBar appearWithBusLine:busLineInformation];
                                                      
@@ -557,6 +576,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     if (visible) {
         // Appear
         [self.searchInput setShowsCancelButton:YES animated:YES];
+        self.suggestionTable.hidden = NO;
         [UIView animateWithDuration:animationDuration animations:^{
             self.suggestionTable.alpha = 1.0;
         }];

@@ -85,7 +85,7 @@
                                     </connections>
                                 </button>
                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sentido indisponível" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="glA-FY-doE" userLabel="Aviso sentido">
-                                    <rect key="frame" x="140" y="7" width="154" height="21"/>
+                                    <rect key="frame" x="140" y="9" width="154" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -96,8 +96,8 @@
                             <constraints>
                                 <constraint firstItem="Eta-JV-XkO" firstAttribute="leading" secondItem="qnm-aE-a2P" secondAttribute="leading" constant="20" id="10t-Jn-5Zp"/>
                                 <constraint firstAttribute="trailing" secondItem="VwV-WY-5PP" secondAttribute="trailing" constant="20" id="583-Sb-1aD"/>
-                                <constraint firstAttribute="centerX" secondItem="glA-FY-doE" secondAttribute="centerX" constant="0.5" id="9qw-Ql-NJ9"/>
-                                <constraint firstAttribute="centerY" secondItem="glA-FY-doE" secondAttribute="centerY" constant="1.5" id="BmB-Nx-u2X"/>
+                                <constraint firstAttribute="centerX" secondItem="glA-FY-doE" secondAttribute="centerX" id="9qw-Ql-NJ9"/>
+                                <constraint firstAttribute="centerY" secondItem="glA-FY-doE" secondAttribute="centerY" id="BmB-Nx-u2X"/>
                                 <constraint firstAttribute="centerY" secondItem="VwV-WY-5PP" secondAttribute="centerY" id="EOi-jY-LBU"/>
                                 <constraint firstItem="uUW-Bq-UfH" firstAttribute="leading" secondItem="Eta-JV-XkO" secondAttribute="trailing" constant="8" id="J01-fs-UXR"/>
                                 <constraint firstAttribute="centerX" secondItem="uUW-Bq-UfH" secondAttribute="centerX" id="JIB-iz-YR8"/>

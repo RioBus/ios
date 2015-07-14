@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8124.4"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -86,10 +87,22 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="vfn-dB-bea"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <state key="normal" image="Star"/>
-                                        <state key="selected" image="StarFilled"/>
+                                        <state key="selected" image="Bus"/>
                                         <connections>
-                                            <action selector="favoriteMenuButtonTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="TXN-mT-TqB"/>
+                                            <action selector="rightMenuButtonTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="7WM-fO-40M"/>
+                                        </connections>
+                                    </button>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKz-gM-zGK" userLabel="Show Bar Button">
+                                        <rect key="frame" x="355" y="30" width="12" height="12"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="hKz-gM-zGK" secondAttribute="height" multiplier="1:1" id="AJl-uH-rca"/>
+                                            <constraint firstAttribute="width" constant="12" id="ro8-mh-5KJ"/>
+                                        </constraints>
+                                        <state key="normal" image="ArrowUp"/>
+                                        <connections>
+                                            <action selector="arrowMenuButtonTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="rtT-Rs-Yrx"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -99,12 +112,14 @@
                                     <constraint firstAttribute="bottom" secondItem="eQr-1u-aMf" secondAttribute="bottom" id="6Is-0F-dWa"/>
                                     <constraint firstAttribute="centerX" secondItem="koQ-fU-bdw" secondAttribute="centerX" id="Jdr-lq-YQV"/>
                                     <constraint firstAttribute="bottom" secondItem="7nS-lB-gHS" secondAttribute="bottom" id="Olw-nS-Jiv"/>
+                                    <constraint firstItem="hKz-gM-zGK" firstAttribute="centerY" secondItem="8Zz-pQ-lWZ" secondAttribute="centerY" constant="6" id="VwZ-KX-wU2"/>
                                     <constraint firstItem="eQr-1u-aMf" firstAttribute="leading" secondItem="8Zz-pQ-lWZ" secondAttribute="leading" id="dzW-Dl-jwu"/>
                                     <constraint firstAttribute="bottom" secondItem="koQ-fU-bdw" secondAttribute="bottom" id="g6l-xa-Fge"/>
                                     <constraint firstItem="koQ-fU-bdw" firstAttribute="leading" secondItem="eQr-1u-aMf" secondAttribute="trailing" id="h56-bJ-Dnj"/>
                                     <constraint firstAttribute="trailing" secondItem="7nS-lB-gHS" secondAttribute="trailing" id="oB4-dF-euT"/>
                                     <constraint firstAttribute="height" constant="60" id="ofK-ZD-gyH"/>
                                     <constraint firstItem="7nS-lB-gHS" firstAttribute="leading" secondItem="koQ-fU-bdw" secondAttribute="trailing" id="pzi-pa-cH4"/>
+                                    <constraint firstAttribute="trailing" secondItem="hKz-gM-zGK" secondAttribute="trailing" constant="8" id="ue3-j2-Ogg"/>
                                     <constraint firstItem="eQr-1u-aMf" firstAttribute="leading" secondItem="8Zz-pQ-lWZ" secondAttribute="leading" id="vCz-iT-qNF"/>
                                 </constraints>
                             </view>
@@ -114,7 +129,7 @@
                                     <constraint firstAttribute="height" constant="124" id="Jyt-Pa-n5y"/>
                                 </constraints>
                             </view>
-                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
+                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
                                 <rect key="frame" x="0.0" y="70" width="375" height="597"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -147,6 +162,7 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="arrowUpMenuButton" destination="hKz-gM-zGK" id="5lb-zY-l0T"/>
                         <outlet property="busLineBar" destination="oXi-dn-3U5" id="BIo-lq-9vV"/>
                         <outlet property="favoriteMenuButton" destination="7nS-lB-gHS" id="7jb-Ea-zHK"/>
                         <outlet property="informationMenuButton" destination="eQr-1u-aMf" id="91D-R2-f6o"/>
@@ -608,10 +624,11 @@ Obrigado!</string>
         </scene>
     </scenes>
     <resources>
+        <image name="ArrowUp" width="24" height="24"/>
+        <image name="Bus" width="32" height="32"/>
         <image name="InfoButton" width="32" height="32"/>
         <image name="LocationButton" width="29" height="38"/>
         <image name="MiddleButton" width="107" height="61"/>
         <image name="Star" width="32" height="32"/>
-        <image name="StarFilled" width="32" height="32"/>
     </resources>
 </document>

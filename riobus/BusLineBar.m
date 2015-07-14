@@ -98,7 +98,7 @@
         self.rightDestinationButton.alpha = 0.0;
     }
     
-    [UIView animateWithDuration:0.1 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.userInteractionEnabled = YES;
         self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
                                            self.containerView.frame.origin.y,
