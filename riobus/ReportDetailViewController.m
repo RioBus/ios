@@ -12,17 +12,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    
+        
     if ([self.problem[@"tipo"] isEqualToString:@"prefeitura"]) {
         self.problemTextView.hidden = NO;
         self.feedbackView.hidden = YES;
-        
-        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Report"
-                                                              action:@"Reportou problema"
-                                                               label:self.problem[@"descricao"]
-                                                               value:nil] build]];
     }
     else if ([self.problem[@"tipo"] isEqualToString:@"app"] ||
              [self.problem[@"tipo"] isEqualToString:@"outro"]) {
@@ -33,6 +26,10 @@
         NSLog(@"Erro reportando problema (tentando reportar problema de tipo inesperado).");
     }
     
+    [[[GAI sharedInstance] defaultTracker] send:[[GAIDictionaryBuilder createEventWithCategory:@"Report"
+                                                          action:@"Reportou problema"
+                                                           label:self.problem[@"descricao"]
+                                                           value:nil] build]];
 }
 
 - (void)didReceiveMemoryWarning {

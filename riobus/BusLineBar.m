@@ -82,16 +82,20 @@
     self.lineNameLabel.alpha = 1.0;
 
     if (destinationsAvailable) {
-        self.avisoSentidoLabel.hidden = YES;
-        self.directionButton.hidden = NO;
-        self.leftDestinationButton.hidden = NO;
-        self.rightDestinationButton.hidden = NO;
+        self.avisoSentidoLabel.text = @"Selecione o sentido desejado";
+        self.avisoSentidoLabel.hidden = NO;
+        self.avisoSentidoLabel.alpha = 1.0;
+        self.directionButton.alpha = 0.0;
+        self.leftDestinationButton.alpha = 0.0;
+        self.rightDestinationButton.alpha = 0.0;
     }
     else {
+        self.avisoSentidoLabel.text = @"Sentido indisponível";
         self.avisoSentidoLabel.hidden = NO;
-        self.directionButton.hidden = YES;
-        self.leftDestinationButton.hidden = YES;
-        self.rightDestinationButton.hidden = YES;
+        self.avisoSentidoLabel.alpha = 1.0;
+        self.directionButton.alpha = 0.0;
+        self.leftDestinationButton.alpha = 0.0;
+        self.rightDestinationButton.alpha = 0.0;
     }
     
     [UIView animateWithDuration:0.1 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
@@ -100,7 +104,16 @@
                                            self.containerView.frame.origin.y,
                                            self.busLineBar.frame.size.width,
                                            self.busLineBar.frame.size.height);
-    } completion:nil];
+    } completion:^(BOOL finished){
+        if (destinationsAvailable) {
+            [UIView animateWithDuration:0.5 delay:1.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                self.avisoSentidoLabel.alpha = 0.0;
+                self.directionButton.alpha = 1.0;
+                self.leftDestinationButton.alpha = 1.0;
+                self.rightDestinationButton.alpha = 1.0;
+            } completion:nil];
+        }
+    }];
 }
 
 - (void)hide {
