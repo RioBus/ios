@@ -1,3 +1,4 @@
+#import <Google/Analytics.h>
 #import "ReportProblemViewController.h"
 #import "ReportDetailViewController.h"
 
@@ -15,9 +16,16 @@
     self.problems = @[@{ @"descricao": @"Não encontrei uma linha", @"tipo": @"prefeitura" },
                       @{ @"descricao": @"Localização incorreta no mapa", @"tipo": @"prefeitura" },
                       @{ @"descricao": @"Itinerário incorreto", @"tipo": @"prefeitura" },
-                      @{ @"descricao": @"Problema no ônibus", @"tipo": @"prefeitura" },
                       @{ @"descricao": @"Problemas com o aplicativo", @"tipo": @"app" },
                       @{ @"descricao": @"Outro", @"tipo": @"outro" }];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName value:@"Reportar problema"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -136,7 +136,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                 }
                 break;
             case kCLAuthorizationStatusDenied:
-                [PSTAlertController presentOkAlertWithTitle:@"Uso da localização não autorizado" andMessage:@"Você não autorizou o uso da sua localização para o RioBus. Para alterar esta configuração, vá em Ajustes > Rio Bus e habilite esta configuração."];
+                [PSTAlertController presentOkAlertWithTitle:@"Uso da localização não autorizado" andMessage:@"Você não autorizou o uso da sua localização para o RioBus. Para alterar esta configuração, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e habilite esta configuração."];
                 break;
             default:
                 break;
