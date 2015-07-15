@@ -184,20 +184,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     return [self.searchedLine isEqualToString:self.favoriteLine];
 }
 
-- (void)setSearchedLine:(NSString *)searchedLine {
-    _searchedLine = searchedLine;
-    if (searchedLine) {
-        self.arrowUpMenuButton.hidden = NO;
-        [self.favoriteMenuButton setTitle:searchedLine forState:UIControlStateNormal];
-        [self.favoriteMenuButton setImage:nil forState:UIControlStateNormal];
-    }
-    else {
-        self.arrowUpMenuButton.hidden = YES;
-        [self.favoriteMenuButton setTitle:nil forState:UIControlStateNormal];
-        [self.favoriteMenuButton setImage:[UIImage imageNamed:@"Star"] forState:UIControlStateNormal];
-    }
-}
-
 
 #pragma mark BusLineBarViewDelegate methods
 
@@ -208,6 +194,13 @@ static const CGFloat cameraPaddingRight = 30.0;
     return YES;
 }
 
+- (void)busLineBarView:(BusLineBar *)sender didAppear:(BOOL)visible {
+    if (visible) {
+        self.arrowUpMenuButton.hidden = NO;
+        [self.favoriteMenuButton setTitle:self.searchedLine forState:UIControlStateNormal];
+        [self.favoriteMenuButton setImage:nil forState:UIControlStateNormal];
+    }
+}
 
 #pragma mark Controller methods
 
@@ -242,6 +235,9 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.searchedLine = nil;
     self.searchedDirection = nil;
     self.busLineInformation = nil;
+    self.arrowUpMenuButton.hidden = YES;
+    [self.favoriteMenuButton setTitle:nil forState:UIControlStateNormal];
+    [self.favoriteMenuButton setImage:[UIImage imageNamed:@"Star"] forState:UIControlStateNormal];
 }
 
 /**

@@ -113,6 +113,10 @@
                 self.rightDestinationButton.alpha = 1.0;
             } completion:nil];
         }
+        
+        if ([self.delegate respondsToSelector:@selector(busLineBarView:didAppear:)]) {
+            [self.delegate busLineBarView:self didAppear:YES];
+        }
     }];
 }
 
@@ -129,6 +133,10 @@
             self.busLineBar.alpha = 0.0;
         } completion:^(BOOL finished){
             self.userInteractionEnabled = NO;
+            
+            if ([self.delegate respondsToSelector:@selector(busLineBarView:didAppear:)]) {
+                [self.delegate busLineBarView:self didAppear:NO];
+            }
         }];
     }];
 }

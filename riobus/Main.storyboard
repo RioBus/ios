@@ -87,7 +87,7 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="vfn-dB-bea"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                         <state key="normal" image="Star"/>
                                         <state key="selected" image="Bus"/>
                                         <connections>
