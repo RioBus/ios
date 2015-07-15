@@ -189,8 +189,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     if (searchedLine) {
         self.arrowUpMenuButton.hidden = NO;
         [self.favoriteMenuButton setTitle:searchedLine forState:UIControlStateNormal];
-        [self.favoriteMenuButton setImage:[UIImage imageNamed:@"Bus"] forState:UIControlStateNormal];
-        self.favoriteMenuButton.imageEdgeInsets = UIEdgeInsetsMake(5, 0, 5, 5);
+        [self.favoriteMenuButton setImage:nil forState:UIControlStateNormal];
     }
     else {
         self.arrowUpMenuButton.hidden = YES;

@@ -99,12 +99,12 @@
     }
     
     [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.userInteractionEnabled = YES;
         self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
                                            self.containerView.frame.origin.y,
                                            self.busLineBar.frame.size.width,
                                            self.busLineBar.frame.size.height);
     } completion:^(BOOL finished){
+        self.userInteractionEnabled = YES;
         if (destinationsAvailable) {
             [UIView animateWithDuration:0.5 delay:1.5 options:UIViewAnimationOptionCurveEaseOut animations:^{
                 self.avisoSentidoLabel.alpha = 0.0;
@@ -117,14 +117,15 @@
 }
 
 - (void)hide {
-    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.lineNameLabel.alpha = 0.0;
         self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
                                            self.containerView.frame.origin.y + 64,
                                            self.busLineBar.frame.size.width,
                                            self.busLineBar.frame.size.height);
+        
     } completion:^(BOOL finished){
-        [UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveLinear animations:^{
+        [UIView animateWithDuration:0.5 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             self.busLineBar.alpha = 0.0;
         } completion:^(BOOL finished){
             self.userInteractionEnabled = NO;
