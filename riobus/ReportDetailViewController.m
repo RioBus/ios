@@ -15,11 +15,11 @@
         
     if ([self.problem[@"tipo"] isEqualToString:@"prefeitura"]) {
         self.problemTextView.hidden = NO;
-        self.feedbackView.hidden = YES;
+        [self.feedbackView removeFromSuperview];
     }
     else if ([self.problem[@"tipo"] isEqualToString:@"app"] ||
              [self.problem[@"tipo"] isEqualToString:@"outro"]) {
-        self.problemTextView.hidden = YES;
+        [self.problemTextView removeFromSuperview];
         self.feedbackView.hidden = NO;
     }
     else {

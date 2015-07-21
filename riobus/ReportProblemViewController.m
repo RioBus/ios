@@ -42,6 +42,8 @@
 
         NSIndexPath *problemIndexPath = [self.tableView indexPathForSelectedRow];
         detailViewController.problem = self.problems[problemIndexPath.row];
+        
+        [self.tableView deselectRowAtIndexPath:problemIndexPath animated:YES];
     }
 }
 
@@ -100,4 +102,5 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self performSegueWithIdentifier:@"ShowReportDetail" sender:self];
 }
+
 @end

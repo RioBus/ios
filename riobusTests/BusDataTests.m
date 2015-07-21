@@ -111,61 +111,61 @@
 }
 
 - (void)testHumanReadableStringForSeconds {
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:0], @"0 segundos");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:0], @"agora");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:1], @"1 segundo");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:1], @"agora");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:15], @"15 segundos");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:15], @"agora");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:59], @"59 segundos");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:59], @"agora");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:60], @"1 minuto");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:60], @"agora");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:119], @"1 minuto");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:119], @"agora");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:120], @"2 minutos");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:120], @"2 minutos atrás");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:3599], @"59 minutos");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:3599], @"59 minutos atrás");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:3600], @"1 hora");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:3600], @"1 hora atrás");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:7199], @"1 hora");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:7199], @"1 hora atrás");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:7200], @"2 horas");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:7200], @"2 horas atrás");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:86399], @"23 horas");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:86399], @"23 horas atrás");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:86400], @"1 dia");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:86400], @"1 dia atrás");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:172799], @"1 dia");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:172799], @"1 dia atrás");
     
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:172800], @"2 dias");
+    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:172800], @"2 dias atrás");
 }
 
 - (void)testHumanReadableDelay {
     self.busData.lastUpdate = [NSDate date];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"0 segundos");
+    XCTAssertEqualObjects([self.busData humanReadableDelay], @"agora");
     
     self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-15];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"15 segundos");
+    XCTAssertEqualObjects([self.busData humanReadableDelay], @"agora");
     
     self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-60];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"1 minuto");
+    XCTAssertEqualObjects([self.busData humanReadableDelay], @"agora");
     
     self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-180];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"3 minutos");
+    XCTAssertEqualObjects([self.busData humanReadableDelay], @"3 minutos atrás");
     
     self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-3600];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"1 hora");
+    XCTAssertEqualObjects([self.busData humanReadableDelay], @"1 hora atrás");
     
     self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-7200];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"2 horas");
+    XCTAssertEqualObjects([self.busData humanReadableDelay], @"2 horas atrás");
     
     self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-86400];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"1 dia");
+    XCTAssertEqualObjects([self.busData humanReadableDelay], @"1 dia atrás");
     
     self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-172800];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"2 dias");
+    XCTAssertEqualObjects([self.busData humanReadableDelay], @"2 dias atrás");
 }
 
 @end
