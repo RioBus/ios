@@ -1,0 +1,76 @@
+# https://github.com/KrauseFx/fastlane/tree/master/docs
+# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md
+
+fastlane_version "1.12.0"
+
+default_platform :ios
+
+platform :ios do
+
+  before_all do
+  end
+
+  desc "Increment build number"
+  lane :increment_build do 
+    increment_build_number
+    commit_version_bump(force: true)
+  end
+
+  desc "Runs snapshot"
+  lane :snapshots do
+    `snapshot --noclean`
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    cocoapods
+    xctest(
+      workspace: './riobus.xcworkspace',
+      scheme: 'unit-tests',
+      sdk: 'iphonesimulator',
+      destination: "name=iPhone 6"
+    )
+  end
+
+  desc "Submit a new Beta Build to Apple TestFlight"
+  desc "This will also make sure the profile is up to date"
+  lane :beta do
+    cocoapods
+    ipa(
+      scheme: "riobus",
+      configuration: "Release",
+    )
+    snapshots
+    deliver(
+      skip_deploy: true,
+      beta: true
+    )
+
+  end
+
+  desc "Deploy a new version to the App Store"
+  desc "** Full Markdown** Support: `code`"
+  lane :deploy do
+    cocoapods
+    ipa(
+      scheme: "riobus",
+      configuration: "Release",
+    )
+    snapshots
+    deliver(
+      skip_deploy: true,
+      force: true
+    )
+  end
+
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+    notify "Fastlane finished '#{lane}'" # Mac OS X Notification
+  end
+
+
+  error do |lane, exception|
+    notify "Fastlane error '#{lane}'" # Mac OS X Notification
+  end
+end

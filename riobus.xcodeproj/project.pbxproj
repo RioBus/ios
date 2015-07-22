@@ -294,7 +294,6 @@
 				681A7F3E196722530006C335 /* Frameworks */,
 				681A7F3F196722530006C335 /* Resources */,
 				F53865278DE24F58A1EE981B /* Copy Pods Resources */,
-				A36CEC211AF02C39002A3B0C /* Update build number */,
 				A3B9259F1B27F25000BEFC9F /* Convert TODO's and FIXME's to warnings */,
 			);
 			buildRules = (
@@ -429,20 +428,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
-		};
-		A36CEC211AF02C39002A3B0C /* Update build number */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Update build number";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n# Auto Increment Version Script\n# set CFBundleVersion to 1.0.1 first!!!\n# the perl regex splits out the last part of a build number (ie: 1.1.1) and increments it by one\n# if you have a build number that is more than 3 components, add a '\\.\\d+' into the first part of the regex.\nbuildPlist=${INFOPLIST_FILE}\nnewVersion=`/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$buildPlist\" | /usr/bin/perl -pe 's/(\\d+)/($1+1)/eg'`\n#echo $newVersion;\n/usr/libexec/PListBuddy -c \"Set :CFBundleVersion $newVersion\" \"$buildPlist\"";
 		};
 		A3B9259F1B27F25000BEFC9F /* Convert TODO's and FIXME's to warnings */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -626,6 +611,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1205;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "riobus/riobus-Prefix.pch";
 				INFOPLIST_FILE = "riobus/riobus-Info.plist";
@@ -633,6 +619,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "riobus-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -645,12 +632,14 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1205;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "riobus/riobus-Prefix.pch";
 				INFOPLIST_FILE = "riobus/riobus-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "riobus-Bridging-Header.h";
+				VERSIONING_SYSTEM = "apple-generic";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
