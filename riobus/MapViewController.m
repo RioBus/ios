@@ -68,7 +68,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.informationMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
     [self.informationMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
     [self.favoriteMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
-//    [self.favoriteMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateSelected];
     [self.favoriteMenuButton setBackgroundColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
     [self.locationMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
     [self.locationMenuButton setBackgroundTintColor:[UIColor appLightBlueColor] forUIControlState:UIControlStateHighlighted];
@@ -111,7 +110,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark Menu actions
+#pragma mark - Menu IBActions
 
 - (IBAction)informationMenuButtonTapped:(UIButton *)sender {
     [self performSegueWithIdentifier:@"ViewAboutScreen" sender:self];
@@ -174,7 +173,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark Favorite line methods
+#pragma mark - Favorite line methods
 
 - (NSString *)favoriteLine {
     return [[NSUserDefaults standardUserDefaults] objectForKey:@"favorite_line"];
@@ -185,7 +184,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark BusLineBarViewDelegate methods
+#pragma mark - BusLineBar methods
 
 - (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestination:(NSString *)destination {
     self.searchedDirection = destination;
@@ -202,7 +201,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     }
 }
 
-#pragma mark Controller methods
+#pragma mark - Controller methods
 
 /**
  * Cancelar todas as requisições pendentes
@@ -218,7 +217,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark Carregamento do marcadores, da rota e do mapa
+#pragma mark - Carregamento do marcadores, da rota e do mapa
 
 /**
  * Limpar marcadores do mapa e últimos parâmetros de pesquisa.
@@ -425,7 +424,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark UISearchBarDelegate methods
+#pragma mark - UISearchBar methods
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     [self.searchInput resignFirstResponder];
@@ -446,7 +445,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    if(![searchBar isFirstResponder]) {
+    if (![searchBar isFirstResponder]) {
         self.searchBarShouldBeginEditing = NO;
         [self clearSearch];
     }
@@ -474,7 +473,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark CLLocationManagerDelegate methods
+#pragma mark - CLLocationManager methods
 
 - (CLLocationManager *)locationManager {
     if (!_locationManager) {
@@ -515,7 +514,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark Listeners de notificações
+#pragma mark - Listeners de notificações
 
 /**
  * Método chamado quando o teclado será exibido na tela. Atualiza o tamanho da 
@@ -559,7 +558,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark Funções utilitárias
+#pragma mark - Funções utilitárias
 
 /**
  * Mostra ou esconde com uma animação a tabela de sugestões.

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8121.20" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8101.16"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -63,7 +63,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQr-1u-aMf" userLabel="Left Button">
                                         <rect key="frame" x="0.0" y="14" width="133" height="46"/>
                                         <color key="backgroundColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="InfoButton" label="Informações"/>
+                                        <accessibility key="accessibilityConfiguration" label="Informações"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="eyd-BU-hly"/>
                                         </constraints>
@@ -74,7 +74,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koQ-fU-bdw" userLabel="Middle Button">
                                         <rect key="frame" x="133" y="0.0" width="110" height="60"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="LocationButton" label="Minha localização"/>
+                                        <accessibility key="accessibilityConfiguration" label="Minha localização"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="7LX-6G-I7k"/>
                                         </constraints>
@@ -86,7 +86,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nS-lB-gHS" userLabel="Right Button">
                                         <rect key="frame" x="243" y="14" width="132" height="46"/>
                                         <color key="backgroundColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="RightButton"/>
+                                        <accessibility key="accessibilityConfiguration"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="46" id="vfn-dB-bea"/>
                                         </constraints>
@@ -419,7 +419,7 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdt-qg-l7J">
-                                <rect key="frame" x="221" y="565" width="140" height="30"/>
+                                <rect key="frame" x="218" y="565" width="143" height="30"/>
                                 <state key="normal" title="RioBus no Facebook">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -465,7 +465,7 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.90588235289999997" green="0.90588235289999997" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="eIo-3m-jYP">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" id="eIo-3m-jYP">
                                 <rect key="frame" x="0.0" y="22" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eIo-3m-jYP" id="T3o-mR-zyn">
@@ -634,4 +634,9 @@ Obrigado!</string>
         <image name="MiddleButton" width="107" height="61"/>
         <image name="Star" width="32" height="32"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

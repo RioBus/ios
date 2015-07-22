@@ -28,18 +28,10 @@
     [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-}
-
-- (IBAction)didTapCloseButton:(id)sender {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"ShowReportDetail"]) {
         ReportDetailViewController *detailViewController = segue.destinationViewController;
-
+        
         NSIndexPath *problemIndexPath = [self.tableView indexPathForSelectedRow];
         detailViewController.problem = self.problems[problemIndexPath.row];
         
@@ -47,8 +39,19 @@
     }
 }
 
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
 
-#pragma mark UITableViewDataSource methods
+
+#pragma mark - IBActions
+
+- (IBAction)didTapCloseButton:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+#pragma mark - UITableViewDataSource methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.problems.count;

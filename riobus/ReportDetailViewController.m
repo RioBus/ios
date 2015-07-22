@@ -36,6 +36,9 @@
     [super didReceiveMemoryWarning];
 }
 
+
+#pragma mark - IBActions
+
 - (IBAction)didTapCloseButton:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

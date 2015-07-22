@@ -26,6 +26,9 @@
     [self.aboutTextView setContentOffset:CGPointZero animated:NO];
 }
 
+
+#pragma mark - IBActions
+
 - (IBAction)didTapFacebookButton:(id)sender {
     NSURL *fbURL = [[NSURL alloc] initWithString:@"fb://profile/1408367169433222"];
     // Verifica se o usuário possui o app do Facebook instalado. Caso contrário, abre a página normalmente no Safari.
@@ -38,25 +41,6 @@
 
 - (IBAction)didTapCloseButton:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (IBAction)didTapClearCacheButton:(id)sender {
-    PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Limpar o cache" message:@"Limpando o cache você irá remover os trajetos de linhas de ônibus armazenadas."];
-    [alertController addAction:[PSTAlertAction actionWithTitle:@"Cancelar" style:PSTAlertActionStyleCancel handler:nil]];
-    [alertController addAction:[PSTAlertAction actionWithTitle:@"Limpar" style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
-        [self clearCache];
-    }]];
-    [alertController showWithSender:sender controller:self animated:YES completion:nil];
-}
-
-- (void)clearCache {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Rotas de Onibus"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [[[GAI sharedInstance] defaultTracker] send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
-                                                               action:@"Usuário limpou o cache"
-                                                                label:@""
-                                                                value:nil] build]];
 }
 
 @end
