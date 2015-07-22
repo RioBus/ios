@@ -87,7 +87,7 @@ class RioBusUITests: XCTestCase {
         if (favoriteCell.exists) {
             favoriteCell.buttons["StarFilled"].tap()
             app.alerts.collectionViews.buttons["Excluir"].tap()
-            XCTAssert(!favoriteCell.exists, "Não removeu a linha favorita");
+            XCTAssertFalse(favoriteCell.exists, "Não removeu a linha favorita");
         }
         
         addSomeLinesToHistory()
@@ -105,7 +105,7 @@ class RioBusUITests: XCTestCase {
         // Remover dos favoritos
         favoriteCell.buttons["StarFilled"].tap()
         app.alerts.collectionViews.buttons["Excluir"].tap()
-        XCTAssert(!favoriteCell.exists, "Não removeu a linha favorita");
+        XCTAssertFalse(favoriteCell.exists, "Não removeu a linha favorita");
     }
     
     /**
