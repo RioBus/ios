@@ -4,3 +4,5 @@ before_install:
   - gem install cocoapods -v '0.37.2'
 cache: cocoapods
 script: xcodebuild -workspace riobus.xcworkspace -scheme riobus -sdk iphonesimulator -configuration Release ONLY_ACTIVE_ARCH=NO
+notifications:
+  slack: riobussl:oXchKgSosMSQ9JFACqdubfuz
