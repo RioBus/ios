@@ -2,11 +2,15 @@
 #import "BusData.h"
 
 @interface BusDataStore : NSObject
+
 /**
  * Obtém a instância singleton de BusDataStore, inicializando-a caso necessário.
  * @returns Instância singleton de BusDataStore
  */
 + (instancetype)sharedInstance;
+
+// TODO: documentation
+- (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler;
 
 /**
  * Carrega do servidor um array com os ônibus da linha selecionada.
@@ -22,6 +26,6 @@
  * @param handler Bloco a ser executado ao final da operação, que terá como entrada um dicionário contendo as informações da linha, como nome e os pontos do percurso.
  * @returns Retorna a operação relacionada ao request dos dados.
  */
-- (NSOperation*)loadBusLineInformationForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSDictionary *, NSError *))handler;
+- (NSOperation*)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler;
 
 @end

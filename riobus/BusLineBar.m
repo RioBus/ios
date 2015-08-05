@@ -1,4 +1,5 @@
 #import "BusLineBar.h"
+#import "BusLine.h"
 
 @interface BusLineBar ()
 
@@ -149,18 +150,17 @@
     [self hide];
 }
 
-- (void)appearWithBusLine:(NSDictionary *)busLineInformation {
-    if (busLineInformation[@"name"] && ![busLineInformation[@"name"] isEqualToString:@""]) {
-        self.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLineInformation[@"line"], busLineInformation[@"name"]];
+- (void)appearWithBusLine:(BusLine *)busLine {
+    if (busLine.name) {
+        self.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLine.line, busLine.name];
     }
     else {
-        self.lineNameLabel.text = [NSString stringWithFormat:@"Linha %@", busLineInformation[@"line"]];
+        self.lineNameLabel.text = [NSString stringWithFormat:@"Linha %@", busLine.line];
     }
     
-    NSArray *places = busLineInformation[@"places"];
-    if (places.count == 2) {
-        [self.leftDestinationButton setTitle:places[0] forState:UIControlStateNormal];
-        [self.rightDestinationButton setTitle:places[1] forState:UIControlStateNormal];
+    if (busLine.places.count == 2) {
+        [self.leftDestinationButton setTitle:busLine.places[0] forState:UIControlStateNormal];
+        [self.rightDestinationButton setTitle:busLine.places[1] forState:UIControlStateNormal];
         [self slideUpWithDestinationsAvailable:YES];
     }
     else {

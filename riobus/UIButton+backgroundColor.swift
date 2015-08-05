@@ -42,10 +42,10 @@ extension UIButton {
         
         let rect = CGRectMake(0, 0, image.size.width, image.size.height)
         
-        CGContextSetBlendMode(context, kCGBlendModeNormal)
+        CGContextSetBlendMode(context, .Normal)
         CGContextDrawImage(context, rect, image.CGImage)
         
-        CGContextSetBlendMode(context, kCGBlendModeSourceIn)
+        CGContextSetBlendMode(context, .SourceIn)
         tintColor.setFill()
         CGContextFillRect(context, rect)
         

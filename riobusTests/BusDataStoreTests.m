@@ -105,7 +105,7 @@ static const float timeoutInSeconds = 10.0;
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:@"" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
         XCTAssertNil(busLineInformation, @"Shapes should've returned nil with empty line number");
         XCTAssertNotNil(error, @"Operation should have returned an error from server");
         
@@ -128,7 +128,7 @@ static const float timeoutInSeconds = 10.0;
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:@"ABCDEFGH" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"ABCDEFGH" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
         NSArray* shapes = busLineInformation[@"shapes"];
         XCTAssertNotNil(shapes, @"Shapes returned nil");
         XCTAssert(shapes.count == 0, @"Shapes should've returned an empty array");
@@ -153,7 +153,7 @@ static const float timeoutInSeconds = 10.0;
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusLineInformationForLineNumber:@"485" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
+    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"485" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
         NSArray* shapes = busLineInformation[@"shapes"];
         XCTAssertNotNil(shapes, @"Shapes returned nil");
         XCTAssert(shapes.count > 0, @"Shapes returned an empty array");

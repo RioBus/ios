@@ -27,6 +27,7 @@
 		A31D90EE1AFA950E00AD3B35 /* BusDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */; };
 		A31D90F51AFAADE100AD3B35 /* BusDataStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */; };
 		A35072F91B2D021200F91A2F /* RioBusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35072F81B2D021200F91A2F /* RioBusUITests.swift */; };
+		A352EB331B729DCD00A5969B /* BusLine.m in Sources */ = {isa = PBXBuildFile; fileRef = A352EB321B729DCD00A5969B /* BusLine.m */; };
 		A37A3CEA1B1CD425006A397C /* BusLineBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = A37A3CE91B1CD425006A397C /* BusLineBar.xib */; };
 		A37A3CEC1B1CD55C006A397C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A37A3CEB1B1CD55B006A397C /* Main.storyboard */; };
 		A37A3CEF1B1CD61E006A397C /* BusLineBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A37A3CEE1B1CD61E006A397C /* BusLineBar.m */; };
@@ -89,6 +90,8 @@
 		A35072F61B2D021200F91A2F /* RioBus UI Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RioBus UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35072F81B2D021200F91A2F /* RioBusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RioBusUITests.swift; sourceTree = "<group>"; };
 		A35072FA1B2D021200F91A2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A352EB311B729DCD00A5969B /* BusLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusLine.h; sourceTree = "<group>"; };
+		A352EB321B729DCD00A5969B /* BusLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusLine.m; sourceTree = "<group>"; };
 		A37A3CE91B1CD425006A397C /* BusLineBar.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BusLineBar.xib; sourceTree = "<group>"; };
 		A37A3CEB1B1CD55B006A397C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A37A3CED1B1CD61E006A397C /* BusLineBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusLineBar.h; sourceTree = "<group>"; };
@@ -237,6 +240,8 @@
 				681A7F9D196824890006C335 /* BusData.m */,
 				681A7F9F196824FC0006C335 /* BusDataStore.h */,
 				681A7FA0196824FC0006C335 /* BusDataStore.m */,
+				A352EB311B729DCD00A5969B /* BusLine.h */,
+				A352EB321B729DCD00A5969B /* BusLine.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -469,6 +474,7 @@
 				A37A3CEF1B1CD61E006A397C /* BusLineBar.m in Sources */,
 				681A7F9E196824890006C335 /* BusData.m in Sources */,
 				681A7F7C196727C60006C335 /* MapViewController.m in Sources */,
+				A352EB331B729DCD00A5969B /* BusLine.m in Sources */,
 				A3B925A41B29166800BEFC9F /* UIColor+RioBus.swift in Sources */,
 				681A7F55196722540006C335 /* AppDelegate.m in Sources */,
 				A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */,

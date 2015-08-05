@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 
 @class BusLineBar;
+@class BusLine;
 
 @protocol BusLineBarDelegate <NSObject>
 
@@ -26,9 +27,9 @@
 
 /**
  * Make bar appear in the view sliding from the bottom of the screen with the information about the especified line.
- * @param busLineInformation A dictionary containing the line number, line name and destinations.
+ * @param busLine A BusLine object containing the line number, line name and destinations.
  */
-- (void)appearWithBusLine:(NSDictionary *)busLineInformation;
+- (void)appearWithBusLine:(BusLine *)busLine;
 
 /**
  * Hide bar from the view sliding to the bottom of the screen

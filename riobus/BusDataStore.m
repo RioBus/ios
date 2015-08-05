@@ -18,56 +18,50 @@ static const NSString *host = @"http://rest.riob.us";
 - (instancetype)init {
     self = [super init];
     if (self) {
-        // Verifica se o cache salvo é incompatível com o formato atual. Isso serve caso o usuário atualize o app
-        // para uma versão que usa um cache diferente.
-        if ([[NSUserDefaults standardUserDefaults] floatForKey:@"cache_version"] < 2.0) {
+        // TODO: Re-enable cache
+        // Check if the user's cache is in the proper version, rebuilding it otherwise
+//        if ([[NSUserDefaults standardUserDefaults] floatForKey:@"cache_version"] < 2.0) {
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"Rotas de Onibus"];
             [[NSUserDefaults standardUserDefaults] setFloat:2.0 forKey:@"cache_version"];
-            NSLog(@"Cache do usuário redefinido (cache incompatível ou não existente).");
-        }
+            NSLog(@"User's cache redefined (cache wasn't found or was too old).");
+//        }
     }
     return self;
 }
 
-- (NSOperation *)loadBusLineInformationForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSDictionary *, NSError *))handler {
-    // Previne URL injection
+- (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler {
     AFHTTPRequestOperation *operation;
-    NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Rotas de Onibus"] mutableCopy];
-    if (!buses) {
-        buses = [[NSMutableDictionary alloc] init];
-    }
-    
-    // Procura o cache da linha pesquisada
-    __block NSString* jsonData = buses[webSafeNumber];
-    if (!jsonData) {
-        NSLog(@"Itinerário para a linha %@ não está no cache.", webSafeNumber);
-        NSString *strUrl = [NSString stringWithFormat:@"%@/itinerary/%@", host, webSafeNumber];
+    NSDictionary *cachedLines = [[NSUserDefaults standardUserDefaults] objectForKey:@"tracked_bus_lines"];
+    // TODO: set prescription date for cache
+    if (!cachedLines) {
+        NSLog(@"Tracked lines database not on cache.");
+        NSString *strUrl = [NSString stringWithFormat:@"%@/v3/itinerary", host];
         NSLog(@"URL = %@" , strUrl);
         
-        // Monta o request
+        // Prepare request
         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
         operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
         
-        // Chama a URL
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSData* responseObject) {
-            jsonData = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-            
-            if (![jsonData isEqualToString:@"[]"]) {
-                buses[webSafeNumber] = jsonData;
-                [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"Rotas de Onibus"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                
-                NSLog(@"Itinerário da linha %@ salvo no cache.", webSafeNumber);
+        // Fetch URL
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSData *responseObject) {
+            NSError *jsonParseError;
+            NSArray *availableLines = [NSJSONSerialization JSONObjectWithData:responseObject options: NSJSONReadingMutableContainers error:&jsonParseError];
+            if (jsonParseError) {
+                NSLog(@"Error decoding JSON itinerary data");
             }
             else {
-                NSLog(@"Itinerário da linha %@ retornou vazio.", webSafeNumber);
+                NSMutableDictionary *fetchedLines = [[NSMutableDictionary alloc] initWithCapacity:availableLines.count];
+                for (NSDictionary *lineData in availableLines) {
+                    NSString *lineName = lineData[@"line"];
+                    fetchedLines[lineName] = lineData[@"description"];
+                }
+                
+                [[NSUserDefaults standardUserDefaults] setObject:fetchedLines forKey:@"tracked_bus_lines"];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    handler(fetchedLines, nil);
+                });
             }
-                      
-            [self processBusLine:lineNumber withJsonData:jsonData withCompletionHandler:handler];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            // Chama "callback" de retorno na thread principal (evita problemas na atualizacao da interface)
             NSLog(@"ERRO: Requisição de itinerário falhou. %@", error.localizedDescription);
             dispatch_async(dispatch_get_main_queue(), ^{
                 handler(nil, error);
@@ -77,87 +71,120 @@ static const NSString *host = @"http://rest.riob.us";
         [operation start];
     }
     else {
-        NSLog(@"Itinerário para a linha %@ encontrado no cache.", webSafeNumber);
+        NSLog(@"Tracked lines found on cache.");
         
-        [self processBusLine:lineNumber withJsonData:jsonData withCompletionHandler:handler];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            handler(cachedLines, nil);
+        });
+    }
+
+    return operation;
+}
+
+- (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler {
+    // Avoid URL injection
+    AFHTTPRequestOperation *operation;
+    NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Rotas de Onibus"] mutableCopy];
+    if (!buses) {
+        buses = [[NSMutableDictionary alloc] init];
+    }
+    
+    // Search for cached bus line information
+    __block NSString *jsonData = buses[webSafeNumber];
+    if (!jsonData) {
+        NSLog(@"Itinerary for line %@ is not on cache.", webSafeNumber);
+        NSString *strUrl = [NSString stringWithFormat:@"%@/v3/itinerary/%@", host, webSafeNumber];
+        NSLog(@"URL = %@" , strUrl);
+        
+        // Prepare request
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
+        operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        
+        // Fetch URL
+        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSData* responseObject) {
+            jsonData = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+            
+            if (![jsonData isEqualToString:@""]) {
+                buses[webSafeNumber] = jsonData;
+                [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"Rotas de Onibus"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                NSLog(@"Itinerary for line %@ now cached.", webSafeNumber);
+            }
+            else {
+                NSLog(@"Itinerary for line %@ returned empty.", webSafeNumber);
+            }
+                      
+            [self processBusLineItinerary:lineNumber withJsonData:jsonData withCompletionHandler:handler];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            // Send data to callback on main thread to avoid issues updating the UI
+            NSLog(@"ERRO: Itinerary request to server failed. %@", error.localizedDescription);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                handler(nil, error);
+            });
+        }];
+        
+        [operation start];
+    }
+    else {
+        NSLog(@"Itinerary for line %@ found on cache.", webSafeNumber);
+        
+        [self processBusLineItinerary:lineNumber withJsonData:jsonData withCompletionHandler:handler];
     }
     
     return operation;
 }
 
-
-- (void)processBusLine:(NSString *)lineNumber withJsonData:(NSString*)jsonData withCompletionHandler:(void (^)(NSDictionary *busesData, NSError *error))handler {
+- (void)processBusLineItinerary:(NSString *)lineNumber withJsonData:(NSString *)jsonData withCompletionHandler:(void (^)(NSArray *itinerarySpots, NSError *error))handler {
     if (jsonData) {
-        // Agora já temos os dados da linha no cache
         NSData *itineraryJsonData = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
         NSError *jsonParseError = nil;
-        NSArray *pontosDoPercurso = [NSJSONSerialization JSONObjectWithData:itineraryJsonData options: NSJSONReadingMutableContainers error:&jsonParseError];
+        NSDictionary *itinerary = [NSJSONSerialization JSONObjectWithData:itineraryJsonData options: NSJSONReadingMutableContainers error:&jsonParseError];
         if (jsonParseError) {
             NSLog(@"Error decoding JSON itinerary data");
+            // Send data to callback on main thread to avoid issues updating the UI
+            dispatch_async(dispatch_get_main_queue(), ^{
+                handler(nil, jsonParseError);
+            });
+            
+            return;
         }
         
-        // Lê informações da linha
-        NSMutableDictionary *busLineInformation = [[NSMutableDictionary alloc] init];
-        busLineInformation[@"line"] = lineNumber;
+        // Convert JSON location data to CLLocation objects
+        NSArray *itinerarySpotsDictionaries = itinerary[@"spots"];
+        NSMutableArray *itinerarySpots = [[NSMutableArray alloc] initWithCapacity:itinerarySpotsDictionaries.count];
         
-        // Converte dados para lista de shapes
-        NSMutableArray *shapes = [[NSMutableArray alloc] initWithCapacity:6];
-        
-        if (pontosDoPercurso.count > 0) {
-            busLineInformation[@"name"] = ((NSString *)pontosDoPercurso[0][@"description"]).capitalizedString;
-            
-            // Tirar informação entre parênteses do nome da linha
-            NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"s/\\[.*?\\]|\\(.*?\\)|\\{.*?\\}//g" options:NSRegularExpressionCaseInsensitive error:nil];
-            NSString *lineNameWithoutParentheses = [regex stringByReplacingMatchesInString:busLineInformation[@"name"] options:0 range:NSMakeRange(0, [busLineInformation[@"name"] length]) withTemplate:@""];
-            lineNameWithoutParentheses = [lineNameWithoutParentheses stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
-            busLineInformation[@"places"] = [lineNameWithoutParentheses componentsSeparatedByString:@" X "];
-            
-            NSCharacterSet *quoteCharSet = [NSCharacterSet characterSetWithCharactersInString:@"\""];
-            [shapes addObject:[[NSMutableArray alloc] initWithCapacity:200]];
-            __block NSString *lastShapeId = pontosDoPercurso[0][@"shape"];
-            
-            for (NSDictionary *dadosDoPonto in pontosDoPercurso) {
-                NSString *strLatitude = [dadosDoPonto[@"latitude"] stringByTrimmingCharactersInSet:quoteCharSet];
-                NSString *strLongitude = [dadosDoPonto[@"longitude"] stringByTrimmingCharactersInSet:quoteCharSet];
+        if (itinerarySpotsDictionaries.count > 0) {
+            for (NSDictionary *spot in itinerarySpotsDictionaries) {
+                NSString *strLatitude = spot[@"latitude"];
+                NSString *strLongitude = spot[@"longitude"];
                 
                 CLLocation *location = [[CLLocation alloc] initWithLatitude:strLatitude.doubleValue longitude:strLongitude.doubleValue];
-                NSString *currShapeId = dadosDoPonto[@"shape"];
-                
-                NSMutableArray *currShapeArray;
-                if ([lastShapeId isEqualToString:currShapeId]) {
-                    currShapeArray = shapes.lastObject;
-                }
-                else {
-                    currShapeArray = [[NSMutableArray alloc] initWithCapacity:200];
-                    [shapes addObject:currShapeArray];
-                }
-                
-                lastShapeId = currShapeId;
-                [currShapeArray addObject:location];
+                [itinerarySpots addObject:location];
             }
         }
         
-        busLineInformation[@"shapes"] = shapes;
-        handler(busLineInformation, nil);
+        // Send data to callback on main thread to avoid issues updating the UI
+        dispatch_async(dispatch_get_main_queue(), ^{
+            handler(itinerarySpots, nil);
+        });
     }
     
 }
 
 - (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler {
-    // Previne URL injection
+    // Prepare request
     NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *strUrl = [NSString stringWithFormat:@"%@/search/2/%@", host, webSafeNumber];
     NSLog(@"URL = %@" , strUrl);
-    
-    // Monta o request
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     operation.responseSerializer = [AFJSONResponseSerializer serializer];
     
-    // Chama a URL
+    // Fetch URL
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        // Objeto com os
         NSArray *jsonBusesData = (NSArray *)responseObject;
         NSMutableArray *busesData = [[NSMutableArray alloc] initWithCapacity:jsonBusesData.count];
         
@@ -166,13 +193,13 @@ static const NSString *host = @"http://rest.riob.us";
             [busesData addObject:bus];
         }
         
-        // Chama "callback" de retorno na thread principal (evita problemas na atualizacao da interface)
+        // Send data to callback on main thread to avoid issues updating the UI
         dispatch_async(dispatch_get_main_queue(), ^{
             handler(busesData, nil);
         });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        // Chama "callback" de retorno na thread principal (evita problemas na atualizacao da interface)
+        // Send data to callback on main thread to avoid issues updating the UI
         dispatch_async(dispatch_get_main_queue(), ^{
             handler(nil, error);
         });
