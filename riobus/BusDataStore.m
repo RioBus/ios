@@ -1,4 +1,5 @@
 #import "BusDataStore.h"
+#import "BusData.h"
 #import <AFNetworking/AFNetworking.h>
 
 @implementation BusDataStore
