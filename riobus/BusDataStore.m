@@ -4,6 +4,7 @@
 @implementation BusDataStore
 
 static const NSString *host = @"http://rest.riob.us";
+static const float cacheVersion = 3.0;
 
 + (instancetype)sharedInstance {
     static id sharedInstance;
@@ -18,13 +19,12 @@ static const NSString *host = @"http://rest.riob.us";
 - (instancetype)init {
     self = [super init];
     if (self) {
-        // TODO: Re-enable cache
         // Check if the user's cache is in the proper version, rebuilding it otherwise
-//        if ([[NSUserDefaults standardUserDefaults] floatForKey:@"cache_version"] < 2.0) {
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"Rotas de Onibus"];
-            [[NSUserDefaults standardUserDefaults] setFloat:2.0 forKey:@"cache_version"];
+        if ([[NSUserDefaults standardUserDefaults] floatForKey:@"cache_version"] < cacheVersion) {
+            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"bus_itineraries"];
+            [[NSUserDefaults standardUserDefaults] setFloat:cacheVersion forKey:@"cache_version"];
             NSLog(@"User's cache redefined (cache wasn't found or was too old).");
-//        }
+        }
     }
     return self;
 }
@@ -62,7 +62,7 @@ static const NSString *host = @"http://rest.riob.us";
                 });
             }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"ERRO: Requisição de itinerário falhou. %@", error.localizedDescription);
+            NSLog(@"ERROR: Bus lines request to server failed. %@", error.localizedDescription);
             dispatch_async(dispatch_get_main_queue(), ^{
                 handler(nil, error);
             });
@@ -71,7 +71,7 @@ static const NSString *host = @"http://rest.riob.us";
         [operation start];
     }
     else {
-        NSLog(@"Tracked lines found on cache.");
+        NSLog(@"Tracked bus lines found on cache.");
         
         dispatch_async(dispatch_get_main_queue(), ^{
             handler(cachedLines, nil);
@@ -86,7 +86,7 @@ static const NSString *host = @"http://rest.riob.us";
     AFHTTPRequestOperation *operation;
     NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Rotas de Onibus"] mutableCopy];
+    NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"bus_itineraries"] mutableCopy];
     if (!buses) {
         buses = [[NSMutableDictionary alloc] init];
     }
@@ -108,7 +108,7 @@ static const NSString *host = @"http://rest.riob.us";
             
             if (![jsonData isEqualToString:@""]) {
                 buses[webSafeNumber] = jsonData;
-                [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"Rotas de Onibus"];
+                [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"bus_itineraries"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 
                 NSLog(@"Itinerary for line %@ now cached.", webSafeNumber);
@@ -120,7 +120,7 @@ static const NSString *host = @"http://rest.riob.us";
             [self processBusLineItinerary:lineNumber withJsonData:jsonData withCompletionHandler:handler];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             // Send data to callback on main thread to avoid issues updating the UI
-            NSLog(@"ERRO: Itinerary request to server failed. %@", error.localizedDescription);
+            NSLog(@"ERROR: Itinerary request to server failed. %@", error.localizedDescription);
             dispatch_async(dispatch_get_main_queue(), ^{
                 handler(nil, error);
             });
@@ -177,7 +177,7 @@ static const NSString *host = @"http://rest.riob.us";
 - (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler {
     // Prepare request
     NSString *webSafeNumber = [lineNumber stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *strUrl = [NSString stringWithFormat:@"%@/search/2/%@", host, webSafeNumber];
+    NSString *strUrl = [NSString stringWithFormat:@"%@/v3/search/%@", host, webSafeNumber];
     NSLog(@"URL = %@" , strUrl);
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];

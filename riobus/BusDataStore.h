@@ -4,27 +4,37 @@
 @interface BusDataStore : NSObject
 
 /**
- * Obtém a instância singleton de BusDataStore, inicializando-a caso necessário.
- * @returns Instância singleton de BusDataStore
+ * Gets singleton instance of BusDataStore, initialising it if necessary.
+ * @returns Unique instance of BusDataStore.
  */
 + (instancetype)sharedInstance;
 
-// TODO: documentation
+/**
+ * Loads document from server containing list of all bus lines with tracking available.
+ * @param handler Block to be called when operation is finished, containing a dictionary with
+ * the description for each bus line. This object can be nil when an error occurs, in which case
+ * the second parameter will contain an associated NSError.
+ * @returns NSOperation object of the request.
+ */
 - (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler;
 
 /**
- * Carrega do servidor um array com os ônibus da linha selecionada.
- * @param lineNumber Número da linha de ônibus (ex: 485).
- * @param handler Bloco a ser executado ao final da operação, que terá como entrada busesData contendo os ônibus ou um objeto nil caso nenhum seja encontrado e error que será nil caso  a operação não tenha falhas ou um objeto NSError caso ocorra algum erro.
- * @returns Retorna a operação relacionada ao request dos dados.
+ * Loads an array from the server containing all the tracked buses for the selected line.
+ * @param lineNumber Line number to be tracked (e.g.: 485).
+ * @param handler Block to be called when operation is finished, containing an array with all buses
+ * of the specified line. This object can be nil when an error occurs, in which case the second
+ * parameter will contain an associated NSError.
+ * @returns NSOperation object of the request.
  */
 - (NSOperation*)loadBusDataForLineNumber:(NSString*)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler;
 
 /**
- * Carrega do servidor um dicionário com as informações da linha selecionada, como seu itinerário.
- * @param lineNumber Número da linha de ônibus (ex: 485).
- * @param handler Bloco a ser executado ao final da operação, que terá como entrada um dicionário contendo as informações da linha, como nome e os pontos do percurso.
- * @returns Retorna a operação relacionada ao request dos dados.
+ * Loads an array from the server containing all the location points of a bus line itinerary.
+ * @param lineNumber Line number to be tracked (e.g.: 485).
+ * @param handler Block to be called when operation is finished, containing an array with all spots
+ * of the specified line's itinerary. This object can be nil when an error occurs, in which case the 
+ * second parameter will contain an associated NSError.
+ * @returns NSOperation object of the request.
  */
 - (NSOperation*)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler;
 
