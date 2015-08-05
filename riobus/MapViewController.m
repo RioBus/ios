@@ -201,6 +201,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     }
 }
 
+
 #pragma mark - Controller methods
 
 /**
@@ -371,7 +372,6 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                      else {
                                                                          self.busesData = nil;
                                                                          
-                                                                         [self.busLineBar hide];
                                                                          [SVProgressHUD dismiss];
                                                                          
                                                                          [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@", self.searchedLine] andMessage:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento ou não existir."];
@@ -403,9 +403,8 @@ static const CGFloat cameraPaddingRight = 30.0;
             if (!marker) {
                 marker = [[GMSMarker alloc] init];
                 marker.map = self.mapView;
-                marker.icon = self.favoriteLineMode ? [UIImage imageNamed:@"BusMarkerFavorite"] : [UIImage imageNamed:@"BusMarker"];
+                marker.icon = [UIImage imageNamed:@"BusMarker"];
                 self.markerForOrder[busData.order] = marker;
-                
             }
             
             marker.title = busData.destination ? [NSString stringWithFormat:@"%@ → %@", busData.order, busData.destination] : busData.order;
