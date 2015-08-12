@@ -299,6 +299,9 @@ static const CGFloat cameraPaddingRight = 30.0;
         return;
     }
     
+    // Save search to history
+    [self.suggestionTable addToRecentTable:busLine];
+    
     // Set new search parameters
     self.searchInput.text = busLine;
     self.searchedDirection = nil;
@@ -481,9 +484,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     NSString *escapedBusLineString = [[searchBar.text.uppercaseString componentsSeparatedByCharactersInSet:[validCharacters invertedSet]] componentsJoinedByString:@""];
     
     if (![escapedBusLineString isEqualToString:@""]) {
-        // Save search to history
-        [self.suggestionTable addToRecentTable:escapedBusLineString];
-        
         // Search bus line
         [self searchForBusLine:escapedBusLineString];
     }
