@@ -15,7 +15,17 @@
             NSString *lineNameWithoutParentheses = [regex stringByReplacingMatchesInString:_name options:0 range:NSMakeRange(0, _name.length) withTemplate:@""];
             lineNameWithoutParentheses = [lineNameWithoutParentheses stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
             
-            _places = [lineNameWithoutParentheses componentsSeparatedByString:@" X "];
+            // Parse the two locations from bus line name
+            NSMutableArray *places = [[lineNameWithoutParentheses componentsSeparatedByString:@" X "] mutableCopy];
+            
+            // Only assign location property if we have parsed two names
+            if (places.count == 2) {
+                // Trim the name strings
+                for (int i=0; i<places.count; i++) {
+                    places[i] = [places[i] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                }
+                _places = places;
+            }
         }
     }
     return self;
