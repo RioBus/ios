@@ -2,6 +2,7 @@
 #import <XCTest/XCTest.h>
 
 #import "BusDataStore.h"
+#import "BusData.h"
 
 @interface BusDataStoreTests : XCTestCase
 
@@ -101,37 +102,13 @@ static const float timeoutInSeconds = 10.0;
 /**
  * Tests if the server is responding normally to a request with an empty line number
  */
-- (void)testLoadBusLineShapeEmpty {
-    NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
-    __block BOOL waitingForBlock = YES;
-    
-    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
-        XCTAssertNil(busLineInformation, @"Shapes should've returned nil with empty line number");
-        XCTAssertNotNil(error, @"Operation should have returned an error from server");
-        
-        waitingForBlock = NO;
-    }];
-    
-    // Run the loop
-    while (waitingForBlock && timeout.timeIntervalSinceNow > 0) {
-        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
-                                 beforeDate:[NSDate dateWithTimeIntervalSinceNow:1]];
-    }
-    
-    XCTAssertFalse(waitingForBlock, @"Test failed with timeout.");
-}
-
-/**
- * Tests if the server is responding normally to a request with an empty line number
- */
 - (void)testLoadBusLineShapeFakeLine {
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"ABCDEFGH" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
-        NSArray* shapes = busLineInformation[@"shapes"];
-        XCTAssertNotNil(shapes, @"Shapes returned nil");
-        XCTAssert(shapes.count == 0, @"Shapes should've returned an empty array");
+    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"ABCDEFGH" withCompletionHandler:^(NSArray *itinerarySpots, NSError *error) {
+        XCTAssertNotNil(itinerarySpots, @"Itinerary spots returned nil");
+        XCTAssert(itinerarySpots.count == 0, @"Itinerary spots should've returned an empty array");
         XCTAssertNil(error, @"Operation returned an error");
         
         waitingForBlock = NO;
@@ -153,13 +130,11 @@ static const float timeoutInSeconds = 10.0;
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"485" withCompletionHandler:^(NSDictionary *busLineInformation, NSError *error) {
-        NSArray* shapes = busLineInformation[@"shapes"];
-        XCTAssertNotNil(shapes, @"Shapes returned nil");
-        XCTAssert(shapes.count > 0, @"Shapes returned an empty array");
-        XCTAssert(((NSArray*)shapes[0]).count > 0, @"Shapes does not contain a NSArray object");
-        NSArray* shape = shapes[0];
-        CLLocation* location = shape[0];
+    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"485" withCompletionHandler:^(NSArray *itinerarySpots, NSError *error) {
+        XCTAssertNotNil(itinerarySpots, @"Itinerary spots returned nil");
+        XCTAssert(itinerarySpots.count > 0, @"Itinerary spots returned an empty array");
+        
+        CLLocation* location = itinerarySpots[0];
         XCTAssertNotNil(location, @"Returned shape object is nil");
         XCTAssertNil(error, @"Operation returned an error");
         
