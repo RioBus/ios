@@ -3,6 +3,6 @@ osx_image: xcode6.4
 before_install:
   - gem install cocoapods -v '0.37.2'
 cache: cocoapods
-script: xcodebuild -workspace riobus.xcworkspace -scheme riobus -sdk iphonesimulator -configuration Release ONLY_ACTIVE_ARCH=NO
+script: xcodebuild test -workspace riobus.xcworkspace -scheme unit-tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
 notifications:
   slack: riobussl:oXchKgSosMSQ9JFACqdubfuz
