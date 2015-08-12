@@ -95,12 +95,12 @@ class RioBusUITests: XCTestCase {
         // Marcar uma linha como favorita
         let normalCell = normalCells.elementAtIndex(0)
         normalCell.buttons["Star"].tap()
-        XCTAssertEqual(favoriteCell.staticTexts.element.value as! String, normalCell.staticTexts.element.value as! String, "Não salvou a primeira linha como favorito")
+        XCTAssertEqual(favoriteCell.staticTexts.elementAtIndex(0).value as! String, normalCell.staticTexts.elementAtIndex(0).value as! String, "Não salvou a primeira linha como favorito")
         
         // Marcar outra linha como favorita
         normalCell.buttons["Star"].tap()
         app.alerts.collectionViews.buttons["Redefinir"].tap()
-        XCTAssertEqual(favoriteCell.staticTexts.element.value as! String, normalCell.staticTexts.element.value as! String, "Não salvou a segunda linha como favorito")
+        XCTAssertEqual(favoriteCell.staticTexts.elementAtIndex(0).value as! String, normalCell.staticTexts.elementAtIndex(0).value as! String, "Não salvou a segunda linha como favorito")
         
         // Remover dos favoritos
         favoriteCell.buttons["StarFilled"].tap()

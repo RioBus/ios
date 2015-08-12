@@ -63,6 +63,8 @@ static const int recentItemsLimit = 10;
  */
 - (void)didUpdateTrackedLines:(NSNotification *)notification {
     NSLog(@"ST Received notification that bus lines were updated.");
+    self.trackedBusLines = (NSDictionary *)notification.object;
+    [self reloadData];
 }
 
 /**
@@ -126,8 +128,8 @@ static const int recentItemsLimit = 10;
             [self moveRowAtIndexPath:favoriteIndexPath toIndexPath:recentsIndexPath];
             [self moveRowAtIndexPath:indexPath toIndexPath:favoriteIndexPath];
             [self endUpdates];
-            [self configureCell:[self cellForRowAtIndexPath:favoriteIndexPath] forRowAtIndexPath:favoriteIndexPath];
-            [self configureCell:[self cellForRowAtIndexPath:recentsIndexPath] forRowAtIndexPath:recentsIndexPath];
+            [self reloadRowsAtIndexPaths:@[favoriteIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self reloadRowsAtIndexPaths:@[recentsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }]];
         
         [alertController showWithSender:self controller:nil animated:YES completion:nil];
@@ -146,7 +148,7 @@ static const int recentItemsLimit = 10;
             [self deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:optionsSectionIndex]] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         [self endUpdates];
-        [self configureCell:[self cellForRowAtIndexPath:favoriteIndexPath] forRowAtIndexPath:favoriteIndexPath];
+        [self reloadRowsAtIndexPaths:@[favoriteIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -173,7 +175,7 @@ static const int recentItemsLimit = 10;
             [self insertRowsAtIndexPaths:@[optionsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         [self endUpdates];
-        [self configureCell:[self cellForRowAtIndexPath:recentsIndexPath] forRowAtIndexPath:recentsIndexPath];
+        [self reloadRowsAtIndexPaths:@[recentsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }]];
     
     [alertController showWithSender:self controller:nil animated:YES completion:nil];
@@ -228,54 +230,65 @@ static const int recentItemsLimit = 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *simpleTableIdentifier = @"Cell";
+    UITableViewCell *cell;
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:simpleTableIdentifier];
-    }
-    
-    cell.imageView.userInteractionEnabled = YES;
-    cell.imageView.tag = indexPath.item;
-
-    [self configureCell:cell forRowAtIndexPath:indexPath];
-    
-    return cell;
-}
-
-- (void)configureCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == favoritesSectionIndex) {
-        cell.imageView.image = [[UIImage imageNamed:@"StarFilled"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.tintColor = [UIColor appGoldColor];
+        NSString *cellIdentifier = @"Favorite Line Cell";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            cell.tintColor = [UIColor appGoldColor];
+            cell.textLabel.textColor = [UIColor darkGrayColor];
+            UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeLineFromFavorite:)];
+            tapped.numberOfTapsRequired = 1;
+            cell.imageView.image = [[UIImage imageNamed:@"StarFilled"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [cell.imageView addGestureRecognizer:tapped];
+            cell.imageView.isAccessibilityElement = YES;
+            cell.imageView.accessibilityTraits = UIAccessibilityTraitButton;
+            if ([cell respondsToSelector:NSSelectorFromString(@"setAcessibilityElements")]) {
+                cell.accessibilityElements = @[cell.textLabel, cell.imageView];
+            }
+            cell.imageView.userInteractionEnabled = YES;
+        }
+        
         cell.textLabel.text = self.favoriteLine;
-        cell.textLabel.textColor = [UIColor darkGrayColor];
         cell.detailTextLabel.text = self.trackedBusLines[self.favoriteLine];
-        UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeLineFromFavorite:)];
-        tapped.numberOfTapsRequired = 1;
-        [cell.imageView addGestureRecognizer:tapped];
     }
     else if (indexPath.section == recentsSectionIndex) {
+        NSString *cellIdentifier = @"Recent Line Cell";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+            cell.tintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+            cell.textLabel.textColor = [UIColor darkGrayColor];
+            UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(makeLineFavorite:)];
+            tapped.numberOfTapsRequired = 1;
+            cell.imageView.image = [[UIImage imageNamed:@"Star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [cell.imageView addGestureRecognizer:tapped];
+            cell.imageView.isAccessibilityElement = YES;
+            cell.imageView.accessibilityTraits = UIAccessibilityTraitButton;
+            if ([cell respondsToSelector:NSSelectorFromString(@"setAcessibilityElements")]) {
+                cell.accessibilityElements = @[cell.textLabel, cell.imageView];
+            }
+            cell.imageView.userInteractionEnabled = YES;
+        }
+        
         NSString *lineName = self.recentLines[self.recentLines.count - indexPath.row - 1];
-        cell.imageView.image = [[UIImage imageNamed:@"Star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.tintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
         cell.textLabel.text = lineName;
-        cell.textLabel.textColor = [UIColor darkGrayColor];
         cell.detailTextLabel.text = self.trackedBusLines[lineName];
-        UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(makeLineFavorite:)];
-        tapped.numberOfTapsRequired = 1;
-        [cell.imageView addGestureRecognizer:tapped];
     }
     else if (indexPath.section == optionsSectionIndex) {
-        cell.imageView.image = nil;
+        NSString *cellIdentifier = @"Option Cell";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.textLabel.textColor = [UIColor lightGrayColor];
+        }
+        
         cell.textLabel.text = @"Limpar pesquisas";
-        cell.textLabel.textColor = [UIColor lightGrayColor];
-        cell.detailTextLabel.text = @"";
     }
-    cell.imageView.isAccessibilityElement = YES;
-    cell.imageView.accessibilityTraits = UIAccessibilityTraitButton;
-    if ([cell respondsToSelector:NSSelectorFromString(@"setAcessibilityElements")]) {
-        cell.accessibilityElements = @[cell.textLabel, cell.imageView];
-    }
+    
+    return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
