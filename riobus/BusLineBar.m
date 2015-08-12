@@ -158,6 +158,9 @@
         self.lineNameLabel.text = [NSString stringWithFormat:@"Linha %@", busLine.line];
     }
     
+    self.leftDestinationButton.selected = NO;
+    self.rightDestinationButton.selected = NO;
+    
     if (busLine.places.count == 2) {
         [self.leftDestinationButton setTitle:busLine.places[0] forState:UIControlStateNormal];
         [self.rightDestinationButton setTitle:busLine.places[1] forState:UIControlStateNormal];
@@ -171,24 +174,18 @@
 
 - (BOOL)selectDestination:(NSString *)destination {
     if ([self.leftDestinationButton.titleLabel.text isEqualToString:destination]) {
-        self.leftDestinationButton.enabled = NO;
         self.leftDestinationButton.selected = YES;
-        self.rightDestinationButton.enabled = YES;
         self.rightDestinationButton.selected = NO;
         return YES;
     }
     
     if ([self.rightDestinationButton.titleLabel.text isEqualToString:destination]) {
-        self.leftDestinationButton.enabled = YES;
         self.leftDestinationButton.selected = NO;
-        self.rightDestinationButton.enabled = NO;
         self.rightDestinationButton.selected = YES;
         return YES;
     }
     
-    self.leftDestinationButton.enabled = YES;
     self.leftDestinationButton.selected = NO;
-    self.rightDestinationButton.enabled = YES;
     self.rightDestinationButton.selected = NO;
     return NO;
 }
@@ -206,12 +203,12 @@
 }
 
 - (IBAction)didTapDirectionButton:(UIButton *)sender {
-    if (self.leftDestinationButton.enabled) {
+    if (!self.leftDestinationButton.selected) {
         if ([self.delegate busLineBarView:self didSelectDestination:self.leftDestinationButton.titleLabel.text]) {
             [self selectDestination:self.leftDestinationButton.titleLabel.text];
         }
     }
-    else if (self.rightDestinationButton.enabled) {
+    else if (!self.rightDestinationButton.selected) {
         if ([self.delegate busLineBarView:self didSelectDestination:self.rightDestinationButton.titleLabel.text]) {
             [self selectDestination:self.rightDestinationButton.titleLabel.text];
         }
