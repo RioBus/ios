@@ -23,6 +23,7 @@ static const float cacheVersion = 3.0;
         // Check if the user's cache is in the proper version, rebuilding it otherwise
         if ([[NSUserDefaults standardUserDefaults] floatForKey:@"cache_version"] < cacheVersion) {
             [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"bus_itineraries"];
+            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"Rotas de Onibus"];
             [[NSUserDefaults standardUserDefaults] setFloat:cacheVersion forKey:@"cache_version"];
             NSLog(@"User's cache redefined (cache wasn't found or was too old).");
         }
@@ -58,6 +59,8 @@ static const float cacheVersion = 3.0;
                 }
                 
                 [[NSUserDefaults standardUserDefaults] setObject:fetchedLines forKey:@"tracked_bus_lines"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"RioBusDidUpdateTrackedLines" object:fetchedLines];
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     handler(fetchedLines, nil);
                 });

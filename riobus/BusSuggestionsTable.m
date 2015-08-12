@@ -26,7 +26,9 @@ static const int recentItemsLimit = 10;
         self.delegate = self;
         self.dataSource = self;
         
-        self.favoriteLine  = [[NSUserDefaults standardUserDefaults] objectForKey:@"favorite_line"];
+        self.trackedBusLines = [[NSUserDefaults standardUserDefaults] objectForKey:@"tracked_bus_lines"];
+        
+        self.favoriteLine = [[NSUserDefaults standardUserDefaults] objectForKey:@"favorite_line"];
         
         NSArray *savedRecents = [[NSUserDefaults standardUserDefaults] objectForKey:@"Recents"];
         if (savedRecents) {
@@ -35,12 +37,16 @@ static const int recentItemsLimit = 10;
         else {
             self.recentLines = [[NSMutableArray alloc] init];
         }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateTrackedLines:)
+                                                     name:@"RioBusDidUpdateTrackedLines"
+                                                   object:nil];
     }
     
     return self;
 }
 
-- (void)syncrhonizePreferences {
+- (void)synchronizePreferences {
     // Trim the size of the recent lines table by removing the last lines
     while (self.recentLines.count >= recentItemsLimit) {
         [self.recentLines removeObjectAtIndex:0];
@@ -49,6 +55,14 @@ static const int recentItemsLimit = 10;
     [[NSUserDefaults standardUserDefaults] setObject:self.recentLines forKey:@"Recents"];
     [[NSUserDefaults standardUserDefaults] setObject:self.favoriteLine forKey:@"favorite_line"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+/**
+ * Notification called when the application has received new bus lines from the server.
+ * @param notification Notification contaning object with new bus lines.
+ */
+- (void)didUpdateTrackedLines:(NSNotification *)notification {
+    NSLog(@"ST Received notification that bus lines were updated.");
 }
 
 /**
@@ -86,7 +100,7 @@ static const int recentItemsLimit = 10;
         NSLog(@"Exception atualizando tabela");
     }
     
-    [self syncrhonizePreferences];
+    [self synchronizePreferences];
 }
 
 - (void)makeLineFavorite:(UITapGestureRecognizer *)gestureRecognizer {
@@ -104,7 +118,7 @@ static const int recentItemsLimit = 10;
             [self.recentLines removeObject:busLine];
             [self.recentLines addObject:self.favoriteLine];
             self.favoriteLine = busLine;
-            [self syncrhonizePreferences];
+            [self synchronizePreferences];
             
             // Atualizar view
             [self beginUpdates];
@@ -123,7 +137,7 @@ static const int recentItemsLimit = 10;
         // Atualizar modelo
         self.favoriteLine = busLine;
         [self.recentLines removeObject:busLine];
-        [self syncrhonizePreferences];
+        [self synchronizePreferences];
         
         // Atualizar view
         [self beginUpdates];
@@ -146,7 +160,7 @@ static const int recentItemsLimit = 10;
             [self.recentLines addObject:self.favoriteLine];
         }
         self.favoriteLine = nil;
-        [self syncrhonizePreferences];
+        [self synchronizePreferences];
         
         // Atualizar view
         NSIndexPath *favoriteIndexPath = [NSIndexPath indexPathForRow:0 inSection:favoritesSectionIndex];
@@ -173,7 +187,7 @@ static const int recentItemsLimit = 10;
         
         // Atualizar modelo
         [self.recentLines removeAllObjects];
-        [self syncrhonizePreferences];
+        [self synchronizePreferences];
         
         // Atualizar view
         [self beginUpdates];
@@ -218,7 +232,7 @@ static const int recentItemsLimit = 10;
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:simpleTableIdentifier];
     }
     
     cell.imageView.userInteractionEnabled = YES;
@@ -235,15 +249,18 @@ static const int recentItemsLimit = 10;
         cell.tintColor = [UIColor appGoldColor];
         cell.textLabel.text = self.favoriteLine;
         cell.textLabel.textColor = [UIColor darkGrayColor];
+        cell.detailTextLabel.text = self.trackedBusLines[self.favoriteLine];
         UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeLineFromFavorite:)];
         tapped.numberOfTapsRequired = 1;
         [cell.imageView addGestureRecognizer:tapped];
     }
     else if (indexPath.section == recentsSectionIndex) {
+        NSString *lineName = self.recentLines[self.recentLines.count - indexPath.row - 1];
         cell.imageView.image = [[UIImage imageNamed:@"Star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.tintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
-        cell.textLabel.text = self.recentLines[self.recentLines.count - indexPath.row - 1];
+        cell.textLabel.text = lineName;
         cell.textLabel.textColor = [UIColor darkGrayColor];
+        cell.detailTextLabel.text = self.trackedBusLines[lineName];
         UITapGestureRecognizer *tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(makeLineFavorite:)];
         tapped.numberOfTapsRequired = 1;
         [cell.imageView addGestureRecognizer:tapped];
@@ -252,6 +269,7 @@ static const int recentItemsLimit = 10;
         cell.imageView.image = nil;
         cell.textLabel.text = @"Limpar pesquisas";
         cell.textLabel.textColor = [UIColor lightGrayColor];
+        cell.detailTextLabel.text = @"";
     }
     cell.imageView.isAccessibilityElement = YES;
     cell.imageView.accessibilityTraits = UIAccessibilityTraitButton;
@@ -273,7 +291,7 @@ static const int recentItemsLimit = 10;
         else {
             [self.recentLines removeObjectAtIndex:self.recentLines.count - indexPath.row - 1];
         }
-        [self syncrhonizePreferences];
+        [self synchronizePreferences];
         
         // Atualizar view
         [tableView beginUpdates];

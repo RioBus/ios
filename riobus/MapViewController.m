@@ -102,6 +102,9 @@ static const CGFloat cameraPaddingRight = 30.0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateTrackedLines:)
+                                                 name:@"RioBusDidUpdateTrackedLines"
+                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -248,7 +251,7 @@ static const CGFloat cameraPaddingRight = 30.0;
  * Loads dictionary of available bus lines being tracked containing line names and descriptions.
  */
 - (void)updateTrackedBusLines {
-    [SVProgressHUD show];
+    [SVProgressHUD showWithStatus:@"Atualizando linhas"];
     
     [[BusDataStore sharedInstance] loadTrackedBusLinesWithCompletionHandler:^(NSDictionary *trackedBusLines, NSError *error) {
         [SVProgressHUD dismiss];
@@ -272,6 +275,14 @@ static const CGFloat cameraPaddingRight = 30.0;
             self.trackedBusLines = trackedBusLines;
         }
     }];
+}
+
+/**
+ * Notification called when the application has received new bus lines from the server.
+ * @param notification Notification contaning object with new bus lines.
+ */
+- (void)didUpdateTrackedLines:(NSNotification *)notification {
+    NSLog(@"Received notification that bus lines were updated.");
 }
 
 /**

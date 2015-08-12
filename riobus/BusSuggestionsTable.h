@@ -6,5 +6,6 @@ IB_DESIGNABLE
 - (void)addToRecentTable:(NSString *)busLine;
 
 @property (nonatomic) UISearchBar *searchInput;
+@property (nonatomic) NSDictionary *trackedBusLines;
 
 @end
