@@ -195,7 +195,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 #pragma mark - BusLineBar methods
 
-- (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestinations:(NSArray *)destinations {
+- (void)busLineBarView:(BusLineBar *)sender didSelectDestinations:(NSArray *)destinations {
     if (destinations.count == 1) {
         self.searchedDirection = destinations[0];
     }
@@ -204,8 +204,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     }
     
     [self updateBusMarkers];
-    
-    return YES;
 }
 
 - (void)busLineBarView:(BusLineBar *)sender didAppear:(BOOL)visible {
