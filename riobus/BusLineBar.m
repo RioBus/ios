@@ -158,8 +158,8 @@
         self.lineNameLabel.text = [NSString stringWithFormat:@"Linha %@", busLine.line];
     }
     
-    self.leftDestinationButton.selected = NO;
-    self.rightDestinationButton.selected = NO;
+    self.leftDestinationButton.selected = YES;
+    self.rightDestinationButton.selected = YES;
     
     if (busLine.places.count == 2) {
         [self.leftDestinationButton setTitle:busLine.places[0] forState:UIControlStateNormal];
@@ -172,46 +172,54 @@
 
 }
 
-- (BOOL)selectDestination:(NSString *)destination {
-    if ([self.leftDestinationButton.titleLabel.text isEqualToString:destination]) {
-        self.leftDestinationButton.selected = YES;
-        self.rightDestinationButton.selected = NO;
-        return YES;
+- (NSArray *)selectedDestinations {
+    NSMutableArray *destinations = [[NSMutableArray alloc] initWithCapacity:2];
+    
+    if (self.leftDestinationButton.selected) {
+        [destinations addObject:self.leftDestinationButton.titleLabel.text];
     }
     
-    if ([self.rightDestinationButton.titleLabel.text isEqualToString:destination]) {
-        self.leftDestinationButton.selected = NO;
-        self.rightDestinationButton.selected = YES;
-        return YES;
+    if (self.rightDestinationButton.selected) {
+        [destinations addObject:self.rightDestinationButton.titleLabel.text];
     }
     
-    self.leftDestinationButton.selected = NO;
-    self.rightDestinationButton.selected = NO;
-    return NO;
+    return destinations;
 }
 
 - (IBAction)didTapLeftDestinationButton:(UIButton *)sender {
-    if ([self.delegate busLineBarView:self didSelectDestination:sender.titleLabel.text]) {
-        [self selectDestination:sender.titleLabel.text];
+    self.leftDestinationButton.selected = !self.leftDestinationButton.selected;
+    
+    // If the two destinations are disabled, enable the opposite one
+    if (!self.leftDestinationButton.selected && !self.rightDestinationButton.selected) {
+        self.rightDestinationButton.selected = YES;
     }
+    
+    [self.delegate busLineBarView:self didSelectDestinations:self.selectedDestinations];
 }
 
 - (IBAction)didTapRightDestinationButton:(UIButton *)sender {
-    if ([self.delegate busLineBarView:self didSelectDestination:sender.titleLabel.text]) {
-        [self selectDestination:sender.titleLabel.text];
+    self.rightDestinationButton.selected = !self.rightDestinationButton.selected;
+    
+    // If the two destinations are disabled, enable the opposite one
+    if (!self.leftDestinationButton.selected && !self.rightDestinationButton.selected) {
+        self.leftDestinationButton.selected = YES;
     }
+    
+    [self.delegate busLineBarView:self didSelectDestinations:self.selectedDestinations];
 }
 
 - (IBAction)didTapDirectionButton:(UIButton *)sender {
-    if (!self.leftDestinationButton.selected) {
-        if ([self.delegate busLineBarView:self didSelectDestination:self.leftDestinationButton.titleLabel.text]) {
-            [self selectDestination:self.leftDestinationButton.titleLabel.text];
-        }
+    if (!self.leftDestinationButton.selected && self.rightDestinationButton.selected) {
+        self.leftDestinationButton.selected = YES;
+        self.rightDestinationButton.selected = NO;
+        
+        [self.delegate busLineBarView:self didSelectDestinations:self.selectedDestinations];
     }
     else if (!self.rightDestinationButton.selected) {
-        if ([self.delegate busLineBarView:self didSelectDestination:self.rightDestinationButton.titleLabel.text]) {
-            [self selectDestination:self.rightDestinationButton.titleLabel.text];
-        }
+        self.leftDestinationButton.selected = NO;
+        self.rightDestinationButton.selected = YES;
+        
+        [self.delegate busLineBarView:self didSelectDestinations:self.selectedDestinations];
     }
 }
 

@@ -11,7 +11,7 @@
  * @param destination The name of the destination the user has selected.
  * @returns A BOOL value indicating if the selection was authorised. YES will make the selection visible in the view and NO will keep the previous state.
  */
-- (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestination:(NSString *)destination;
+- (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestinations:(NSArray *)destinations;
 
 /**
  * Notifies the delegate that the bus bar has finished all animations and is now visibile. Optional method.
@@ -37,11 +37,9 @@
 - (void)hide;
 
 /**
- * Mark a destination as selected in the view
- * @param destination The name of the destination that should match one of the buttons
- * @returns BOOL indicating if the destination was successfuly select. Will return NO if the destination could not be found.
+ * Array of currently selected destinations (NSStrings). Will always be of size 1 or 2.
  */
-- (BOOL)selectDestination:(NSString *)destination;
+@property (nonatomic, readonly, copy) NSArray *selectedDestinations;
 
 @property (weak, nonatomic) IBOutlet UILabel *lineNameLabel;
 @property (weak, nonatomic) IBOutlet UIButton *rightDestinationButton;

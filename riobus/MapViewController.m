@@ -195,8 +195,14 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 #pragma mark - BusLineBar methods
 
-- (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestination:(NSString *)destination {
-    self.searchedDirection = destination;
+- (BOOL)busLineBarView:(BusLineBar *)sender didSelectDestinations:(NSArray *)destinations {
+    if (destinations.count == 1) {
+        self.searchedDirection = destinations[0];
+    }
+    else {
+        self.searchedDirection = nil;
+    }
+    
     [self updateBusMarkers];
     
     return YES;
