@@ -81,7 +81,7 @@ static const float timeoutInSeconds = 10.0;
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusDataForLineNumber:@"485" withCompletionHandler:^(NSArray *busesData, NSError *error) {
+    [[BusDataStore sharedInstance] loadBusDataForLineNumber:@"636" withCompletionHandler:^(NSArray *busesData, NSError *error) {
         XCTAssertNotNil(busesData, @"busesData returned nil");
         XCTAssert(busesData.count > 0, @"busesData returned an empty array");
         XCTAssertEqualObjects([busesData[0] class], [BusData class], @"busesData does not contain a BusData object");
