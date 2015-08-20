@@ -421,7 +421,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                          
                                                                          [SVProgressHUD dismiss];
                                                                          
-                                                                         [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@", self.searchedBusLine.line] andMessage:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento ou não existir."];
+                                                                         [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:@"Nenhum ônibus encontrado para a linha %@", self.searchedBusLine.line] andMessage:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento."];
                                                                          
                                                                          [self clearSearch];
                                                                          
@@ -452,7 +452,17 @@ static const CGFloat cameraPaddingRight = 30.0;
             if (!marker) {
                 marker = [[GMSMarker alloc] init];
                 marker.map = self.mapView;
-                marker.icon = [UIImage imageNamed:@"BusMarker"];
+                
+                if (busData.delayInMinutes < 5) {
+                    marker.icon = [UIImage imageNamed:@"BusMarkerGreen"];
+                }
+                else if (busData.delayInMinutes < 10) {
+                    marker.icon = [UIImage imageNamed:@"BusMarkerYellow"];
+                }
+                else {
+                    marker.icon = [UIImage imageNamed:@"BusMarkerRed"];
+                }
+                
                 self.markerForOrder[busData.order] = marker;
             }
             
