@@ -33,10 +33,10 @@ static const float cacheVersion = 3.0;
 
 - (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler {
     AFHTTPRequestOperation *operation;
-    NSDictionary *cachedLines = [[NSUserDefaults standardUserDefaults] objectForKey:@"tracked_bus_lines"];
-    // TODO: set prescription date for cache
-    if (!cachedLines) {
-        NSLog(@"Tracked lines database not on cache.");
+//    NSDictionary *cachedLines = [[NSUserDefaults standardUserDefaults] objectForKey:@"tracked_bus_lines"];
+//    // TODO: set prescription date for cache
+//    if (!cachedLines) {
+//        NSLog(@"Tracked lines database not on cache.");
         NSString *strUrl = [NSString stringWithFormat:@"%@/v3/itinerary", host];
         NSLog(@"URL = %@" , strUrl);
         
@@ -73,14 +73,14 @@ static const float cacheVersion = 3.0;
         }];
         
         [operation start];
-    }
-    else {
-        NSLog(@"Tracked bus lines found on cache.");
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            handler(cachedLines, nil);
-        });
-    }
+//    }
+//    else {
+//        NSLog(@"Tracked bus lines found on cache.");
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            handler(cachedLines, nil);
+//        });
+//    }
 
     return operation;
 }
