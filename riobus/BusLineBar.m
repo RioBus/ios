@@ -9,6 +9,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *avisoSentidoLabel;
 @property (weak, nonatomic) IBOutlet UIButton *directionButton;
 @property (nonatomic, strong) NSMutableArray *customConstraints;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *barHeightConstraint;
 
 @end
 
@@ -101,7 +102,7 @@
     
     [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.busLineBar.frame = CGRectMake(self.busLineBar.frame.origin.x,
-                                           self.containerView.frame.origin.y,
+                                           self.containerView.frame.origin.y + self.barHeightConstraint.constant,
                                            self.busLineBar.frame.size.width,
                                            self.busLineBar.frame.size.height);
     } completion:^(BOOL finished){
