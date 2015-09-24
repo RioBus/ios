@@ -337,15 +337,4 @@ static const int recentItemsLimit = 10;
     }
 }
 
-//- (nullable NSString *)tableView:(nonnull UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-//    if (section == favoritesSectionIndex && self.favoriteLine) {
-//        return @"Linha favorita";
-//    }
-//    else if (section == recentsSectionIndex && self.recentLines.count > 0) {
-//        return @"Pesquisas recentes";
-//    }
-//    
-//    return @"";
-//}
-
 @end

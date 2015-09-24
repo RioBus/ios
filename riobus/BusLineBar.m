@@ -156,7 +156,7 @@
         self.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLine.line, busLine.name];
     }
     else {
-        self.lineNameLabel.text = [NSString stringWithFormat:@"Linha %@", busLine.line];
+        self.lineNameLabel.text = [NSString stringWithFormat:@"Pesquisa por “%@”", busLine.line];
     }
     
     self.leftDestinationButton.selected = YES;
