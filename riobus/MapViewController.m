@@ -453,14 +453,14 @@ static const CGFloat cameraPaddingRight = 30.0;
  * Atualiza os marcadores dos ônibus no mapa de acordo com últimos dados e última direção.
  */
 - (void)updateBusMarkers {
-    // Atualizar marcadores
+    // Refresh markers
     self.mapBounds = [[GMSCoordinateBounds alloc] init];
     
     for (BusData *busData in self.busesData) {
-        // Busca o marcador no mapa se já existir
+        // Fetch previously used marker, if it exists
         GMSMarker *marker = self.markerForOrder[busData.order];
         
-        // Se o ônibus for para a direção desejada, adicioná-lo no mapa
+        // If the bus matches the selected direction, add it to the map
         if (!self.searchedDirection || [busData.destination isEqualToString:self.searchedDirection]) {
             if (!marker) {
                 marker = [[GMSMarker alloc] init];
@@ -487,14 +487,17 @@ static const CGFloat cameraPaddingRight = 30.0;
                 marker.opacity = 0.5;
             }
         }
-        // Se o ônibus for para a direção contrária e já estiver no mapa
+        // If the bus doesn't match the selected direction and is already in the map, remove it
         else if (marker) {
             marker.map = nil;
             [self.markerForOrder removeObjectForKey:busData.order];
         }
     }
     
-    // Realinhar mapa
+    // Re-center map adding the user's current location, if enabled
+    if (self.mapView.myLocation) {
+        self.mapBounds = [self.mapBounds includingCoordinate:self.mapView.myLocation.coordinate];
+    }
     UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
                                                     cameraPaddingRight,
                                                     cameraPaddingBottom,
