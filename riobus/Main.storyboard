@@ -234,8 +234,8 @@
                                     <segue destination="37H-yd-k75" kind="push" id="x5Y-2E-aph"/>
                                 </connections>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-DC-OOX">
-                                <rect key="frame" x="13" y="5" width="348" height="552"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-DC-OOX">
+                                <rect key="frame" x="13" y="5" width="348" height="565"/>
                                 <attributedString key="attributedText">
                                     <fragment content="RioBus ">
                                         <attributes>
@@ -287,7 +287,7 @@ Cg
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -298,7 +298,7 @@ Cg
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -310,7 +310,7 @@ Cg
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -321,7 +321,7 @@ Cg
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -332,7 +332,7 @@ Cg
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -343,7 +343,7 @@ Cg
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue-Bold"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -357,7 +357,7 @@ Cg
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -370,21 +370,44 @@ Cg
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="20" name="HelveticaNeue"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
+                                    <fragment content="Basta digitar ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="na caixa de busca ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
                                     <fragment>
-                                        <string key="content">Basta digitar a linha do ônibus que você deseja encontrar na caixa de busca e a posição de cada carro aparecerá no mapa. Na parte inferior da tela, você poderá ver informações como o nome da linha e selecionar apenas o destino desejado. Além disso, você pode ver mais informações sobre o ônibus ao clicar sobre o marcador.
+                                        <string key="content">a linha de ônibus que você deseja encontrar ou uma palavra-chave (ex: Centro) e a posição de cada ônibus aparecerá no mapa.
+
+Na parte inferior da tela, você poderá ver informações como o nome da linha e selecionar apenas o destino desejado. Além disso, você pode ver mais informações sobre o ônibus ao clicar sobre o marcador.
 
 </string>
                                         <attributes>
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -395,7 +418,7 @@ Cg
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="20" name="HelveticaNeue"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -403,12 +426,12 @@ Cg
                                     </fragment>
                                     <fragment>
                                         <string key="content">
-Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestões através da nossa página no Facebook. Ou então, caso você seja o tipo que prefere pôr a mão na massa, pode nos ajudar a aprimorar o nosso código, que está hospedado publicamente no GitHub. O código está licenciado sob a licença GNU GPL v2, isso quer dizer que você pode alterar e reutilizar à vontade!</string>
+Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestões através da nossa página no Facebook. Ou então, caso você seja o tipo que prefere pôr a mão na massa, pode nos ajudar a aprimorar o nosso código, que está hospedado publicamente no GitHub. O código está licenciado sob a licença GNU GPL v2 - isso quer dizer que você pode alterar e reutilizar a vontade!</string>
                                         <attributes>
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                             <font key="NSFont" size="14" name="HelveticaNeue"/>
                                             <real key="NSKern" value="0.0"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36">
                                                 <tabStops/>
                                             </paragraphStyle>
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -476,7 +499,7 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                                             <rect key="frame" x="15" y="0.0" width="325" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
