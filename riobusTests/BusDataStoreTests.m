@@ -130,11 +130,11 @@ static const float timeoutInSeconds = 10.0;
     NSDate *timeout = [NSDate dateWithTimeIntervalSinceNow:timeoutInSeconds];
     __block BOOL waitingForBlock = YES;
     
-    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"485" withCompletionHandler:^(NSArray *itinerarySpots, NSError *error) {
+    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:@"636" withCompletionHandler:^(NSArray *itinerarySpots, NSError *error) {
         XCTAssertNotNil(itinerarySpots, @"Itinerary spots returned nil");
         XCTAssert(itinerarySpots.count > 0, @"Itinerary spots returned an empty array");
         
-        CLLocation* location = itinerarySpots[0];
+        CLLocation* location = itinerarySpots.firstObject;
         XCTAssertNotNil(location, @"Returned shape object is nil");
         XCTAssertNil(error, @"Operation returned an error");
         

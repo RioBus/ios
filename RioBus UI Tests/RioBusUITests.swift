@@ -93,14 +93,14 @@ class RioBusUITests: XCTestCase {
         addSomeLinesToHistory()
         
         // Marcar uma linha como favorita
-        let normalCell = normalCells.elementAtIndex(0)
+        let normalCell = normalCells.elementBoundByIndex(0)
         normalCell.buttons["Star"].tap()
-        XCTAssertEqual(favoriteCell.staticTexts.elementAtIndex(0).value as! String, normalCell.staticTexts.elementAtIndex(0).value as! String, "Não salvou a primeira linha como favorito")
+        XCTAssertEqual(favoriteCell.staticTexts.elementBoundByIndex(0).value as? String, normalCell.staticTexts.elementBoundByIndex(0).value as? String, "Não salvou a primeira linha como favorito")
         
         // Marcar outra linha como favorita
         normalCell.buttons["Star"].tap()
         app.alerts.collectionViews.buttons["Redefinir"].tap()
-        XCTAssertEqual(favoriteCell.staticTexts.elementAtIndex(0).value as! String, normalCell.staticTexts.elementAtIndex(0).value as! String, "Não salvou a segunda linha como favorito")
+        XCTAssertEqual(favoriteCell.staticTexts.elementBoundByIndex(0).value as? String, normalCell.staticTexts.elementBoundByIndex(0).value as? String, "Não salvou a segunda linha como favorito")
         
         // Remover dos favoritos
         favoriteCell.buttons["StarFilled"].tap()
@@ -113,15 +113,15 @@ class RioBusUITests: XCTestCase {
     */
     func testBusLineSearchScreen() {
         searchField.tap()
-        searchField.typeText("324")
+        searchField.typeText("636")
         app.typeText("\r")
         
         XCTAssertEqual(app.alerts.count, 0, "Ocorreu um erro fazendo uma pesquisa")
         
-        XCTAssert(app.staticTexts["324 - Ribeira X Castelo (Circular)"].exists, "Não exibiu a barra de informações")
-        XCTAssert(app.buttons["Ribeira"].exists, "Não exibiu o botão do sentido 1")
-        XCTAssert(app.buttons["Castelo"].exists, "Não exibiu o botão do sentido 2")
-        XCTAssertEqual(searchField.value as! String, "324", "Não atualizou a barra de pesquisa")
+        XCTAssert(app.staticTexts["636 - Saens Pena X Gardenia Azul"].exists, "Não exibiu a barra de informações")
+        XCTAssert(app.buttons["Saens Pena"].exists, "Não exibiu o botão do sentido 1")
+        XCTAssert(app.buttons["Gardenia Azul"].exists, "Não exibiu o botão do sentido 2")
+        XCTAssertEqual(searchField.value as? String, "636", "Não atualizou a barra de pesquisa")
     }
     
     /**
@@ -150,9 +150,8 @@ class RioBusUITests: XCTestCase {
     */
     func testInfoScreen() {
         // Tap info button
-        
-        app.windows.childrenMatchingType(.Unknown).elementAtIndex(0).childrenMatchingType(.Unknown).elementAtIndex(4).childrenMatchingType(.Button).elementAtIndex(1).tap()
-        
+        app.buttons["Informações"].tap()
+                
         // Test: Reportar problema
         app.buttons["Reportar problema"].tap()
         
