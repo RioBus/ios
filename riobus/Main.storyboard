@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
@@ -21,6 +21,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lfw-bq-mSB" customClass="GMSMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="622"/>
+                                <animations/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="5Od-EK-s7Y"/>
@@ -31,6 +32,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2j4-0q-DaP" userLabel="Status Bar Background View">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
+                                        <animations/>
                                         <color key="backgroundColor" red="0.2627450980392157" green="0.63529411764705879" blue="0.95686274509803915" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="TXx-uM-JEO"/>
@@ -38,6 +40,7 @@
                                     </view>
                                     <searchBar opaque="NO" contentMode="redraw" text="" placeholder="Pesquisar linha de ônibus" translatesAutoresizingMaskIntoConstraints="NO" id="7Gl-dC-szk">
                                         <rect key="frame" x="0.0" y="23" width="375" height="44"/>
+                                        <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="barTintColor" red="0.2630089015" green="0.63410336320000005" blue="0.95744694180000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="search"/>
@@ -46,6 +49,7 @@
                                         </connections>
                                     </searchBar>
                                 </subviews>
+                                <animations/>
                                 <color key="backgroundColor" red="0.2627450980392157" green="0.63529411764705879" blue="0.95686274509803915" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="7Gl-dC-szk" firstAttribute="leading" secondItem="qj4-Wq-QPi" secondAttribute="leading" id="GIw-ST-IOK"/>
@@ -62,6 +66,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQr-1u-aMf" userLabel="Left Button">
                                         <rect key="frame" x="0.0" y="14" width="133" height="46"/>
+                                        <animations/>
                                         <color key="backgroundColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <accessibility key="accessibilityConfiguration" label="Informações"/>
                                         <constraints>
@@ -74,6 +79,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koQ-fU-bdw" userLabel="Middle Button">
                                         <rect key="frame" x="133" y="0.0" width="110" height="60"/>
+                                        <animations/>
                                         <accessibility key="accessibilityConfiguration" label="Minha localização"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="7LX-6G-I7k"/>
@@ -85,6 +91,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nS-lB-gHS" userLabel="Right Button">
                                         <rect key="frame" x="243" y="14" width="132" height="46"/>
+                                        <animations/>
                                         <color key="backgroundColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <accessibility key="accessibilityConfiguration"/>
                                         <constraints>
@@ -99,6 +106,7 @@
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKz-gM-zGK" userLabel="Show Bar Button">
                                         <rect key="frame" x="355" y="30" width="12" height="12"/>
+                                        <animations/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="hKz-gM-zGK" secondAttribute="height" multiplier="1:1" id="AJl-uH-rca"/>
                                             <constraint firstAttribute="width" constant="12" id="ro8-mh-5KJ"/>
@@ -109,6 +117,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <animations/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="koQ-fU-bdw" firstAttribute="top" secondItem="8Zz-pQ-lWZ" secondAttribute="top" id="3Kk-0c-aPu"/>
@@ -128,15 +137,18 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oXi-dn-3U5" customClass="BusLineBar">
                                 <rect key="frame" x="0.0" y="543" width="375" height="124"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="124" id="Jyt-Pa-n5y"/>
                                 </constraints>
                             </view>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lsP-IF-CM0" customClass="BusSuggestionsTable">
                                 <rect key="frame" x="0.0" y="70" width="375" height="597"/>
+                                <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -198,6 +210,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="t8b-Y1-f6V">
                         <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
@@ -227,6 +240,7 @@
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FWK-Od-CVk">
                                 <rect key="frame" x="13" y="565" width="129" height="30"/>
+                                <animations/>
                                 <state key="normal" title="Reportar problema">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -236,6 +250,7 @@
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YkP-DC-OOX">
                                 <rect key="frame" x="13" y="5" width="348" height="565"/>
+                                <animations/>
                                 <attributedString key="attributedText">
                                     <fragment content="RioBus ">
                                         <attributes>
@@ -413,6 +428,34 @@ Na parte inferior da tela, você poderá ver informações como o nome da linha 
                                             <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
                                         </attributes>
                                     </fragment>
+                                    <fragment>
+                                        <string key="content">Legenda dos marcadores
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="20" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">Verde: atualizado há menos de 5 min
+Amarelo: atualizado entre 5 e 10 minutos atrás
+Vermelho: atualizado há mais de 10 min
+
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="justified" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" minimumLineHeight="16" defaultTabInterval="36" tighteningFactorForTruncation="0.0">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
+                                        </attributes>
+                                    </fragment>
                                     <fragment content="Quer contribuir?">
                                         <attributes>
                                             <color key="NSColor" red="0.36470588235294116" green="0.36470588235294116" blue="0.36470588235294116" alpha="1" colorSpace="calibratedRGB"/>
@@ -443,6 +486,7 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wdt-qg-l7J">
                                 <rect key="frame" x="218" y="565" width="143" height="30"/>
+                                <animations/>
                                 <state key="normal" title="RioBus no Facebook">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -451,6 +495,7 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                                 </connections>
                             </button>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -486,6 +531,7 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="oXB-As-Suv">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
                         <color key="backgroundColor" red="0.90588235289999997" green="0.90588235289999997" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" textLabel="Xwb-W1-b5l" style="IBUITableViewCellStyleDefault" id="eIo-3m-jYP">
@@ -498,12 +544,15 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Problema" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xwb-W1-b5l">
                                             <rect key="frame" x="15" y="0.0" width="325" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <animations/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <animations/>
                                 </tableViewCellContentView>
+                                <animations/>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -541,6 +590,7 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                         <subviews>
                             <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TtM-oB-F7b">
                                 <rect key="frame" x="13" y="5" width="344" height="590"/>
+                                <animations/>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Ops! Parece que isso é um problema com os dados oficiais dos ônibus!">
@@ -573,6 +623,7 @@ Você pode enviar uma reclamação sobre seu problema através do 1746 (http://1
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ILA-8y-qvN" userLabel="Feedback Text View">
                                         <rect key="frame" x="13" y="8" width="348" height="257"/>
+                                        <animations/>
                                         <inset key="scrollIndicatorInsets" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
                                         <attributedString key="attributedText">
                                             <fragment content="Como podemos ajudar?">
@@ -604,6 +655,7 @@ Obrigado!</string>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9QZ-fr-m3g">
                                         <rect key="frame" x="116" y="280" width="144" height="34"/>
+                                        <animations/>
                                         <state key="normal" title="Enviar mensagem">
                                             <color key="titleColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
@@ -612,6 +664,7 @@ Obrigado!</string>
                                         </connections>
                                     </button>
                                 </subviews>
+                                <animations/>
                                 <constraints>
                                     <constraint firstItem="ILA-8y-qvN" firstAttribute="top" secondItem="0xt-8F-DTx" secondAttribute="topMargin" id="L1u-58-jed"/>
                                     <constraint firstItem="9QZ-fr-m3g" firstAttribute="centerX" secondItem="0xt-8F-DTx" secondAttribute="centerX" id="RaR-qw-LPw"/>
@@ -621,6 +674,7 @@ Obrigado!</string>
                                 </constraints>
                             </view>
                         </subviews>
+                        <animations/>
                         <color key="backgroundColor" red="0.90588235289999997" green="0.90588235289999997" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="0xt-8F-DTx" firstAttribute="leading" secondItem="Lb1-zG-MSk" secondAttribute="leading" id="0mN-6K-L3I"/>
