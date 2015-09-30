@@ -22,6 +22,7 @@
 @property (nonatomic) NSDictionary *trackedBusLines;
 @property (nonatomic) BusLine *searchedBusLine;
 @property (nonatomic) NSString *searchedDirection;
+@property (nonatomic) BOOL hasUpdatedMapPosition;
 
 @property (nonatomic) NSTimer *updateTimer;
 @property (nonatomic) NSMutableArray *lastRequests;
@@ -246,6 +247,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.searchInput.text = @"";
     self.searchedDirection = nil;
     self.searchedBusLine = nil;
+    self.hasUpdatedMapPosition = NO;
     self.arrowUpMenuButton.hidden = YES;
     [self.favoriteMenuButton setTitle:nil forState:UIControlStateNormal];
     [self.favoriteMenuButton setImage:[UIImage imageNamed:@"Star"] forState:UIControlStateNormal];
@@ -459,6 +461,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     for (BusData *busData in self.busesData) {
         // Fetch previously used marker, if it exists
         GMSMarker *marker = self.markerForOrder[busData.order];
+        NSString *lineName = self.trackedBusLines[busData.lineNumber] ? self.trackedBusLines[busData.lineNumber] : @"";
         
         // If the bus matches the selected direction, add it to the map
         if (!self.searchedDirection || [busData.destination isEqualToString:self.searchedDirection]) {
@@ -480,7 +483,7 @@ static const CGFloat cameraPaddingRight = 30.0;
             }
             
             marker.title = busData.destination ? [NSString stringWithFormat:@"%@ → %@", busData.order, busData.destination] : busData.order;
-            marker.snippet = [NSString stringWithFormat:@"Velocidade: %.0f km/h\nAtualizado %@", busData.velocity.doubleValue, busData.humanReadableDelay];
+            marker.snippet = [NSString stringWithFormat:@"Linha: %@ %@\nVelocidade: %.0f km/h\nAtualizado %@", busData.lineNumber, lineName, busData.velocity.doubleValue, busData.humanReadableDelay];
             marker.position = busData.location.coordinate;
             self.mapBounds = [self.mapBounds includingCoordinate:marker.position];
             if (busData.delayInMinutes >= 5) {
@@ -495,14 +498,17 @@ static const CGFloat cameraPaddingRight = 30.0;
     }
     
     // Re-center map adding the user's current location, if enabled
-    if (self.mapView.myLocation) {
-        self.mapBounds = [self.mapBounds includingCoordinate:self.mapView.myLocation.coordinate];
+    if (!self.hasUpdatedMapPosition) {
+        if (self.mapView.myLocation) {
+            self.mapBounds = [self.mapBounds includingCoordinate:self.mapView.myLocation.coordinate];
+        }
+        UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
+                                                        cameraPaddingRight,
+                                                        cameraPaddingBottom,
+                                                        cameraPaddingLeft);
+        [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
+        self.hasUpdatedMapPosition = YES;
     }
-    UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
-                                                    cameraPaddingRight,
-                                                    cameraPaddingBottom,
-                                                    cameraPaddingLeft);
-    [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
     
 }
 
