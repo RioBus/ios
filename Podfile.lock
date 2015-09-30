@@ -35,6 +35,7 @@ PODS:
   - GoogleUtilities (1.1.0):
     - GoogleSymbolUtilities (~> 1.0.0)
   - PSTAlertController (1.1.0)
+  - SimulatorStatusMagic (1.7)
   - SVProgressHUD (1.1.3)
 
 DEPENDENCIES:
@@ -42,6 +43,7 @@ DEPENDENCIES:
   - Google/Analytics (~> 1.0.0)
   - GoogleMaps (~> 1.10)
   - PSTAlertController (~> 1.1)
+  - SimulatorStatusMagic
   - SVProgressHUD (~> 1.1.3)
 
 SPEC CHECKSUMS:
@@ -53,6 +55,7 @@ SPEC CHECKSUMS:
   GoogleSymbolUtilities: a7b0feed1fe667c8d5e647177938d0ecd62d6948
   GoogleUtilities: 8ed9134debe11719097881711464752900668f10
   PSTAlertController: cb21afcfa76c3229feec7db044afd4f60dab5892
+  SimulatorStatusMagic: 46c90a12f73abeda6d7c16876e1e0998b6ca5f4f
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
 
-COCOAPODS: 0.39.0.beta.4
+COCOAPODS: 0.38.2

@@ -15,14 +15,14 @@ platform :ios do
     increment_build_number
     build_number = Actions.lane_context[Actions::SharedValues::BUILD_NUMBER]
     commit_version_bump(
-      message: "Build number bump to #{build_number}"
+      message: "Build number bump to #{build_number}”,
       force: true
     )
   end
 
   desc "Runs snapshot"
   lane :snapshots do
-    `snapshot --noclean`
+    `SNAPSHOT_BREAK_ON_FIRST_ERROR=1 snapshot --noclean`
   end
 
   desc "Runs all the tests"
