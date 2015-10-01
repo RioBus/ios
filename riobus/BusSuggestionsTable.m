@@ -324,11 +324,11 @@ static const int recentItemsLimit = 10;
     
     if (self.searchInput) {
         if (indexPath.section == favoritesSectionIndex) {
-            (self.searchInput).text = self.favoriteLine;
+            self.searchInput.text = self.favoriteLine;
             [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
         }
         else if (indexPath.section == recentsSectionIndex) {
-            (self.searchInput).text = self.recentLines[self.recentLines.count - indexPath.row - 1];
+            self.searchInput.text = self.recentLines[self.recentLines.count - indexPath.row - 1];
             [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
         }
         else if (indexPath.section == optionsSectionIndex) {

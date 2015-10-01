@@ -59,12 +59,12 @@ platform :ios do
   desc "** Full Markdown** Support: `code`"
   lane :deploy do
     cocoapods
-    increment_build
+    
     ipa(
       scheme: "riobus",
       configuration: "Release",
     )
-    snapshots
+    
     deliver(
       skip_deploy: true,
       force: true

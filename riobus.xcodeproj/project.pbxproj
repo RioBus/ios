@@ -23,6 +23,7 @@
 		681A7F9E196824890006C335 /* BusData.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F9D196824890006C335 /* BusData.m */; };
 		681A7FA1196824FC0006C335 /* BusDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA0196824FC0006C335 /* BusDataStore.m */; };
 		681A7FA819684A6C0006C335 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA719684A6C0006C335 /* OptionsViewController.m */; };
+		A30684C81BBD0E9400B64790 /* LineListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A30684C71BBD0E9400B64790 /* LineListViewController.m */; settings = {ASSET_TAGS = (); }; };
 		A31D90EE1AFA950E00AD3B35 /* BusDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */; };
 		A31D90F51AFAADE100AD3B35 /* BusDataStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */; };
 		A34B99E51B7BCBF90090A311 /* BusLineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A34B99E41B7BCBF90090A311 /* BusLineTests.m */; };
@@ -85,6 +86,8 @@
 		681A7FA619684A6C0006C335 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		681A7FA719684A6C0006C335 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		8D9CA8F077F246CFBA653042 /* libPods-riobus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-riobus.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A30684C61BBD0E9400B64790 /* LineListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineListViewController.h; sourceTree = "<group>"; };
+		A30684C71BBD0E9400B64790 /* LineListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineListViewController.m; sourceTree = "<group>"; };
 		A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataTests.m; sourceTree = "<group>"; };
 		A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataStoreTests.m; sourceTree = "<group>"; };
 		A34B99E41B7BCBF90090A311 /* BusLineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusLineTests.m; sourceTree = "<group>"; };
@@ -191,6 +194,8 @@
 				681A7F54196722540006C335 /* AppDelegate.m */,
 				681A7F7A196727C60006C335 /* MapViewController.h */,
 				681A7F7B196727C60006C335 /* MapViewController.m */,
+				A30684C61BBD0E9400B64790 /* LineListViewController.h */,
+				A30684C71BBD0E9400B64790 /* LineListViewController.m */,
 				681A7FA619684A6C0006C335 /* OptionsViewController.h */,
 				681A7FA719684A6C0006C335 /* OptionsViewController.m */,
 				A3D3D6931B500E4200D9A83C /* ReportProblemViewController.h */,
@@ -473,6 +478,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A30684C81BBD0E9400B64790 /* LineListViewController.m in Sources */,
 				A3D3D6951B500E4200D9A83C /* ReportProblemViewController.m in Sources */,
 				A37A3CEF1B1CD61E006A397C /* BusLineBar.m in Sources */,
 				681A7F9E196824890006C335 /* BusData.m in Sources */,

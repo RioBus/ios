@@ -188,6 +188,7 @@
                         <outlet property="searchInput" destination="7Gl-dC-szk" id="SUm-y6-ddu"/>
                         <outlet property="suggestionTable" destination="lsP-IF-CM0" id="vlk-aV-VkW"/>
                         <segue destination="8Yh-BV-TBK" kind="modal" identifier="ViewAboutScreen" id="i99-ef-1bq"/>
+                        <segue destination="yj5-79-oUu" kind="modal" identifier="ViewBusLinesList" id="Mn8-0S-2QP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
@@ -200,7 +201,7 @@
                     </connections>
                 </searchDisplayController>
             </objects>
-            <point key="canvasLocation" x="143.5" y="-55.5"/>
+            <point key="canvasLocation" x="59.5" y="-55.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="MsF-Ft-6bt">
@@ -225,6 +226,86 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="amU-4d-TCX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="633.5" y="-874.5"/>
+        </scene>
+        <!--Linhas de ônibus-->
+        <scene sceneID="9Lv-Bi-Tqw">
+            <objects>
+                <tableViewController id="WRm-Vm-CCZ" customClass="LineListViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="9fr-dU-z5D">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LineCell" textLabel="9Qq-Qo-ZjD" detailTextLabel="VKC-hs-bta" style="IBUITableViewCellStyleSubtitle" id="ap3-VV-wHh">
+                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ap3-VV-wHh" id="cLA-cs-x58">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Qq-Qo-ZjD">
+                                            <rect key="frame" x="15" y="6" width="31.5" height="19.5"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VKC-hs-bta">
+                                            <rect key="frame" x="15" y="25.5" width="40.5" height="13.5"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <animations/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <animations/>
+                                </tableViewCellContentView>
+                                <animations/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="WRm-Vm-CCZ" id="NzS-v7-IeM"/>
+                            <outlet property="delegate" destination="WRm-Vm-CCZ" id="WGh-a8-kDC"/>
+                        </connections>
+                    </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Linhas de ônibus" id="3le-W5-90l">
+                        <barButtonItem key="leftBarButtonItem" title="Fechar" id="uZp-xA-bqh">
+                            <connections>
+                                <action selector="didTapCloseButton:" destination="WRm-Vm-CCZ" id="9he-Zn-dD7"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Poh-gn-1Ft" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1174.5" y="726.5"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="L75-2g-tg7">
+            <objects>
+                <navigationController id="yj5-79-oUu" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="SVR-eK-Y82">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="WRm-Vm-CCZ" kind="relationship" relationship="rootViewController" id="t0x-fo-vH5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7vH-4C-NJB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="623.5" y="726.5"/>
         </scene>
         <!--Options View Controller-->
         <scene sceneID="uLg-Wb-IE0">
@@ -509,13 +590,7 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="top" secondItem="kB7-cd-FK6" secondAttribute="bottom" constant="5" id="j7I-fv-aMv"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="RioBus" id="lds-IN-wQg">
-                        <barButtonItem key="rightBarButtonItem" title="Fechar" id="a4o-aP-bQb">
-                            <connections>
-                                <action selector="didTapCloseButton:" destination="TAr-9s-PmU" id="SQC-Kr-Cym"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="RioBus" id="lds-IN-wQg"/>
                     <connections>
                         <outlet property="aboutTextView" destination="YkP-DC-OOX" id="PlR-Pi-G4J"/>
                     </connections>
@@ -538,11 +613,11 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                                 <rect key="frame" x="0.0" y="22" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eIo-3m-jYP" id="T3o-mR-zyn">
-                                    <rect key="frame" x="0.0" y="0.0" width="342" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Problema" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xwb-W1-b5l">
-                                            <rect key="frame" x="15" y="0.0" width="325" height="43"/>
+                                            <rect key="frame" x="15" y="0.0" width="325" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -562,11 +637,6 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                     </tableView>
                     <navigationItem key="navigationItem" title="Reportar problema" id="jYU-sD-bg8">
                         <barButtonItem key="backBarButtonItem" title="Problemas" id="eoH-5l-4fX"/>
-                        <barButtonItem key="rightBarButtonItem" title="Fechar" id="uZp-xA-bqh">
-                            <connections>
-                                <action selector="didTapCloseButton:" destination="37H-yd-k75" id="7CU-uD-xfF"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="9UO-CH-7LB" kind="push" identifier="ShowReportDetail" id="rmR-3i-LRY"/>
