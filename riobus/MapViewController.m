@@ -10,7 +10,6 @@
 #import "OptionsViewController.h"
 #import "BusSuggestionsTable.h"
 #import "BusLineBar.h"
-#import "LineListViewController.h"
 #import "riobus-Swift.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, UISearchBarDelegate, BusLineBarDelegate>
@@ -564,10 +563,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     }
 }
 
-- (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar {
-    [self performSegueWithIdentifier:@"ViewBusLinesList" sender:self];
-}
-
 
 #pragma mark - CLLocationManager methods
 
@@ -666,7 +661,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     if (visible) {
         // Appear
         [self.searchInput setShowsCancelButton:YES animated:YES];
-        self.searchInput.showsBookmarkButton = YES;
         self.suggestionTable.hidden = NO;
         [UIView animateWithDuration:animationDuration animations:^{
             self.suggestionTable.alpha = 1.0;
@@ -675,18 +669,9 @@ static const CGFloat cameraPaddingRight = 30.0;
     else {
         // Disappear
         [self.searchInput setShowsCancelButton:NO animated:YES];
-        self.searchInput.showsBookmarkButton = NO;
         [UIView animateWithDuration:animationDuration animations:^{
             self.suggestionTable.alpha = 0.0;
         }];
-    }
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"ViewBusLinesList"]) {
-        UINavigationController *navigationVC = (UINavigationController *)segue.destinationViewController;
-        LineListViewController *lineListVC = (LineListViewController *)navigationVC.topViewController;
-        lineListVC.searchInput = self.searchInput;
     }
 }
 
