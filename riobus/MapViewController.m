@@ -214,6 +214,9 @@ static const CGFloat cameraPaddingRight = 30.0;
         [self.favoriteMenuButton setTitle:self.searchedBusLine.line forState:UIControlStateNormal];
         [self.favoriteMenuButton setImage:nil forState:UIControlStateNormal];
     }
+    else {
+        [self.favoriteMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
+    }
 }
 
 

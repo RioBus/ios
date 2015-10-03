@@ -8,3 +8,6 @@ Pods/
 */xcuserdata
 fastlane/screenshots
 report.xml
+riobus.app.dSYM.zip
+riobus.ipa
+fastlane/metadata
