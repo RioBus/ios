@@ -19,8 +19,8 @@ static const int recentItemsLimit = 5;
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-        self.rowHeight = 45;
-        self.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        self.rowHeight = 60;
+        self.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.delegate = self;
         self.dataSource = self;
         
@@ -202,16 +202,19 @@ static const int recentItemsLimit = 5;
     cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell.textLabel.font = [UIFont systemFontOfSize:22];
+        cell.textLabel.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
+        cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:15];
+
         UITapGestureRecognizer *tapped;
         if ([lineName isEqualToString:self.favoriteLine]) {
             cell.tintColor = [UIColor appGoldColor];
-            cell.textLabel.textColor = [UIColor darkGrayColor];
             tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeLineFromFavorite:)];
             cell.imageView.image = [[UIImage imageNamed:@"StarFilled"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
         else {
-            cell.tintColor = [UIColor colorWithWhite:0.8 alpha:1.0];
-            cell.detailTextLabel.tintColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+            cell.tintColor = [UIColor colorWithWhite:0.9 alpha:1.0];
             tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(makeLineFavorite:)];
             cell.imageView.image = [[UIImage imageNamed:@"Star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
@@ -290,14 +293,21 @@ static const int recentItemsLimit = 5;
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9"];
+    return @[@"★", @"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9"];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {
-    NSInteger newRow = [self indexForFirstChar:title];
-    NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:newRow inSection:allLinesSectionIndex];
-    [tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    NSIndexPath *newIndexPath;
     
+    if ([title isEqualToString:@"★"]) {
+        newIndexPath = [NSIndexPath indexPathForRow:0 inSection:recentsSectionIndex];
+    }
+    else {
+        NSInteger newRow = [self indexForFirstChar:title];
+        newIndexPath = [NSIndexPath indexPathForRow:newRow inSection:allLinesSectionIndex];
+    }
+    
+    [tableView scrollToRowAtIndexPath:newIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
     return index;
 }
 
@@ -307,7 +317,7 @@ static const int recentItemsLimit = 5;
 - (NSInteger)indexForFirstChar:(NSString *)character {
     NSUInteger count = 0;
     for (id line in self.busLines) {
-        NSString* str = line[@"name"];
+        NSString *str = line[@"name"];
         if ([str hasPrefix:character]) {
             return count;
         }
