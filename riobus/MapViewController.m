@@ -319,6 +319,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     // Set new search parameters
     self.searchInput.text = busLineCute;
     self.searchedDirection = nil;
+    self.hasUpdatedMapPosition = NO;
     self.searchedBusLine = [[BusLine alloc] initWithLine:busLine andName:self.trackedBusLines[busLine]];
     [self.busLineBar appearWithBusLine:self.searchedBusLine];
     
