@@ -160,9 +160,15 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (IBAction)rightMenuButtonTapped:(UIButton *)sender {
     if (!self.searchedBusLine.line) {
-        // Se o usuário definiu uma linha favorita
+        // If the user has set a favourite search
         if (self.favoriteLine) {
-            [self searchForBusLine:@[self.favoriteLine]];
+            // Escape search input
+            NSString *validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            NSCharacterSet *splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
+            NSMutableArray *buses = [[[self.favoriteLine uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
+            [buses removeObject:@""];
+            
+            [self searchForBusLine:buses];
             
             [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UI"
                                                                        action:@"Clicou menu favorito"
