@@ -64,6 +64,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self updateTrackedBusLines];
     
     self.mapView.mapType = kGMSTypeNormal;
+    self.mapView.trafficEnabled = YES;
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
         [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
         self.mapView.myLocationEnabled = YES;
