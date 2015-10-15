@@ -286,7 +286,7 @@ static const int recentItemsLimit = 5;
         return @"Minhas linhas";
     }
     else if (section == allLinesSectionIndex) {
-        return [NSString stringWithFormat:@"Todas as linhas (%ld online)", self.busLines.count];
+        return [NSString stringWithFormat:@"Todas as linhas (%ld online)", (unsigned long)self.busLines.count];
     }
     
     return @"";

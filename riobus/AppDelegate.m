@@ -3,6 +3,7 @@
 #import <AFNetworking/AFNetworkActivityIndicatorManager.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <Google/Analytics.h>
+#import <Parse/Parse.h>
 
 #ifdef DEBUG
 #import <SimulatorStatusMagic/SDStatusBarManager.h>
@@ -17,6 +18,10 @@
     // Configure AFNetworking
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    
+    // Configure Parse
+    [Parse setApplicationId:@"MiNwvb2H3O1nTiZQLdVsIj8px5JWfCN1gITg1vIK"
+                  clientKey:@"aJZh3mH9u9Baik8pE1vIfkbQwYA2V8E24oIinRy5"];
     
     // Configure Google Analytics
     NSError *configureError;
@@ -40,7 +45,27 @@
     NSLog(@"App on screenshot mode. User defaults have been reset.");
 #endif
     
+    // Register for Push Notifications
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+    
     return YES;
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
