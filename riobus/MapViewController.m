@@ -350,27 +350,28 @@ static const CGFloat cameraPaddingRight = 30.0;
     [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:busLine
                                                withCompletionHandler:^(NSArray *itinerarySpots, NSError *error) {
                                                    [SVProgressHUD popActivity];
+                                                   int i;
                                                    
                                                    if (!error && itinerarySpots.count > 0) {
-                                                       //                                                       self.mapBounds = [[GMSCoordinateBounds alloc] init];
-                                                       GMSMutablePath *gmShape = [GMSMutablePath path];
+                                                       GMSMutablePath *routeShape = [GMSMutablePath path];
+                                                       GMSMutablePath *routeShapeReturning = [GMSMutablePath path];
                                                        
-                                                       for (CLLocation *location in itinerarySpots) {
-                                                           [gmShape addCoordinate:location.coordinate];
-                                                           //                                                           self.mapBounds = [self.mapBounds includingCoordinate:location.coordinate];
+                                                       // Draw route in one shape for normal path and another for returning path
+                                                       for (i=0; i<itinerarySpots.count/2; i++) {
+                                                           CLLocation *location = itinerarySpots[i];
+                                                           [routeShape addCoordinate:location.coordinate];
+                                                       }
+                                                       for (; i<itinerarySpots.count; i++) {
+                                                           CLLocation *location = itinerarySpots[i];
+                                                           [routeShapeReturning addCoordinate:location.coordinate];
                                                        }
                                                        
-                                                       GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
-                                                       polyLine.strokeColor = [UIColor appOrangeColor];
-                                                       polyLine.strokeWidth = 2.0;
-                                                       polyLine.map = self.mapView;
-                                                       
-                                                       // Realinhar mapa
-                                                       //                                                       UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
-                                                       //                                                                                                       cameraPaddingRight,
-                                                       //                                                                                                       cameraPaddingBottom,
-                                                       //                                                                                                       cameraPaddingLeft);
-                                                       //                                                       [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
+                                                       GMSPolyline *polyLine = [GMSPolyline polylineWithPath:routeShape];
+                                                       GMSPolyline *polyLineReturning = [GMSPolyline polylineWithPath:routeShapeReturning];
+                                                       polyLine.strokeColor = [UIColor appRouteBlueColor];
+                                                       polyLineReturning.strokeColor = [UIColor appRouteRedColor];
+                                                       polyLine.strokeWidth = polyLineReturning.strokeWidth = 3.0;
+                                                       polyLineReturning.map = polyLine.map = self.mapView;
                                                    }
                                                    else {
                                                        [self.mapView animateToCameraPosition: [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude

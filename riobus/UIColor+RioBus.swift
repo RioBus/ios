@@ -14,6 +14,14 @@ extension UIColor {
     }
     
     class func appGoldColor() -> UIColor {
-        return UIColor(red: 255.0, green: 215.0/255.0, blue: 0.0, alpha: 1.0)
+        return UIColor(red: 255.0/255.0, green: 215.0/255.0, blue: 0.0, alpha: 1.0)
+    }
+    
+    class func appRouteBlueColor() -> UIColor {
+        return UIColor(red: 35.0/255.0, green: 114.0/255.0, blue: 164.0/255.0, alpha: 1.0)
+    }
+    
+    class func appRouteRedColor() -> UIColor {
+        return UIColor(red: 233.0/255.0, green: 67.0/255.0, blue: 50.0/255.0, alpha: 1.0)
     }
 }
