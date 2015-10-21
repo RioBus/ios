@@ -86,30 +86,15 @@ static const int recentItemsLimit = 5;
  * @param busLine Uma string com o número da linha.
  */
 - (void)addToRecentTable:(NSString *)busLine {
-    NSIndexPath *recentsIndexPath = [NSIndexPath indexPathForRow:0 inSection:recentsSectionIndex];
-    
-    @try {
-        [self beginUpdates];
-        
-        if ([self.recentLines containsObject:busLine]) {
-            NSInteger index = [self.recentLines indexOfObject:busLine];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:self.recentLines.count - index - 1 inSection:recentsSectionIndex];
-            [self.recentLines removeObject:busLine];
-            [self.recentLines addObject:busLine];
-            
-            [self moveRowAtIndexPath:indexPath toIndexPath:recentsIndexPath];
-        }
-        else {
-            [self.recentLines addObject:busLine];
-            [self insertRowsAtIndexPaths:@[recentsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
-        
-        [self endUpdates];
+    if ([self.recentLines containsObject:busLine]) {
+        [self.recentLines removeObject:busLine];
+        [self.recentLines addObject:busLine];
     }
-    @catch (NSException *e) {
-        NSLog(@"Exception atualizando tabela");
+    else {
+        [self.recentLines addObject:busLine];
     }
     
+    [self reloadData];
     [self synchronizePreferences];
 }
 
