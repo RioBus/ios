@@ -1,6 +1,7 @@
 #import <PSTAlertController.h>
 #import "BusSuggestionsTable.h"
 #import "riobus-Swift.h"
+#import <Parse/Parse.h>
 
 @interface BusSuggestionsTable()
 @property (nonatomic) NSString *favoriteLine;
@@ -47,13 +48,17 @@ static const int recentItemsLimit = 5;
 
 - (void)synchronizePreferences {
     // Trim the size of the recent lines table by removing the last lines
-    while (self.recentLines.count >= recentItemsLimit) {
+    while (self.recentLines.count > recentItemsLimit) {
         [self.recentLines removeObjectAtIndex:0];
     }
     
     [[NSUserDefaults standardUserDefaults] setObject:self.recentLines forKey:@"Recents"];
     [[NSUserDefaults standardUserDefaults] setObject:self.favoriteLine forKey:@"favorite_line"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setObject:self.recentLines forKey:@"recentSearches"];
+    [currentInstallation saveInBackground];
 }
 
 - (void)setBusLinesFromTrackedLines:(NSDictionary *)trackedLinesDictionary {
