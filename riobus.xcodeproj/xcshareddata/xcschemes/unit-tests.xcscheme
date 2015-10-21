@@ -61,7 +61,8 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       enableGPUFrameCaptureMode = "3"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "YES"
+      region = "BR">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
