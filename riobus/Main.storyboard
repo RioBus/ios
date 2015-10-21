@@ -509,7 +509,13 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                             <constraint firstItem="YkP-DC-OOX" firstAttribute="top" secondItem="kB7-cd-FK6" secondAttribute="bottom" constant="5" id="j7I-fv-aMv"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="RioBus" id="lds-IN-wQg"/>
+                    <navigationItem key="navigationItem" title="RioBus" id="lds-IN-wQg">
+                        <barButtonItem key="rightBarButtonItem" title="Fechar" id="HG8-gi-AVD">
+                            <connections>
+                                <action selector="didTapCloseButton:" destination="TAr-9s-PmU" id="X4y-cG-1hW"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="aboutTextView" destination="YkP-DC-OOX" id="PlR-Pi-G4J"/>
                     </connections>

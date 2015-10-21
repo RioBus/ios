@@ -125,26 +125,6 @@ class RioBusUITests: XCTestCase {
     }
     
     /**
-     * Testa a funcionalidade de apagar o histórico de pesquisas recentes. Para isso, garante
-     * primeiro que exista pelo menos duas linhas na tabela e então as remove.
-     */
-    func testClearFromTable() {
-        searchField.tap()
-        
-        addSomeLinesToHistory()
-        
-        let normalCells = app.tables.cells.containingType(.Button, identifier: "Star")
-        let limparPesquisasButton = app.tables.cells.containingType(.StaticText, identifier: "Limpar pesquisas").element
-        
-        XCTAssert(limparPesquisasButton.exists, "Botão de limpar pesquisas deveria existir");
-        limparPesquisasButton.tap()
-        app.alerts["Limpar histórico"].collectionViews.buttons["Excluir"].tap()
-        
-        XCTAssertEqual(normalCells.count, 0, "Lista de linhas recentes não foi limpa")
-        XCTAssertFalse(limparPesquisasButton.exists, "Botão de limpar pesquisas não deveria existir mais");
-    }
-    
-    /**
      * Testa a abertura da tela de informações assim como suas funcionalidades, como reportar problema
      * e o botão para abrir a página do Facebook.
     */
