@@ -237,15 +237,11 @@ static const int recentItemsLimit = 5;
         cell.detailTextLabel.text = self.busLines[indexPath.row][@"description"];
     }
     
-    
-    
-    
-    
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return indexPath.section != allLinesSectionIndex;
+    return indexPath.section == recentsSectionIndex;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

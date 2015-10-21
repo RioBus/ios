@@ -529,11 +529,13 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.searchInput setShowsCancelButton:NO animated:YES];
     [self setSuggestionsTableVisible:NO];
     
-    // Escape search input
-    NSString *validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    NSCharacterSet *splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
-    NSMutableArray *buses = [[[self.searchInput.text uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
-    [buses removeObject:@""];
+    NSMutableArray *buses = [[NSMutableArray alloc] init];
+    for (NSString *line in [[self.searchInput.text uppercaseString] componentsSeparatedByString:@","]) {
+        NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (![trimmedLine isEqualToString:@""]) {
+            [buses addObject:trimmedLine];
+        }
+    }
     
     if (buses.count > 0) {
         // Search bus line
