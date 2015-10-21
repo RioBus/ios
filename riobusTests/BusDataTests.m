@@ -25,7 +25,7 @@
  */
 - (void)testInitWithDictionary {
     NSDictionary *dictionary = @{
-                                 @"timeStamp": @"06-08-2015 23:40:00",
+                                 @"timeStamp": @"2015-10-20T10:54:36.000Z",
                                  @"order": @"B31151",
                                  @"line": @"485",
                                  @"speed": @20,
@@ -40,7 +40,7 @@
     
     BusData *busData = [[BusData alloc] initWithDictionary:dictionary];
     XCTAssertNotNil(busData);
-    XCTAssertEqualObjects([jsonDateFormat stringFromDate:busData.lastUpdate], dictionary[@"timeStamp"]);
+    XCTAssertEqualObjects([jsonDateFormat stringFromDate:busData.lastUpdate], @"10-20-2015 10:54:36");
     XCTAssertEqualObjects(busData.order, dictionary[@"order"]);
     XCTAssertEqualObjects(busData.lineNumber, dictionary[@"line"]);
     XCTAssertEqualObjects(busData.velocity, dictionary[@"speed"]);

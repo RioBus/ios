@@ -57,13 +57,7 @@ static const int hoursInDay = 24;
 }
 
 - (NSInteger)delayInSeconds {
-    NSInteger result = [[NSDate date] timeIntervalSinceDate:self.lastUpdate];
-
-    if ([NSCalendar currentCalendar].timeZone.daylightSavingTime) {
-        result -= secondsInMinute * minutesInHour;
-    }
-
-    return result;
+    return [[NSDate date] timeIntervalSinceDate:self.lastUpdate];
 }
 
 + (NSString *)humanReadableStringForTime:(NSInteger)value ofType:(NSString *)type {
