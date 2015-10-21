@@ -497,9 +497,6 @@ static const CGFloat cameraPaddingRight = 30.0;
             marker.snippet = [NSString stringWithFormat:@"Linha: %@ %@\nVelocidade: %.0f km/h\nAtualizado %@", busData.lineNumber, lineName, busData.velocity.doubleValue, busData.humanReadableDelay];
             marker.position = busData.location.coordinate;
             self.mapBounds = [self.mapBounds includingCoordinate:marker.position];
-            if (busData.delayInMinutes >= 5) {
-                marker.opacity = 0.5;
-            }
         }
         // If the bus doesn't match the selected direction and is already in the map, remove it
         else if (marker) {
