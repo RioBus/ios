@@ -46,6 +46,7 @@
 		A3C19DC61B5452D70085B897 /* ReportDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */; };
 		A3D3D6951B500E4200D9A83C /* ReportProblemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */; };
 		A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */; };
+		A3FAE4041BDDCA98002DD53F /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */; };
 		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
 /* End PBXBuildFile section */
 
@@ -126,6 +127,7 @@
 		A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PSTAlertController+okAlert.swift"; sourceTree = "<group>"; };
 		A3EE10171B34927F0092BE99 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3EE10181B34927F0092BE99 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -311,6 +313,7 @@
 				A37A3CE91B1CD425006A397C /* BusLineBar.xib */,
 				6392614F1A06A88400B9A53C /* BusSuggestionsTable.h */,
 				639261501A06A88400B9A53C /* BusSuggestionsTable.m */,
+				A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3FAE4041BDDCA98002DD53F /* Launch Screen.storyboard in Resources */,
 				A37A3CEA1B1CD425006A397C /* BusLineBar.xib in Resources */,
 				A35E6D7B1BBA3151005DB3BA /* GoogleService-Info.plist in Resources */,
 				681A7F5D196722540006C335 /* Images.xcassets in Resources */,
