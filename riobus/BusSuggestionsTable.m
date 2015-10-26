@@ -4,8 +4,8 @@
 #import <Parse/Parse.h>
 
 @interface BusSuggestionsTable()
-@property (nonatomic) NSString *favoriteLine;
-@property (nonatomic) NSMutableArray *recentLines;
+@property (atomic) NSString *favoriteLine;
+@property (atomic) NSMutableArray *recentLines;
 @property (nonatomic) NSArray *busLines;
 @end
 
@@ -99,8 +99,8 @@ static const int recentItemsLimit = 5;
         [self.recentLines addObject:busLine];
     }
     
-    [self reloadData];
     [self synchronizePreferences];
+    [self reloadData];
 }
 
 - (void)makeLineFavorite:(UITapGestureRecognizer *)gestureRecognizer {
@@ -182,13 +182,14 @@ static const int recentItemsLimit = 5;
     else if (indexPath.section == allLinesSectionIndex) {
         lineName = self.busLines[indexPath.row][@"name"];
     }
-    
+
     if ([lineName isEqualToString:self.favoriteLine]) {
         cellIdentifier = @"Favorite Line Cell";
     }
     else {
-       cellIdentifier = @"Line Cell";
+        cellIdentifier = @"Line Cell";
     }
+    
     cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];

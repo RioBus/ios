@@ -670,6 +670,7 @@ static const CGFloat cameraPaddingRight = 30.0;
         // Appear
         [self.searchInput setShowsCancelButton:YES animated:YES];
         self.suggestionTable.hidden = NO;
+        [self.suggestionTable setContentOffset:CGPointZero animated:NO];
         [UIView animateWithDuration:animationDuration animations:^{
             self.suggestionTable.alpha = 1.0;
         }];
