@@ -28,7 +28,7 @@
 		A34B99E51B7BCBF90090A311 /* BusLineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A34B99E41B7BCBF90090A311 /* BusLineTests.m */; };
 		A35072F91B2D021200F91A2F /* RioBusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35072F81B2D021200F91A2F /* RioBusUITests.swift */; };
 		A352EB331B729DCD00A5969B /* BusLine.m in Sources */ = {isa = PBXBuildFile; fileRef = A352EB321B729DCD00A5969B /* BusLine.m */; };
-		A35E6D7B1BBA3151005DB3BA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A35E6D7A1BBA3151005DB3BA /* GoogleService-Info.plist */; settings = {ASSET_TAGS = (); }; };
+		A35E6D7B1BBA3151005DB3BA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A35E6D7A1BBA3151005DB3BA /* GoogleService-Info.plist */; };
 		A361F7A71BC3050F00C19E09 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F46196722530006C335 /* CoreGraphics.framework */; };
 		A361F7AE1BC3050F00C19E09 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A361F7A81BC3050F00C19E09 /* AudioToolbox.framework */; };
 		A361F7AF1BC3050F00C19E09 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A361F7A91BC3050F00C19E09 /* CFNetwork.framework */; };
