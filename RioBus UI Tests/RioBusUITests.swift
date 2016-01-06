@@ -80,7 +80,7 @@ class RioBusUITests: XCTestCase {
     func testMarkBusLineAsFavorite() {
         searchField.tap()
         
-        let favoriteCell = app.tables.cells.containingType(.Button, identifier: "StarFilled").element
+        let favoriteCell = app.tables.cells.containingType(.Button, identifier: "StarFilled").elementBoundByIndex(0)
         let normalCells = app.tables.cells.containingType(.Button, identifier: "Star")
         
         // Se já existir uma linha favorita, removê-la
