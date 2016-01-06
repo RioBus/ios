@@ -340,6 +340,7 @@
 				681A7F3F196722530006C335 /* Resources */,
 				F53865278DE24F58A1EE981B /* Copy Pods Resources */,
 				A3B9259F1B27F25000BEFC9F /* Convert TODO's and FIXME's to warnings */,
+				DB5BD78A7CF5A636DACA9F74 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -493,6 +494,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "KEYWORDS=\"TODO:|FIXME:|DevTeam:|XXX:\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | perl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"\n";
+		};
+		DB5BD78A7CF5A636DACA9F74 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-riobus/Pods-riobus-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		F53865278DE24F58A1EE981B /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
