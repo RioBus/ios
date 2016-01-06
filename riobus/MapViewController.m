@@ -354,24 +354,16 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                    
                                                    if (!error && itinerarySpots.count > 0) {
                                                        GMSMutablePath *routeShape = [GMSMutablePath path];
-                                                       GMSMutablePath *routeShapeReturning = [GMSMutablePath path];
                                                        
-                                                       // Draw route in one shape for normal path and another for returning path
-                                                       for (i=0; i<itinerarySpots.count/2; i++) {
+                                                       for (i=0; i<itinerarySpots.count; i++) {
                                                            CLLocation *location = itinerarySpots[i];
                                                            [routeShape addCoordinate:location.coordinate];
                                                        }
-                                                       for (; i<itinerarySpots.count; i++) {
-                                                           CLLocation *location = itinerarySpots[i];
-                                                           [routeShapeReturning addCoordinate:location.coordinate];
-                                                       }
                                                        
                                                        GMSPolyline *polyLine = [GMSPolyline polylineWithPath:routeShape];
-                                                       GMSPolyline *polyLineReturning = [GMSPolyline polylineWithPath:routeShapeReturning];
-                                                       polyLine.strokeColor = [UIColor appRouteBlueColor];
-                                                       polyLineReturning.strokeColor = [UIColor appRouteRedColor];
-                                                       polyLine.strokeWidth = polyLineReturning.strokeWidth = 3.0;
-                                                       polyLineReturning.map = polyLine.map = self.mapView;
+                                                       polyLine.strokeColor = [UIColor appOrangeColor];
+                                                       polyLine.strokeWidth = 3.0;
+                                                       polyLine.map = self.mapView;
                                                    }
                                                    else {
                                                        [self.mapView animateToCameraPosition: [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
