@@ -25,56 +25,24 @@ platform :ios do
     snapshot
   end
 
-  desc "Runs all the tests"
-  lane :test do
-    scan(scheme: "riobus")
-  end
-
-  desc "Submit a new Beta Build to Apple TestFlight"
-  desc "This will also make sure the profile is up to date"
-  lane :beta do
-    cocoapods
-    increment_build
-    ipa(
-      scheme: "riobus",
-      configuration: "Release",
-    )
-    snapshots
-    deliver(
-      skip_deploy: true,
-      beta: true
-    )
-    build_number = Actions.lane_context[Actions::SharedValues::BUILD_NUMBER]
-    add_git_tag(tag: "TestFlight Build #{build_number}")
-
+  lane :bla do
+    notification(subtitle:get_version_number(xcodeproj: "riobus.xcodeproj"), message: ":)")
   end
 
   desc "Deploy a new version to the App Store"
   desc "** Full Markdown** Support: `code`"
   lane :deploy do
-    cocoapods
-    
-    ipa(
-      scheme: "riobus",
-      configuration: "Release",
-    )
-    
-    deliver(
-      skip_deploy: true,
-      force: true
-    )
+    gym
+    deliver
     build_number = Actions.lane_context[Actions::SharedValues::BUILD_NUMBER]
     add_git_tag(tag: "App Store Build #{build_number}")
   end
 
-
   after_all do |lane|
-    # This block is called, only if the executed lane was successful
-    notify "Fastlane finished '#{lane}'" # Mac OS X Notification
+    notification(subtitle: "Lane #{lane} finished", message: ":)")
   end
 
-
   error do |lane, exception|
-    notify "Fastlane error '#{lane}'" # Mac OS X Notification
+    notification(subtitle: "Lane #{lane} errored", message: exception)
   end
 end

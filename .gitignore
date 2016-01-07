@@ -12,3 +12,4 @@ riobus.app.dSYM.zip
 riobus.ipa
 fastlane/metadata
 Preview.html
+fastlane/test_output

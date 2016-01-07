@@ -979,6 +979,7 @@
 				A38B3C421C3DE56300FAA6A9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
