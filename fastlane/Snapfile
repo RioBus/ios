@@ -4,4 +4,4 @@ languages([
 
 scheme "screenshot"
 
-clear_previous_screenshots 
+clear_previous_screenshots true
