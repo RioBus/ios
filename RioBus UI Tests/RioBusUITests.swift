@@ -80,7 +80,7 @@ class RioBusUITests: XCTestCase {
     func testMarkBusLineAsFavorite() {
         searchField.tap()
         
-        let favoriteCell = app.tables.cells.containingType(.Button, identifier: "StarFilled").element
+        let favoriteCell = app.tables.cells.containingType(.Button, identifier: "StarFilled").elementBoundByIndex(0)
         let normalCells = app.tables.cells.containingType(.Button, identifier: "Star")
         
         // Se já existir uma linha favorita, removê-la
@@ -122,26 +122,6 @@ class RioBusUITests: XCTestCase {
         XCTAssert(app.buttons["Saens Pena"].exists, "Não exibiu o botão do sentido 1")
         XCTAssert(app.buttons["Gardenia Azul"].exists, "Não exibiu o botão do sentido 2")
         XCTAssertEqual(searchField.value as? String, "636", "Não atualizou a barra de pesquisa")
-    }
-    
-    /**
-     * Testa a funcionalidade de apagar o histórico de pesquisas recentes. Para isso, garante
-     * primeiro que exista pelo menos duas linhas na tabela e então as remove.
-     */
-    func testClearFromTable() {
-        searchField.tap()
-        
-        addSomeLinesToHistory()
-        
-        let normalCells = app.tables.cells.containingType(.Button, identifier: "Star")
-        let limparPesquisasButton = app.tables.cells.containingType(.StaticText, identifier: "Limpar pesquisas").element
-        
-        XCTAssert(limparPesquisasButton.exists, "Botão de limpar pesquisas deveria existir");
-        limparPesquisasButton.tap()
-        app.alerts["Limpar histórico"].collectionViews.buttons["Excluir"].tap()
-        
-        XCTAssertEqual(normalCells.count, 0, "Lista de linhas recentes não foi limpa")
-        XCTAssertFalse(limparPesquisasButton.exists, "Botão de limpar pesquisas não deveria existir mais");
     }
     
     /**

@@ -1,8 +1,5 @@
 language: objective-c
-osx_image: xcode7
-before_install:
-  - gem install cocoapods -v '0.38.2'
-cache: cocoapods
-script: xcodebuild test -workspace riobus.xcworkspace -scheme unit-tests -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+osx_image: xcode7.2
+script: xctool -workspace riobus.xcworkspace -scheme riobus -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO test
 notifications:
   slack: riobussl:oXchKgSosMSQ9JFACqdubfuz

@@ -64,6 +64,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self updateTrackedBusLines];
     
     self.mapView.mapType = kGMSTypeNormal;
+    self.mapView.trafficEnabled = YES;
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
         [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
         self.mapView.myLocationEnabled = YES;
@@ -159,9 +160,15 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (IBAction)rightMenuButtonTapped:(UIButton *)sender {
     if (!self.searchedBusLine.line) {
-        // Se o usuário definiu uma linha favorita
+        // If the user has set a favourite search
         if (self.favoriteLine) {
-            [self searchForBusLine:@[self.favoriteLine]];
+            // Escape search input
+            NSString *validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            NSCharacterSet *splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
+            NSMutableArray *buses = [[[self.favoriteLine uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
+            [buses removeObject:@""];
+            
+            [self searchForBusLine:buses];
             
             [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UI"
                                                                        action:@"Clicou menu favorito"
@@ -212,6 +219,9 @@ static const CGFloat cameraPaddingRight = 30.0;
         self.arrowUpMenuButton.hidden = NO;
         [self.favoriteMenuButton setTitle:self.searchedBusLine.line forState:UIControlStateNormal];
         [self.favoriteMenuButton setImage:nil forState:UIControlStateNormal];
+    }
+    else {
+        [self.favoriteMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
     }
 }
 
@@ -277,7 +287,7 @@ static const CGFloat cameraPaddingRight = 30.0;
             }
         }
         else {
-            NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", trackedBusLines.count);
+            NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", (long)trackedBusLines.count);
             self.trackedBusLines = trackedBusLines;
         }
     }];
@@ -316,6 +326,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     // Set new search parameters
     self.searchInput.text = busLineCute;
     self.searchedDirection = nil;
+    self.hasUpdatedMapPosition = NO;
     self.searchedBusLine = [[BusLine alloc] initWithLine:busLine andName:self.trackedBusLines[busLine]];
     [self.busLineBar appearWithBusLine:self.searchedBusLine];
     
@@ -339,27 +350,20 @@ static const CGFloat cameraPaddingRight = 30.0;
     [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:busLine
                                                withCompletionHandler:^(NSArray *itinerarySpots, NSError *error) {
                                                    [SVProgressHUD popActivity];
+                                                   int i;
                                                    
                                                    if (!error && itinerarySpots.count > 0) {
-                                                       //                                                       self.mapBounds = [[GMSCoordinateBounds alloc] init];
-                                                       GMSMutablePath *gmShape = [GMSMutablePath path];
+                                                       GMSMutablePath *routeShape = [GMSMutablePath path];
                                                        
-                                                       for (CLLocation *location in itinerarySpots) {
-                                                           [gmShape addCoordinate:location.coordinate];
-                                                           //                                                           self.mapBounds = [self.mapBounds includingCoordinate:location.coordinate];
+                                                       for (i=0; i<itinerarySpots.count; i++) {
+                                                           CLLocation *location = itinerarySpots[i];
+                                                           [routeShape addCoordinate:location.coordinate];
                                                        }
                                                        
-                                                       GMSPolyline *polyLine = [GMSPolyline polylineWithPath:gmShape];
+                                                       GMSPolyline *polyLine = [GMSPolyline polylineWithPath:routeShape];
                                                        polyLine.strokeColor = [UIColor appOrangeColor];
-                                                       polyLine.strokeWidth = 2.0;
+                                                       polyLine.strokeWidth = 3.0;
                                                        polyLine.map = self.mapView;
-                                                       
-                                                       // Realinhar mapa
-                                                       //                                                       UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
-                                                       //                                                                                                       cameraPaddingRight,
-                                                       //                                                                                                       cameraPaddingBottom,
-                                                       //                                                                                                       cameraPaddingLeft);
-                                                       //                                                       [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
                                                    }
                                                    else {
                                                        [self.mapView animateToCameraPosition: [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
@@ -486,9 +490,6 @@ static const CGFloat cameraPaddingRight = 30.0;
             marker.snippet = [NSString stringWithFormat:@"Linha: %@ %@\nVelocidade: %.0f km/h\nAtualizado %@", busData.lineNumber, lineName, busData.velocity.doubleValue, busData.humanReadableDelay];
             marker.position = busData.location.coordinate;
             self.mapBounds = [self.mapBounds includingCoordinate:marker.position];
-            if (busData.delayInMinutes >= 5) {
-                marker.opacity = 0.5;
-            }
         }
         // If the bus doesn't match the selected direction and is already in the map, remove it
         else if (marker) {
@@ -520,11 +521,13 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.searchInput setShowsCancelButton:NO animated:YES];
     [self setSuggestionsTableVisible:NO];
     
-    // Escape search input
-    NSString *validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-    NSCharacterSet *splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
-    NSMutableArray *buses = [[[self.searchInput.text uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
-    [buses removeObject:@""];
+    NSMutableArray *buses = [[NSMutableArray alloc] init];
+    for (NSString *line in [[self.searchInput.text uppercaseString] componentsSeparatedByString:@","]) {
+        NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (![trimmedLine isEqualToString:@""]) {
+            [buses addObject:trimmedLine];
+        }
+    }
     
     if (buses.count > 0) {
         // Search bus line
@@ -659,6 +662,7 @@ static const CGFloat cameraPaddingRight = 30.0;
         // Appear
         [self.searchInput setShowsCancelButton:YES animated:YES];
         self.suggestionTable.hidden = NO;
+        [self.suggestionTable setContentOffset:CGPointZero animated:NO];
         [UIView animateWithDuration:animationDuration animations:^{
             self.suggestionTable.alpha = 1.0;
         }];

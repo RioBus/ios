@@ -22,7 +22,7 @@ platform :ios do
 
   desc "Runs snapshot"
   lane :snapshots do
-    `SNAPSHOT_BREAK_ON_FIRST_ERROR=1 snapshot --noclean`
+    snapshot
   end
 
   desc "Runs all the tests"
@@ -59,12 +59,12 @@ platform :ios do
   desc "** Full Markdown** Support: `code`"
   lane :deploy do
     cocoapods
-    increment_build
+    
     ipa(
       scheme: "riobus",
       configuration: "Release",
     )
-    snapshots
+    
     deliver(
       skip_deploy: true,
       force: true

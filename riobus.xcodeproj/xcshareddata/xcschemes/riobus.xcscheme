@@ -26,7 +26,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      codeCoverageEnabled = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -45,6 +46,16 @@
                BlueprintIdentifier = "A35072F51B2D021200F91A2F"
                BuildableName = "RioBus UI Tests.xctest"
                BlueprintName = "RioBus UI Tests"
+               ReferencedContainer = "container:riobus.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A38B3C381C3DE56300FAA6A9"
+               BuildableName = "RioBus Snapshots.xctest"
+               BlueprintName = "RioBus Snapshots"
                ReferencedContainer = "container:riobus.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -71,7 +82,8 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       enableGPUFrameCaptureMode = "3"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "NO"
+      region = "BR">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference

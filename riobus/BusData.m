@@ -10,9 +10,12 @@ static const int hoursInDay = 24;
     self = [super init];
     if (self) {
         NSDateFormatter *jsonDateFormat = [[NSDateFormatter alloc] init];
-        jsonDateFormat.dateFormat = @"MM-dd-yyyy HH:mm:ss";
+        jsonDateFormat.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
         self.lastUpdate = [jsonDateFormat dateFromString:dictionary[@"timeStamp"]];
+        if (self.lastUpdate) {
+            
+        }
         self.order = dictionary[@"order"];
         self.lineNumber = dictionary[@"line"];
         self.velocity = dictionary[@"speed"];
@@ -54,13 +57,7 @@ static const int hoursInDay = 24;
 }
 
 - (NSInteger)delayInSeconds {
-    NSInteger result = [[NSDate date] timeIntervalSinceDate:self.lastUpdate];
-
-    if ([NSCalendar currentCalendar].timeZone.daylightSavingTime) {
-        result -= secondsInMinute * minutesInHour;
-    }
-
-    return result;
+    return [[NSDate date] timeIntervalSinceDate:self.lastUpdate];
 }
 
 + (NSString *)humanReadableStringForTime:(NSInteger)value ofType:(NSString *)type {
