@@ -49,6 +49,16 @@
                ReferencedContainer = "container:riobus.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A38B3C381C3DE56300FAA6A9"
+               BuildableName = "RioBus Snapshots.xctest"
+               BlueprintName = "RioBus Snapshots"
+               ReferencedContainer = "container:riobus.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

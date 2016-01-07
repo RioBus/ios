@@ -22,7 +22,7 @@ platform :ios do
 
   desc "Runs snapshot"
   lane :snapshots do
-    `SNAPSHOT_BREAK_ON_FIRST_ERROR=1 snapshot --noclean`
+    snapshot
   end
 
   desc "Runs all the tests"
