@@ -20,14 +20,14 @@ class TakeScreenshots: XCTestCase {
         let app = XCUIApplication()
         let searchField = app.searchFields["Pesquisar linha de ônibus"]
         searchField.tap()
-        snapshot("0-TabelaPesquisa")
+        snapshot("2-TabelaPesquisa")
         
         searchField.typeText("485\n")
         snapshot("1-PesquisaLinha")
         
         searchField.buttons["Limpar texto"].tap()
         app.buttons["Informações"].tap()
-        snapshot("2-TelaInformacoes")
+        snapshot("3-TelaInformacoes")
     }
     
 }
