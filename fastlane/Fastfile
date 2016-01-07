@@ -25,8 +25,9 @@ platform :ios do
     snapshot
   end
 
-  lane :bla do
-    notification(subtitle:get_version_number(xcodeproj: "riobus.xcodeproj"), message: ":)")
+  desc "Runs all the tests"
+  lane :test do
+    scan(scheme: "riobus")
   end
 
   desc "Deploy a new version to the App Store"
