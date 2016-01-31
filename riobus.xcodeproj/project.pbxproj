@@ -372,7 +372,8 @@
 				681A7F3F196722530006C335 /* Resources */,
 				F53865278DE24F58A1EE981B /* Copy Pods Resources */,
 				A3B9259F1B27F25000BEFC9F /* Convert TODO's and FIXME's to warnings */,
-				DB5BD78A7CF5A636DACA9F74 /* Embed Pods Frameworks */,
+				DB5BD78A7CF5A636DACA9F74 /* I */,
+				6DBA71C93463D35D600B0491 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -543,6 +544,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		6DBA71C93463D35D600B0491 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-riobus/Pods-riobus-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A3B9259F1B27F25000BEFC9F /* Convert TODO's and FIXME's to warnings */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -557,14 +573,14 @@
 			shellPath = /bin/sh;
 			shellScript = "KEYWORDS=\"TODO:|FIXME:|DevTeam:|XXX:\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | perl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"\n";
 		};
-		DB5BD78A7CF5A636DACA9F74 /* Embed Pods Frameworks */ = {
+		DB5BD78A7CF5A636DACA9F74 /* I */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = I;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
