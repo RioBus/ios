@@ -176,7 +176,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                         value:nil] build]];
         }
         else {
-            [PSTAlertController presentOkAlertWithTitle:@"Você não possui nenhuma linha favorita" andMessage:@"Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela."];
+            [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"Você não possui nenhuma linha favorita", nil) andMessage:@"Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela."];
         }
     }
     else {
