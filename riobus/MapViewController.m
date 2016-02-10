@@ -7,7 +7,7 @@
 #import "MapViewController.h"
 #import "AboutViewController.h"
 
-@interface MapViewController () <CLLocationManagerDelegate,  UISearchBarDelegate, BusLineBarDelegate>
+@interface MapViewController () <CLLocationManagerDelegate, UISearchBarDelegate, BusLineBarDelegate>
 
 @end
 
@@ -39,7 +39,6 @@
     
     self.busLineBar.delegate = self;
     
-    self.searchBarShouldBeginEditing = YES;
     self.searchBar.delegate = self;
     self.searchBar.backgroundImage = [UIImage new];
     [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[UISearchBar.class]].tintColor = [UIColor whiteColor];
@@ -61,9 +60,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateTrackedLines:)
-                                                 name:@"RioBusDidUpdateTrackedLines"
-                                               object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -78,14 +74,8 @@
 
 #pragma mark - Menu IBActions
 
-- (IBAction)informationMenuButtonTapped:(UIButton *)sender {
-    [self performSegueWithIdentifier:@"ViewAboutScreen" sender:self];
-}
-
 - (IBAction)locationMenuButtonTapped:(UIButton *)sender {
-    // Verifica se o usuário possui os Serviços de Localização habilitados no aparelho
     if ([CLLocationManager locationServicesEnabled]) {
-        // Verifica se autorizou o uso da localização no app
         CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
         switch (authorizationStatus) {
             case kCLAuthorizationStatusAuthorizedWhenInUse:
@@ -183,10 +173,7 @@
 
 #pragma mark - Controller methods
 
-/**
- * Cancelar todas as requisições pendentes
- */
-- (void)cancelCurrentRequests {
+- (void)cancelPendingRequests {
     if (self.lastRequests) {
         for (NSOperation *request in self.lastRequests) {
             [request cancel];
@@ -197,16 +184,13 @@
 }
 
 
-#pragma mark - Carregamento do marcadores, da rota e do mapa
+#pragma mark - Loading of itinerary, bus data and map markers
 
-/**
- * Clear map markers and current search parameters.
- */
-- (void)clearSearch {
+- (void)clearSearchAndMap {
     [self.mapView clear];
     [self.busLineBar hide];
     [self.updateTimer invalidate];
-    [self cancelCurrentRequests];
+    [self cancelPendingRequests];
     [SVProgressHUD dismiss];
     self.searchBar.text = @"";
     self.searchedDirection = nil;
@@ -217,42 +201,30 @@
     [self.favoriteMenuButton setImage:[UIImage imageNamed:@"Star"] forState:UIControlStateNormal];
 }
 
-/**
- * Loads dictionary of available bus lines being tracked containing line names and descriptions.
- */
 - (void)updateTrackedBusLines {
     [SVProgressHUD showWithStatus:@"Atualizando linhas"];
     
     [BusDataStore loadTrackedBusLinesWithCompletionHandler:^(NSDictionary *trackedBusLines, NSError *error) {
         [SVProgressHUD dismiss];
-        if (error) {
-            if (error.code != NSURLErrorCancelled) {
-                if ([AFNetworkReachabilityManager sharedManager].isReachable) {
-                    [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
-                    
-                    [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
-                                                                               action:@"Erro atualizando lista de linhas"
-                                                                                label:@"Erro comunicando com o servidor"
-                                                                                value:nil] build]];
-                }
-                else {
-                    [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"NO_CONNECTION_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"NO_CONNECTION_ALERT_MESSAGE", nil)];
-                }
+        if (error && error.code != NSURLErrorCancelled) {
+            if ([AFNetworkReachabilityManager sharedManager].isReachable) {
+                [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
+                
+                [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                           action:@"Erro atualizando lista de linhas"
+                                                                            label:@"Erro comunicando com o servidor"
+                                                                            value:nil] build]];
             }
+            else {
+                [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"NO_CONNECTION_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"NO_CONNECTION_ALERT_MESSAGE", nil)];
+            }
+            
+            return;
         }
-        else {
-            NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", (long)trackedBusLines.count);
-            self.trackedBusLines = trackedBusLines;
-        }
+        
+        NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", (long)trackedBusLines.count);
+        self.trackedBusLines = trackedBusLines;
     }];
-}
-
-/**
- * Notification called when the application has received new bus lines from the server.
- * @param notification Notification contaning object with new bus lines.
- */
-- (void)didUpdateTrackedLines:(NSNotification *)notification {
-    NSLog(@"Received notification that bus lines were updated.");
 }
 
 /**
@@ -301,10 +273,9 @@
         [self.mapView animateToDefaultCameraPosition];
         
         [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
-                                                                   action:@"Erro atualizando BusData"
+                                                                   action:@"Erro atualizando itinerário"
                                                                     label:[NSString stringWithFormat:@"Itinerário indisponível (%@)", self.searchedBusLine.line]
                                                                     value:nil] build]];
-
     }];
 }
 
@@ -314,7 +285,7 @@
     }
     
     [self.updateTimer invalidate];
-    [self cancelCurrentRequests];
+    [self cancelPendingRequests];
     
     // Load bus data for searched line
     NSOperation *request = [BusDataStore loadBusDataForLineNumber:self.searchedBusLine.line withCompletionHandler:^(NSArray *busesData, NSError *error) {
@@ -326,7 +297,7 @@
                 if ([AFNetworkReachabilityManager sharedManager].isReachable) {
                     [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
                     
-                    [self clearSearch];
+                    [self clearSearchAndMap];
                     
                     [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
                                                                                action:@"Erro atualizando BusData"
@@ -336,7 +307,7 @@
                 else {
                     [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"NO_CONNECTION_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"NO_CONNECTION_ALERT_MESSAGE", nil)];
                     
-                    [self clearSearch];
+                    [self clearSearchAndMap];
                     
                     [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
                                                                                action:@"Erro atualizando BusData"
@@ -366,7 +337,7 @@
                 
                 [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"NO_BUS_FOUND_ALERT_TITLE", nil), self.searchedBusLine.line] andMessage:NSLocalizedString(@"NO_BUS_FOUND_ALERT_MESSAGE", nil)];
                 
-                [self clearSearch];
+                [self clearSearchAndMap];
                 
                 [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
                                                                            action:@"Erro atualizando BusData"
@@ -433,23 +404,11 @@
     }
 }
 
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    if (![searchBar isFirstResponder]) {
-        self.searchBarShouldBeginEditing = NO;
-        [self clearSearch];
-    }
-}
-
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    BOOL boolToReturn = self.searchBarShouldBeginEditing;
-    self.searchBarShouldBeginEditing = YES;
+    [self setSuggestionsTableVisible:YES];
+    [SVProgressHUD dismiss];
     
-    if (boolToReturn) {
-        [self setSuggestionsTableVisible:YES];
-        [SVProgressHUD dismiss];
-    }
-    
-    return boolToReturn;
+    return YES;
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
@@ -457,7 +416,7 @@
     [self setSuggestionsTableVisible:NO];
     
     if (searchBar.text.length == 0) {
-        [self clearSearch];
+        [self clearSearchAndMap];
     }
 }
 

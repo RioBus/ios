@@ -30,7 +30,6 @@
 @property (nonatomic, readonly, copy) NSString *favoriteLine;
 @property (nonatomic, readonly) BOOL favoriteLineMode;
 @property (nonatomic) CGFloat suggestionTableBottomSpacing;
-@property (nonatomic) BOOL searchBarShouldBeginEditing;
 @property (nonatomic) id<GAITracker> tracker;
 
 @end
