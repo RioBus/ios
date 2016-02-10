@@ -22,9 +22,6 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lfw-bq-mSB" customClass="GMSMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="622"/>
                                 <gestureRecognizers/>
-                                <connections>
-                                    <outlet property="delegate" destination="vXZ-lx-hvc" id="5Od-EK-s7Y"/>
-                                </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qj4-Wq-QPi" userLabel="Top Bar">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
@@ -41,9 +38,6 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="barTintColor" red="0.2630089015" green="0.63410336320000005" blue="0.95744694180000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" returnKeyType="search"/>
-                                        <connections>
-                                            <outlet property="delegate" destination="vXZ-lx-hvc" id="hSM-yE-dcJ"/>
-                                        </connections>
                                     </searchBar>
                                 </subviews>
                                 <color key="backgroundColor" red="0.2627450980392157" green="0.63529411764705879" blue="0.95686274509803915" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
@@ -172,8 +166,8 @@
                         <outlet property="keyboardBottomConstraint" destination="GX1-bd-vh2" id="CQB-Z9-GjU"/>
                         <outlet property="locationMenuButton" destination="koQ-fU-bdw" id="WN0-XX-vFX"/>
                         <outlet property="mapView" destination="Lfw-bq-mSB" id="IVe-WC-4Ar"/>
+                        <outlet property="searchBar" destination="7Gl-dC-szk" id="eK0-Mj-6c0"/>
                         <outlet property="searchDisplayController" destination="SXP-NW-eBt" id="1of-vD-bwM"/>
-                        <outlet property="searchInput" destination="7Gl-dC-szk" id="SUm-y6-ddu"/>
                         <outlet property="suggestionTable" destination="lsP-IF-CM0" id="vlk-aV-VkW"/>
                         <segue destination="8Yh-BV-TBK" kind="modal" identifier="ViewAboutScreen" id="i99-ef-1bq"/>
                     </connections>

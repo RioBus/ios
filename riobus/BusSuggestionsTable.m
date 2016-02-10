@@ -256,14 +256,14 @@ static const int recentItemsLimit = 5;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (self.searchInput) {
+    if (self.searchBar) {
         if (indexPath.section == recentsSectionIndex) {
-            self.searchInput.text = self.recentLines[self.recentLines.count - indexPath.row - 1];
-            [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
+            self.searchBar.text = self.recentLines[self.recentLines.count - indexPath.row - 1];
+            [self.searchBar.delegate searchBarSearchButtonClicked:self.searchBar];
         }
         else if (indexPath.section == allLinesSectionIndex) {
-            self.searchInput.text = self.busLines[indexPath.row][@"name"];
-            [self.searchInput.delegate searchBarSearchButtonClicked:self.searchInput];
+            self.searchBar.text = self.busLines[indexPath.row][@"name"];
+            [self.searchBar.delegate searchBarSearchButtonClicked:self.searchBar];
         }
     }
 }

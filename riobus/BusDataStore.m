@@ -1,5 +1,4 @@
 #import "BusDataStore.h"
-#import "BusData.h"
 #import <AFNetworking/AFNetworking.h>
 
 @implementation BusDataStore
@@ -7,87 +6,62 @@
 static const NSString *host = @"http://rest.riob.us";
 static const float cacheVersion = 3.0;
 
-+ (instancetype)sharedInstance {
-    static id sharedInstance;
-    
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[[self class] alloc] init];
-    });
-    return sharedInstance;
-}
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        // Check if the user's cache is in the proper version, rebuilding it otherwise
-        if ([[NSUserDefaults standardUserDefaults] floatForKey:@"cache_version"] < cacheVersion) {
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"bus_itineraries"];
-            [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"Rotas de Onibus"];
-            [[NSUserDefaults standardUserDefaults] setFloat:cacheVersion forKey:@"cache_version"];
-            NSLog(@"User's cache redefined (cache wasn't found or was too old).");
-        }
++ (void)updateUsersCacheIfNecessary {
+    if ([[NSUserDefaults standardUserDefaults] floatForKey:@"cache_version"] < cacheVersion) {
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"bus_itineraries"];
+        [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"Rotas de Onibus"];
+        [[NSUserDefaults standardUserDefaults] setFloat:cacheVersion forKey:@"cache_version"];
+        NSLog(@"User's cache redefined (cache wasn't found or was outdated).");
     }
-    return self;
 }
 
-- (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler {
++ (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler {
     AFHTTPRequestOperation *operation;
-//    NSDictionary *cachedLines = [[NSUserDefaults standardUserDefaults] objectForKey:@"tracked_bus_lines"];
-//    // TODO: set prescription date for cache
-//    if (!cachedLines) {
-//        NSLog(@"Tracked lines database not on cache.");
-        NSString *strUrl = [NSString stringWithFormat:@"%@/v3/itinerary", host];
-        NSLog(@"URL = %@" , strUrl);
-        
-        // Prepare request
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
-        operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        
-        // Fetch URL
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSData *responseObject) {
-            NSError *jsonParseError;
-            NSArray *availableLines = [NSJSONSerialization JSONObjectWithData:responseObject options: NSJSONReadingMutableContainers error:&jsonParseError];
-            if (jsonParseError) {
-                NSLog(@"Error decoding JSON itinerary data");
+    
+    NSString *strUrl = [NSString stringWithFormat:@"%@/v3/itinerary", host];
+    NSLog(@"URL = %@" , strUrl);
+    
+    // Prepare request
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
+    operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    // Fetch URL
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSData *responseObject) {
+        NSError *jsonParseError;
+        NSArray *availableLines = [NSJSONSerialization JSONObjectWithData:responseObject options: NSJSONReadingMutableContainers error:&jsonParseError];
+        if (jsonParseError) {
+            NSLog(@"Error decoding JSON itinerary data");
+        }
+        else {
+            NSMutableDictionary *fetchedLines = [[NSMutableDictionary alloc] initWithCapacity:availableLines.count];
+            for (NSDictionary *lineData in availableLines) {
+                NSString *lineName = lineData[@"line"];
+                fetchedLines[lineName] = lineData[@"description"];
             }
-            else {
-                NSMutableDictionary *fetchedLines = [[NSMutableDictionary alloc] initWithCapacity:availableLines.count];
-                for (NSDictionary *lineData in availableLines) {
-                    NSString *lineName = lineData[@"line"];
-                    fetchedLines[lineName] = lineData[@"description"];
-                }
-                
-                [[NSUserDefaults standardUserDefaults] setObject:fetchedLines forKey:@"tracked_bus_lines"];
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"RioBusDidUpdateTrackedLines" object:fetchedLines];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    handler(fetchedLines, nil);
-                });
-            }
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"ERROR: Bus lines request to server failed. %@", error.localizedDescription);
+            
+            [[NSUserDefaults standardUserDefaults] setObject:fetchedLines forKey:@"tracked_bus_lines"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"RioBusDidUpdateTrackedLines" object:fetchedLines];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
-                handler(nil, error);
+                handler(fetchedLines, nil);
             });
-        }];
-        
-        [operation start];
-//    }
-//    else {
-//        NSLog(@"Tracked bus lines found on cache.");
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            handler(cachedLines, nil);
-//        });
-//    }
-
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"ERROR: Bus lines request to server failed. %@", error.localizedDescription);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            handler(nil, error);
+        });
+    }];
+    
+    [operation start];
+    
+    
     return operation;
 }
 
-- (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler {
-    // Avoid URL injection
++ (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler {
     AFHTTPRequestOperation *operation;
+    // Avoid URL injection
     NSString *webSafeNumber = [lineNumber stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"bus_itineraries"] mutableCopy];
@@ -120,7 +94,7 @@ static const float cacheVersion = 3.0;
             else {
                 NSLog(@"Itinerary for line %@ returned empty.", webSafeNumber);
             }
-                      
+            
             [self processBusLineItinerary:lineNumber withJsonData:jsonData withCompletionHandler:handler];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             // Send data to callback on main thread to avoid issues updating the UI
@@ -135,13 +109,13 @@ static const float cacheVersion = 3.0;
     else {
         NSLog(@"Itinerary for line %@ found on cache.", webSafeNumber);
         
-        [self processBusLineItinerary:lineNumber withJsonData:jsonData withCompletionHandler:handler];
+        [BusDataStore processBusLineItinerary:lineNumber withJsonData:jsonData withCompletionHandler:handler];
     }
     
     return operation;
 }
 
-- (void)processBusLineItinerary:(NSString *)lineNumber withJsonData:(NSString *)jsonData withCompletionHandler:(void (^)(NSArray *itinerarySpots, NSError *error))handler {
++ (void)processBusLineItinerary:(NSString *)lineNumber withJsonData:(NSString *)jsonData withCompletionHandler:(void (^)(NSArray *itinerarySpots, NSError *error))handler {
     if (jsonData) {
         NSData *itineraryJsonData = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
         NSError *jsonParseError = nil;
@@ -178,7 +152,7 @@ static const float cacheVersion = 3.0;
     
 }
 
-- (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler {
++ (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray<BusData *> *, NSError *))handler {
     // Prepare request
     NSString *webSafeNumber = [lineNumber stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSString *strUrl = [NSString stringWithFormat:@"%@/v3/search/%@", host, webSafeNumber];
@@ -190,7 +164,7 @@ static const float cacheVersion = 3.0;
     // Fetch URL
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSArray *jsonBusesData = (NSArray *)responseObject;
-        NSMutableArray *busesData = [[NSMutableArray alloc] initWithCapacity:jsonBusesData.count];
+        NSMutableArray<BusData *> *busesData = [[NSMutableArray alloc] initWithCapacity:jsonBusesData.count];
         
         for (NSDictionary *jsonBusData in jsonBusesData) {
             BusData *bus = [[BusData alloc] initWithDictionary:jsonBusData];

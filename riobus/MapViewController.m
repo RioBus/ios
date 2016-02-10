@@ -4,7 +4,6 @@
 #import <PSTAlertController.h>
 #import <SVProgressHUD.h>
 #import "BusDataStore.h"
-#import "BusData.h"
 #import "BusLine.h"
 #import "BusLineBar.h"
 #import "BusSuggestionsTable.h"
@@ -14,34 +13,6 @@
 #import "riobus-Swift.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, UISearchBarDelegate, BusLineBarDelegate>
-
-@property (nonatomic) CLLocationManager *locationManager;
-@property (nonatomic) NSMutableDictionary *markerForOrder;
-@property (nonatomic) GMSCoordinateBounds *mapBounds;
-
-@property (nonatomic) NSArray *busesData;
-@property (nonatomic) NSDictionary *trackedBusLines;
-@property (nonatomic) BusLine *searchedBusLine;
-@property (nonatomic) NSString *searchedDirection;
-@property (nonatomic) BOOL hasUpdatedMapPosition;
-
-@property (nonatomic) NSTimer *updateTimer;
-@property (nonatomic) NSMutableArray *lastRequests;
-@property (nonatomic, readonly, copy) NSString *favoriteLine;
-@property (nonatomic, readonly) BOOL favoriteLineMode;
-@property (nonatomic) CGFloat suggestionTableBottomSpacing;
-@property (nonatomic) BOOL searchBarShouldBeginEditing;
-@property (nonatomic) id<GAITracker> tracker;
-
-@property (weak, nonatomic) IBOutlet GMSMapView *mapView;
-@property (weak, nonatomic) IBOutlet UISearchBar *searchInput;
-@property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
-@property (weak, nonatomic) IBOutlet BusLineBar *busLineBar;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *keyboardBottomConstraint;
-@property (weak, nonatomic) IBOutlet UIButton *locationMenuButton;
-@property (weak, nonatomic) IBOutlet UIButton *favoriteMenuButton;
-@property (weak, nonatomic) IBOutlet UIButton *informationMenuButton;
-@property (weak, nonatomic) IBOutlet UIButton *arrowUpMenuButton;
 
 @end
 
@@ -62,8 +33,10 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:20];
     self.lastRequests = [[NSMutableArray alloc] init];
     
+    [BusDataStore updateUsersCacheIfNecessary];
     [self updateTrackedBusLines];
     
+    self.mapView.delegate = self;
     self.mapView.mapType = kGMSTypeNormal;
     self.mapView.trafficEnabled = YES;
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
@@ -71,7 +44,7 @@ static const CGFloat cameraPaddingRight = 30.0;
         self.mapView.myLocationEnabled = YES;
     }
     
-    self.suggestionTable.searchInput = self.searchInput;
+    self.suggestionTable.searchBar = self.searchBar;
     self.suggestionTable.alpha = 0;
     
     [self.informationMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
@@ -85,8 +58,9 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.busLineBar.delegate = self;
     
     self.searchBarShouldBeginEditing = YES;
-    self.searchInput.backgroundImage = [UIImage new];
-    [UIBarButtonItem appearanceWhenContainedIn:[UISearchBar class], nil].tintColor = [UIColor whiteColor];
+    self.searchBar.delegate = self;
+    self.searchBar.backgroundImage = [UIImage new];
+    [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[UISearchBar.class]].tintColor = [UIColor whiteColor];
     
     [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.8]];
     [SVProgressHUD setForegroundColor:[UIColor appDarkBlueColor]];
@@ -234,7 +208,7 @@ static const CGFloat cameraPaddingRight = 30.0;
  */
 - (void)cancelCurrentRequests {
     if (self.lastRequests) {
-        for (NSOperation* request in self.lastRequests) {
+        for (NSOperation *request in self.lastRequests) {
             [request cancel];
         }
     }
@@ -255,7 +229,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.updateTimer invalidate];
     [self cancelCurrentRequests];
     [SVProgressHUD dismiss];
-    self.searchInput.text = @"";
+    self.searchBar.text = @"";
     self.searchedDirection = nil;
     self.searchedBusLine = nil;
     self.hasUpdatedMapPosition = NO;
@@ -270,7 +244,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 - (void)updateTrackedBusLines {
     [SVProgressHUD showWithStatus:@"Atualizando linhas"];
     
-    [[BusDataStore sharedInstance] loadTrackedBusLinesWithCompletionHandler:^(NSDictionary *trackedBusLines, NSError *error) {
+    [BusDataStore loadTrackedBusLinesWithCompletionHandler:^(NSDictionary *trackedBusLines, NSError *error) {
         [SVProgressHUD dismiss];
         if (error) {
             if (error.code != NSURLErrorCancelled) {
@@ -314,18 +288,11 @@ static const CGFloat cameraPaddingRight = 30.0;
     NSString *busLineCute = [busLines componentsJoinedByString:@", "];
     NSString *busLine = [busLines componentsJoinedByString:@","];
     
-    // Ignore cached search for now
-    /*
-     if (!self.trackedBusLines[busLine]) {
-     [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:@"Linha %@ não encontrada", busLine] andMessage:@"Não há dados de rastreamento sobre esta linha. Ela pode não estar sendo monitorada pela Prefeitura ou ter sido digitada incorretamente."];
-     return;
-     }*/
-    
     // Save search to history
     [self.suggestionTable addToRecentTable:busLineCute];
     
     // Set new search parameters
-    self.searchInput.text = busLineCute;
+    self.searchBar.text = busLineCute;
     self.searchedDirection = nil;
     self.hasUpdatedMapPosition = NO;
     self.searchedBusLine = [[BusLine alloc] initWithLine:busLine andName:self.trackedBusLines[busLine]];
@@ -333,7 +300,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     
     // Draw itineraries
     if (busLines.count == 1) {
-        [self insertRouteOfBus:busLine];
+        [self loadAndDrawItineraryForBusLine:busLine];
     }
     
     // Call updater
@@ -341,14 +308,10 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self updateSearchedBusesData];
 }
 
-/**
- * Busca e insere no mapa as informações de itinerário da linha. Método assíncrono.
- * @param busLine Nome da linha de ônibus.
- */
-- (void)insertRouteOfBus:(NSString * __nonnull)busLine {
+- (void)loadAndDrawItineraryForBusLine:(NSString * __nonnull)busLine {
     [SVProgressHUD show];
     
-    [[BusDataStore sharedInstance] loadBusLineItineraryForLineNumber:busLine
+    [BusDataStore loadBusLineItineraryForLineNumber:busLine
                                                withCompletionHandler:^(NSArray *itinerarySpots, NSError *error) {
                                                    [SVProgressHUD popActivity];
                                                    int i;
@@ -379,11 +342,8 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                }];
 }
 
-/**
- * Atualiza os dados dos ônibus para o carregamento do mapa. Método assíncrono.
- */
 - (void)updateSearchedBusesData {
-    if ([self.searchInput isFirstResponder] || !self.searchedBusLine) {
+    if ([self.searchBar isFirstResponder] || !self.searchedBusLine) {
         return;
     }
     
@@ -391,74 +351,70 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self cancelCurrentRequests];
     
     // Load bus data for searched line
-    NSOperation *request = [[BusDataStore sharedInstance] loadBusDataForLineNumber:self.searchedBusLine.line
-                                                             withCompletionHandler:^(NSArray *busesData, NSError *error) {
-                                                                 if (error) {
-                                                                     [self.busLineBar hide];
-                                                                     [SVProgressHUD dismiss];
-                                                                     
-                                                                     if (error.code != NSURLErrorCancelled) {
-                                                                         if ([AFNetworkReachabilityManager sharedManager].isReachable) {
-                                                                             [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
-                                                                             
-                                                                             [self clearSearch];
-                                                                             
-                                                                             [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
-                                                                                                                                        action:@"Erro atualizando BusData"
-                                                                                                                                         label:@"Erro comunicando com o servidor"
-                                                                                                                                         value:nil] build]];
-                                                                         }
-                                                                         else {
-                                                                             [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"NO_CONNECTION_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"NO_CONNECTION_ALERT_MESSAGE", nil)];
-                                                                             
-                                                                             [self clearSearch];
-                                                                             
-                                                                             [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
-                                                                                                                                        action:@"Erro atualizando BusData"
-                                                                                                                                         label:@"Sem conexão com a internet"
-                                                                                                                                         value:nil] build]];
-                                                                         }
-                                                                     }
-                                                                     
-                                                                     self.busesData = nil;
-                                                                 }
-                                                                 else {
-                                                                     if (busesData.count > 0) {
-                                                                         self.busesData = busesData;
-                                                                         [self updateBusMarkers];
-                                                                         [SVProgressHUD popActivity];
-                                                                         
-                                                                         self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15
-                                                                                                                             target:self
-                                                                                                                           selector:@selector(updateSearchedBusesData)
-                                                                                                                           userInfo:nil
-                                                                                                                            repeats:NO];
-                                                                     }
-                                                                     else {
-                                                                         self.busesData = nil;
-                                                                         
-                                                                         [SVProgressHUD dismiss];
-                                                                         
-                                                                         [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"NO_BUS_FOUND_ALERT_TITLE", nil), self.searchedBusLine.line] andMessage:NSLocalizedString(@"NO_BUS_FOUND_ALERT_MESSAGE", nil)];
-                                                                         
-                                                                         [self clearSearch];
-                                                                         
-                                                                         [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
-                                                                                                                                    action:@"Erro atualizando BusData"
-                                                                                                                                     label:[NSString stringWithFormat:@"Nenhum ônibus encontrado (%@)", self.searchedBusLine.line]
-                                                                                                                                     value:nil] build]];
-                                                                         
-                                                                         [self.updateTimer invalidate];
-                                                                     }
-                                                                 }
-                                                             }];
+    NSOperation *request = [BusDataStore loadBusDataForLineNumber:self.searchedBusLine.line withCompletionHandler:^(NSArray *busesData, NSError *error) {
+        if (error) {
+            [self.busLineBar hide];
+            [SVProgressHUD dismiss];
+            
+            if (error.code != NSURLErrorCancelled) {
+                if ([AFNetworkReachabilityManager sharedManager].isReachable) {
+                    [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
+                    
+                    [self clearSearch];
+                    
+                    [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                               action:@"Erro atualizando BusData"
+                                                                                label:@"Erro comunicando com o servidor"
+                                                                                value:nil] build]];
+                }
+                else {
+                    [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"NO_CONNECTION_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"NO_CONNECTION_ALERT_MESSAGE", nil)];
+                    
+                    [self clearSearch];
+                    
+                    [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                               action:@"Erro atualizando BusData"
+                                                                                label:@"Sem conexão com a internet"
+                                                                                value:nil] build]];
+                }
+            }
+            
+            self.busesData = nil;
+        }
+        else {
+            if (busesData.count > 0) {
+                self.busesData = busesData;
+                [self updateBusMarkers];
+                [SVProgressHUD popActivity];
+                
+                self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:15
+                                                                    target:self
+                                                                  selector:@selector(updateSearchedBusesData)
+                                                                  userInfo:nil
+                                                                   repeats:NO];
+            }
+            else {
+                self.busesData = nil;
+                
+                [SVProgressHUD dismiss];
+                
+                [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"NO_BUS_FOUND_ALERT_TITLE", nil), self.searchedBusLine.line] andMessage:NSLocalizedString(@"NO_BUS_FOUND_ALERT_MESSAGE", nil)];
+                
+                [self clearSearch];
+                
+                [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                           action:@"Erro atualizando BusData"
+                                                                            label:[NSString stringWithFormat:@"Nenhum ônibus encontrado (%@)", self.searchedBusLine.line]
+                                                                            value:nil] build]];
+                
+                [self.updateTimer invalidate];
+            }
+        }
+    }];
     
     [self.lastRequests addObject:request];
 }
 
-/**
- * Atualiza os marcadores dos ônibus no mapa de acordo com últimos dados e última direção.
- */
 - (void)updateBusMarkers {
     // Refresh markers
     self.mapBounds = [[GMSCoordinateBounds alloc] init];
@@ -508,7 +464,7 @@ static const CGFloat cameraPaddingRight = 30.0;
         if (self.mapView.myLocation) {
             self.mapBounds = [self.mapBounds includingCoordinate:self.mapView.myLocation.coordinate];
         }
-        UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchInput.frame) + cameraPaddingTop,
+        UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchBar.frame) + cameraPaddingTop,
                                                         cameraPaddingRight,
                                                         cameraPaddingBottom,
                                                         cameraPaddingLeft);
@@ -522,12 +478,12 @@ static const CGFloat cameraPaddingRight = 30.0;
 #pragma mark - UISearchBar methods
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [self.searchInput resignFirstResponder];
-    [self.searchInput setShowsCancelButton:NO animated:YES];
+    [self.searchBar resignFirstResponder];
+    [self.searchBar setShowsCancelButton:NO animated:YES];
     [self setSuggestionsTableVisible:NO];
     
     NSMutableArray *buses = [[NSMutableArray alloc] init];
-    for (NSString *line in [[self.searchInput.text uppercaseString] componentsSeparatedByString:@","]) {
+    for (NSString *line in [[self.searchBar.text uppercaseString] componentsSeparatedByString:@","]) {
         NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         if (![trimmedLine isEqualToString:@""]) {
             [buses addObject:trimmedLine];
@@ -535,7 +491,6 @@ static const CGFloat cameraPaddingRight = 30.0;
     }
     
     if (buses.count > 0) {
-        // Search bus line
         [self searchForBusLine:buses];
     }
 }
@@ -610,7 +565,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark - Listeners de notificações
+#pragma mark - Notification listeners
 
 /**
  * Método chamado quando o teclado será exibido na tela. Atualiza o tamanho da
@@ -640,7 +595,7 @@ static const CGFloat cameraPaddingRight = 30.0;
  * @param sender Notificação que ativou o método.
  */
 - (void)appDidEnterBackground:(NSNotification *)sender {
-    // Cancela o timer para não ficar gastando bateria no background
+    // Cancela o timer para não gastar bateria no background
     [self.updateTimer invalidate];
 }
 
@@ -654,7 +609,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 }
 
 
-#pragma mark - Funções utilitárias
+#pragma mark - Etc.
 
 /**
  * Mostra ou esconde com uma animação a tabela de sugestões.
@@ -665,7 +620,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     
     if (visible) {
         // Appear
-        [self.searchInput setShowsCancelButton:YES animated:YES];
+        [self.searchBar setShowsCancelButton:YES animated:YES];
         self.suggestionTable.hidden = NO;
         [self.suggestionTable setContentOffset:CGPointZero animated:NO];
         [UIView animateWithDuration:animationDuration animations:^{
@@ -674,7 +629,7 @@ static const CGFloat cameraPaddingRight = 30.0;
     }
     else {
         // Disappear
-        [self.searchInput setShowsCancelButton:NO animated:YES];
+        [self.searchBar setShowsCancelButton:NO animated:YES];
         [UIView animateWithDuration:animationDuration animations:^{
             self.suggestionTable.alpha = 0.0;
         }];
