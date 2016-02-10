@@ -26,7 +26,7 @@ static NSDateFormatter *jsonDateFormatter;
     return self;
 }
 
-- (NSString *)destination {
+- (NSString *__nullable)destination {
     // Verifica se a linha possui informação de sentido
     if (![self.sense isEqualToString:@""] && ![self.sense isEqualToString:@"desconhecido"]) {
         // Tirar informação entre parênteses do nome da linha

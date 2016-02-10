@@ -1,5 +1,5 @@
-#import "BusDataStore.h"
 #import <AFNetworking/AFNetworking.h>
+#import "BusDataStore.h"
 
 @implementation BusDataStore
 
@@ -59,7 +59,7 @@ static const float cacheVersion = 3.0;
     return operation;
 }
 
-+ (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler {
++ (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray<CLLocation *> *, NSError *))handler {
     AFHTTPRequestOperation *operation;
     // Avoid URL injection
     NSString *webSafeNumber = [lineNumber stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -115,7 +115,7 @@ static const float cacheVersion = 3.0;
     return operation;
 }
 
-+ (void)processBusLineItinerary:(NSString *)lineNumber withJsonData:(NSString *)jsonData withCompletionHandler:(void (^)(NSArray *itinerarySpots, NSError *error))handler {
++ (void)processBusLineItinerary:(NSString *)lineNumber withJsonData:(NSString *)jsonData withCompletionHandler:(void (^)(NSArray<CLLocation *> *itinerarySpots, NSError *error))handler {
     if (jsonData) {
         NSData *itineraryJsonData = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
         NSError *jsonParseError = nil;
@@ -131,8 +131,8 @@ static const float cacheVersion = 3.0;
         }
         
         // Convert JSON location data to CLLocation objects
-        NSArray *itinerarySpotsDictionaries = itinerary[@"spots"];
-        NSMutableArray *itinerarySpots = [[NSMutableArray alloc] initWithCapacity:itinerarySpotsDictionaries.count];
+        NSArray<NSDictionary *> *itinerarySpotsDictionaries = itinerary[@"spots"];
+        NSMutableArray<CLLocation *> *itinerarySpots = [[NSMutableArray alloc] initWithCapacity:itinerarySpotsDictionaries.count];
         
         if (itinerarySpotsDictionaries.count > 0) {
             for (NSDictionary *spot in itinerarySpotsDictionaries) {
@@ -163,7 +163,7 @@ static const float cacheVersion = 3.0;
     
     // Fetch URL
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSArray *jsonBusesData = (NSArray *)responseObject;
+        NSArray<NSDictionary *> *jsonBusesData = (NSArray *)responseObject;
         NSMutableArray<BusData *> *busesData = [[NSMutableArray alloc] initWithCapacity:jsonBusesData.count];
         
         for (NSDictionary *jsonBusData in jsonBusesData) {

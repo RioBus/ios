@@ -32,6 +32,6 @@
  * second parameter will contain an associated NSError.
  * @returns NSOperation object of the request.
  */
-+ (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler;
++ (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray<CLLocation *> *, NSError *))handler;
 
 @end

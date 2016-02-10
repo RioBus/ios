@@ -1,7 +1,7 @@
+#import <Parse/Parse.h>
 #import <PSTAlertController.h>
 #import "BusSuggestionsTable.h"
 #import "riobus-Swift.h"
-#import <Parse/Parse.h>
 
 @interface BusSuggestionsTable()
 @property (atomic) NSString *favoriteLine;

@@ -14,7 +14,7 @@
  * Retorna o destino do ônibus, extraído a partir do sentido no nome da linha.
  * @returns Nome do destino atual do ônibus. Se o destino não pode ser identificado, um objeto nil é retornado.
  */
-@property (nonatomic, readonly, copy) NSString *destination;
+@property (nonatomic, readonly, copy) NSString *__nullable destination;
 
 @property (nonatomic) NSDate *lastUpdate;
 @property (nonatomic) NSString *order;
