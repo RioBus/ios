@@ -2,7 +2,7 @@
 
 "BUS_DETAIL_MARKER_SNIPPET" = "Linha: %@ %@\nVelocidade: %.0f km/h\nAtualizado %@";
 
-"LINES_UPDATE_ERROR_ALERT_TITLE" = "Erro comunicando com o servidor";
+"LINES_UPDATE_ERROR_ALERT_TITLE" = "Erro comunicando com o servidor.";
 "LINES_UPDATE_ERROR_ALERT_MESSAGE" = "Não foi possível atualizar os dados dos ônibus. Por favor, tente novamente.";
 
 "LOCATION_DENIED_ALERT_TITLE" = "Uso da localização não autorizado";
@@ -17,8 +17,30 @@
 "NO_CONNECTION_ALERT_TITLE" = "Sem conexão com a internet";
 "NO_CONNECTION_ALERT_MESSAGE" = "Não foi possível obter os dados dos ônibus. Verifique sua conexão com a internet.";
 
-"NO_FAVORITE_LINE_ALERT_TITLE" = "Você ainda não possui uma linha favorita";
+"NO_FAVORITE_LINE_ALERT_TITLE" = "Você ainda não definiu uma linha favorita.";
 "NO_FAVORITE_LINE_ALERT_MESSAGE" = "Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela.";
+
+
+// BusSuggestionsTable
+
+"MY_LINES_HEADER_TITLE" = "Minhas linhas";
+"ALL_LINES_HEADER_TITLE" = "Todas as linhas (%ld online)";
+
+"SET_LINE_AS_FAVORITE_ALERT_TITLE" = "Definir a linha %@ como favorita?";
+"SET_LINE_AS_FAVORITE_ALERT_MESSAGE" = "Isto irá remover a linha %@ dos favoritos.";
+"SET_LINE_AS_FAVORITE_OK_BUTTON" = "Redefinir";
+"CANCEL" = "Cancelar";
+
+"REMOVE_LINE_FROM_FAVORITES_ALERT_TITLE" = "Excluir favorito";
+"REMOVE_LINE_FROM_FAVORITES_ALERT_MESSAGE" = "Você deseja mesmo remover a linha %@ dos favoritos?";
+"REMOVE" = "Excluir";
+
+
+// BusLineBar
+
+"LINE_BAR_SEARCH_FOR_LINE_TITLE" = "Pesquisa por “%@”";
+"SELECT_DIRECTION" = "Selecione o sentido desejado";
+"SELECT_DIRECTION_UNAVAILABLE" = "Sentido indisponível";
 
 
 // ReportProblemViewController

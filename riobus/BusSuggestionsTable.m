@@ -110,9 +110,9 @@ static const int recentItemsLimit = 5;
     
     // Se já existe uma linha favorita definida
     if (self.favoriteLine) {
-        PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:@"Definir a linha %@ como favorita?", busLine] message:[NSString stringWithFormat:@"Isto irá remover a linha %@ dos favoritos.", self.favoriteLine]];
-        [alertController addAction:[PSTAlertAction actionWithTitle:@"Cancelar" style:PSTAlertActionStyleCancel handler:nil]];
-        [alertController addAction:[PSTAlertAction actionWithTitle:@"Redefinir" style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
+        PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_TITLE", nil), busLine] message:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_MESSAGE", nil), self.favoriteLine]];
+        [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"CANCEL", nil) style:PSTAlertActionStyleCancel handler:nil]];
+        [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"SET_LINE_AS_FAVORITE_OK_BUTTON", nil) style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
             // Atualizar modelo
             [self addToRecentTable:busLine];
             self.favoriteLine = busLine;
@@ -137,10 +137,10 @@ static const int recentItemsLimit = 5;
 }
 
 - (void)removeLineFromFavorite:(UITapGestureRecognizer *)gestureRecognizer {
-    NSString *confirmMessage = [NSString stringWithFormat:@"Você deseja mesmo remover a linha %@ dos favoritos?", self.favoriteLine];
-    PSTAlertController *alertController = [PSTAlertController alertWithTitle:@"Excluir favorito" message:confirmMessage];
-    [alertController addAction:[PSTAlertAction actionWithTitle:@"Cancelar" style:PSTAlertActionStyleCancel handler:nil]];
-    [alertController addAction:[PSTAlertAction actionWithTitle:@"Excluir" style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
+    NSString *confirmMessage = [NSString stringWithFormat:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_MESSAGE", nil), self.favoriteLine];
+    PSTAlertController *alertController = [PSTAlertController alertWithTitle:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_TITLE", nil) message:confirmMessage];
+    [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"CANCEL", nil) style:PSTAlertActionStyleCancel handler:nil]];
+    [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"REMOVE", nil) style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
         // Atualizar modelo
         self.favoriteLine = nil;
         [self synchronizePreferences];
@@ -270,10 +270,10 @@ static const int recentItemsLimit = 5;
 
 - (nullable NSString *)tableView:(nonnull UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == recentsSectionIndex && self.recentLines.count > 0) {
-        return @"Minhas linhas";
+        return NSLocalizedString(@"MY_LINES_HEADER_TITLE", nil);
     }
     else if (section == allLinesSectionIndex) {
-        return [NSString stringWithFormat:@"Todas as linhas (%ld online)", (unsigned long)self.busLines.count];
+        return [NSString stringWithFormat:NSLocalizedString(@"ALL_LINES_HEADER_TITLE", nil), (unsigned long)self.busLines.count];
     }
     
     return @"";
