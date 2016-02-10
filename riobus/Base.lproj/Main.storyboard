@@ -562,98 +562,45 @@ Você pode colaborar com o projeto sempre nos enviando suas críticas e sugestõ
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TtM-oB-F7b">
-                                <rect key="frame" x="13" y="5" width="344" height="590"/>
-                                <inset key="scrollIndicatorInsets" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
-                                <attributedString key="attributedText">
-                                    <fragment content="Ops! Parece que isso é um problema com os dados oficiais dos ônibus!">
-                                        <attributes>
-                                            <color key="NSColor" red="0.36470588240000001" green="0.36470588240000001" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
-                                            <font key="NSFont" size="20" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">
-
-O RioBus funciona apenas como um ponto de acesso às informações de ônibus fornecidas pela própria Prefeitura do Rio de Janeiro e FETRANSPOR, que são responsáveis pela corretude dos dados dos ônibus e a qualidade dos serviços de transporte oferecidos.
-
-Se você não conseguiu encontrar os ônibus de uma linha, pode ser que ela não seja monitorada pela Prefeitura ou que o serviço esteja temporariamente com problemas. Lembramos que o serviço prestado é restrito apenas às linhas de ônibus municipais.
-
-Você pode enviar uma reclamação sobre seu problema através do 1746 (http://1746.rio), serviço da Prefeitura, ou pelo site da FETRANSPOR (http://fetranspor.com.br).</string>
-                                        <attributes>
-                                            <color key="NSColor" red="0.36470588240000001" green="0.36470588240000001" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
-                                            <font key="NSFont" size="14" name="HelveticaNeue"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
-                            </textView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0xt-8F-DTx">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
-                                <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ILA-8y-qvN" userLabel="Feedback Text View">
-                                        <rect key="frame" x="13" y="8" width="348" height="257"/>
-                                        <inset key="scrollIndicatorInsets" minX="0.0" minY="8" maxX="0.0" maxY="0.0"/>
-                                        <attributedString key="attributedText">
-                                            <fragment content="Como podemos ajudar?">
-                                                <attributes>
-                                                    <color key="NSColor" red="0.36470588240000001" green="0.36470588240000001" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <font key="NSFont" size="20" name="HelveticaNeue"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                </attributes>
-                                            </fragment>
-                                            <fragment>
-                                                <string key="content">
-
-O RioBus é um aplicativo colaborativo e todo feedback é importante para nós!
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9QZ-fr-m3g">
+                                <rect key="frame" x="116" y="278" width="144" height="34"/>
+                                <state key="normal" title="Enviar mensagem">
+                                    <color key="titleColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapMessageButton:" destination="9UO-CH-7LB" eventType="touchUpInside" id="iA6-99-tPc"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Como podemos ajudar?" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YUh-4K-Len">
+                                <rect key="frame" x="16" y="20" width="343" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ewv-gy-czp">
+                                <rect key="frame" x="16" y="52" width="343" height="201"/>
+                                <string key="text">O RioBus é um aplicativo colaborativo e todo feedback é importante para nós!
 
 Nos diga que problema ou feedback você possui sobre o aplicativo para que nossa equipe possa continuar o melhorando.
 
 Clicando no botão abaixo você verá a página do RioBus no Facebook, por onde você pode nos enviar uma mensagem.
 
 Obrigado!</string>
-                                                <attributes>
-                                                    <color key="NSColor" red="0.36470588240000001" green="0.36470588240000001" blue="0.36470588240000001" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <font key="NSFont" size="14" name="HelveticaNeue"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                </attributes>
-                                            </fragment>
-                                        </attributedString>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                        <dataDetectorType key="dataDetectorTypes" link="YES"/>
-                                    </textView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9QZ-fr-m3g">
-                                        <rect key="frame" x="116" y="280" width="144" height="34"/>
-                                        <state key="normal" title="Enviar mensagem">
-                                            <color key="titleColor" red="0.26274509800000001" green="0.63529411759999999" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="didTapMessageButton:" destination="9UO-CH-7LB" eventType="touchUpInside" id="iA6-99-tPc"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="ILA-8y-qvN" firstAttribute="top" secondItem="0xt-8F-DTx" secondAttribute="topMargin" id="L1u-58-jed"/>
-                                    <constraint firstItem="9QZ-fr-m3g" firstAttribute="centerX" secondItem="0xt-8F-DTx" secondAttribute="centerX" id="RaR-qw-LPw"/>
-                                    <constraint firstItem="9QZ-fr-m3g" firstAttribute="top" secondItem="ILA-8y-qvN" secondAttribute="bottom" constant="15" id="jX3-Fx-vpM"/>
-                                    <constraint firstAttribute="trailing" secondItem="ILA-8y-qvN" secondAttribute="trailing" constant="14" id="uwo-SS-azi"/>
-                                    <constraint firstItem="ILA-8y-qvN" firstAttribute="leading" secondItem="0xt-8F-DTx" secondAttribute="leadingMargin" constant="5" id="z1i-E5-auR"/>
-                                </constraints>
-                            </view>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.90588235289999997" green="0.90588235289999997" blue="0.90588235289999997" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="0xt-8F-DTx" firstAttribute="leading" secondItem="Lb1-zG-MSk" secondAttribute="leading" id="0mN-6K-L3I"/>
-                            <constraint firstItem="lPM-0z-Zjn" firstAttribute="top" secondItem="0xt-8F-DTx" secondAttribute="bottom" id="1D1-NG-uo1"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="TtM-oB-F7b" secondAttribute="trailing" constant="2" id="BWf-Ij-RGA"/>
-                            <constraint firstItem="TtM-oB-F7b" firstAttribute="leading" secondItem="Lb1-zG-MSk" secondAttribute="leadingMargin" constant="-3" id="V9l-hc-ZVQ"/>
-                            <constraint firstItem="TtM-oB-F7b" firstAttribute="top" secondItem="bv4-jw-va6" secondAttribute="bottom" constant="5" id="dhW-oo-aRC"/>
-                            <constraint firstAttribute="trailing" secondItem="0xt-8F-DTx" secondAttribute="trailing" id="qs8-wi-YoU"/>
-                            <constraint firstItem="0xt-8F-DTx" firstAttribute="top" secondItem="Lb1-zG-MSk" secondAttribute="topMargin" id="tE9-LI-Ufm"/>
-                            <constraint firstItem="lPM-0z-Zjn" firstAttribute="top" secondItem="TtM-oB-F7b" secondAttribute="bottom" constant="8" symbolic="YES" id="zuK-iq-WTn"/>
+                            <constraint firstItem="Ewv-gy-czp" firstAttribute="leading" secondItem="YUh-4K-Len" secondAttribute="leading" id="1uK-gF-is2"/>
+                            <constraint firstItem="9QZ-fr-m3g" firstAttribute="top" secondItem="Ewv-gy-czp" secondAttribute="bottom" constant="25" id="42n-yA-y50"/>
+                            <constraint firstItem="YUh-4K-Len" firstAttribute="leading" secondItem="Lb1-zG-MSk" secondAttribute="leadingMargin" id="BQ2-MD-au6"/>
+                            <constraint firstItem="YUh-4K-Len" firstAttribute="top" secondItem="bv4-jw-va6" secondAttribute="bottom" constant="20" id="Cqu-cc-6Gv"/>
+                            <constraint firstItem="Ewv-gy-czp" firstAttribute="top" secondItem="YUh-4K-Len" secondAttribute="bottom" constant="8" id="CrY-66-XY4"/>
+                            <constraint firstItem="YUh-4K-Len" firstAttribute="trailing" secondItem="Lb1-zG-MSk" secondAttribute="trailingMargin" id="NHF-ip-IXv"/>
+                            <constraint firstItem="Ewv-gy-czp" firstAttribute="width" secondItem="YUh-4K-Len" secondAttribute="width" id="pMh-dx-oj3"/>
+                            <constraint firstItem="9QZ-fr-m3g" firstAttribute="centerX" secondItem="Lb1-zG-MSk" secondAttribute="centerX" id="rgI-f3-2gi"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Problema" id="lL4-Zr-HuO">
@@ -664,8 +611,9 @@ Obrigado!</string>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="feedbackView" destination="0xt-8F-DTx" id="BnT-tg-aAH"/>
-                        <outlet property="problemTextView" destination="TtM-oB-F7b" id="qsE-4W-kPR"/>
+                        <outlet property="problemMessageLabel" destination="Ewv-gy-czp" id="Uw7-93-iSW"/>
+                        <outlet property="problemTitleLabel" destination="YUh-4K-Len" id="pk4-WP-zjZ"/>
+                        <outlet property="sendMessageButton" destination="9QZ-fr-m3g" id="KvZ-eE-50d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dnW-yf-6H1" userLabel="First Responder" sceneMemberID="firstResponder"/>

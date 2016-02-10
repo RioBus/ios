@@ -40,7 +40,7 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>O Rio Bus precisa da sua localização para mostrar sua posição no mapa e os ônibus pertos de você.</string>
+	<string>Rio Bus uses your location to display the buses that are close to you.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen</string>
 	<key>UIMainStoryboardFile</key>

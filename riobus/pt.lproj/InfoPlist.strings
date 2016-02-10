@@ -1,2 +1,3 @@
 /* Localized versions of Info.plist keys */
 
+NSLocationWhenInUseUsageDescription = "O Rio Bus usa sua localização para mostrar os ônibus pertos de você.";

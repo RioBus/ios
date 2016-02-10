@@ -13,11 +13,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.problems = @[@{ @"descricao": @"Não encontrei uma linha", @"tipo": @"prefeitura" },
-                      @{ @"descricao": @"Localização incorreta no mapa", @"tipo": @"prefeitura" },
-                      @{ @"descricao": @"Itinerário incorreto", @"tipo": @"prefeitura" },
-                      @{ @"descricao": @"Problemas com o aplicativo", @"tipo": @"app" },
-                      @{ @"descricao": @"Outro", @"tipo": @"outro" }];
+    self.problems = @[@{ @"descricao": NSLocalizedString(@"REPORT_LINE_NOT_FOUND", nil), @"tipo": @"prefeitura" },
+                      @{ @"descricao": NSLocalizedString(@"REPORT_WRONG_LOCATION", nil), @"tipo": @"prefeitura" },
+                      @{ @"descricao": NSLocalizedString(@"REPORT_WRONG_ITINERARY", nil), @"tipo": @"prefeitura" },
+                      @{ @"descricao": NSLocalizedString(@"REPORT_APP_ISSUES", nil), @"tipo": @"app" },
+                      @{ @"descricao": NSLocalizedString(@"REPORT_OTHER", nil), @"tipo": @"outro" }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -9,7 +9,7 @@
 "9QZ-fr-m3g.normalTitle" = "Send a message";
 
 /* Class = "UIButton"; normalTitle = "Reportar problema"; ObjectID = "FWK-Od-CVk"; */
-"FWK-Od-CVk.normalTitle" = "Report a problem";
+"FWK-Od-CVk.normalTitle" = "Report an issue";
 
 /* Class = "UIBarButtonItem"; title = "Fechar"; ObjectID = "HG8-gi-AVD"; */
 "HG8-gi-AVD.title" = "Close";
@@ -24,16 +24,16 @@
 "eQr-1u-aMf.accessibilityLabel" = "Information";
 
 /* Class = "UIBarButtonItem"; title = "Problemas"; ObjectID = "eoH-5l-4fX"; */
-"eoH-5l-4fX.title" = "Problems";
+"eoH-5l-4fX.title" = "Issues";
 
 /* Class = "UINavigationItem"; title = "Reportar problema"; ObjectID = "jYU-sD-bg8"; */
-"jYU-sD-bg8.title" = "Report a problem";
+"jYU-sD-bg8.title" = "Report an issue";
 
 /* Class = "UIButton"; accessibilityLabel = "Minha localização"; ObjectID = "koQ-fU-bdw"; */
 "koQ-fU-bdw.accessibilityLabel" = "My location";
 
 /* Class = "UINavigationItem"; title = "Problema"; ObjectID = "lL4-Zr-HuO"; */
-"lL4-Zr-HuO.title" = "Problem";
+"lL4-Zr-HuO.title" = "Issue";
 
 /* Class = "UINavigationItem"; title = "RioBus"; ObjectID = "lds-IN-wQg"; */
 "lds-IN-wQg.title" = "RioBus";

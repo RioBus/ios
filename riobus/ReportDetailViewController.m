@@ -3,9 +3,6 @@
 
 @interface ReportDetailViewController ()
 
-@property (weak, nonatomic) IBOutlet UITextView *problemTextView;
-@property (weak, nonatomic) IBOutlet UIView *feedbackView;
-
 @end
 
 @implementation ReportDetailViewController
@@ -14,16 +11,18 @@
     [super viewWillAppear:animated];
         
     if ([self.problem[@"tipo"] isEqualToString:@"prefeitura"]) {
-        self.problemTextView.hidden = NO;
-        [self.feedbackView removeFromSuperview];
+        self.problemTitleLabel.text = NSLocalizedString(@"ISSUE_CITY_HALL_TITLE", nil);
+        self.problemMessageLabel.text = NSLocalizedString(@"ISSUE_CITY_HALL_MESSAGE", nil);
+        
+        [self.sendMessageButton performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:NO];
     }
     else if ([self.problem[@"tipo"] isEqualToString:@"app"] ||
              [self.problem[@"tipo"] isEqualToString:@"outro"]) {
-        [self.problemTextView removeFromSuperview];
-        self.feedbackView.hidden = NO;
+        self.problemTitleLabel.text = NSLocalizedString(@"ISSUE_APP_TITLE", nil);
+        self.problemMessageLabel.text = NSLocalizedString(@"ISSUE_APP_MESSAGE", nil);
     }
     else {
-        NSLog(@"Erro reportando problema (tentando reportar problema de tipo inesperado).");
+        NSLog(@"Error reporting issue (unexpected issue type received)");
     }
     
     [[[GAI sharedInstance] defaultTracker] send:[[GAIDictionaryBuilder createEventWithCategory:@"Report"

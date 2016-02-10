@@ -46,4 +46,17 @@
 // ReportProblemViewController
 
 "REPORT_TYPE_HEADER_TITLE" = "Que tipo de problema você gostaria de reportar?";
+"REPORT_LINE_NOT_FOUND" = "Não encontrei uma linha";
+"REPORT_WRONG_LOCATION" = "Localização incorreta no mapa";
+"REPORT_WRONG_ITINERARY" = "Itinerário incorreto";
+"REPORT_APP_ISSUES" = "Problemas com o aplicativo";
+"REPORT_OTHER" = "Outro";
 
+
+// ReportProblemDetailViewController
+
+"ISSUE_CITY_HALL_TITLE" = "Sobre os dados informados";
+"ISSUE_CITY_HALL_MESSAGE" = "O Rio Bus funciona apenas como um ponto de acesso às informações de ônibus fornecidas pela própria Prefeitura do Rio de Janeiro e FETRANSPOR, que são responsáveis pela corretude dos dados dos ônibus e a qualidade dos serviços de transporte oferecidos.\n\nSe você não conseguiu encontrar os ônibus de uma linha, pode ser que ela não seja monitorada pela Prefeitura ou que o serviço esteja temporariamente com problemas. Lembramos que o serviço prestado é restrito apenas às linhas de ônibus municipais.\n\nVocê pode enviar uma reclamação sobre seu problema através do 1746 (http://1746.rio), serviço da Prefeitura, ou pelo site da FETRANSPOR (http://fetranspor.com.br).";
+
+"ISSUE_APP_TITLE" = "Como podemos ajudar?";
+"ISSUE_APP_MESSAGE" = "O Rio Bus é um aplicativo colaborativo e todo feedback é importante para nós!\n\nNos diga que problema ou feedback você possui sobre o aplicativo para que nossa equipe possa continuar o melhorando.\n\nClicando no botão abaixo você verá a página do RioBus no Facebook, por onde você pode nos enviar uma mensagem.\n\nObrigado!";

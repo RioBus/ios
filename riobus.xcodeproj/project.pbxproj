@@ -130,9 +130,9 @@
 		A38B3C3D1C3DE56300FAA6A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A390E3F61C6A9961005981EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A390E3FB1C6A99B8005981EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
-		A390E3FC1C6A99B8005981EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A390E4001C6A9C54005981EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A390E4021C6A9C59005981EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A390E4031C6ACA29005981EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3B925A01B290DDF00BEFC9F /* riobus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "riobus-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+backgroundColor.swift"; sourceTree = "<group>"; };
 		A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RioBus.swift"; sourceTree = "<group>"; };
@@ -683,7 +683,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				A3EE10171B34927F0092BE99 /* pt */,
-				A390E3FC1C6A99B8005981EC /* en */,
+				A390E4031C6ACA29005981EC /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
