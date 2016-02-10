@@ -8,6 +8,7 @@ default_platform :ios
 platform :ios do
 
   before_all do
+    ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
   end
 
   desc "Increment build number"
@@ -40,10 +41,15 @@ platform :ios do
   end
 
   after_all do |lane|
-    notification(subtitle: "Lane #{lane} finished", message: ":)")
+    slack(
+      message: "Successfully deployed new App Update."
+    )
   end
 
   error do |lane, exception|
-    notification(subtitle: "Lane #{lane} errored", message: exception)
+    slack(
+      message: exception.message,
+      success: false
+    )
   end
 end
