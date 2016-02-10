@@ -1,1 +1,27 @@
-"Você não possui nenhuma linha favorita" = "Você ainda não possui uma linha favorita";
+// MapViewController
+
+"BUS_DETAIL_MARKER_SNIPPET" = "Linha: %@ %@\nVelocidade: %.0f km/h\nAtualizado %@";
+
+"LINES_UPDATE_ERROR_ALERT_TITLE" = "Erro comunicando com o servidor";
+"LINES_UPDATE_ERROR_ALERT_MESSAGE" = "Não foi possível atualizar os dados dos ônibus. Por favor, tente novamente.";
+
+"LOCATION_DENIED_ALERT_TITLE" = "Uso da localização não autorizado";
+"LOCATION_DENIED_ALERT_MESSAGE" = "Você não autorizou o uso da sua localização para o RioBus. Para alterar esta configuração, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e habilite esta configuração.";
+
+"LOCATION_DISABLED_ALERT_TITLE" = "Serviços de localização desabilitados";
+"LOCATION_DISABLED_ALERT_MESSAGE" = "O uso da sua localização está desativado nas configurações do seu aparelho. Você pode ativá-lo em Ajustes > Privacidade > Serv. Localização.";
+
+"NO_BUS_FOUND_ALERT_TITLE" = "Nenhum ônibus encontrado para “%@”";
+"NO_BUS_FOUND_ALERT_MESSAGE" = "Esta linha pode não estar sendo monitorada pela Prefeitura no momento.";
+
+"NO_CONNECTION_ALERT_TITLE" = "Sem conexão com a internet";
+"NO_CONNECTION_ALERT_MESSAGE" = "Não foi possível obter os dados dos ônibus. Verifique sua conexão com a internet.";
+
+"NO_FAVORITE_LINE_ALERT_TITLE" = "Você ainda não possui uma linha favorita";
+"NO_FAVORITE_LINE_ALERT_MESSAGE" = "Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela.";
+
+
+// ReportProblemViewController
+
+"REPORT_TYPE_HEADER_TITLE" = "Que tipo de problema você gostaria de reportar?";
+

@@ -89,7 +89,7 @@
     style.tailIndent = -15.0;
     style.lineSpacing = 1.5;
     
-    NSAttributedString *attrText = [[NSAttributedString alloc] initWithString:@"Que tipo de problema você gostaria de reportar?"
+    NSAttributedString *attrText = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"REPORT_TYPE_HEADER_TITLE", @"Header of the table view of the 'Report issue' screen")
                                                                    attributes:@{ NSParagraphStyleAttributeName: style}];
 
     UILabel *lblSectionName = [[UILabel alloc] init];

@@ -147,14 +147,14 @@ static const CGFloat cameraPaddingRight = 30.0;
                 }
                 break;
             case kCLAuthorizationStatusDenied:
-                [PSTAlertController presentOkAlertWithTitle:@"Uso da localização não autorizado" andMessage:@"Você não autorizou o uso da sua localização para o RioBus. Para alterar esta configuração, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e habilite esta configuração."];
+                [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LOCATION_DENIED_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LOCATION_DENIED_ALERT_MESSAGE", nil)];
                 break;
             default:
                 break;
         }
     }
     else {
-        [PSTAlertController presentOkAlertWithTitle:@"Serviços de localização desabilitados" andMessage:@"O uso da sua localização está desativado nas configurações do seu aparelho. Você pode ativá-lo em Ajustes > Privacidade > Serv. Localização."];
+        [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LOCATION_DISABLED_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LOCATION_DISABLED_ALERT_MESSAGE", nil)];
     }
 }
 
@@ -176,7 +176,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                         value:nil] build]];
         }
         else {
-            [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"Você não possui nenhuma linha favorita", nil) andMessage:@"Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela."];
+            [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"NO_FAVORITE_LINE_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"NO_FAVORITE_LINE_ALERT_MESSAGE", nil)];
         }
     }
     else {
@@ -274,7 +274,7 @@ static const CGFloat cameraPaddingRight = 30.0;
         if (error) {
             if (error.code != NSURLErrorCancelled) {
                 if ([AFNetworkReachabilityManager sharedManager].isReachable) {
-                    [PSTAlertController presentOkAlertWithTitle:@"Erro comunicando com o servidor" andMessage:@"Não foi possível buscar as posições dos ônibus. Por favor, tente novamente."];
+                    [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
                     
                     [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
                                                                                action:@"Erro atualizando lista de linhas"
@@ -282,7 +282,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                                 value:nil] build]];
                 }
                 else {
-                    [PSTAlertController presentOkAlertWithTitle:@"Sem conexão com a internet" andMessage:@"Não foi possível obter os dados dos ônibus. Verifique sua conexão com a internet."];
+                    [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"NO_CONNECTION_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"NO_CONNECTION_ALERT_MESSAGE", nil)];
                 }
             }
         }
@@ -398,7 +398,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                      
                                                                      if (error.code != NSURLErrorCancelled) {
                                                                          if ([AFNetworkReachabilityManager sharedManager].isReachable) {
-                                                                             [PSTAlertController presentOkAlertWithTitle:@"Erro comunicando com o servidor" andMessage:@"Não foi possível buscar as posições dos ônibus. Por favor, tente novamente."];
+                                                                             [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
                                                                              
                                                                              [self clearSearch];
                                                                              
@@ -408,7 +408,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                                                                                          value:nil] build]];
                                                                          }
                                                                          else {
-                                                                             [PSTAlertController presentOkAlertWithTitle:@"Sem conexão com a internet" andMessage:@"Não foi possível buscar as posições dos ônibus pois parece não haver conexão com a internet."];
+                                                                             [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"NO_CONNECTION_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"NO_CONNECTION_ALERT_MESSAGE", nil)];
                                                                              
                                                                              [self clearSearch];
                                                                              
@@ -438,7 +438,7 @@ static const CGFloat cameraPaddingRight = 30.0;
                                                                          
                                                                          [SVProgressHUD dismiss];
                                                                          
-                                                                         [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:@"Nenhum ônibus encontrado para “%@”", self.searchedBusLine.line] andMessage:@"Esta linha pode não estar sendo monitorada pela Prefeitura no momento."];
+                                                                         [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"NO_BUS_FOUND_ALERT_TITLE", nil), self.searchedBusLine.line] andMessage:NSLocalizedString(@"NO_BUS_FOUND_ALERT_MESSAGE", nil)];
                                                                          
                                                                          [self clearSearch];
                                                                          
@@ -487,7 +487,7 @@ static const CGFloat cameraPaddingRight = 30.0;
             }
             
             marker.title = busData.destination ? [NSString stringWithFormat:@"%@ → %@", busData.order, busData.destination] : busData.order;
-            marker.snippet = [NSString stringWithFormat:@"Linha: %@ %@\nVelocidade: %.0f km/h\nAtualizado %@", busData.lineNumber, lineName, busData.velocity.doubleValue, busData.humanReadableDelay];
+            marker.snippet = [NSString stringWithFormat:NSLocalizedString(@"BUS_DETAIL_MARKER_SNIPPET", nil), busData.lineNumber, lineName, busData.velocity.doubleValue, busData.humanReadableDelay];
             marker.position = busData.location.coordinate;
             self.mapBounds = [self.mapBounds includingCoordinate:marker.position];
         }
@@ -577,7 +577,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 
 - (void)locationManager:(nonnull CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
-        [PSTAlertController presentOkAlertWithTitle:@"Uso da localização não autorizado" andMessage:@"Para alterar esta configuração no futuro, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e autorize o uso da sua localização."];
+        [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LOCATION_DENIED_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LOCATION_DENIED_ALERT_MESSAGE", nil)];
         
         [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
                                                                    action:@"Usuário não atualizou localização"

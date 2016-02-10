@@ -245,7 +245,6 @@
 		681A7F4A196722530006C335 /* riobus */ = {
 			isa = PBXGroup;
 			children = (
-				A390E4011C6A9C54005981EC /* Localizable.strings */,
 				A3B925A51B291C6F00BEFC9F /* Extensions */,
 				681A7F9B196824560006C335 /* Model */,
 				A3D5FE471B1D6F6E0062A103 /* View */,
@@ -260,6 +259,7 @@
 				A3C19DC41B5452D70085B897 /* ReportDetailViewController.h */,
 				A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */,
 				681A7F5C196722540006C335 /* Images.xcassets */,
+				A390E4011C6A9C54005981EC /* Localizable.strings */,
 				681A7F4B196722530006C335 /* Supporting Files */,
 			);
 			path = riobus;
