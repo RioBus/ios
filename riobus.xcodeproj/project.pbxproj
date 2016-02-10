@@ -44,6 +44,7 @@
 		A390E3F51C6A9961005981EC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A390E3F71C6A9961005981EC /* Main.storyboard */; };
 		A390E3FF1C6A9C54005981EC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A390E4011C6A9C54005981EC /* Localizable.strings */; };
 		A39BA2E41C6AD9D70063DDD1 /* AboutText.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A39BA2E61C6AD9D70063DDD1 /* AboutText.rtf */; };
+		A39BA2E91C6B09C00063DDD1 /* RioBusMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39BA2E81C6B09C00063DDD1 /* RioBusMapView.swift */; };
 		A3B925A21B290DE000BEFC9F /* UIButton+backgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */; };
 		A3B925A41B29166800BEFC9F /* UIColor+RioBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */; };
 		A3C19DC61B5452D70085B897 /* ReportDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */; };
@@ -136,6 +137,7 @@
 		A390E4031C6ACA29005981EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A39BA2E51C6AD9D70063DDD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/AboutText.rtf; sourceTree = "<group>"; };
 		A39BA2E71C6AD9D90063DDD1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/AboutText.rtf; sourceTree = "<group>"; };
+		A39BA2E81C6B09C00063DDD1 /* RioBusMapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RioBusMapView.swift; sourceTree = "<group>"; };
 		A3B925A01B290DDF00BEFC9F /* riobus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "riobus-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+backgroundColor.swift"; sourceTree = "<group>"; };
 		A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+RioBus.swift"; sourceTree = "<group>"; };
@@ -353,6 +355,7 @@
 				639261501A06A88400B9A53C /* BusSuggestionsTable.m */,
 				A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */,
 				A39BA2E61C6AD9D70063DDD1 /* AboutText.rtf */,
+				A39BA2E81C6B09C00063DDD1 /* RioBusMapView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -622,6 +625,7 @@
 				A3D3D6951B500E4200D9A83C /* ReportProblemViewController.m in Sources */,
 				A37A3CEF1B1CD61E006A397C /* BusLineBar.m in Sources */,
 				681A7F9E196824890006C335 /* BusData.m in Sources */,
+				A39BA2E91C6B09C00063DDD1 /* RioBusMapView.swift in Sources */,
 				681A7F7C196727C60006C335 /* MapViewController.m in Sources */,
 				A352EB331B729DCD00A5969B /* BusLine.m in Sources */,
 				A3B925A41B29166800BEFC9F /* UIColor+RioBus.swift in Sources */,

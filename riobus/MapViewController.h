@@ -1,9 +1,12 @@
 #import <UIKit/UIKit.h>
 #import "BusData.h"
+#import "BusLine.h"
+#import "BusLineBar.h"
+#import "riobus-Swift.h"
 
 @interface MapViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet GMSMapView *mapView;
+@property (weak, nonatomic) IBOutlet RioBusMapView *mapView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (weak, nonatomic) IBOutlet BusLineBar *busLineBar;
@@ -14,7 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *arrowUpMenuButton;
 
 @property (nonatomic) CLLocationManager *locationManager;
-@property (nonatomic) NSMutableDictionary *markerForOrder;
 @property (nonatomic) GMSCoordinateBounds *mapBounds;
 
 @property (nonatomic) NSArray<BusData *> *busesData;

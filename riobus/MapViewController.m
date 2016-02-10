@@ -1,44 +1,28 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import <GoogleMaps/GoogleMaps.h>
 #import <Google/Analytics.h>
 #import <PSTAlertController.h>
 #import <SVProgressHUD.h>
 #import "BusDataStore.h"
-#import "BusLine.h"
-#import "BusLineBar.h"
 #import "BusSuggestionsTable.h"
 #import "MapViewController.h"
-#import "NSDate+TimeAgo.h"
 #import "OptionsViewController.h"
-#import "riobus-Swift.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, UISearchBarDelegate, BusLineBarDelegate>
 
 @end
 
-static const CGFloat cameraDefaultLatitude = -22.9043527;
-static const CGFloat cameraDefaultLongitude = -43.1912805;
-static const CGFloat cameraDefaultZoomLevel = 12.0;
-static const CGFloat cameraCurrentLocationZoomLevel = 14.0;
-static const CGFloat cameraPaddingTop = 50.0;
-static const CGFloat cameraPaddingLeft = 30.0;
-static const CGFloat cameraPaddingBottom = 100.0;
-static const CGFloat cameraPaddingRight = 30.0;
+
 
 @implementation MapViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.markerForOrder = [[NSMutableDictionary alloc] initWithCapacity:20];
     self.lastRequests = [[NSMutableArray alloc] init];
     
     [BusDataStore updateUsersCacheIfNecessary];
     [self updateTrackedBusLines];
     
-    self.mapView.delegate = self;
-    self.mapView.mapType = kGMSTypeNormal;
-    self.mapView.trafficEnabled = YES;
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
         [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
         self.mapView.myLocationEnabled = YES;
@@ -87,9 +71,7 @@ static const CGFloat cameraPaddingRight = 30.0;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.mapView.camera = [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
-                                                      longitude:cameraDefaultLongitude
-                                                           zoom:cameraDefaultZoomLevel];
+    [self.mapView setDefaultCameraPosition];
     
     [self.tracker set:kGAIScreenName value:@"Mapa"];
     [self.tracker send:[[GAIDictionaryBuilder createScreenView] build]];
@@ -223,7 +205,6 @@ static const CGFloat cameraPaddingRight = 30.0;
  * Clear map markers and current search parameters.
  */
 - (void)clearSearch {
-    [self.markerForOrder removeAllObjects];
     [self.mapView clear];
     [self.busLineBar hide];
     [self.updateTimer invalidate];
@@ -282,7 +263,6 @@ static const CGFloat cameraPaddingRight = 30.0;
  */
 - (void)searchForBusLine:(NSArray * __nonnull)busLines {
     // Clear map and previous search parameters
-    [self.markerForOrder removeAllObjects];
     [self.mapView clear];
     
     NSString *busLineCute = [busLines componentsJoinedByString:@", "];
@@ -311,35 +291,23 @@ static const CGFloat cameraPaddingRight = 30.0;
 - (void)loadAndDrawItineraryForBusLine:(NSString * __nonnull)busLine {
     [SVProgressHUD show];
     
-    [BusDataStore loadBusLineItineraryForLineNumber:busLine
-                                               withCompletionHandler:^(NSArray *itinerarySpots, NSError *error) {
-                                                   [SVProgressHUD popActivity];
-                                                   int i;
-                                                   
-                                                   if (!error && itinerarySpots.count > 0) {
-                                                       GMSMutablePath *routeShape = [GMSMutablePath path];
-                                                       
-                                                       for (i=0; i<itinerarySpots.count; i++) {
-                                                           CLLocation *location = itinerarySpots[i];
-                                                           [routeShape addCoordinate:location.coordinate];
-                                                       }
-                                                       
-                                                       GMSPolyline *polyLine = [GMSPolyline polylineWithPath:routeShape];
-                                                       polyLine.strokeColor = [UIColor appOrangeColor];
-                                                       polyLine.strokeWidth = 3.0;
-                                                       polyLine.map = self.mapView;
-                                                   }
-                                                   else {
-                                                       [self.mapView animateToCameraPosition: [GMSCameraPosition cameraWithLatitude:cameraDefaultLatitude
-                                                                                                                          longitude:cameraDefaultLongitude
-                                                                                                                               zoom:cameraDefaultZoomLevel]];
-                                                       
-                                                       [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
-                                                                                                                  action:@"Erro atualizando BusData"
-                                                                                                                   label:[NSString stringWithFormat:@"Itinerário indisponível (%@)", self.searchedBusLine.line]
-                                                                                                                   value:nil] build]];
-                                                   }
-                                               }];
+    [BusDataStore loadBusLineItineraryForLineNumber:busLine withCompletionHandler:^(NSArray<CLLocation *> *itinerarySpots, NSError *error) {
+        [SVProgressHUD popActivity];
+        
+        if (!error) {
+            [self.mapView drawItineraryWithSpots:itinerarySpots];
+            
+            return;
+        }
+        
+        [self.mapView animateToDefaultCameraPosition];
+        
+        [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
+                                                                   action:@"Erro atualizando BusData"
+                                                                    label:[NSString stringWithFormat:@"Itinerário indisponível (%@)", self.searchedBusLine.line]
+                                                                    value:nil] build]];
+
+    }];
 }
 
 - (void)updateSearchedBusesData {
@@ -420,42 +388,18 @@ static const CGFloat cameraPaddingRight = 30.0;
     self.mapBounds = [[GMSCoordinateBounds alloc] init];
     
     for (BusData *busData in self.busesData) {
-        // Fetch previously used marker, if it exists
-        GMSMarker *marker = self.markerForOrder[busData.order];
         NSString *lineName = self.trackedBusLines[busData.lineNumber] ? self.trackedBusLines[busData.lineNumber] : @"";
         
         // If the bus matches the selected direction, add it to the map
         if (!self.searchedDirection || [busData.destination isEqualToString:self.searchedDirection]) {
-            if (!marker) {
-                marker = [[GMSMarker alloc] init];
-                marker.map = self.mapView;
-                NSInteger delayInMinutes = [[NSDate date] timeIntervalSinceDate:busData.lastUpdate]/60;
-                
-                if (delayInMinutes >= 0 && delayInMinutes < 5) {
-                    marker.icon = [UIImage imageNamed:@"BusMarkerGreen"];
-                }
-                else if (delayInMinutes >= 0 && delayInMinutes < 10) {
-                    marker.icon = [UIImage imageNamed:@"BusMarkerYellow"];
-                }
-                else {
-                    marker.icon = [UIImage imageNamed:@"BusMarkerRed"];
-                    if (delayInMinutes < 0) {
-                        NSLog(@"ERROR: Delay in minutes was negative! (%ld)", (long)delayInMinutes);
-                    }
-                }
-                
-                self.markerForOrder[busData.order] = marker;
-            }
             
-            marker.title = busData.destination ? [NSString stringWithFormat:@"%@ → %@", busData.order, busData.destination] : busData.order;
-            marker.snippet = [NSString stringWithFormat:NSLocalizedString(@"BUS_DETAIL_MARKER_SNIPPET", nil), busData.lineNumber, lineName, busData.velocity.doubleValue, [[busData.lastUpdate timeAgo] lowercaseString]];
-            marker.position = busData.location.coordinate;
-            self.mapBounds = [self.mapBounds includingCoordinate:marker.position];
+            [self.mapView addOrUpdateMarkerWithBusData:busData lineName:lineName];
+            
+            self.mapBounds = [self.mapBounds includingCoordinate:busData.location.coordinate];
         }
-        // If the bus doesn't match the selected direction and is already in the map, remove it
-        else if (marker) {
-            marker.map = nil;
-            [self.markerForOrder removeObjectForKey:busData.order];
+        // If the bus doesn't match the selected direction, remove it or ignore it
+        else {
+            [self.mapView removeOrIgnoreMarkerWithBusData:busData];
         }
     }
     
@@ -464,11 +408,7 @@ static const CGFloat cameraPaddingRight = 30.0;
         if (self.mapView.myLocation) {
             self.mapBounds = [self.mapBounds includingCoordinate:self.mapView.myLocation.coordinate];
         }
-        UIEdgeInsets mapBoundsInsets = UIEdgeInsetsMake(CGRectGetMaxY(self.searchBar.frame) + cameraPaddingTop,
-                                                        cameraPaddingRight,
-                                                        cameraPaddingBottom,
-                                                        cameraPaddingLeft);
-        [self.mapView animateWithCameraUpdate:[GMSCameraUpdate fitBounds:self.mapBounds withEdgeInsets:mapBoundsInsets]];
+        [self.mapView animateToBounds:self.mapBounds];
         self.hasUpdatedMapPosition = YES;
     }
     
@@ -556,8 +496,8 @@ static const CGFloat cameraPaddingRight = 30.0;
     [self.locationManager stopUpdatingLocation];
     
     CLLocation *location = locations.lastObject;
-    [self.mapView animateToLocation:location.coordinate];
-    [self.mapView animateToZoom:cameraCurrentLocationZoomLevel];
+    
+    [self.mapView animateToCoordinate:location.coordinate];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
