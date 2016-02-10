@@ -863,7 +863,6 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/riobus.app/riobus";
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
@@ -890,7 +889,6 @@
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/riobus.app/riobus";
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 				);
