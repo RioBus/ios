@@ -60,7 +60,7 @@ class RioBusMapView: UIView {
         }
         marker.icon = RioBusMapView.markerIconAccordingToDate(busData.lastUpdate)
         marker.snippet = String(format: NSLocalizedString("BUS_DETAIL_MARKER_SNIPPET", comment: ""), busData.lineNumber, lineName, busData.velocity, busData.lastUpdate.timeAgo().lowercaseString)
-        marker.position = busData.location.coordinate // FIXME: use coordinate directly
+        marker.position = busData.location
     }
     
     func removeOrIgnoreMarkerWithBusData(busData: BusData) {

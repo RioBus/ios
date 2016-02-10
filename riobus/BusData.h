@@ -8,7 +8,7 @@
  * @param dictionary Dicionário contendo as chaves retornadas por um request ao servidor do RioBus. Esse dicionário deve conter as chaves timeStamp, order, line, speec, latitude, longitude, direction e sense.
  * @returns Uma instância de BusData com as propriedades definidas.
  */
-- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+- (__nullable instancetype)initWithDictionary:(NSDictionary *__nonnull)dictionary;
 
 /**
  * Retorna o destino do ônibus, extraído a partir do sentido no nome da linha.
@@ -16,12 +16,12 @@
  */
 @property (nonatomic, readonly, copy) NSString *__nullable destination;
 
-@property (nonatomic) NSDate *lastUpdate;
-@property (nonatomic) NSString *order;
-@property (nonatomic) NSString *lineNumber;
-@property (nonatomic) NSNumber *velocity;
-@property (nonatomic) CLLocation *location;
-@property (nonatomic) NSNumber *direction;
-@property (nonatomic) NSString *sense;
+@property (nonatomic) NSDate *__nonnull lastUpdate;
+@property (nonatomic) NSString *__nonnull order;
+@property (nonatomic) NSString *__nonnull lineNumber;
+@property (nonatomic) NSNumber *__nonnull velocity;
+@property (nonatomic) CLLocationCoordinate2D location;
+@property (nonatomic) NSNumber *__nonnull direction;
+@property (nonatomic) NSString *__nullable directionName;
 
 @end

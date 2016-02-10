@@ -18,20 +18,19 @@ static NSDateFormatter *jsonDateFormatter;
         self.order = dictionary[@"order"];
         self.lineNumber = dictionary[@"line"];
         self.velocity = dictionary[@"speed"];
-        self.location = [[CLLocation alloc] initWithLatitude:[dictionary[@"latitude"] doubleValue]
-                                                   longitude:[dictionary[@"longitude"] doubleValue]];
+        self.location = CLLocationCoordinate2DMake([dictionary[@"latitude"] doubleValue], [dictionary[@"longitude"] doubleValue]);
         self.direction = dictionary[@"direction"];
-        self.sense = dictionary[@"sense"];
+        self.directionName = dictionary[@"sense"];
     }
     return self;
 }
 
 - (NSString *__nullable)destination {
     // Verifica se a linha possui informação de sentido
-    if (![self.sense isEqualToString:@""] && ![self.sense isEqualToString:@"desconhecido"]) {
+    if (![self.directionName isEqualToString:@""] && ![self.directionName isEqualToString:@"desconhecido"]) {
         // Tirar informação entre parênteses do nome da linha
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"s/\\[.*?\\]|\\(.*?\\)|\\{.*?\\}//g" options:NSRegularExpressionCaseInsensitive error:nil];
-        NSString *lineNameWithoutParentheses = [regex stringByReplacingMatchesInString:self.sense options:0 range:NSMakeRange(0, self.sense.length) withTemplate:@""];
+        NSString *lineNameWithoutParentheses = [regex stringByReplacingMatchesInString:self.directionName options:0 range:NSMakeRange(0, self.directionName.length) withTemplate:@""];
         lineNameWithoutParentheses = [lineNameWithoutParentheses stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
         NSArray *places = [lineNameWithoutParentheses componentsSeparatedByString:@" X "];
@@ -43,8 +42,8 @@ static NSDateFormatter *jsonDateFormatter;
     return nil;
 }
 
-- (void)setSense:(NSString *)sense {
-    _sense = sense.capitalizedString;
+- (void)setDirectionName:(NSString *)directionName {
+    _directionName = directionName.capitalizedString;
 }
 
 @end

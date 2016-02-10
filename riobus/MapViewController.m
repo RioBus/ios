@@ -7,7 +7,7 @@
 #import "MapViewController.h"
 #import "OptionsViewController.h"
 
-@interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, UISearchBarDelegate, BusLineBarDelegate>
+@interface MapViewController () <CLLocationManagerDelegate,  UISearchBarDelegate, BusLineBarDelegate>
 
 @end
 
@@ -395,7 +395,7 @@
             
             [self.mapView addOrUpdateMarkerWithBusData:busData lineName:lineName];
             
-            self.mapBounds = [self.mapBounds includingCoordinate:busData.location.coordinate];
+            self.mapBounds = [self.mapBounds includingCoordinate:busData.location];
         }
         // If the bus doesn't match the selected direction, remove it or ignore it
         else {
