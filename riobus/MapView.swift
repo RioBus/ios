@@ -1,6 +1,6 @@
 import Foundation
 
-class RioBusMapView: UIView {
+class MapView: UIView {
     static let cameraDefaultLatitude = -22.9043527
     static let cameraDefaultLongitude = -43.1912805
     static let cameraDefaultZoomLevel = Float(12.0)
@@ -58,7 +58,7 @@ class RioBusMapView: UIView {
         } else {
             marker.title = busData.order
         }
-        marker.icon = RioBusMapView.markerIconAccordingToDate(busData.lastUpdate)
+        marker.icon = MapView.markerIconAccordingToDate(busData.lastUpdate)
         marker.snippet = String(format: NSLocalizedString("BUS_DETAIL_MARKER_SNIPPET", comment: ""), busData.lineNumber, lineName, busData.velocity, busData.lastUpdate.timeAgo().lowercaseString)
         marker.position = busData.location
     }
@@ -85,7 +85,7 @@ class RioBusMapView: UIView {
         let busDelayInSeconds = NSDate().timeIntervalSinceDate(date)
         let busDelayInMinutes = busDelayInSeconds/60
         if busDelayInMinutes < 0 {
-            // FIXME: error
+            // Invalid
         } else if busDelayInMinutes < 5 {
             return UIImage(named: "BusMarkerGreen")
         } else if busDelayInMinutes < 10 {
@@ -114,25 +114,25 @@ class RioBusMapView: UIView {
     
     func animateToBounds(bounds: GMSCoordinateBounds) {
         let mapBoundsInsets = UIEdgeInsets(
-            top: RioBusMapView.cameraPaddingTop,
-            left: RioBusMapView.cameraPaddingLeft,
-            bottom: RioBusMapView.cameraPaddingBottom,
-            right: RioBusMapView.cameraPaddingRight
+            top: MapView.cameraPaddingTop,
+            left: MapView.cameraPaddingLeft,
+            bottom: MapView.cameraPaddingBottom,
+            right: MapView.cameraPaddingRight
         )
         mapView.animateWithCameraUpdate(GMSCameraUpdate.fitBounds(bounds, withEdgeInsets: mapBoundsInsets))
     }
     
     func setDefaultCameraPosition() {
-        mapView.camera = GMSCameraPosition.cameraWithLatitude(RioBusMapView.cameraDefaultLatitude, longitude: RioBusMapView.cameraDefaultLongitude, zoom: RioBusMapView.cameraDefaultZoomLevel)
+        mapView.camera = GMSCameraPosition.cameraWithLatitude(MapView.cameraDefaultLatitude, longitude: MapView.cameraDefaultLongitude, zoom: MapView.cameraDefaultZoomLevel)
     }
     
     func animateToDefaultCameraPosition() {
-        mapView.camera = GMSCameraPosition.cameraWithLatitude(RioBusMapView.cameraDefaultLatitude, longitude: RioBusMapView.cameraDefaultLongitude, zoom: RioBusMapView.cameraDefaultZoomLevel)
+        mapView.camera = GMSCameraPosition.cameraWithLatitude(MapView.cameraDefaultLatitude, longitude: MapView.cameraDefaultLongitude, zoom: MapView.cameraDefaultZoomLevel)
     }
     
     func animateToCoordinate(coordinate: CLLocationCoordinate2D) {
         mapView.animateToLocation(coordinate)
-        mapView.animateToZoom(RioBusMapView.cameraCurrentLocationZoomLevel)
+        mapView.animateToZoom(MapView.cameraCurrentLocationZoomLevel)
     }
     
 }

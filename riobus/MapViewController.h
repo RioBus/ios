@@ -6,7 +6,7 @@
 
 @interface MapViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet RioBusMapView *mapView;
+@property (weak, nonatomic) IBOutlet MapView *mapView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet BusSuggestionsTable *suggestionTable;
 @property (weak, nonatomic) IBOutlet BusLineBar *busLineBar;

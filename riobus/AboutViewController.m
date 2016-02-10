@@ -1,8 +1,8 @@
 #import <Google/Analytics.h>
 #import <PSTAlertController/PSTAlertController.h>
-#import "OptionsViewController.h"
+#import "AboutViewController.h"
 
-@implementation OptionsViewController
+@implementation AboutViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

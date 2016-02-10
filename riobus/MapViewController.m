@@ -5,13 +5,11 @@
 #import "BusDataStore.h"
 #import "BusSuggestionsTable.h"
 #import "MapViewController.h"
-#import "OptionsViewController.h"
+#import "AboutViewController.h"
 
 @interface MapViewController () <CLLocationManagerDelegate,  UISearchBarDelegate, BusLineBarDelegate>
 
 @end
-
-
 
 @implementation MapViewController
 
