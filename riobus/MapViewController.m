@@ -1,15 +1,16 @@
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <GoogleMaps/GoogleMaps.h>
 #import <Google/Analytics.h>
 #import <PSTAlertController.h>
 #import <SVProgressHUD.h>
-#import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "MapViewController.h"
 #import "BusDataStore.h"
 #import "BusData.h"
 #import "BusLine.h"
-#import "OptionsViewController.h"
-#import "BusSuggestionsTable.h"
 #import "BusLineBar.h"
+#import "BusSuggestionsTable.h"
+#import "MapViewController.h"
+#import "NSDate+TimeAgo.h"
+#import "OptionsViewController.h"
 #import "riobus-Swift.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, GMSMapViewDelegate, UISearchBarDelegate, BusLineBarDelegate>
@@ -472,22 +473,26 @@ static const CGFloat cameraPaddingRight = 30.0;
             if (!marker) {
                 marker = [[GMSMarker alloc] init];
                 marker.map = self.mapView;
+                NSInteger delayInMinutes = [[NSDate date] timeIntervalSinceDate:busData.lastUpdate]/60;
                 
-                if (busData.delayInMinutes < 5) {
+                if (delayInMinutes >= 0 && delayInMinutes < 5) {
                     marker.icon = [UIImage imageNamed:@"BusMarkerGreen"];
                 }
-                else if (busData.delayInMinutes < 10) {
+                else if (delayInMinutes >= 0 && delayInMinutes < 10) {
                     marker.icon = [UIImage imageNamed:@"BusMarkerYellow"];
                 }
                 else {
                     marker.icon = [UIImage imageNamed:@"BusMarkerRed"];
+                    if (delayInMinutes < 0) {
+                        NSLog(@"ERROR: Delay in minutes was negative! (%ld)", (long)delayInMinutes);
+                    }
                 }
                 
                 self.markerForOrder[busData.order] = marker;
             }
             
             marker.title = busData.destination ? [NSString stringWithFormat:@"%@ → %@", busData.order, busData.destination] : busData.order;
-            marker.snippet = [NSString stringWithFormat:NSLocalizedString(@"BUS_DETAIL_MARKER_SNIPPET", nil), busData.lineNumber, lineName, busData.velocity.doubleValue, busData.humanReadableDelay];
+            marker.snippet = [NSString stringWithFormat:NSLocalizedString(@"BUS_DETAIL_MARKER_SNIPPET", nil), busData.lineNumber, lineName, busData.velocity.doubleValue, [[busData.lastUpdate timeAgo] lowercaseString]];
             marker.position = busData.location.coordinate;
             self.mapBounds = [self.mapBounds includingCoordinate:marker.position];
         }

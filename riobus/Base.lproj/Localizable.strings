@@ -1,6 +1,6 @@
 // MapViewController
 
-"BUS_DETAIL_MARKER_SNIPPET" = "Linha: %@ %@\nVelocidade: %.0f km/h\nAtualizado %@";
+"BUS_DETAIL_MARKER_SNIPPET" = "Linha: %@ %@\nVelocidade: %.0f km/h\nÚltima atualização: %@";
 
 "LINES_UPDATE_ERROR_ALERT_TITLE" = "Erro comunicando com o servidor.";
 "LINES_UPDATE_ERROR_ALERT_MESSAGE" = "Não foi possível atualizar os dados dos ônibus. Por favor, tente novamente.";
