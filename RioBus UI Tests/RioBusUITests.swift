@@ -62,8 +62,7 @@ class RioBusUITests: XCTestCase {
     func testAddSearchToTable() {
         searchField.tap()
         
-        searchField.typeText("324")
-        app.typeText("\r")
+        searchField.typeText("324\r")
         
         // Ignorar possíveis erros da pesquisa que não são relevantes neste caso
         ignoreOkAlerts(app);
@@ -113,15 +112,14 @@ class RioBusUITests: XCTestCase {
     */
     func testBusLineSearchScreen() {
         searchField.tap()
-        searchField.typeText("636")
-        app.typeText("\r")
+        searchField.typeText("324\r")
         
         XCTAssertEqual(app.alerts.count, 0, "Ocorreu um erro fazendo uma pesquisa")
         
-        XCTAssert(app.staticTexts["636 - Saens Pena X Gardenia Azul"].exists, "Não exibiu a barra de informações")
-        XCTAssert(app.buttons["Saens Pena"].exists, "Não exibiu o botão do sentido 1")
-        XCTAssert(app.buttons["Gardenia Azul"].exists, "Não exibiu o botão do sentido 2")
-        XCTAssertEqual(searchField.value as? String, "636", "Não atualizou a barra de pesquisa")
+        XCTAssert(app.staticTexts["324 - Ribeira X Castelo (Circular)"].exists, "Não exibiu a barra de informações")
+        XCTAssert(app.buttons["Ribeira"].exists, "Não exibiu o botão do sentido 1")
+        XCTAssert(app.buttons["Castelo"].exists, "Não exibiu o botão do sentido 2")
+        XCTAssertEqual(searchField.value as? String, "324", "Não atualizou a barra de pesquisa")
     }
     
     /**
