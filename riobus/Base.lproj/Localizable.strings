@@ -1,0 +1,62 @@
+// MapViewController
+
+"BUS_DETAIL_MARKER_SNIPPET" = "Linha: %@ %@\nVelocidade: %@ km/h\nÚltima atualização: %@";
+
+"LINES_UPDATE_ERROR_ALERT_TITLE" = "Erro comunicando com o servidor.";
+"LINES_UPDATE_ERROR_ALERT_MESSAGE" = "Não foi possível atualizar os dados dos ônibus. Por favor, tente novamente.";
+
+"LOCATION_DENIED_ALERT_TITLE" = "Uso da localização não autorizado";
+"LOCATION_DENIED_ALERT_MESSAGE" = "Você não autorizou o uso da sua localização para o RioBus. Para alterar esta configuração, vá em Ajustes > Privacidade > Serv. Localização > Rio Bus e habilite esta configuração.";
+
+"LOCATION_DISABLED_ALERT_TITLE" = "Serviços de localização desabilitados";
+"LOCATION_DISABLED_ALERT_MESSAGE" = "O uso da sua localização está desativado nas configurações do seu aparelho. Você pode ativá-lo em Ajustes > Privacidade > Serv. Localização.";
+
+"NO_BUS_FOUND_ALERT_TITLE" = "Nenhum ônibus encontrado para “%@”";
+"NO_BUS_FOUND_ALERT_MESSAGE" = "Esta linha pode não estar sendo monitorada pela Prefeitura no momento.";
+
+"NO_CONNECTION_ALERT_TITLE" = "Sem conexão com a internet";
+"NO_CONNECTION_ALERT_MESSAGE" = "Não foi possível obter os dados dos ônibus. Verifique sua conexão com a internet.";
+
+"NO_FAVORITE_LINE_ALERT_TITLE" = "Você ainda não definiu uma linha favorita.";
+"NO_FAVORITE_LINE_ALERT_MESSAGE" = "Para definir uma linha favorita, pesquise uma linha e selecione a estrela ao lado dela.";
+
+
+// BusSuggestionsTable
+
+"MY_LINES_HEADER_TITLE" = "Minhas linhas";
+"ALL_LINES_HEADER_TITLE" = "Todas as linhas (%ld online)";
+
+"SET_LINE_AS_FAVORITE_ALERT_TITLE" = "Definir a linha %@ como favorita?";
+"SET_LINE_AS_FAVORITE_ALERT_MESSAGE" = "Isto irá remover a linha %@ dos favoritos.";
+"SET_LINE_AS_FAVORITE_OK_BUTTON" = "Redefinir";
+"CANCEL" = "Cancelar";
+
+"REMOVE_LINE_FROM_FAVORITES_ALERT_TITLE" = "Excluir favorito";
+"REMOVE_LINE_FROM_FAVORITES_ALERT_MESSAGE" = "Você deseja mesmo remover a linha %@ dos favoritos?";
+"REMOVE" = "Excluir";
+
+
+// BusLineBar
+
+"LINE_BAR_SEARCH_FOR_LINE_TITLE" = "Pesquisa por “%@”";
+"SELECT_DIRECTION" = "Selecione o sentido desejado";
+"SELECT_DIRECTION_UNAVAILABLE" = "Sentido indisponível";
+
+
+// ReportProblemViewController
+
+"REPORT_TYPE_HEADER_TITLE" = "Que tipo de problema você gostaria de reportar?";
+"REPORT_LINE_NOT_FOUND" = "Não encontrei uma linha";
+"REPORT_WRONG_LOCATION" = "Localização incorreta no mapa";
+"REPORT_WRONG_ITINERARY" = "Itinerário incorreto";
+"REPORT_APP_ISSUES" = "Problemas com o aplicativo";
+"REPORT_OTHER" = "Outro";
+
+
+// ReportProblemDetailViewController
+
+"ISSUE_CITY_HALL_TITLE" = "Sobre os dados informados";
+"ISSUE_CITY_HALL_MESSAGE" = "O Rio Bus funciona apenas como um ponto de acesso às informações de ônibus fornecidas pela própria Prefeitura do Rio de Janeiro e FETRANSPOR, que são responsáveis pela corretude dos dados dos ônibus e a qualidade dos serviços de transporte oferecidos.\n\nSe você não conseguiu encontrar os ônibus de uma linha, pode ser que ela não seja monitorada pela Prefeitura ou que o serviço esteja temporariamente com problemas. Lembramos que o serviço prestado é restrito apenas às linhas de ônibus municipais.\n\nVocê pode enviar uma reclamação sobre seu problema através do 1746 (http://1746.rio), serviço da Prefeitura, ou pelo site da FETRANSPOR (http://fetranspor.com.br).";
+
+"ISSUE_APP_TITLE" = "Como podemos ajudar?";
+"ISSUE_APP_MESSAGE" = "O Rio Bus é um aplicativo colaborativo e todo feedback é importante para nós!\n\nNos diga que problema ou feedback você possui sobre o aplicativo para que nossa equipe possa continuar o melhorando.\n\nClicando no botão abaixo você verá a página do RioBus no Facebook, por onde você pode nos enviar uma mensagem.\n\nObrigado!";

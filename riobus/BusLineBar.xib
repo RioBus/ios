@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10109" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10083"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -27,7 +28,6 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y5X-ex-o2D" userLabel="Bar Background">
                             <rect key="frame" x="0.0" y="15" width="435" height="109"/>
-                            <animations/>
                             <color key="backgroundColor" red="0.31372549019607843" green="0.65490196078431373" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="109" id="1Rq-rg-oGi"/>
@@ -35,7 +35,6 @@
                         </view>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BusLineBar" translatesAutoresizingMaskIntoConstraints="NO" id="pgM-C2-icK" userLabel="Bar Background Image">
                             <rect key="frame" x="0.0" y="0.0" width="435" height="124"/>
-                            <animations/>
                             <gestureRecognizers/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="124" id="vB6-0g-nz5"/>
@@ -43,7 +42,6 @@
                         </imageView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="123 - Origem X Destino" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Yr-es-i85" userLabel="Line Name">
                             <rect key="frame" x="124" y="50" width="190" height="22"/>
-                            <animations/>
                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
@@ -53,7 +51,6 @@
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uUW-Bq-UfH" userLabel="Direction Button">
                                     <rect key="frame" x="210" y="10" width="15" height="18"/>
-                                    <animations/>
                                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <state key="normal" image="DirectionButton"/>
                                     <connections>
@@ -62,7 +59,6 @@
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eta-JV-XkO">
                                     <rect key="frame" x="20" y="2" width="182" height="33"/>
-                                    <animations/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <state key="normal" title="Origem">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -77,7 +73,6 @@
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VwV-WY-5PP">
                                     <rect key="frame" x="233" y="2" width="182" height="33"/>
-                                    <animations/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <state key="normal" title="Destino">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -92,13 +87,11 @@
                                 </button>
                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Sentido indisponível" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="glA-FY-doE" userLabel="Aviso sentido">
                                     <rect key="frame" x="140" y="10" width="154" height="21"/>
-                                    <animations/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <animations/>
                             <color key="backgroundColor" red="0.14117647059999999" green="0.49803921569999998" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="tintColor" red="0.31372549020000001" green="0.65490196079999996" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
@@ -117,7 +110,6 @@
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kuf-ce-eNC" userLabel="Hide Bar Button">
                             <rect key="frame" x="415" y="30" width="12" height="12"/>
-                            <animations/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="Kuf-ce-eNC" secondAttribute="height" multiplier="1:1" id="Kfs-Sr-WuA"/>
                                 <constraint firstAttribute="width" constant="12" id="sN3-23-1ex"/>
@@ -128,7 +120,6 @@
                             </connections>
                         </button>
                     </subviews>
-                    <animations/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="y5X-ex-o2D" secondAttribute="trailing" id="8Nh-NN-abB"/>
                         <constraint firstItem="Kuf-ce-eNC" firstAttribute="top" secondItem="KYv-rm-N1k" secondAttribute="top" constant="30" id="BQ1-ut-SIW"/>
@@ -152,7 +143,6 @@
                     </connections>
                 </view>
             </subviews>
-            <animations/>
             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="KYv-rm-N1k" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" priority="750" constant="124" id="6eC-EL-kVJ" userLabel="Build Vertical Space - (124) - Bus Line Bar - Bus Line Container View"/>

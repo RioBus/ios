@@ -21,6 +21,11 @@ Runs snapshot
 fastlane ios test
 ```
 Runs all the tests
+### ios unit_test
+```
+fastlane ios unit_test
+```
+Runs only the unit tests
 ### ios deploy
 ```
 fastlane ios deploy
@@ -31,6 +36,6 @@ Deploy a new version to the App Store
 
 ----
 
-This README.md is auto-generated and will be re-generated every time to run [fastlane](https://fastlane.tools)
-More information about fastlane can be found on [https://fastlane.tools](https://fastlane.tools).
-The documentation of fastlane can be found on [GitHub](https://github.com/fastlane/fastlane)
+This README.md is auto-generated and will be re-generated every time to run [fastlane](https://fastlane.tools).  
+More information about fastlane can be found on [https://fastlane.tools](https://fastlane.tools).  
+The documentation of fastlane can be found on [GitHub](https://github.com/fastlane/fastlane).

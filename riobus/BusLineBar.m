@@ -13,7 +13,6 @@
 
 @end
 
-
 @implementation BusLineBar
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -84,7 +83,7 @@
     self.lineNameLabel.alpha = 1.0;
 
     if (destinationsAvailable) {
-        self.avisoSentidoLabel.text = @"Selecione o sentido desejado";
+        self.avisoSentidoLabel.text = NSLocalizedString(@"SELECT_DIRECTION", nil);
         self.avisoSentidoLabel.hidden = NO;
         self.avisoSentidoLabel.alpha = 1.0;
         self.directionButton.alpha = 0.0;
@@ -92,7 +91,7 @@
         self.rightDestinationButton.alpha = 0.0;
     }
     else {
-        self.avisoSentidoLabel.text = @"Sentido indisponível";
+        self.avisoSentidoLabel.text = NSLocalizedString(@"SELECT_DIRECTION_UNAVAILABLE", nil);
         self.avisoSentidoLabel.hidden = NO;
         self.avisoSentidoLabel.alpha = 1.0;
         self.directionButton.alpha = 0.0;
@@ -156,7 +155,7 @@
         self.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLine.line, busLine.name];
     }
     else {
-        self.lineNameLabel.text = [NSString stringWithFormat:@"Pesquisa por “%@”", busLine.line];
+        self.lineNameLabel.text = [NSString stringWithFormat:NSLocalizedString(@"LINE_BAR_SEARCH_FOR_LINE_TITLE", nil), busLine.line];
     }
     
     self.leftDestinationButton.selected = YES;

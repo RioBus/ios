@@ -13,11 +13,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.problems = @[@{ @"descricao": @"Não encontrei uma linha", @"tipo": @"prefeitura" },
-                      @{ @"descricao": @"Localização incorreta no mapa", @"tipo": @"prefeitura" },
-                      @{ @"descricao": @"Itinerário incorreto", @"tipo": @"prefeitura" },
-                      @{ @"descricao": @"Problemas com o aplicativo", @"tipo": @"app" },
-                      @{ @"descricao": @"Outro", @"tipo": @"outro" }];
+    self.problems = @[@{ @"descricao": NSLocalizedString(@"REPORT_LINE_NOT_FOUND", nil), @"tipo": @"prefeitura" },
+                      @{ @"descricao": NSLocalizedString(@"REPORT_WRONG_LOCATION", nil), @"tipo": @"prefeitura" },
+                      @{ @"descricao": NSLocalizedString(@"REPORT_WRONG_ITINERARY", nil), @"tipo": @"prefeitura" },
+                      @{ @"descricao": NSLocalizedString(@"REPORT_APP_ISSUES", nil), @"tipo": @"app" },
+                      @{ @"descricao": NSLocalizedString(@"REPORT_OTHER", nil), @"tipo": @"outro" }];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -89,7 +89,7 @@
     style.tailIndent = -15.0;
     style.lineSpacing = 1.5;
     
-    NSAttributedString *attrText = [[NSAttributedString alloc] initWithString:@"Que tipo de problema você gostaria de reportar?"
+    NSAttributedString *attrText = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"REPORT_TYPE_HEADER_TITLE", @"Header of the table view of the 'Report issue' screen")
                                                                    attributes:@{ NSParagraphStyleAttributeName: style}];
 
     UILabel *lblSectionName = [[UILabel alloc] init];

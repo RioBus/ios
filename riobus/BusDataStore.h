@@ -1,12 +1,9 @@
 #import <Foundation/Foundation.h>
+#import "BusData.h"
 
 @interface BusDataStore : NSObject
 
-/**
- * Gets singleton instance of BusDataStore, initialising it if necessary.
- * @returns Unique instance of BusDataStore.
- */
-+ (instancetype)sharedInstance;
++ (void)updateUsersCacheIfNecessary;
 
 /**
  * Loads document from server containing list of all bus lines with tracking available.
@@ -15,7 +12,7 @@
  * the second parameter will contain an associated NSError.
  * @returns NSOperation object of the request.
  */
-- (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler;
++ (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler;
 
 /**
  * Loads an array from the server containing all the tracked buses for the selected line.
@@ -25,7 +22,7 @@
  * parameter will contain an associated NSError.
  * @returns NSOperation object of the request.
  */
-- (NSOperation*)loadBusDataForLineNumber:(NSString*)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler;
++ (NSOperation *)loadBusDataForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray<BusData *> *, NSError *))handler;
 
 /**
  * Loads an array from the server containing all the location points of a bus line itinerary.
@@ -35,6 +32,6 @@
  * second parameter will contain an associated NSError.
  * @returns NSOperation object of the request.
  */
-- (NSOperation*)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray *, NSError *))handler;
++ (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray<CLLocation *> *, NSError *))handler;
 
 @end

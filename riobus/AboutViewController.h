@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface OptionsViewController : UIViewController
+@interface AboutViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UITextView *aboutTextView;
 

@@ -25,7 +25,7 @@
  */
 - (void)testInitWithDictionary {
     NSDictionary *dictionary = @{
-                                 @"timeStamp": @"2015-10-20T10:54:36.000Z",
+                                 @"timeStamp": @"2016-02-10T03:00:06.000Z",
                                  @"order": @"B31151",
                                  @"line": @"485",
                                  @"speed": @20,
@@ -37,135 +37,56 @@
     
     NSDateFormatter *jsonDateFormat = [[NSDateFormatter alloc] init];
     jsonDateFormat.dateFormat = @"MM-dd-yyyy HH:mm:ss";
+    jsonDateFormat.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
     
     BusData *busData = [[BusData alloc] initWithDictionary:dictionary];
     XCTAssertNotNil(busData);
-    XCTAssertEqualObjects([jsonDateFormat stringFromDate:busData.lastUpdate], @"10-20-2015 10:54:36");
+    XCTAssertEqualObjects([jsonDateFormat stringFromDate:busData.lastUpdate], @"02-10-2016 03:00:06");
     XCTAssertEqualObjects(busData.order, dictionary[@"order"]);
     XCTAssertEqualObjects(busData.lineNumber, dictionary[@"line"]);
     XCTAssertEqualObjects(busData.velocity, dictionary[@"speed"]);
-    XCTAssertEqual(busData.location.coordinate.latitude, [dictionary[@"latitude"] doubleValue]);
-    XCTAssertEqual(busData.location.coordinate.longitude, [dictionary[@"longitude"] doubleValue]);
+    XCTAssertEqual(busData.location.latitude, [dictionary[@"latitude"] doubleValue]);
+    XCTAssertEqual(busData.location.longitude, [dictionary[@"longitude"] doubleValue]);
     XCTAssertEqualObjects(busData.direction, dictionary[@"direction"]);
-    XCTAssertEqualObjects(busData.sense, ((NSString *)dictionary[@"sense"]).capitalizedString);
+    XCTAssertEqualObjects(busData.directionName, ((NSString *)dictionary[@"sense"]).capitalizedString);
 }
 
 /**
  * Tests destination parsing 
  */
 - (void)testDestination {
-    self.busData.sense = @"GENERAL OSORIO (VIA TUNEL SANTA BARBARA) X PENHA";
+    self.busData.directionName = @"GENERAL OSORIO (VIA TUNEL SANTA BARBARA) X PENHA";
     XCTAssertEqualObjects(self.busData.destination, @"Penha");
     
-    self.busData.sense = @"GENERAL OSORIO X PENHA";
+    self.busData.directionName = @"GENERAL OSORIO X PENHA";
     XCTAssertEqualObjects(self.busData.destination, @"Penha");
     
-    self.busData.sense = @"PENHA X GENERAL OSORIO (VIA TUNEL SANTA BARBARA)";
+    self.busData.directionName = @"PENHA X GENERAL OSORIO (VIA TUNEL SANTA BARBARA)";
     XCTAssertEqualObjects(self.busData.destination, @"General Osorio");
     
-    self.busData.sense = @"JARDIM BOTANICO (HORTO) X CENTRAL (VIA COPACABANA)";
+    self.busData.directionName = @"JARDIM BOTANICO (HORTO) X CENTRAL (VIA COPACABANA)";
     XCTAssertEqualObjects(self.busData.destination, @"Central");
     
-    self.busData.sense = @"CENTRAL (VIA COPACABANA) X JARDIM BOTANICO (HORTO)";
+    self.busData.directionName = @"CENTRAL (VIA COPACABANA) X JARDIM BOTANICO (HORTO)";
     XCTAssertEqualObjects(self.busData.destination, @"Jardim Botanico");
     
-    self.busData.sense = @"PENHA X GENERAL OSORIO";
+    self.busData.directionName = @"PENHA X GENERAL OSORIO";
     XCTAssertEqualObjects(self.busData.destination, @"General Osorio");
     
-    self.busData.sense = @"Penha x General Osorio";
+    self.busData.directionName = @"Penha x General Osorio";
     XCTAssertEqualObjects(self.busData.destination, @"General Osorio");
     
-    self.busData.sense = @"";
+    self.busData.directionName = @"";
     XCTAssertNil(self.busData.destination);
     
-    self.busData.sense = @"desconhecido";
+    self.busData.directionName = @"desconhecido";
     XCTAssertNil(self.busData.destination);
     
-    self.busData.sense = @"GENERAL OSORIO";
+    self.busData.directionName = @"GENERAL OSORIO";
     XCTAssertNil(self.busData.destination);
     
-    self.busData.sense = @"GENERAL OSORIO X ";
+    self.busData.directionName = @"GENERAL OSORIO X ";
     XCTAssertNil(self.busData.destination);
-}
-
-- (void)testDelayInSeconds {
-    self.busData.lastUpdate = [NSDate date];
-    XCTAssertEqual([self.busData delayInSeconds], 0);
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-15];
-    XCTAssertEqual([self.busData delayInSeconds], 15);
-}
-
-- (void)testDelayInMinutes {
-    self.busData.lastUpdate = [NSDate date];
-    XCTAssertEqual([self.busData delayInMinutes], 0);
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-15];
-    XCTAssertEqual([self.busData delayInMinutes], 0);
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-60];
-    XCTAssertEqual([self.busData delayInMinutes], 1);
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-200];
-    XCTAssertEqual([self.busData delayInMinutes], 3);
-}
-
-- (void)testHumanReadableStringForSeconds {
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:0], @"agora");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:1], @"agora");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:15], @"agora");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:59], @"agora");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:60], @"agora");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:119], @"agora");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:120], @"2 minutos atrás");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:3599], @"59 minutos atrás");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:3600], @"1 hora atrás");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:7199], @"1 hora atrás");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:7200], @"2 horas atrás");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:86399], @"23 horas atrás");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:86400], @"1 dia atrás");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:172799], @"1 dia atrás");
-    
-    XCTAssertEqualObjects([BusData humanReadableStringForSeconds:172800], @"2 dias atrás");
-}
-
-- (void)testHumanReadableDelay {
-    self.busData.lastUpdate = [NSDate date];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"agora");
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-15];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"agora");
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-60];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"agora");
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-180];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"3 minutos atrás");
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-3600];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"1 hora atrás");
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-7200];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"2 horas atrás");
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-86400];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"1 dia atrás");
-    
-    self.busData.lastUpdate = [NSDate dateWithTimeIntervalSinceNow:-172800];
-    XCTAssertEqualObjects([self.busData humanReadableDelay], @"2 dias atrás");
 }
 
 @end

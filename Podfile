@@ -5,5 +5,6 @@ target "riobus" do
     pod 'PSTAlertController', '~> 1.1'
     pod 'SVProgressHUD', '~>1.1.3'
     pod 'Parse'
+    pod 'NSDate+TimeAgo'
     pod 'SimulatorStatusMagic', :configurations => ['Debug']
 end

@@ -20,7 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Bolts/Tasks (1.5.1)
+  - Bolts/Tasks (1.6.0)
   - Google/Analytics (1.0.7):
     - Google/Core
     - GoogleAnalytics (~> 3.12)
@@ -35,7 +35,8 @@ PODS:
   - GoogleSymbolUtilities (1.0.3)
   - GoogleUtilities (1.1.0):
     - GoogleSymbolUtilities (~> 1.0.0)
-  - Parse (1.11.0):
+  - NSDate+TimeAgo (1.0.3)
+  - Parse (1.12.0):
     - Bolts/Tasks (~> 1.5)
   - PSTAlertController (1.2.0)
   - SimulatorStatusMagic (1.7)
@@ -45,6 +46,7 @@ DEPENDENCIES:
   - AFNetworking (~> 2.5)
   - Google/Analytics (~> 1.0.0)
   - GoogleMaps (~> 1.10)
+  - NSDate+TimeAgo
   - Parse
   - PSTAlertController (~> 1.1)
   - SimulatorStatusMagic
@@ -52,14 +54,15 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
-  Bolts: a12663244b1d3351c738882e71902fc74db54f64
+  Bolts: f52a250053bb517ca874523c3913776359ab3def
   Google: 875f5a8ade86dd02e36586e4a54814843938c7f6
   GoogleAnalytics: 9be1afdb8deeac4bb5f13ca7f7d3b9db2a1f43dc
   GoogleMaps: c947160008f414c66707a5ea60f35e92055c7670
   GoogleNetworkingUtilities: 292992ab31b7b4ba32809a0e8b40e324cdfb2c0c
   GoogleSymbolUtilities: 82ad9f93d3615244b3f4ce440f5ab2515e8b4f56
   GoogleUtilities: 8ed9134debe11719097881711464752900668f10
-  Parse: 886af46a0a677402f6374bb97ac212e795f70afe
+  NSDate+TimeAgo: 416f55d2696d3744c313091c5a9280d47f8238fe
+  Parse: de2c52a9a1421b91ae7594ab8ce191afd184f19b
   PSTAlertController: 9b802dfbda54fee2683bfd6dda7023a6de895d5b
   SimulatorStatusMagic: 46c90a12f73abeda6d7c16876e1e0998b6ca5f4f
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1

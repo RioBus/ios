@@ -1,16 +1,24 @@
 #import <Google/Analytics.h>
 #import <PSTAlertController/PSTAlertController.h>
-#import "OptionsViewController.h"
+#import "AboutViewController.h"
 
-@implementation OptionsViewController
+@implementation AboutViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    NSURL *url = [[NSBundle mainBundle] URLForResource:@"AboutText" withExtension:@"rtf"];
+    NSError *error;
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithFileURL:url
+                                                                               options:@{NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType}
+                                                                    documentAttributes:nil
+                                                                                 error:&error];
+    NSAssert(!error, @"There was an error loading the about text from file.");
+    
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
-
-    NSMutableAttributedString *mutable = self.aboutTextView.attributedText.mutableCopy;
+    
+    NSMutableAttributedString *mutable = attributedString.mutableCopy;
     [mutable.mutableString replaceOccurrencesOfString:@"$VERSION" withString:version options:NSCaseInsensitiveSearch range:NSMakeRange(0, mutable.length)];
     [mutable.mutableString replaceOccurrencesOfString:@"$BUILD" withString:build options:NSCaseInsensitiveSearch range:NSMakeRange(0, mutable.length)];
     self.aboutTextView.attributedText = mutable;
