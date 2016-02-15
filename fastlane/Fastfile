@@ -37,7 +37,6 @@ platform :ios do
   end
 
   desc "Deploy a new version to the App Store"
-  desc "** Full Markdown** Support: `code`"
   lane :deploy do
     gym
     deliver
