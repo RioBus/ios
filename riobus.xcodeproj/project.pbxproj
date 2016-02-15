@@ -93,7 +93,7 @@
 		681A7F53196722540006C335 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		681A7F54196722540006C335 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; wrapsLines = 1; };
 		681A7F5C196722540006C335 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		681A7F62196722540006C335 /* riobusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = riobusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		681A7F62196722540006C335 /* RioBus Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RioBus Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		681A7F63196722540006C335 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		681A7F6B196722540006C335 /* riobusTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "riobusTests-Info.plist"; sourceTree = "<group>"; };
 		681A7F7A196727C60006C335 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
@@ -217,7 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				681A7F41196722530006C335 /* riobus.app */,
-				681A7F62196722540006C335 /* riobusTests.xctest */,
+				681A7F62196722540006C335 /* RioBus Tests.xctest */,
 				A35072F61B2D021200F91A2F /* RioBus UI Tests.xctest */,
 				A38B3C391C3DE56300FAA6A9 /* RioBus Snapshots.xctest */,
 			);
@@ -396,9 +396,9 @@
 			productReference = 681A7F41196722530006C335 /* riobus.app */;
 			productType = "com.apple.product-type.application";
 		};
-		681A7F61196722540006C335 /* riobusTests */ = {
+		681A7F61196722540006C335 /* RioBus Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 681A7F76196722540006C335 /* Build configuration list for PBXNativeTarget "riobusTests" */;
+			buildConfigurationList = 681A7F76196722540006C335 /* Build configuration list for PBXNativeTarget "RioBus Tests" */;
 			buildPhases = (
 				681A7F5E196722540006C335 /* Sources */,
 				681A7F5F196722540006C335 /* Frameworks */,
@@ -409,9 +409,9 @@
 			dependencies = (
 				681A7F68196722540006C335 /* PBXTargetDependency */,
 			);
-			name = riobusTests;
+			name = "RioBus Tests";
 			productName = riobusTests;
-			productReference = 681A7F62196722540006C335 /* riobusTests.xctest */;
+			productReference = 681A7F62196722540006C335 /* RioBus Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		A35072F51B2D021200F91A2F /* RioBus UI Tests */ = {
@@ -496,7 +496,7 @@
 			projectRoot = "";
 			targets = (
 				681A7F40196722530006C335 /* riobus */,
-				681A7F61196722540006C335 /* riobusTests */,
+				681A7F61196722540006C335 /* RioBus Tests */,
 				A35072F51B2D021200F91A2F /* RioBus UI Tests */,
 				A38B3C381C3DE56300FAA6A9 /* RioBus Snapshots */,
 			);
@@ -1003,7 +1003,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		681A7F76196722540006C335 /* Build configuration list for PBXNativeTarget "riobusTests" */ = {
+		681A7F76196722540006C335 /* Build configuration list for PBXNativeTarget "RioBus Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				681A7F77196722540006C335 /* Debug */,

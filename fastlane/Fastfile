@@ -31,6 +31,11 @@ platform :ios do
     scan
   end
 
+  desc "Runs only the unit tests"
+  lane :unit_test do
+    scan(scheme: "unit-tests")
+  end
+
   desc "Deploy a new version to the App Store"
   desc "** Full Markdown** Support: `code`"
   lane :deploy do

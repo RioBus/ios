@@ -21,6 +21,11 @@ Runs snapshot
 fastlane ios test
 ```
 Runs all the tests
+### ios unit_test
+```
+fastlane ios unit_test
+```
+Runs only the unit tests
 ### ios deploy
 ```
 fastlane ios deploy
