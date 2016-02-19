@@ -27,7 +27,7 @@ class MapView: UIView {
         }
     }
     
-    private var loadedMarkers = [BusData: GMSMarker]()
+    private var loadedMarkers = [String: GMSMarker]()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -64,19 +64,19 @@ class MapView: UIView {
     }
     
     func removeOrIgnoreMarkerWithBusData(busData: BusData) {
-        if let loadedMarker = loadedMarkers[busData] {
+        if let loadedMarker = loadedMarkers[busData.order] {
             loadedMarker.map = nil
-            loadedMarkers[busData] = nil
+            loadedMarkers[busData.order] = nil
         }
     }
     
     private func markerForBusData(busData: BusData) -> GMSMarker {
-        if let loadedMarker = loadedMarkers[busData] {
+        if let loadedMarker = loadedMarkers[busData.order] {
             return loadedMarker
         } else {
             let newMarker = GMSMarker()
             newMarker.map = mapView
-            loadedMarkers[busData] = newMarker
+            loadedMarkers[busData.order] = newMarker
             return newMarker
         }
     }
