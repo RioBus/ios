@@ -63,7 +63,7 @@
                                         </constraints>
                                         <state key="normal" image="InfoButton"/>
                                         <connections>
-                                            <segue destination="8Yh-BV-TBK" kind="modal" identifier="ViewAboutScreen" id="Ydu-91-49A"/>
+                                            <segue destination="8Yh-BV-TBK" kind="modal" identifier="ViewAboutScreen" modalPresentationStyle="formSheet" id="Ydu-91-49A"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="koQ-fU-bdw" userLabel="Location Button">
