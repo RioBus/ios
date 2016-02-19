@@ -32,8 +32,6 @@ fastlane ios deploy
 ```
 Deploy a new version to the App Store
 
-** Full Markdown** Support: `code`
-
 ----
 
 This README.md is auto-generated and will be re-generated every time to run [fastlane](https://fastlane.tools).  

@@ -37,7 +37,6 @@ platform :ios do
   end
 
   desc "Deploy a new version to the App Store"
-  desc "** Full Markdown** Support: `code`"
   lane :deploy do
     gym
     deliver
@@ -47,7 +46,7 @@ platform :ios do
 
   after_all do |lane|
     slack(
-      message: "Successfully deployed new App Update."
+      message: "Successfully finished fastlane."
     )
   end
 
