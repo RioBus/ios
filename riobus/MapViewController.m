@@ -7,7 +7,7 @@
 #import "MapViewController.h"
 #import "AboutViewController.h"
 
-@interface MapViewController () <CLLocationManagerDelegate, UISearchBarDelegate, BusLineBarDelegate>
+@interface MapViewController () <CLLocationManagerDelegate, BusSuggestionsTableDelegate, BusLineBarDelegate>
 
 @end
 
@@ -26,7 +26,9 @@
         self.mapView.myLocationEnabled = YES;
     }
     
+    self.suggestionTable.searchDelegate = self;
     self.suggestionTable.searchBar = self.searchBar;
+    self.suggestionTable.searchBar.delegate = self.suggestionTable;
     self.suggestionTable.alpha = 0;
     
     [self.informationMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
@@ -39,7 +41,6 @@
     
     self.busLineBar.delegate = self;
     
-    self.searchBar.delegate = self;
     self.searchBar.backgroundImage = [UIImage new];
     [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[UISearchBar.class]].tintColor = [UIColor whiteColor];
     
@@ -143,6 +144,21 @@
 
 - (BOOL)favoriteLineMode {
     return [self.searchedBusLine.line isEqualToString:self.favoriteLine];
+}
+
+
+#pragma mark - Bus Suggestions Table methods
+
+- (void)didSearchForBuses:(NSArray<NSString *> *)buses {
+    [self searchForBusLine:buses];
+}
+
+- (void)didCancelSearch {
+    [self clearSearchAndMap];
+}
+
+- (void)didStartEditing {
+    [SVProgressHUD dismiss];
 }
 
 
@@ -384,41 +400,7 @@
 }
 
 
-#pragma mark - UISearchBar methods
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [self.searchBar resignFirstResponder];
-    [self.searchBar setShowsCancelButton:NO animated:YES];
-    [self setSuggestionsTableVisible:NO];
-    
-    NSMutableArray *buses = [[NSMutableArray alloc] init];
-    for (NSString *line in [[self.searchBar.text uppercaseString] componentsSeparatedByString:@","]) {
-        NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        if (![trimmedLine isEqualToString:@""]) {
-            [buses addObject:trimmedLine];
-        }
-    }
-    
-    if (buses.count > 0) {
-        [self searchForBusLine:buses];
-    }
-}
-
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    [self setSuggestionsTableVisible:YES];
-    [SVProgressHUD dismiss];
-    
-    return YES;
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
-    [self setSuggestionsTableVisible:NO];
-    
-    if (searchBar.text.length == 0) {
-        [self clearSearchAndMap];
-    }
-}
 
 
 #pragma mark - CLLocationManager methods
@@ -503,34 +485,6 @@
  */
 - (void)appWillEnterForeground:(NSNotification *)sender {
     [self performSelector:@selector(updateSearchedBusesData)];
-}
-
-
-#pragma mark - Etc.
-
-/**
- * Mostra ou esconde com uma animação a tabela de sugestões.
- * @param visible BOOL se deve tornar a tabela visível ou não.
- */
-- (void)setSuggestionsTableVisible:(BOOL)visible {
-    static const float animationDuration = 0.2;
-    
-    if (visible) {
-        // Appear
-        [self.searchBar setShowsCancelButton:YES animated:YES];
-        self.suggestionTable.hidden = NO;
-        [self.suggestionTable setContentOffset:CGPointZero animated:NO];
-        [UIView animateWithDuration:animationDuration animations:^{
-            self.suggestionTable.alpha = 1.0;
-        }];
-    }
-    else {
-        // Disappear
-        [self.searchBar setShowsCancelButton:NO animated:YES];
-        [UIView animateWithDuration:animationDuration animations:^{
-            self.suggestionTable.alpha = 0.0;
-        }];
-    }
 }
 
 @end

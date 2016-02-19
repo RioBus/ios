@@ -3,9 +3,9 @@
 #import "BusSuggestionsTable.h"
 #import "riobus-Swift.h"
 
-@interface BusSuggestionsTable()
-@property (atomic) NSString *favoriteLine;
-@property (atomic) NSMutableArray *recentLines;
+@interface BusSuggestionsTable ()
+@property (nonatomic) NSString *favoriteLine;
+@property (nonatomic) NSMutableArray *recentLines;
 @property (nonatomic) NSArray *busLines;
 @end
 
@@ -15,6 +15,7 @@ static const int recentsSectionIndex = 0;
 static const int allLinesSectionIndex = 1;
 static const int totalSections = 2;
 static const int recentItemsLimit = 5;
+static const float animationDuration = 0.2;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -46,6 +47,22 @@ static const int recentItemsLimit = 5;
     return self;
 }
 
+- (void)show {
+    [self.searchBar setShowsCancelButton:YES animated:YES];
+    self.hidden = NO;
+    [self setContentOffset:CGPointZero animated:NO];
+    [UIView animateWithDuration:animationDuration animations:^{
+        self.alpha = 1.0;
+    }];
+}
+
+- (void)hide {
+    [self.searchBar setShowsCancelButton:NO animated:YES];
+    [UIView animateWithDuration:animationDuration animations:^{
+        self.alpha = 0.0;
+    }];
+}
+
 - (void)synchronizePreferences {
     // Trim the size of the recent lines table by removing the last lines
     while (self.recentLines.count > recentItemsLimit) {
@@ -73,10 +90,6 @@ static const int recentItemsLimit = 5;
     _busLines = [trackedLinesArray sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
-/**
- * Notification called when the application has received new bus lines from the server.
- * @param notification Notification contaning object with new bus lines.
- */
 - (void)didUpdateTrackedLines:(NSNotification *)notification {
     NSLog(@"ST Received notification that bus lines were updated.");
     self.trackedBusLines = (NSDictionary *)notification.object;
@@ -84,12 +97,6 @@ static const int recentItemsLimit = 5;
     [self reloadData];
 }
 
-/**
- * Adiciona uma linha no histórico caso ainda não tenha sido pesquisada.
- * Caso a linha já esteja no histórico, atualiza sua posição para lembrar que
- * foi a última pesquisada.
- * @param busLine Uma string com o número da linha.
- */
 - (void)addToRecentTable:(NSString *)busLine {
     if ([self.recentLines containsObject:busLine]) {
         [self.recentLines removeObject:busLine];
@@ -311,6 +318,42 @@ static const int recentItemsLimit = 5;
         count++;
     }
     return 0;
+}
+
+#pragma mark - UISearchBar methods
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [self hide];
+    
+    NSMutableArray<NSString *> *buses = [[NSMutableArray alloc] init];
+    for (NSString *line in [[searchBar.text uppercaseString] componentsSeparatedByString:@","]) {
+        NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (![trimmedLine isEqualToString:@""]) {
+            [buses addObject:trimmedLine];
+        }
+    }
+    
+    if (buses.count > 0) {
+        [self.searchDelegate didSearchForBuses:buses];
+    }
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    [self show];
+    [self.searchDelegate didStartEditing];
+    
+    return YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    [self hide];
+    
+    if (searchBar.text.length == 0) {
+        [self.searchDelegate didCancelSearch];
+    }
 }
 
 @end
