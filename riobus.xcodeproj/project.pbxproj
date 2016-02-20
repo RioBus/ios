@@ -50,6 +50,7 @@
 		A3C19DC61B5452D70085B897 /* ReportDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */; };
 		A3D3D6951B500E4200D9A83C /* ReportProblemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */; };
 		A3D3E8051C77E0570094BBAC /* BusLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D3E8041C77E0570094BBAC /* BusLineCell.swift */; };
+		A3D3E8071C77F6870094BBAC /* PreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */; };
 		A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */; };
 		A3FAE4041BDDCA98002DD53F /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */; };
 		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
@@ -148,6 +149,7 @@
 		A3D3D6931B500E4200D9A83C /* ReportProblemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportProblemViewController.h; sourceTree = "<group>"; };
 		A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportProblemViewController.m; sourceTree = "<group>"; };
 		A3D3E8041C77E0570094BBAC /* BusLineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusLineCell.swift; sourceTree = "<group>"; };
+		A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesStore.swift; sourceTree = "<group>"; };
 		A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PSTAlertController+okAlert.swift"; sourceTree = "<group>"; };
 		A3EE10171B34927F0092BE99 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 				A390E4011C6A9C54005981EC /* Localizable.strings */,
 				A390E3F71C6A9961005981EC /* Main.storyboard */,
 				681A7F4B196722530006C335 /* Supporting Files */,
+				A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */,
 			);
 			name = RioBus;
 			path = riobus;
@@ -652,6 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3D3D6951B500E4200D9A83C /* ReportProblemViewController.m in Sources */,
+				A3D3E8071C77F6870094BBAC /* PreferencesStore.swift in Sources */,
 				A37A3CEF1B1CD61E006A397C /* BusLineBar.m in Sources */,
 				681A7F9E196824890006C335 /* BusData.m in Sources */,
 				A39BA2E91C6B09C00063DDD1 /* MapView.swift in Sources */,

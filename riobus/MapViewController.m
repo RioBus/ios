@@ -240,6 +240,9 @@
         
         NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", (long)trackedBusLines.count);
         self.trackedBusLines = trackedBusLines;
+        
+        [PreferencesStore.sharedInstance updateTrackedLinesWithDictionary:trackedBusLines];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"RioBusDidUpdateTrackedLines" object:self];
     }];
 }
 

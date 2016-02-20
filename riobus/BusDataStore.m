@@ -39,9 +39,6 @@ static const float cacheVersion = 3.0;
                 fetchedLines[lineName] = lineData[@"description"];
             }
             
-            [[NSUserDefaults standardUserDefaults] setObject:fetchedLines forKey:@"tracked_bus_lines"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"RioBusDidUpdateTrackedLines" object:fetchedLines];
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 handler(fetchedLines, nil);
             });

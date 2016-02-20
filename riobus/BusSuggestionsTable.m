@@ -5,9 +5,10 @@
 #import "riobus-Swift.h"
 
 @interface BusSuggestionsTable () <BusLineCellDelegate>
-@property (nonatomic) NSString *favoriteLine;
 @property (nonatomic) NSMutableArray *recentLines;
-@property (nonatomic) NSArray *busLines;
+@property (nonatomic) NSString *favoriteLine;
+@property (nonatomic) NSArray<BusLine *> *busLines;
+@property (nonatomic) NSDictionary<NSString *, BusLine *> *trackedBusLines;
 @end
 
 @implementation BusSuggestionsTable
@@ -27,10 +28,10 @@ static const float animationDuration = 0.2;
         self.delegate = self;
         self.dataSource = self;
         
-        self.trackedBusLines = [[NSUserDefaults standardUserDefaults] objectForKey:@"tracked_bus_lines"];
-        [self setBusLinesFromTrackedLines:self.trackedBusLines];
+        self.favoriteLine = PreferencesStore.sharedInstance.favoriteLine;
         
-        self.favoriteLine = [[NSUserDefaults standardUserDefaults] objectForKey:@"favorite_line"];
+        self.trackedBusLines = PreferencesStore.sharedInstance.trackedLines;
+        [self updateBusLinesArray];
         
         NSArray *savedRecents = [[NSUserDefaults standardUserDefaults] objectForKey:@"Recents"];
         if (savedRecents) {
@@ -71,7 +72,7 @@ static const float animationDuration = 0.2;
     }
     
     [[NSUserDefaults standardUserDefaults] setObject:self.recentLines forKey:@"Recents"];
-    [[NSUserDefaults standardUserDefaults] setObject:self.favoriteLine forKey:@"favorite_line"];
+    PreferencesStore.sharedInstance.favoriteLine = self.favoriteLine;
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
@@ -79,22 +80,20 @@ static const float animationDuration = 0.2;
     [currentInstallation saveInBackground];
 }
 
-- (void)setBusLinesFromTrackedLines:(NSDictionary *)trackedLinesDictionary {
-    NSMutableArray *trackedLinesArray = [NSMutableArray arrayWithCapacity:trackedLinesDictionary.count];
+- (void)updateBusLinesArray {
+    NSMutableArray<BusLine *> *trackedLinesArray = [NSMutableArray arrayWithCapacity:self.trackedBusLines.count];
     
-    for (id line in trackedLinesDictionary) {
-        [trackedLinesArray addObject:@{@"name": line, @"description": trackedLinesDictionary[line]}];
-    }
+    [self.trackedBusLines enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull lineName, BusLine * _Nonnull busLine, BOOL * _Nonnull stop) {
+        [trackedLinesArray addObject:busLine];
+    }];
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name"
-                                                                   ascending:YES];
-    _busLines = [trackedLinesArray sortedArrayUsingDescriptors:@[sortDescriptor]];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    self.busLines = [trackedLinesArray sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
 - (void)didUpdateTrackedLines:(NSNotification *)notification {
-    NSLog(@"ST Received notification that bus lines were updated.");
-    self.trackedBusLines = (NSDictionary *)notification.object;
-    [self setBusLinesFromTrackedLines:self.trackedBusLines];
+    self.trackedBusLines = PreferencesStore.sharedInstance.trackedLines;
+    [self updateBusLinesArray];
     [self reloadData];
 }
 
@@ -184,19 +183,19 @@ static const float animationDuration = 0.2;
         cell.delegate = self;
     }
     
-    NSString *lineName, *lineDescription;
-    
+    BusLine *busLine;
     if (indexPath.section == recentsSectionIndex) {
-        lineName = self.recentLines[self.recentLines.count - indexPath.row - 1];
-        lineDescription = self.trackedBusLines[lineName];
+        NSString *lineName = self.recentLines[self.recentLines.count - indexPath.row - 1];
+        busLine = self.trackedBusLines[lineName];
+        if (!busLine) {
+            busLine = [[BusLine alloc] initWithName:lineName andDescription:nil];
+        }
     }
     else if (indexPath.section == allLinesSectionIndex) {
-        lineName = self.busLines[indexPath.row][@"name"];
-        lineDescription = self.busLines[indexPath.row][@"description"];
+        busLine = self.busLines[indexPath.row];
     }
     
-    BusLine *busLine = [[BusLine alloc] initWithName:lineName andDescription:lineDescription];
-    BOOL isFavorite = [lineName isEqualToString:self.favoriteLine];
+    BOOL isFavorite = [busLine.name isEqualToString:self.favoriteLine];
     [cell configureCellWithBusLine:busLine isFavorite:isFavorite];
     
     return cell;
@@ -233,7 +232,7 @@ static const float animationDuration = 0.2;
             [self.searchBar.delegate searchBarSearchButtonClicked:self.searchBar];
         }
         else if (indexPath.section == allLinesSectionIndex) {
-            self.searchBar.text = self.busLines[indexPath.row][@"name"];
+            self.searchBar.text = self.busLines[indexPath.row].name;
             [self.searchBar.delegate searchBarSearchButtonClicked:self.searchBar];
         }
     }
@@ -274,8 +273,8 @@ static const float animationDuration = 0.2;
  */
 - (NSInteger)indexForFirstChar:(NSString *)character {
     NSUInteger count = 0;
-    for (id line in self.busLines) {
-        NSString *str = line[@"name"];
+    for (BusLine *busLine in self.busLines) {
+        NSString *str = busLine.name;
         if ([str hasPrefix:character]) {
             return count;
         }
