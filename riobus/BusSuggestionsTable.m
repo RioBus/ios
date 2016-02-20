@@ -3,7 +3,7 @@
 #import "BusSuggestionsTable.h"
 #import "riobus-Swift.h"
 
-@interface BusSuggestionsTable ()
+@interface BusSuggestionsTable () <BusLineCellDelegate>
 @property (nonatomic) NSString *favoriteLine;
 @property (nonatomic) NSMutableArray *recentLines;
 @property (nonatomic) NSArray *busLines;
@@ -110,11 +110,10 @@ static const float animationDuration = 0.2;
     [self reloadData];
 }
 
-- (void)makeLineFavorite:(UITapGestureRecognizer *)gestureRecognizer {
-    NSIndexPath *indexPath = [self indexPathForRowAtPoint:[gestureRecognizer locationInView:self]];
-    UITableViewCell *cell = [self cellForRowAtIndexPath:indexPath];
-    NSString *busLine = cell.textLabel.text;
-    
+
+#pragma mark - BusLineCell methods
+
+- (void)makeFavorite:(NSString *)busLine {
     // Se já existe uma linha favorita definida
     if (self.favoriteLine) {
         PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_TITLE", nil), busLine] message:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_MESSAGE", nil), self.favoriteLine]];
@@ -143,8 +142,8 @@ static const float animationDuration = 0.2;
     }
 }
 
-- (void)removeLineFromFavorite:(UITapGestureRecognizer *)gestureRecognizer {
-    NSString *confirmMessage = [NSString stringWithFormat:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_MESSAGE", nil), self.favoriteLine];
+- (void)removeFromFavorites:(NSString *)busLine {
+    NSString *confirmMessage = [NSString stringWithFormat:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_MESSAGE", nil), busLine];
     PSTAlertController *alertController = [PSTAlertController alertWithTitle:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_TITLE", nil) message:confirmMessage];
     [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"CANCEL", nil) style:PSTAlertActionStyleCancel handler:nil]];
     [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"REMOVE", nil) style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
@@ -179,61 +178,26 @@ static const float animationDuration = 0.2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell;
-    NSString *lineName;
-    NSString *cellIdentifier;
+    
+    BusLineCell *cell = [tableView dequeueReusableCellWithIdentifier:BusLineCell.cellIdentifier];
+    if (!cell) {
+        cell = [[BusLineCell alloc] init];
+        cell.delegate = self;
+    }
+    
+    NSString *lineName, *lineDescription;
     
     if (indexPath.section == recentsSectionIndex) {
         lineName = self.recentLines[self.recentLines.count - indexPath.row - 1];
+        lineDescription = self.trackedBusLines[lineName];
     }
     else if (indexPath.section == allLinesSectionIndex) {
         lineName = self.busLines[indexPath.row][@"name"];
-    }
-
-    if ([lineName isEqualToString:self.favoriteLine]) {
-        cellIdentifier = @"Favorite Line Cell";
-    }
-    else {
-        cellIdentifier = @"Line Cell";
+        lineDescription = self.busLines[indexPath.row][@"description"];
     }
     
-    cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [UIFont systemFontOfSize:22];
-        cell.textLabel.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
-        cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:15];
-
-        UITapGestureRecognizer *tapped;
-        if ([lineName isEqualToString:self.favoriteLine]) {
-            cell.tintColor = [UIColor appGoldColor];
-            tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeLineFromFavorite:)];
-            cell.imageView.image = [[UIImage imageNamed:@"StarFilled"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        }
-        else {
-            cell.tintColor = [UIColor colorWithWhite:0.9 alpha:1.0];
-            tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(makeLineFavorite:)];
-            cell.imageView.image = [[UIImage imageNamed:@"Star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        }
-        tapped.numberOfTapsRequired = 1;
-        [cell.imageView addGestureRecognizer:tapped];
-        cell.imageView.isAccessibilityElement = YES;
-        cell.imageView.accessibilityTraits = UIAccessibilityTraitButton;
-        if ([cell respondsToSelector:NSSelectorFromString(@"setAcessibilityElements")]) {
-            cell.accessibilityElements = @[cell.textLabel, cell.imageView];
-        }
-        cell.imageView.userInteractionEnabled = YES;
-    }
-    
-    cell.textLabel.text = lineName;
-
-    if (indexPath.section == recentsSectionIndex) {
-        cell.detailTextLabel.text = self.trackedBusLines[lineName];
-    }
-    else if (indexPath.section == allLinesSectionIndex) {
-        cell.detailTextLabel.text = self.busLines[indexPath.row][@"description"];
-    }
+    BOOL isFavorite = [lineName isEqualToString:self.favoriteLine];
+    [cell configureCellWithBusLine:lineName description:lineDescription isFavorite:isFavorite];
     
     return cell;
 }
