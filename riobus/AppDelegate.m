@@ -4,6 +4,7 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
+#import "riobus-Swift.h"
 
 #ifdef DEBUG
 #import <SimulatorStatusMagic/SDStatusBarManager.h>
@@ -35,13 +36,12 @@
     NSLog(@"Google Analytics running in Dry Run mode. Data will not be sent to Analytics.");
     [[SDStatusBarManager sharedInstance] enableOverrides];
 #endif
-    
+
 #ifdef SNAPSHOT
     // If the app is running on Snapshot mode, clear previous Simulator preferences and load static preferences set
-    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
-    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
-    [[NSUserDefaults standardUserDefaults] setObject:@[@"555",@"475",@"636"] forKey:@"Recents"];
-    [[NSUserDefaults standardUserDefaults] setObject:@"348" forKey:@"favorite_line"];
+    [PreferencesStore.sharedInstance clearPreferences];
+    PreferencesStore.sharedInstance.recentSearches = @[@"555", @"475", @"636", @"348"];
+    PreferencesStore.sharedInstance.favoriteLine = @"348";
     NSLog(@"App on screenshot mode. User defaults have been reset.");
 #endif
     

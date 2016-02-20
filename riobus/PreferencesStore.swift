@@ -27,7 +27,25 @@ class PreferencesStore: NSObject {
         }
     }
     
+    var recentSearches: [String] {
+        get {
+            if let savedSearches = userDefaults.arrayForKey("Recents") {
+                return savedSearches as! [String]
+            } else {
+                return [String]()
+            }
+        }
+        set(newSearches) {
+            userDefaults.setObject(newSearches, forKey: "Recents")
+        }
+    }
+    
     func updateTrackedLinesWithDictionary(newLines: [String: String]) {
         userDefaults.setObject(newLines, forKey: "tracked_bus_lines")
+    }
+    
+    func clearPreferences() {
+        let appDomain = NSBundle.mainBundle().bundleIdentifier!
+        userDefaults.removePersistentDomainForName(appDomain)
     }
 }

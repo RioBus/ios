@@ -2,10 +2,11 @@
 #import <Google/Analytics.h>
 #import <PSTAlertController.h>
 #import <SVProgressHUD.h>
+#import "AboutViewController.h"
 #import "BusDataStore.h"
 #import "BusSuggestionsTable.h"
 #import "MapViewController.h"
-#import "AboutViewController.h"
+#import "riobus-Swift.h"
 
 @interface MapViewController () <CLLocationManagerDelegate, BusSuggestionsTableDelegate, BusLineBarDelegate>
 
@@ -106,19 +107,19 @@
 
 - (IBAction)rightMenuButtonTapped:(UIButton *)sender {
     if (!self.searchedBusLine.name) {
-        // If the user has set a favourite search
-        if (self.favoriteLine) {
+        NSString *favoriteLine = PreferencesStore.sharedInstance.favoriteLine;
+        if (favoriteLine) {
             // Escape search input
             NSString *validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             NSCharacterSet *splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
-            NSMutableArray *buses = [[[self.favoriteLine uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
+            NSMutableArray *buses = [[[favoriteLine uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
             [buses removeObject:@""];
             
             [self searchForBusLine:buses];
             
             [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UI"
                                                                        action:@"Clicou menu favorito"
-                                                                        label:[NSString stringWithFormat:@"Pesquisou linha favorita %@", self.favoriteLine]
+                                                                        label:[NSString stringWithFormat:@"Pesquisou linha favorita %@", favoriteLine]
                                                                         value:nil] build]];
         }
         else {
@@ -138,12 +139,8 @@
 
 #pragma mark - Favorite line methods
 
-- (NSString *)favoriteLine {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"favorite_line"];
-}
-
 - (BOOL)favoriteLineMode {
-    return [self.searchedBusLine.name isEqualToString:self.favoriteLine];
+    return [self.searchedBusLine.name isEqualToString:PreferencesStore.sharedInstance.favoriteLine];
 }
 
 

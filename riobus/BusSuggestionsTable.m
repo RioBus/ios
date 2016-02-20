@@ -5,7 +5,7 @@
 #import "riobus-Swift.h"
 
 @interface BusSuggestionsTable () <BusLineCellDelegate>
-@property (nonatomic) NSMutableArray *recentLines;
+@property (nonatomic) NSMutableArray<NSString *> *recentLines;
 @property (nonatomic) NSString *favoriteLine;
 @property (nonatomic) NSArray<BusLine *> *busLines;
 @property (nonatomic) NSDictionary<NSString *, BusLine *> *trackedBusLines;
@@ -29,17 +29,9 @@ static const float animationDuration = 0.2;
         self.dataSource = self;
         
         self.favoriteLine = PreferencesStore.sharedInstance.favoriteLine;
-        
+        self.recentLines = PreferencesStore.sharedInstance.recentSearches.mutableCopy;
         self.trackedBusLines = PreferencesStore.sharedInstance.trackedLines;
         [self updateBusLinesArray];
-        
-        NSArray *savedRecents = [[NSUserDefaults standardUserDefaults] objectForKey:@"Recents"];
-        if (savedRecents) {
-            self.recentLines = [savedRecents mutableCopy];
-        }
-        else {
-            self.recentLines = [[NSMutableArray alloc] init];
-        }
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateTrackedLines:)
                                                      name:@"RioBusDidUpdateTrackedLines"
@@ -71,9 +63,8 @@ static const float animationDuration = 0.2;
         [self.recentLines removeObjectAtIndex:0];
     }
     
-    [[NSUserDefaults standardUserDefaults] setObject:self.recentLines forKey:@"Recents"];
+    PreferencesStore.sharedInstance.recentSearches = self.recentLines;
     PreferencesStore.sharedInstance.favoriteLine = self.favoriteLine;
-    [[NSUserDefaults standardUserDefaults] synchronize];
     
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setObject:self.recentLines forKey:@"recentSearches"];
