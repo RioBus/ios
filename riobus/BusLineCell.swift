@@ -1,8 +1,8 @@
 import UIKit
 
 @objc public protocol BusLineCellDelegate {
-    func removeFromFavorites(busLine: String)
-    func makeFavorite(busLine: String)
+    func removeFromFavorites(busLine: BusLine)
+    func makeFavorite(busLine: BusLine)
 }
 
 class BusLineCell: UITableViewCell {
@@ -11,7 +11,7 @@ class BusLineCell: UITableViewCell {
     let starTappedGestureRecognizer = UITapGestureRecognizer()
     var isFavorite = false
     var delegate: BusLineCellDelegate?
-    var lineName: String?
+    var busLine: BusLine?
     
     init() {
         super.init(style: .Subtitle, reuseIdentifier: BusLineCell.cellIdentifier)
@@ -37,11 +37,12 @@ class BusLineCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureCellWithBusLine(name: String, description: String, isFavorite: Bool) {
-        lineName = name
-        textLabel?.text = lineName
-        detailTextLabel?.text = description
+    func configureCellWithBusLine(busLine: BusLine, isFavorite: Bool) {
+        self.busLine = busLine
         self.isFavorite = isFavorite
+        
+        textLabel?.text = busLine.name
+        detailTextLabel?.text = busLine.lineDescription
         
         if isFavorite {
             tintColor = .appGoldColor()
@@ -55,9 +56,9 @@ class BusLineCell: UITableViewCell {
     
     func didTapStar(sender: UITapGestureRecognizer) {
         if isFavorite {
-            delegate?.removeFromFavorites(lineName!)
+            delegate?.removeFromFavorites(busLine!)
         } else {
-            delegate?.makeFavorite(lineName!)
+            delegate?.makeFavorite(busLine!)
         }
     }
 }

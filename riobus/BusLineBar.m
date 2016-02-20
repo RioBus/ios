@@ -151,11 +151,11 @@
 }
 
 - (void)appearWithBusLine:(BusLine *)busLine {
-    if (busLine.name) {
-        self.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLine.line, busLine.name];
+    if (busLine.lineDescription) {
+        self.lineNameLabel.text = [NSString stringWithFormat:@"%@ - %@", busLine.name, busLine.lineDescription];
     }
     else {
-        self.lineNameLabel.text = [NSString stringWithFormat:NSLocalizedString(@"LINE_BAR_SEARCH_FOR_LINE_TITLE", nil), busLine.line];
+        self.lineNameLabel.text = [NSString stringWithFormat:NSLocalizedString(@"LINE_BAR_SEARCH_FOR_LINE_TITLE", nil), busLine.name];
     }
     
     self.leftDestinationButton.selected = YES;

@@ -1,5 +1,6 @@
 #import <Parse/Parse.h>
 #import <PSTAlertController.h>
+#import "BusLine.h"
 #import "BusSuggestionsTable.h"
 #import "riobus-Swift.h"
 
@@ -113,15 +114,16 @@ static const float animationDuration = 0.2;
 
 #pragma mark - BusLineCell methods
 
-- (void)makeFavorite:(NSString *)busLine {
-    // Se já existe uma linha favorita definida
+- (void)makeFavorite:(BusLine *)busLine {
+    NSString *lineName = busLine.name;
+
     if (self.favoriteLine) {
         PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_TITLE", nil), busLine] message:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_MESSAGE", nil), self.favoriteLine]];
         [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"CANCEL", nil) style:PSTAlertActionStyleCancel handler:nil]];
         [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"SET_LINE_AS_FAVORITE_OK_BUTTON", nil) style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
             // Atualizar modelo
-            [self addToRecentTable:busLine];
-            self.favoriteLine = busLine;
+            [self addToRecentTable:lineName];
+            self.favoriteLine = lineName;
             [self synchronizePreferences];
             
             // Atualizar view
@@ -130,20 +132,17 @@ static const float animationDuration = 0.2;
         
         [alertController showWithSender:self controller:nil animated:YES completion:nil];
     }
-    // Caso não exista uma linha favorita já definida
     else {
-        // Atualizar modelo
-        [self addToRecentTable:busLine];
-        self.favoriteLine = busLine;
+        [self addToRecentTable:lineName];
+        self.favoriteLine = lineName;
         [self synchronizePreferences];
         
-        // Atualizar view
         [self reloadData];
     }
 }
 
-- (void)removeFromFavorites:(NSString *)busLine {
-    NSString *confirmMessage = [NSString stringWithFormat:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_MESSAGE", nil), busLine];
+- (void)removeFromFavorites:(BusLine *)busLine {
+    NSString *confirmMessage = [NSString stringWithFormat:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_MESSAGE", nil), busLine.name];
     PSTAlertController *alertController = [PSTAlertController alertWithTitle:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_TITLE", nil) message:confirmMessage];
     [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"CANCEL", nil) style:PSTAlertActionStyleCancel handler:nil]];
     [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"REMOVE", nil) style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
@@ -196,8 +195,9 @@ static const float animationDuration = 0.2;
         lineDescription = self.busLines[indexPath.row][@"description"];
     }
     
+    BusLine *busLine = [[BusLine alloc] initWithName:lineName andDescription:lineDescription];
     BOOL isFavorite = [lineName isEqualToString:self.favoriteLine];
-    [cell configureCellWithBusLine:lineName description:lineDescription isFavorite:isFavorite];
+    [cell configureCellWithBusLine:busLine isFavorite:isFavorite];
     
     return cell;
 }

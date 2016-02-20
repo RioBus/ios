@@ -105,7 +105,7 @@
 }
 
 - (IBAction)rightMenuButtonTapped:(UIButton *)sender {
-    if (!self.searchedBusLine.line) {
+    if (!self.searchedBusLine.name) {
         // If the user has set a favourite search
         if (self.favoriteLine) {
             // Escape search input
@@ -143,7 +143,7 @@
 }
 
 - (BOOL)favoriteLineMode {
-    return [self.searchedBusLine.line isEqualToString:self.favoriteLine];
+    return [self.searchedBusLine.name isEqualToString:self.favoriteLine];
 }
 
 
@@ -178,7 +178,7 @@
 - (void)busLineBarView:(BusLineBar *)sender didAppear:(BOOL)visible {
     if (visible) {
         self.arrowUpMenuButton.hidden = NO;
-        [self.favoriteMenuButton setTitle:self.searchedBusLine.line forState:UIControlStateNormal];
+        [self.favoriteMenuButton setTitle:self.searchedBusLine.name forState:UIControlStateNormal];
         [self.favoriteMenuButton setImage:nil forState:UIControlStateNormal];
     }
     else {
@@ -261,7 +261,7 @@
     self.searchBar.text = busLineCute;
     self.searchedDirection = nil;
     self.hasUpdatedMapPosition = NO;
-    self.searchedBusLine = [[BusLine alloc] initWithLine:busLine andName:self.trackedBusLines[busLine]];
+    self.searchedBusLine = [[BusLine alloc] initWithName:busLine andDescription:self.trackedBusLines[busLine]];
     [self.busLineBar appearWithBusLine:self.searchedBusLine];
     
     // Draw itineraries
@@ -290,7 +290,7 @@
         
         [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
                                                                    action:@"Erro atualizando itinerário"
-                                                                    label:[NSString stringWithFormat:@"Itinerário indisponível (%@)", self.searchedBusLine.line]
+                                                                    label:[NSString stringWithFormat:@"Itinerário indisponível (%@)", self.searchedBusLine.name]
                                                                     value:nil] build]];
     }];
 }
@@ -304,7 +304,7 @@
     [self cancelPendingRequests];
     
     // Load bus data for searched line
-    NSOperation *request = [BusDataStore loadBusDataForLineNumber:self.searchedBusLine.line withCompletionHandler:^(NSArray *busesData, NSError *error) {
+    NSOperation *request = [BusDataStore loadBusDataForLineNumber:self.searchedBusLine.name withCompletionHandler:^(NSArray *busesData, NSError *error) {
         if (error) {
             [self.busLineBar hide];
             [SVProgressHUD dismiss];
@@ -351,13 +351,13 @@
                 
                 [SVProgressHUD dismiss];
                 
-                [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"NO_BUS_FOUND_ALERT_TITLE", nil), self.searchedBusLine.line] andMessage:NSLocalizedString(@"NO_BUS_FOUND_ALERT_MESSAGE", nil)];
+                [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"NO_BUS_FOUND_ALERT_TITLE", nil), self.searchedBusLine.name] andMessage:NSLocalizedString(@"NO_BUS_FOUND_ALERT_MESSAGE", nil)];
                 
                 [self clearSearchAndMap];
                 
                 [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
                                                                            action:@"Erro atualizando BusData"
-                                                                            label:[NSString stringWithFormat:@"Nenhum ônibus encontrado (%@)", self.searchedBusLine.line]
+                                                                            label:[NSString stringWithFormat:@"Nenhum ônibus encontrado (%@)", self.searchedBusLine.name]
                                                                             value:nil] build]];
                 
                 [self.updateTimer invalidate];
