@@ -27,6 +27,10 @@ class PreferencesStore: NSObject {
         }
     }
     
+    func updateTrackedLinesWithDictionary(newLines: [String: String]) {
+        userDefaults.setObject(newLines, forKey: "tracked_bus_lines")
+    }
+    
     var recentSearches: [String] {
         get {
             if let savedSearches = userDefaults.arrayForKey("Recents") {
@@ -38,10 +42,6 @@ class PreferencesStore: NSObject {
         set(newSearches) {
             userDefaults.setObject(newSearches, forKey: "Recents")
         }
-    }
-    
-    func updateTrackedLinesWithDictionary(newLines: [String: String]) {
-        userDefaults.setObject(newLines, forKey: "tracked_bus_lines")
     }
     
     func clearPreferences() {
