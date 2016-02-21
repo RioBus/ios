@@ -45,15 +45,10 @@ platform :ios do
   end
 
   after_all do |lane|
-    slack(
-      message: "Successfully finished fastlane."
-    )
+
   end
 
   error do |lane, exception|
-    slack(
-      message: exception.message,
-      success: false
-    )
+
   end
 end
