@@ -43,7 +43,12 @@
     self.busLineBar.delegate = self;
     
     self.searchBar.backgroundImage = [UIImage new];
-    [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[UISearchBar.class]].tintColor = [UIColor whiteColor];
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0) {
+        [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[UISearchBar.class]].tintColor = [UIColor whiteColor];
+    }
+    else {
+        [UIBarButtonItem appearanceWhenContainedIn:UISearchBar.class, nil].tintColor = [UIColor whiteColor];
+    }
     
     [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.8]];
     [SVProgressHUD setForegroundColor:[UIColor appDarkBlueColor]];
