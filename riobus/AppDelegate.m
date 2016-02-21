@@ -29,7 +29,7 @@
     [[GGLContext sharedInstance] configureWithError:&configureError];
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
     GAI *gai = [GAI sharedInstance];
-    gai.trackUncaughtExceptions = YES; // Report uncaught exceptions
+    gai.trackUncaughtExceptions = YES;
 #ifdef DEBUG
     gai.logger.logLevel = kGAILogLevelWarning;
     gai.dryRun = YES; // Prevents any data from being sent to Google Analytics
