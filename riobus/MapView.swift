@@ -46,9 +46,7 @@ class MapView: UIView {
         addConstraint(topConstraint)
         
         let bottomConstraint = NSLayoutConstraint(item: mapView, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1, constant: 0)
-
         addConstraint(bottomConstraint)
-
     }
     
     func addOrUpdateMarkerWithBusData(busData: BusData, lineName: String) {
