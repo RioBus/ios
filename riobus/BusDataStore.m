@@ -31,21 +31,18 @@ static const float cacheVersion = 3.0;
         NSArray *availableLines = [NSJSONSerialization JSONObjectWithData:responseObject options: NSJSONReadingMutableContainers error:&jsonParseError];
         if (jsonParseError) {
             NSLog(@"Error decoding JSON itinerary data");
+            return;
         }
-        else {
-            NSMutableDictionary *fetchedLines = [[NSMutableDictionary alloc] initWithCapacity:availableLines.count];
-            for (NSDictionary *lineData in availableLines) {
-                NSString *lineName = lineData[@"line"];
-                fetchedLines[lineName] = lineData[@"description"];
-            }
-            
-            [[NSUserDefaults standardUserDefaults] setObject:fetchedLines forKey:@"tracked_bus_lines"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"RioBusDidUpdateTrackedLines" object:fetchedLines];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                handler(fetchedLines, nil);
-            });
+        
+        NSMutableDictionary *fetchedLines = [[NSMutableDictionary alloc] initWithCapacity:availableLines.count];
+        for (NSDictionary *lineData in availableLines) {
+            NSString *lineName = lineData[@"line"];
+            fetchedLines[lineName] = lineData[@"description"];
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            handler(fetchedLines, nil);
+        });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"ERROR: Bus lines request to server failed. %@", error.localizedDescription);
         dispatch_async(dispatch_get_main_queue(), ^{

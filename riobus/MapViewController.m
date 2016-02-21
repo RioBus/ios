@@ -2,12 +2,13 @@
 #import <Google/Analytics.h>
 #import <PSTAlertController.h>
 #import <SVProgressHUD.h>
+#import "AboutViewController.h"
 #import "BusDataStore.h"
 #import "BusSuggestionsTable.h"
 #import "MapViewController.h"
-#import "AboutViewController.h"
+#import "riobus-Swift.h"
 
-@interface MapViewController () <CLLocationManagerDelegate, UISearchBarDelegate, BusLineBarDelegate>
+@interface MapViewController () <CLLocationManagerDelegate, BusSuggestionsTableDelegate, BusLineBarDelegate>
 
 @end
 
@@ -26,7 +27,9 @@
         self.mapView.myLocationEnabled = YES;
     }
     
+    self.suggestionTable.searchDelegate = self;
     self.suggestionTable.searchBar = self.searchBar;
+    self.suggestionTable.searchBar.delegate = self.suggestionTable;
     self.suggestionTable.alpha = 0;
     
     [self.informationMenuButton setImageTintColor:[UIColor whiteColor] forUIControlState:UIControlStateNormal];
@@ -39,9 +42,13 @@
     
     self.busLineBar.delegate = self;
     
-    self.searchBar.delegate = self;
     self.searchBar.backgroundImage = [UIImage new];
-    [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[UISearchBar.class]].tintColor = [UIColor whiteColor];
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0) {
+        [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[UISearchBar.class]].tintColor = [UIColor whiteColor];
+    }
+    else {
+        [UIBarButtonItem appearanceWhenContainedIn:UISearchBar.class, nil].tintColor = [UIColor whiteColor];
+    }
     
     [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.8]];
     [SVProgressHUD setForegroundColor:[UIColor appDarkBlueColor]];
@@ -104,20 +111,20 @@
 }
 
 - (IBAction)rightMenuButtonTapped:(UIButton *)sender {
-    if (!self.searchedBusLine.line) {
-        // If the user has set a favourite search
-        if (self.favoriteLine) {
+    if (!self.searchedBusLine.name) {
+        NSString *favoriteLine = PreferencesStore.sharedInstance.favoriteLine;
+        if (favoriteLine) {
             // Escape search input
             NSString *validCharacters = @"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
             NSCharacterSet *splitCharacters = [[NSCharacterSet characterSetWithCharactersInString:validCharacters] invertedSet];
-            NSMutableArray *buses = [[[self.favoriteLine uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
+            NSMutableArray *buses = [[[favoriteLine uppercaseString] componentsSeparatedByCharactersInSet:splitCharacters] mutableCopy];
             [buses removeObject:@""];
             
             [self searchForBusLine:buses];
             
             [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UI"
                                                                        action:@"Clicou menu favorito"
-                                                                        label:[NSString stringWithFormat:@"Pesquisou linha favorita %@", self.favoriteLine]
+                                                                        label:[NSString stringWithFormat:@"Pesquisou linha favorita %@", favoriteLine]
                                                                         value:nil] build]];
         }
         else {
@@ -137,12 +144,23 @@
 
 #pragma mark - Favorite line methods
 
-- (NSString *)favoriteLine {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"favorite_line"];
+- (BOOL)favoriteLineMode {
+    return [self.searchedBusLine.name isEqualToString:PreferencesStore.sharedInstance.favoriteLine];
 }
 
-- (BOOL)favoriteLineMode {
-    return [self.searchedBusLine.line isEqualToString:self.favoriteLine];
+
+#pragma mark - Bus Suggestions Table methods
+
+- (void)didSearchForBuses:(NSArray<NSString *> *)buses {
+    [self searchForBusLine:buses];
+}
+
+- (void)didCancelSearch {
+    [self clearSearchAndMap];
+}
+
+- (void)didStartEditing {
+    [SVProgressHUD dismiss];
 }
 
 
@@ -162,7 +180,7 @@
 - (void)busLineBarView:(BusLineBar *)sender didAppear:(BOOL)visible {
     if (visible) {
         self.arrowUpMenuButton.hidden = NO;
-        [self.favoriteMenuButton setTitle:self.searchedBusLine.line forState:UIControlStateNormal];
+        [self.favoriteMenuButton setTitle:self.searchedBusLine.name forState:UIControlStateNormal];
         [self.favoriteMenuButton setImage:nil forState:UIControlStateNormal];
     }
     else {
@@ -224,6 +242,9 @@
         
         NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", (long)trackedBusLines.count);
         self.trackedBusLines = trackedBusLines;
+        
+        [PreferencesStore.sharedInstance updateTrackedLinesWithDictionary:trackedBusLines];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"RioBusDidUpdateTrackedLines" object:self];
     }];
 }
 
@@ -245,7 +266,7 @@
     self.searchBar.text = busLineCute;
     self.searchedDirection = nil;
     self.hasUpdatedMapPosition = NO;
-    self.searchedBusLine = [[BusLine alloc] initWithLine:busLine andName:self.trackedBusLines[busLine]];
+    self.searchedBusLine = [[BusLine alloc] initWithName:busLine andDescription:self.trackedBusLines[busLine]];
     [self.busLineBar appearWithBusLine:self.searchedBusLine];
     
     // Draw itineraries
@@ -274,7 +295,7 @@
         
         [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
                                                                    action:@"Erro atualizando itinerário"
-                                                                    label:[NSString stringWithFormat:@"Itinerário indisponível (%@)", self.searchedBusLine.line]
+                                                                    label:[NSString stringWithFormat:@"Itinerário indisponível (%@)", self.searchedBusLine.name]
                                                                     value:nil] build]];
     }];
 }
@@ -288,7 +309,7 @@
     [self cancelPendingRequests];
     
     // Load bus data for searched line
-    NSOperation *request = [BusDataStore loadBusDataForLineNumber:self.searchedBusLine.line withCompletionHandler:^(NSArray *busesData, NSError *error) {
+    NSOperation *request = [BusDataStore loadBusDataForLineNumber:self.searchedBusLine.name withCompletionHandler:^(NSArray *busesData, NSError *error) {
         if (error) {
             [self.busLineBar hide];
             [SVProgressHUD dismiss];
@@ -335,13 +356,13 @@
                 
                 [SVProgressHUD dismiss];
                 
-                [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"NO_BUS_FOUND_ALERT_TITLE", nil), self.searchedBusLine.line] andMessage:NSLocalizedString(@"NO_BUS_FOUND_ALERT_MESSAGE", nil)];
+                [PSTAlertController presentOkAlertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"NO_BUS_FOUND_ALERT_TITLE", nil), self.searchedBusLine.name] andMessage:NSLocalizedString(@"NO_BUS_FOUND_ALERT_MESSAGE", nil)];
                 
                 [self clearSearchAndMap];
                 
                 [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
                                                                            action:@"Erro atualizando BusData"
-                                                                            label:[NSString stringWithFormat:@"Nenhum ônibus encontrado (%@)", self.searchedBusLine.line]
+                                                                            label:[NSString stringWithFormat:@"Nenhum ônibus encontrado (%@)", self.searchedBusLine.name]
                                                                             value:nil] build]];
                 
                 [self.updateTimer invalidate];
@@ -384,41 +405,7 @@
 }
 
 
-#pragma mark - UISearchBar methods
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [self.searchBar resignFirstResponder];
-    [self.searchBar setShowsCancelButton:NO animated:YES];
-    [self setSuggestionsTableVisible:NO];
-    
-    NSMutableArray *buses = [[NSMutableArray alloc] init];
-    for (NSString *line in [[self.searchBar.text uppercaseString] componentsSeparatedByString:@","]) {
-        NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        if (![trimmedLine isEqualToString:@""]) {
-            [buses addObject:trimmedLine];
-        }
-    }
-    
-    if (buses.count > 0) {
-        [self searchForBusLine:buses];
-    }
-}
-
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
-    [self setSuggestionsTableVisible:YES];
-    [SVProgressHUD dismiss];
-    
-    return YES;
-}
-
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
-    [searchBar resignFirstResponder];
-    [self setSuggestionsTableVisible:NO];
-    
-    if (searchBar.text.length == 0) {
-        [self clearSearchAndMap];
-    }
-}
 
 
 #pragma mark - CLLocationManager methods
@@ -503,34 +490,6 @@
  */
 - (void)appWillEnterForeground:(NSNotification *)sender {
     [self performSelector:@selector(updateSearchedBusesData)];
-}
-
-
-#pragma mark - Etc.
-
-/**
- * Mostra ou esconde com uma animação a tabela de sugestões.
- * @param visible BOOL se deve tornar a tabela visível ou não.
- */
-- (void)setSuggestionsTableVisible:(BOOL)visible {
-    static const float animationDuration = 0.2;
-    
-    if (visible) {
-        // Appear
-        [self.searchBar setShowsCancelButton:YES animated:YES];
-        self.suggestionTable.hidden = NO;
-        [self.suggestionTable setContentOffset:CGPointZero animated:NO];
-        [UIView animateWithDuration:animationDuration animations:^{
-            self.suggestionTable.alpha = 1.0;
-        }];
-    }
-    else {
-        // Disappear
-        [self.searchBar setShowsCancelButton:NO animated:YES];
-        [UIView animateWithDuration:animationDuration animations:^{
-            self.suggestionTable.alpha = 0.0;
-        }];
-    }
 }
 
 @end

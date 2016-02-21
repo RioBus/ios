@@ -1,12 +1,14 @@
 #import <Parse/Parse.h>
 #import <PSTAlertController.h>
+#import "BusLine.h"
 #import "BusSuggestionsTable.h"
 #import "riobus-Swift.h"
 
-@interface BusSuggestionsTable()
-@property (atomic) NSString *favoriteLine;
-@property (atomic) NSMutableArray *recentLines;
-@property (nonatomic) NSArray *busLines;
+@interface BusSuggestionsTable () <BusLineCellDelegate>
+@property (nonatomic) NSMutableArray<NSString *> *recentLines;
+@property (nonatomic) NSString *favoriteLine;
+@property (nonatomic) NSArray<BusLine *> *busLines;
+@property (nonatomic) NSDictionary<NSString *, BusLine *> *trackedBusLines;
 @end
 
 @implementation BusSuggestionsTable
@@ -15,6 +17,7 @@ static const int recentsSectionIndex = 0;
 static const int allLinesSectionIndex = 1;
 static const int totalSections = 2;
 static const int recentItemsLimit = 5;
+static const float animationDuration = 0.2;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
@@ -25,18 +28,10 @@ static const int recentItemsLimit = 5;
         self.delegate = self;
         self.dataSource = self;
         
-        self.trackedBusLines = [[NSUserDefaults standardUserDefaults] objectForKey:@"tracked_bus_lines"];
-        [self setBusLinesFromTrackedLines:self.trackedBusLines];
-        
-        self.favoriteLine = [[NSUserDefaults standardUserDefaults] objectForKey:@"favorite_line"];
-        
-        NSArray *savedRecents = [[NSUserDefaults standardUserDefaults] objectForKey:@"Recents"];
-        if (savedRecents) {
-            self.recentLines = [savedRecents mutableCopy];
-        }
-        else {
-            self.recentLines = [[NSMutableArray alloc] init];
-        }
+        self.favoriteLine = PreferencesStore.sharedInstance.favoriteLine;
+        self.recentLines = PreferencesStore.sharedInstance.recentSearches.mutableCopy;
+        self.trackedBusLines = PreferencesStore.sharedInstance.trackedLines;
+        [self updateBusLinesArray];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didUpdateTrackedLines:)
                                                      name:@"RioBusDidUpdateTrackedLines"
@@ -46,50 +41,53 @@ static const int recentItemsLimit = 5;
     return self;
 }
 
+- (void)show {
+    [self.searchBar setShowsCancelButton:YES animated:YES];
+    self.hidden = NO;
+    [self setContentOffset:CGPointZero animated:NO];
+    [UIView animateWithDuration:animationDuration animations:^{
+        self.alpha = 1.0;
+    }];
+}
+
+- (void)hide {
+    [self.searchBar setShowsCancelButton:NO animated:YES];
+    [UIView animateWithDuration:animationDuration animations:^{
+        self.alpha = 0.0;
+    }];
+}
+
 - (void)synchronizePreferences {
     // Trim the size of the recent lines table by removing the last lines
     while (self.recentLines.count > recentItemsLimit) {
         [self.recentLines removeObjectAtIndex:0];
     }
     
-    [[NSUserDefaults standardUserDefaults] setObject:self.recentLines forKey:@"Recents"];
-    [[NSUserDefaults standardUserDefaults] setObject:self.favoriteLine forKey:@"favorite_line"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    PreferencesStore.sharedInstance.recentSearches = self.recentLines;
+    PreferencesStore.sharedInstance.favoriteLine = self.favoriteLine;
     
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setObject:self.recentLines forKey:@"recentSearches"];
     [currentInstallation saveInBackground];
 }
 
-- (void)setBusLinesFromTrackedLines:(NSDictionary *)trackedLinesDictionary {
-    NSMutableArray *trackedLinesArray = [NSMutableArray arrayWithCapacity:trackedLinesDictionary.count];
+- (void)updateBusLinesArray {
+    NSMutableArray<BusLine *> *trackedLinesArray = [NSMutableArray arrayWithCapacity:self.trackedBusLines.count];
     
-    for (id line in trackedLinesDictionary) {
-        [trackedLinesArray addObject:@{@"name": line, @"description": trackedLinesDictionary[line]}];
-    }
+    [self.trackedBusLines enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull lineName, BusLine * _Nonnull busLine, BOOL * _Nonnull stop) {
+        [trackedLinesArray addObject:busLine];
+    }];
     
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name"
-                                                                   ascending:YES];
-    _busLines = [trackedLinesArray sortedArrayUsingDescriptors:@[sortDescriptor]];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    self.busLines = [trackedLinesArray sortedArrayUsingDescriptors:@[sortDescriptor]];
 }
 
-/**
- * Notification called when the application has received new bus lines from the server.
- * @param notification Notification contaning object with new bus lines.
- */
 - (void)didUpdateTrackedLines:(NSNotification *)notification {
-    NSLog(@"ST Received notification that bus lines were updated.");
-    self.trackedBusLines = (NSDictionary *)notification.object;
-    [self setBusLinesFromTrackedLines:self.trackedBusLines];
+    self.trackedBusLines = PreferencesStore.sharedInstance.trackedLines;
+    [self updateBusLinesArray];
     [self reloadData];
 }
 
-/**
- * Adiciona uma linha no histórico caso ainda não tenha sido pesquisada.
- * Caso a linha já esteja no histórico, atualiza sua posição para lembrar que
- * foi a última pesquisada.
- * @param busLine Uma string com o número da linha.
- */
 - (void)addToRecentTable:(NSString *)busLine {
     if ([self.recentLines containsObject:busLine]) {
         [self.recentLines removeObject:busLine];
@@ -103,19 +101,19 @@ static const int recentItemsLimit = 5;
     [self reloadData];
 }
 
-- (void)makeLineFavorite:(UITapGestureRecognizer *)gestureRecognizer {
-    NSIndexPath *indexPath = [self indexPathForRowAtPoint:[gestureRecognizer locationInView:self]];
-    UITableViewCell *cell = [self cellForRowAtIndexPath:indexPath];
-    NSString *busLine = cell.textLabel.text;
-    
-    // Se já existe uma linha favorita definida
+
+#pragma mark - BusLineCell methods
+
+- (void)makeFavorite:(BusLine *)busLine {
+    NSString *lineName = busLine.name;
+
     if (self.favoriteLine) {
         PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_TITLE", nil), busLine] message:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_MESSAGE", nil), self.favoriteLine]];
         [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"CANCEL", nil) style:PSTAlertActionStyleCancel handler:nil]];
         [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"SET_LINE_AS_FAVORITE_OK_BUTTON", nil) style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
             // Atualizar modelo
-            [self addToRecentTable:busLine];
-            self.favoriteLine = busLine;
+            [self addToRecentTable:lineName];
+            self.favoriteLine = lineName;
             [self synchronizePreferences];
             
             // Atualizar view
@@ -124,20 +122,17 @@ static const int recentItemsLimit = 5;
         
         [alertController showWithSender:self controller:nil animated:YES completion:nil];
     }
-    // Caso não exista uma linha favorita já definida
     else {
-        // Atualizar modelo
-        [self addToRecentTable:busLine];
-        self.favoriteLine = busLine;
+        [self addToRecentTable:lineName];
+        self.favoriteLine = lineName;
         [self synchronizePreferences];
         
-        // Atualizar view
         [self reloadData];
     }
 }
 
-- (void)removeLineFromFavorite:(UITapGestureRecognizer *)gestureRecognizer {
-    NSString *confirmMessage = [NSString stringWithFormat:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_MESSAGE", nil), self.favoriteLine];
+- (void)removeFromFavorites:(BusLine *)busLine {
+    NSString *confirmMessage = [NSString stringWithFormat:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_MESSAGE", nil), busLine.name];
     PSTAlertController *alertController = [PSTAlertController alertWithTitle:NSLocalizedString(@"REMOVE_LINE_FROM_FAVORITES_ALERT_TITLE", nil) message:confirmMessage];
     [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"CANCEL", nil) style:PSTAlertActionStyleCancel handler:nil]];
     [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"REMOVE", nil) style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
@@ -172,61 +167,27 @@ static const int recentItemsLimit = 5;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell;
-    NSString *lineName;
-    NSString *cellIdentifier;
     
-    if (indexPath.section == recentsSectionIndex) {
-        lineName = self.recentLines[self.recentLines.count - indexPath.row - 1];
-    }
-    else if (indexPath.section == allLinesSectionIndex) {
-        lineName = self.busLines[indexPath.row][@"name"];
-    }
-
-    if ([lineName isEqualToString:self.favoriteLine]) {
-        cellIdentifier = @"Favorite Line Cell";
-    }
-    else {
-        cellIdentifier = @"Line Cell";
-    }
-    
-    cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    BusLineCell *cell = [tableView dequeueReusableCellWithIdentifier:BusLineCell.cellIdentifier];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [UIFont systemFontOfSize:22];
-        cell.textLabel.textColor = [UIColor colorWithWhite:0.4 alpha:1.0];
-        cell.detailTextLabel.textColor = [UIColor lightGrayColor];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:15];
-
-        UITapGestureRecognizer *tapped;
-        if ([lineName isEqualToString:self.favoriteLine]) {
-            cell.tintColor = [UIColor appGoldColor];
-            tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeLineFromFavorite:)];
-            cell.imageView.image = [[UIImage imageNamed:@"StarFilled"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        }
-        else {
-            cell.tintColor = [UIColor colorWithWhite:0.9 alpha:1.0];
-            tapped = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(makeLineFavorite:)];
-            cell.imageView.image = [[UIImage imageNamed:@"Star"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        }
-        tapped.numberOfTapsRequired = 1;
-        [cell.imageView addGestureRecognizer:tapped];
-        cell.imageView.isAccessibilityElement = YES;
-        cell.imageView.accessibilityTraits = UIAccessibilityTraitButton;
-        if ([cell respondsToSelector:NSSelectorFromString(@"setAcessibilityElements")]) {
-            cell.accessibilityElements = @[cell.textLabel, cell.imageView];
-        }
-        cell.imageView.userInteractionEnabled = YES;
+        cell = [[BusLineCell alloc] init];
+        cell.delegate = self;
     }
     
-    cell.textLabel.text = lineName;
-
+    BusLine *busLine;
     if (indexPath.section == recentsSectionIndex) {
-        cell.detailTextLabel.text = self.trackedBusLines[lineName];
+        NSString *lineName = self.recentLines[self.recentLines.count - indexPath.row - 1];
+        busLine = self.trackedBusLines[lineName];
+        if (!busLine) {
+            busLine = [[BusLine alloc] initWithName:lineName andDescription:nil];
+        }
     }
     else if (indexPath.section == allLinesSectionIndex) {
-        cell.detailTextLabel.text = self.busLines[indexPath.row][@"description"];
+        busLine = self.busLines[indexPath.row];
     }
+    
+    BOOL isFavorite = [busLine.name isEqualToString:self.favoriteLine];
+    [cell configureCellWithBusLine:busLine isFavorite:isFavorite];
     
     return cell;
 }
@@ -262,7 +223,7 @@ static const int recentItemsLimit = 5;
             [self.searchBar.delegate searchBarSearchButtonClicked:self.searchBar];
         }
         else if (indexPath.section == allLinesSectionIndex) {
-            self.searchBar.text = self.busLines[indexPath.row][@"name"];
+            self.searchBar.text = self.busLines[indexPath.row].name;
             [self.searchBar.delegate searchBarSearchButtonClicked:self.searchBar];
         }
     }
@@ -303,14 +264,50 @@ static const int recentItemsLimit = 5;
  */
 - (NSInteger)indexForFirstChar:(NSString *)character {
     NSUInteger count = 0;
-    for (id line in self.busLines) {
-        NSString *str = line[@"name"];
+    for (BusLine *busLine in self.busLines) {
+        NSString *str = busLine.name;
         if ([str hasPrefix:character]) {
             return count;
         }
         count++;
     }
     return 0;
+}
+
+#pragma mark - UISearchBar methods
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [self hide];
+    
+    NSMutableArray<NSString *> *buses = [[NSMutableArray alloc] init];
+    for (NSString *line in [[searchBar.text uppercaseString] componentsSeparatedByString:@","]) {
+        NSString *trimmedLine = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (![trimmedLine isEqualToString:@""]) {
+            [buses addObject:trimmedLine];
+        }
+    }
+    
+    if (buses.count > 0) {
+        [self.searchDelegate didSearchForBuses:buses];
+    }
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
+    [self show];
+    [self.searchDelegate didStartEditing];
+    
+    return YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    [self hide];
+    
+    if (searchBar.text.length == 0) {
+        [self.searchDelegate didCancelSearch];
+    }
 }
 
 @end

@@ -49,6 +49,8 @@
 		A3B925A41B29166800BEFC9F /* UIColor+RioBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */; };
 		A3C19DC61B5452D70085B897 /* ReportDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */; };
 		A3D3D6951B500E4200D9A83C /* ReportProblemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */; };
+		A3D3E8051C77E0570094BBAC /* BusLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D3E8041C77E0570094BBAC /* BusLineCell.swift */; };
+		A3D3E8071C77F6870094BBAC /* PreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */; };
 		A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */; };
 		A3FAE4041BDDCA98002DD53F /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */; };
 		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
@@ -146,6 +148,8 @@
 		A3C41BE11B1A7B89004CB63A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A3D3D6931B500E4200D9A83C /* ReportProblemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportProblemViewController.h; sourceTree = "<group>"; };
 		A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportProblemViewController.m; sourceTree = "<group>"; };
+		A3D3E8041C77E0570094BBAC /* BusLineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusLineCell.swift; sourceTree = "<group>"; };
+		A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesStore.swift; sourceTree = "<group>"; };
 		A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PSTAlertController+okAlert.swift"; sourceTree = "<group>"; };
 		A3EE10171B34927F0092BE99 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -252,20 +256,18 @@
 			children = (
 				A3B925A51B291C6F00BEFC9F /* Extensions */,
 				681A7F9B196824560006C335 /* Model */,
-				A3D5FE471B1D6F6E0062A103 /* View */,
+				A3D3E8001C77DFA00094BBAC /* About */,
+				A3D3E7FE1C77DF740094BBAC /* Bus Table */,
+				A3D3E7FF1C77DF890094BBAC /* Map */,
+				A3D3E8011C77DFAE0094BBAC /* Reports */,
 				681A7F53196722540006C335 /* AppDelegate.h */,
 				681A7F54196722540006C335 /* AppDelegate.m */,
-				681A7F7A196727C60006C335 /* MapViewController.h */,
-				681A7F7B196727C60006C335 /* MapViewController.m */,
-				681A7FA619684A6C0006C335 /* AboutViewController.h */,
-				681A7FA719684A6C0006C335 /* AboutViewController.m */,
-				A3D3D6931B500E4200D9A83C /* ReportProblemViewController.h */,
-				A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */,
-				A3C19DC41B5452D70085B897 /* ReportDetailViewController.h */,
-				A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */,
 				681A7F5C196722540006C335 /* Images.xcassets */,
+				A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */,
 				A390E4011C6A9C54005981EC /* Localizable.strings */,
+				A390E3F71C6A9961005981EC /* Main.storyboard */,
 				681A7F4B196722530006C335 /* Supporting Files */,
+				A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */,
 			);
 			name = RioBus;
 			path = riobus;
@@ -346,20 +348,48 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
-		A3D5FE471B1D6F6E0062A103 /* View */ = {
+		A3D3E7FE1C77DF740094BBAC /* Bus Table */ = {
 			isa = PBXGroup;
 			children = (
-				A390E3F71C6A9961005981EC /* Main.storyboard */,
+				A3D3E8041C77E0570094BBAC /* BusLineCell.swift */,
+				6392614F1A06A88400B9A53C /* BusSuggestionsTable.h */,
+				639261501A06A88400B9A53C /* BusSuggestionsTable.m */,
+			);
+			name = "Bus Table";
+			sourceTree = "<group>";
+		};
+		A3D3E7FF1C77DF890094BBAC /* Map */ = {
+			isa = PBXGroup;
+			children = (
 				A37A3CED1B1CD61E006A397C /* BusLineBar.h */,
 				A37A3CEE1B1CD61E006A397C /* BusLineBar.m */,
 				A37A3CE91B1CD425006A397C /* BusLineBar.xib */,
-				6392614F1A06A88400B9A53C /* BusSuggestionsTable.h */,
-				639261501A06A88400B9A53C /* BusSuggestionsTable.m */,
-				A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */,
-				A39BA2E61C6AD9D70063DDD1 /* AboutText.rtf */,
 				A39BA2E81C6B09C00063DDD1 /* MapView.swift */,
+				681A7F7A196727C60006C335 /* MapViewController.h */,
+				681A7F7B196727C60006C335 /* MapViewController.m */,
 			);
-			name = View;
+			name = Map;
+			sourceTree = "<group>";
+		};
+		A3D3E8001C77DFA00094BBAC /* About */ = {
+			isa = PBXGroup;
+			children = (
+				A39BA2E61C6AD9D70063DDD1 /* AboutText.rtf */,
+				681A7FA619684A6C0006C335 /* AboutViewController.h */,
+				681A7FA719684A6C0006C335 /* AboutViewController.m */,
+			);
+			name = About;
+			sourceTree = "<group>";
+		};
+		A3D3E8011C77DFAE0094BBAC /* Reports */ = {
+			isa = PBXGroup;
+			children = (
+				A3D3D6931B500E4200D9A83C /* ReportProblemViewController.h */,
+				A3D3D6941B500E4200D9A83C /* ReportProblemViewController.m */,
+				A3C19DC41B5452D70085B897 /* ReportDetailViewController.h */,
+				A3C19DC51B5452D70085B897 /* ReportDetailViewController.m */,
+			);
+			name = Reports;
 			sourceTree = "<group>";
 		};
 		BEC75922FA062B67848E72FA /* Pods */ = {
@@ -625,6 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3D3D6951B500E4200D9A83C /* ReportProblemViewController.m in Sources */,
+				A3D3E8071C77F6870094BBAC /* PreferencesStore.swift in Sources */,
 				A37A3CEF1B1CD61E006A397C /* BusLineBar.m in Sources */,
 				681A7F9E196824890006C335 /* BusData.m in Sources */,
 				A39BA2E91C6B09C00063DDD1 /* MapView.swift in Sources */,
@@ -638,6 +669,7 @@
 				639261511A06A88400B9A53C /* BusSuggestionsTable.m in Sources */,
 				681A7FA1196824FC0006C335 /* BusDataStore.m in Sources */,
 				A3B925A21B290DE000BEFC9F /* UIButton+backgroundColor.swift in Sources */,
+				A3D3E8051C77E0570094BBAC /* BusLineCell.swift in Sources */,
 				681A7FA819684A6C0006C335 /* AboutViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

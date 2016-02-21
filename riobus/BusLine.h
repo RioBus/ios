@@ -2,10 +2,10 @@
 
 @interface BusLine : NSObject
 
-- (instancetype)initWithLine:(NSString *)line andName:(NSString *)name;
+- (instancetype)initWithName:(NSString *)line andDescription:(NSString *)name;
 
-@property (nonatomic) NSString *line;
 @property (nonatomic) NSString *name;
+@property (nonatomic) NSString *lineDescription;
 @property (nonatomic) NSArray *places;
 @property (nonatomic) NSArray *shapes;
 
