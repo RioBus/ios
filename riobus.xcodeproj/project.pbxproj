@@ -20,7 +20,6 @@
 		681A7F7E19672ACF0006C335 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F7D19672ACF0006C335 /* CoreLocation.framework */; };
 		681A7F9E196824890006C335 /* BusData.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F9D196824890006C335 /* BusData.m */; };
 		681A7FA819684A6C0006C335 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA719684A6C0006C335 /* AboutViewController.m */; };
-		775241A3602DA57014C6791E /* Pods_RioBus_Tests_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9C7BFE582F1206F0538D668 /* Pods_RioBus_Tests_Swift.framework */; };
 		A302F3A51C7A97D800FB3A5C /* RioBusAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3A41C7A97D800FB3A5C /* RioBusAPIClient.swift */; };
 		A302F3BA1C7A989300FB3A5C /* RioBusAPIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3B91C7A989300FB3A5C /* RioBusAPIClientTests.swift */; };
 		A302F3BD1C7AAB5D00FB3A5C /* String+webSafeString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3BC1C7AAB5D00FB3A5C /* String+webSafeString.swift */; };
@@ -205,7 +204,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				775241A3602DA57014C6791E /* Pods_RioBus_Tests_Swift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,11 +278,12 @@
 			isa = PBXGroup;
 			children = (
 				A302F3A61C7A97E300FB3A5C /* API */,
-				A3B925A51B291C6F00BEFC9F /* Extensions */,
-				681A7F9B196824560006C335 /* Model */,
 				A3D3E8001C77DFA00094BBAC /* About */,
 				A3D3E7FE1C77DF740094BBAC /* Bus Table */,
+				A3B925A51B291C6F00BEFC9F /* Extensions */,
 				A3D3E7FF1C77DF890094BBAC /* Map */,
+				681A7F9B196824560006C335 /* Model */,
+				A302F3C41C7AD72C00FB3A5C /* Preferences */,
 				A3D3E8011C77DFAE0094BBAC /* Reports */,
 				A302F3C21C7ACEB100FB3A5C /* AppDelegate.swift */,
 				681A7F5C196722540006C335 /* Images.xcassets */,
@@ -292,7 +291,6 @@
 				A390E4011C6A9C54005981EC /* Localizable.strings */,
 				A390E3F71C6A9961005981EC /* Main.storyboard */,
 				681A7F4B196722530006C335 /* Supporting Files */,
-				A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */,
 			);
 			name = RioBus;
 			path = riobus;
@@ -356,6 +354,14 @@
 				A302F3B31C7A986500FB3A5C /* Info.plist */,
 			);
 			path = "RioBus Tests Swift";
+			sourceTree = "<group>";
+		};
+		A302F3C41C7AD72C00FB3A5C /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */,
+			);
+			name = Preferences;
 			sourceTree = "<group>";
 		};
 		A35072F71B2D021200F91A2F /* RioBus UI Tests */ = {
@@ -454,9 +460,8 @@
 				681A7F3D196722530006C335 /* Sources */,
 				681A7F3E196722530006C335 /* Frameworks */,
 				681A7F3F196722530006C335 /* Resources */,
-				F53865278DE24F58A1EE981B /* Copy Pods Resources */,
 				A3B9259F1B27F25000BEFC9F /* Convert TODO's and FIXME's to warnings */,
-				DB5BD78A7CF5A636DACA9F74 /* I */,
+				F53865278DE24F58A1EE981B /* Copy Pods Resources */,
 				6DBA71C93463D35D600B0491 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -689,21 +694,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "KEYWORDS=\"TODO:|FIXME:|DevTeam:|XXX:\"\nfind \"${SRCROOT}/riobus\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | perl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"\n";
-		};
-		DB5BD78A7CF5A636DACA9F74 /* I */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = I;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-riobus/Pods-riobus-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		F53865278DE24F58A1EE981B /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

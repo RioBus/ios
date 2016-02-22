@@ -6,16 +6,25 @@ import SimulatorStatusMagic
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
+
     var window: UIWindow?
+    
+    private static let reachabilityManager = NetworkReachabilityManager()
+    static var isConnectedToNetwork: Bool {
+        get {
+            if let reachable = reachabilityManager?.isReachable {
+                return reachable
+            }
+            return false
+        }
+    }
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Configure Google Maps
         GMSServices.provideAPIKey("AIzaSyAOXbZQbs0_scRqMWj83eDc8snV54yfF5I")
         
         // Configure networking
-        let reachabilityManager = NetworkReachabilityManager()
-        reachabilityManager?.startListening()
+        AppDelegate.reachabilityManager?.startListening()
         
         // Configure Parse
         Parse.setApplicationId("MiNwvb2H3O1nTiZQLdVsIj8px5JWfCN1gITg1vIK", clientKey: "aJZh3mH9u9Baik8pE1vIfkbQwYA2V8E24oIinRy5")

@@ -1,7 +1,6 @@
 use_frameworks!
 
 target 'riobus' do
-    pod 'AFNetworking', '~> 2.5'
     pod 'Alamofire', '~> 3.0'
     pod 'Google/Analytics', '~> 1.0.0'
     pod 'GoogleMaps', '~> 1.10'

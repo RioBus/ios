@@ -1,4 +1,3 @@
-#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <Google/Analytics.h>
 #import <GoogleMaps/GMSCoordinateBounds.h>
 #import <PSTAlertController/PSTAlertController.h>
@@ -206,7 +205,8 @@
     [RioBusAPIClient getTrackedBusLines:^(NSDictionary<NSString *,BusLine *> * _Nullable trackedLines, NSError * _Nullable error) {
         [SVProgressHUD dismiss];
         if (error && error.code != NSURLErrorCancelled) {
-            if ([AFNetworkReachabilityManager sharedManager].isReachable) {
+            
+            if (AppDelegate.isConnectedToNetwork) {
                 [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
                 
                 [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
@@ -297,7 +297,7 @@
             [SVProgressHUD dismiss];
             
             if (error.code != NSURLErrorCancelled) {
-                if ([AFNetworkReachabilityManager sharedManager].isReachable) {
+                if (AppDelegate.isConnectedToNetwork) {
                     [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
                     
                     [self clearSearchAndMap];
