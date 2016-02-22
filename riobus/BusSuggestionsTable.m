@@ -108,7 +108,7 @@ static const float animationDuration = 0.2;
     NSString *lineName = busLine.name;
 
     if (self.favoriteLine) {
-        PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_TITLE", nil), busLine] message:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_MESSAGE", nil), self.favoriteLine]];
+        PSTAlertController *alertController = [PSTAlertController alertWithTitle:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_TITLE", nil), busLine.name] message:[NSString stringWithFormat:NSLocalizedString(@"SET_LINE_AS_FAVORITE_ALERT_MESSAGE", nil), self.favoriteLine]];
         [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"CANCEL", nil) style:PSTAlertActionStyleCancel handler:nil]];
         [alertController addAction:[PSTAlertAction actionWithTitle:NSLocalizedString(@"SET_LINE_AS_FAVORITE_OK_BUTTON", nil) style:PSTAlertActionStyleDefault handler:^(PSTAlertAction *action) {
             // Atualizar modelo
