@@ -17,4 +17,9 @@ class ItineraryCache: NSObject {
         let fileName = lineName.webSafeString()!.stringByAppendingString(".plist")
         return documentsDirectory.stringByAppendingPathComponent(fileName)
     }
+    
+    class func clearLegacyCacheIfNecessary() {
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("bus_itineraries")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("tracked_bus_lines")
+    }
 }

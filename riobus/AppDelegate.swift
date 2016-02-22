@@ -60,8 +60,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let userNotificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Sound, UIUserNotificationType.Alert, UIUserNotificationType.Badge], categories: nil)
         application.registerUserNotificationSettings(userNotificationSettings)
         application.registerForRemoteNotifications()
-        
         application.applicationIconBadgeNumber = 0
+        
+        // Clear legacy caches
+        ItineraryCache.clearLegacyCacheIfNecessary()
         
         return true
     }

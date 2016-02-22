@@ -40,4 +40,14 @@ class ItineraryCacheTests: XCTestCase {
         }
     }
     
+    func testClearLegacyCaches() {
+        ItineraryCache.clearLegacyCacheIfNecessary()
+        
+        let legacyItinerariesCache = NSUserDefaults.standardUserDefaults().objectForKey("bus_itineraries")
+        XCTAssertNil(legacyItinerariesCache, "Legacy itineraries cache should be nil")
+        
+        let legacyTrackedLinesCache = NSUserDefaults.standardUserDefaults().objectForKey("tracked_bus_lines")
+        XCTAssertNil(legacyTrackedLinesCache, "Legacy tracked lines cache should be nil")
+    }
+    
 }
