@@ -61,4 +61,27 @@ class RioBusAPIClient {
             }
         }
     }
+    
+    class func getTrackedBusLines(completionHandler: (trackedLines: [String: BusLine]?, error: ErrorType?) -> Void) {
+        Alamofire.request(.GET, "\(BASE_URL)/itinerary").responseJSON { response in
+            if let linesJSON = response.result.value as? [[String: AnyObject]] {
+                var lines = [String: BusLine]()
+                
+                for line in linesJSON {
+                    let lineName = line["line"] as! String
+                    let lineDescription = line["description"] as! String
+                    lines[lineName] = BusLine(name: lineName, andDescription: lineDescription)
+                }
+                
+                completionHandler(trackedLines: lines, error: nil)
+            } else {
+                if let error = response.result.error {
+                    completionHandler(trackedLines: nil, error: error)
+                } else {
+                    completionHandler(trackedLines: nil, error: RioBusAPIError.InvalidResponse)
+                }
+            }
+        }
+    }
+    
 }
