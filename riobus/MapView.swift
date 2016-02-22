@@ -1,4 +1,5 @@
-import Foundation
+import UIKit
+import GoogleMaps
 
 class MapView: UIView {
     static let cameraDefaultLatitude = -22.9043527

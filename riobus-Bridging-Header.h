@@ -3,6 +3,6 @@
 //
 
 #import <PSTAlertController/PSTAlertController.h>
-#import <GoogleMaps/GoogleMaps.h>
+#import <Google/Analytics.h>
 #import "BusData.h"
 #import "BusLine.h"

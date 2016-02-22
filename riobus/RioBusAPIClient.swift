@@ -2,23 +2,24 @@ import Alamofire
 import Foundation
 
 class RioBusAPIClient: NSObject {
-    enum RioBusAPIError: Int {
-        case InvalidResponse = -1
+    enum RioBusAPIError: ErrorType {
+        case InvalidResponse
     }
     
     private override init() { }
     
     private static let BASE_URL = "http://rest.riob.us/v3"
-    static let ErrorDomain = "us.riob.error.APIError"
+    static let ErrorDomain = "us.riob.error.APIError" // FIXME: get rid of NSError!
     
     class func getBusesForLine(lineName: String, completionHandler: (buses: [BusData]?, error: NSError?) -> Void) {
         let webSafeLineName = lineName.webSafeString() as String!
         let requestURLString = "\(BASE_URL)/search/\(webSafeLineName)"
-        print("Rio Bus API request: \(requestURLString)")
+        logRequest(requestURLString)
         
         Alamofire.request(.GET, requestURLString).responseJSON { response in
             if let busesJSON = response.result.value as? [[String: AnyObject]] {
                 var buses = [BusData]()
+                buses.reserveCapacity(busesJSON.count)
                 
                 for busJSON in busesJSON {
                     if let bus = BusData(dictionary: busJSON) {
@@ -41,7 +42,7 @@ class RioBusAPIClient: NSObject {
     class func getItineraryForLine(lineName: String, completionHandler: (itinerarySpots: [CLLocation]?, error: NSError?) -> Void) {
         let webSafeLineName = lineName.webSafeString() as String!
         let requestURLString = "\(BASE_URL)/itinerary/\(webSafeLineName)"
-        print("Rio Bus API request: \(requestURLString)")
+        logRequest(requestURLString)
 
         Alamofire.request(.GET, requestURLString).responseJSON { response in
             if let lineDetailsJSON = response.result.value as? [String: AnyObject] {
@@ -71,7 +72,7 @@ class RioBusAPIClient: NSObject {
     
     class func getTrackedBusLines(completionHandler: (trackedLines: [String: BusLine]?, error: NSError?) -> Void) {
         let requestURLString = "\(BASE_URL)/itinerary"
-        print("Rio Bus API request: \(requestURLString)")
+        logRequest(requestURLString)
 
         Alamofire.request(.GET, requestURLString).responseJSON { response in
             if let linesJSON = response.result.value as? [[String: AnyObject]] {
@@ -92,6 +93,10 @@ class RioBusAPIClient: NSObject {
                 }
             }
         }
+    }
+    
+    private class func logRequest(requestURLString: String) {
+        print("Rio Bus API request: \(requestURLString)")
     }
     
 }
