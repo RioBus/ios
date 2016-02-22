@@ -13,7 +13,10 @@ class RioBusAPIClient: NSObject {
     
     class func getBusesForLine(lineName: String, completionHandler: (buses: [BusData]?, error: NSError?) -> Void) {
         let webSafeLineName = lineName.webSafeString() as String!
-        Alamofire.request(.GET, "\(BASE_URL)/search/\(webSafeLineName)").responseJSON { response in
+        let requestURLString = "\(BASE_URL)/search/\(webSafeLineName)"
+        print("Rio Bus API request: \(requestURLString)")
+        
+        Alamofire.request(.GET, requestURLString).responseJSON { response in
             if let busesJSON = response.result.value as? [[String: AnyObject]] {
                 var buses = [BusData]()
                 
@@ -37,7 +40,10 @@ class RioBusAPIClient: NSObject {
     
     class func getItineraryForLine(lineName: String, completionHandler: (itinerarySpots: [CLLocation]?, error: NSError?) -> Void) {
         let webSafeLineName = lineName.webSafeString() as String!
-        Alamofire.request(.GET, "\(BASE_URL)/itinerary/\(webSafeLineName)").responseJSON { response in
+        let requestURLString = "\(BASE_URL)/itinerary/\(webSafeLineName)"
+        print("Rio Bus API request: \(requestURLString)")
+
+        Alamofire.request(.GET, requestURLString).responseJSON { response in
             if let lineDetailsJSON = response.result.value as? [String: AnyObject] {
                 if let spotsJSON = lineDetailsJSON["spots"] as? [[String: AnyObject]] {
                     var spots = [CLLocation]()
@@ -64,7 +70,10 @@ class RioBusAPIClient: NSObject {
     }
     
     class func getTrackedBusLines(completionHandler: (trackedLines: [String: BusLine]?, error: NSError?) -> Void) {
-        Alamofire.request(.GET, "\(BASE_URL)/itinerary").responseJSON { response in
+        let requestURLString = "\(BASE_URL)/itinerary"
+        print("Rio Bus API request: \(requestURLString)")
+
+        Alamofire.request(.GET, requestURLString).responseJSON { response in
             if let linesJSON = response.result.value as? [[String: AnyObject]] {
                 var lines = [String: BusLine]()
                 

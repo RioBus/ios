@@ -4,7 +4,6 @@
 #import <PSTAlertController/PSTAlertController.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "AboutViewController.h"
-#import "BusDataStore.h"
 #import "BusSuggestionsTable.h"
 #import "MapViewController.h"
 #import "riobus-Swift.h"
@@ -17,10 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.lastRequests = [[NSMutableArray alloc] init];
-    
-    [BusDataStore updateUsersCacheIfNecessary];
+        
     [self updateTrackedBusLines];
     
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse) {
@@ -188,26 +184,12 @@
 }
 
 
-#pragma mark - Controller methods
-
-- (void)cancelPendingRequests {
-    if (self.lastRequests) {
-        for (NSOperation *request in self.lastRequests) {
-            [request cancel];
-        }
-    }
-    
-    [self.lastRequests removeAllObjects];
-}
-
-
 #pragma mark - Loading of itinerary, bus data and map markers
 
 - (void)clearSearchAndMap {
     [self.mapView clear];
     [self.busLineBar hide];
     [self.updateTimer invalidate];
-    [self cancelPendingRequests];
     [SVProgressHUD dismiss];
     self.searchBar.text = @"";
     self.searchedDirection = nil;
@@ -308,10 +290,8 @@
     }
     
     [self.updateTimer invalidate];
-    [self cancelPendingRequests];
     
-    // Load bus data for searched line
-    NSOperation *request = [BusDataStore loadBusDataForLineNumber:self.searchedBusLine.name withCompletionHandler:^(NSArray *busesData, NSError *error) {
+    [RioBusAPIClient getBusesForLine:self.searchedBusLine.name completionHandler:^(NSArray<BusData *> * _Nullable buses, NSError * _Nullable error) {
         if (error) {
             [self.busLineBar hide];
             [SVProgressHUD dismiss];
@@ -342,8 +322,8 @@
             self.busesData = nil;
         }
         else {
-            if (busesData.count > 0) {
-                self.busesData = busesData;
+            if (buses.count > 0) {
+                self.busesData = buses;
                 [self updateBusMarkers];
                 [SVProgressHUD popActivity];
                 
@@ -371,8 +351,6 @@
             }
         }
     }];
-    
-    [self.lastRequests addObject:request];
 }
 
 - (void)updateBusMarkers {

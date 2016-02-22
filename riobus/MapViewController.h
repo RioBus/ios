@@ -26,7 +26,6 @@
 @property (nonatomic) BOOL hasUpdatedMapPosition;
 
 @property (nonatomic) NSTimer *updateTimer;
-@property (nonatomic) NSMutableArray<NSOperation *> *lastRequests;
 @property (nonatomic, readonly) BOOL favoriteLineMode;
 @property (nonatomic) CGFloat suggestionTableBottomSpacing;
 @property (nonatomic) id<GAITracker> tracker;
