@@ -265,13 +265,24 @@
 }
 
 - (void)loadAndDrawItineraryForBusLine:(NSString * __nonnull)busLine {
-    [SVProgressHUD show];
+    NSArray<CLLocation *> *cachedItinerarySpots = [ItineraryCache getItineraryForLine:busLine];
+    if (cachedItinerarySpots) {
+        NSLog(@"Itinerary for line %@ was found on cache.", busLine);
+        [self.mapView drawItineraryWithSpots:cachedItinerarySpots];
+        return;
+    }
     
+    NSLog(@"Itinerary for line %@ not found on cache. Downloading...", busLine);
+    
+    [SVProgressHUD show];
     [RioBusAPIClient getItineraryForLine:busLine completionHandler:^(NSArray<CLLocation *> * _Nullable itinerarySpots, NSError * _Nullable error) {
         [SVProgressHUD dismiss];
         
         if (!error && itinerarySpots) {
             [self.mapView drawItineraryWithSpots:itinerarySpots];
+            if (![ItineraryCache saveItineraryForLine:busLine itinerarySpots:itinerarySpots]) {
+                NSLog(@"Unable to save itinerary on cache for line %@", busLine);
+            }
             return;
         }
         
