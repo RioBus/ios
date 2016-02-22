@@ -20,7 +20,7 @@
 @property (nonatomic) GMSCoordinateBounds *mapBounds;
 
 @property (nonatomic) NSArray<BusData *> *busesData;
-@property (nonatomic) NSDictionary *trackedBusLines;
+@property (nonatomic) NSDictionary<NSString *, BusLine *> *trackedBusLines;
 @property (nonatomic) BusLine *searchedBusLine;
 @property (nonatomic) NSString *searchedDirection;
 @property (nonatomic) BOOL hasUpdatedMapPosition;

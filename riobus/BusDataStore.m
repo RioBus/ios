@@ -15,47 +15,6 @@ static const float cacheVersion = 3.0;
     }
 }
 
-+ (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler {
-    AFHTTPRequestOperation *operation;
-    
-    NSString *strUrl = [NSString stringWithFormat:@"%@/v3/itinerary", host];
-    NSLog(@"URL = %@" , strUrl);
-    
-    // Prepare request
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
-    operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-    
-    // Fetch URL
-    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSData *responseObject) {
-        NSError *jsonParseError;
-        NSArray *availableLines = [NSJSONSerialization JSONObjectWithData:responseObject options: NSJSONReadingMutableContainers error:&jsonParseError];
-        if (jsonParseError) {
-            NSLog(@"Error decoding JSON itinerary data");
-            return;
-        }
-        
-        NSMutableDictionary *fetchedLines = [[NSMutableDictionary alloc] initWithCapacity:availableLines.count];
-        for (NSDictionary *lineData in availableLines) {
-            NSString *lineName = lineData[@"line"];
-            fetchedLines[lineName] = lineData[@"description"];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            handler(fetchedLines, nil);
-        });
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"ERROR: Bus lines request to server failed. %@", error.localizedDescription);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            handler(nil, error);
-        });
-    }];
-    
-    [operation start];
-    
-    
-    return operation;
-}
-
 + (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray<CLLocation *> *, NSError *))handler {
     AFHTTPRequestOperation *operation;
     // Avoid URL injection

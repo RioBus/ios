@@ -6,15 +6,6 @@
 + (void)updateUsersCacheIfNecessary;
 
 /**
- * Loads document from server containing list of all bus lines with tracking available.
- * @param handler Block to be called when operation is finished, containing a dictionary with
- * the description for each bus line. This object can be nil when an error occurs, in which case
- * the second parameter will contain an associated NSError.
- * @returns NSOperation object of the request.
- */
-+ (NSOperation *)loadTrackedBusLinesWithCompletionHandler:(void (^)(NSDictionary *, NSError *))handler;
-
-/**
  * Loads an array from the server containing all the tracked buses for the selected line.
  * @param lineNumber Line number to be tracked (e.g.: 485).
  * @param handler Block to be called when operation is finished, containing an array with all buses

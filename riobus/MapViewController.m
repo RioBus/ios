@@ -221,7 +221,7 @@
 - (void)updateTrackedBusLines {
     [SVProgressHUD showWithStatus:@"Atualizando linhas"];
     
-    [BusDataStore loadTrackedBusLinesWithCompletionHandler:^(NSDictionary *trackedBusLines, NSError *error) {
+    [RioBusAPIClient getTrackedBusLines:^(NSDictionary<NSString *,BusLine *> * _Nullable trackedLines, NSError * _Nullable error) {
         [SVProgressHUD dismiss];
         if (error && error.code != NSURLErrorCancelled) {
             if ([AFNetworkReachabilityManager sharedManager].isReachable) {
@@ -239,10 +239,9 @@
             return;
         }
         
-        NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", (long)trackedBusLines.count);
-        self.trackedBusLines = trackedBusLines;
-        
-        [PreferencesStore.sharedInstance updateTrackedLinesWithDictionary:trackedBusLines];
+        NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", (long)trackedLines.count);
+        self.trackedBusLines = trackedLines;
+        PreferencesStore.sharedInstance.trackedLines = trackedLines;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"RioBusDidUpdateTrackedLines" object:self];
     }];
 }
@@ -265,7 +264,7 @@
     self.searchBar.text = busLineCute;
     self.searchedDirection = nil;
     self.hasUpdatedMapPosition = NO;
-    self.searchedBusLine = [[BusLine alloc] initWithName:busLine andDescription:self.trackedBusLines[busLine]];
+    self.searchedBusLine = self.trackedBusLines[busLine];
     [self.busLineBar appearWithBusLine:self.searchedBusLine];
     
     // Draw itineraries
@@ -377,12 +376,12 @@
     self.mapBounds = [[GMSCoordinateBounds alloc] init];
     
     for (BusData *busData in self.busesData) {
-        NSString *lineName = self.trackedBusLines[busData.lineNumber] ? self.trackedBusLines[busData.lineNumber] : @"";
+        NSString *lineDescription = self.trackedBusLines[busData.lineNumber] ? self.trackedBusLines[busData.lineNumber].lineDescription : @"";
         
         // If the bus matches the selected direction, add it to the map
         if (!self.searchedDirection || [busData.destination isEqualToString:self.searchedDirection]) {
             
-            [self.mapView addOrUpdateMarkerWithBusData:busData lineName:lineName];
+            [self.mapView addOrUpdateMarkerWithBusData:busData lineDescription:lineDescription];
             
             self.mapBounds = [self.mapBounds includingCoordinate:busData.location];
         }
