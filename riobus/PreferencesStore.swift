@@ -33,7 +33,7 @@ class PreferencesStore: NSObject {
             for (name, busLine) in newLines {
                 lines[name] = busLine.lineDescription
             }
-            userDefaults.setObject(newLines, forKey: "tracked_bus_lines")
+            userDefaults.setObject(lines, forKey: "tracked_bus_lines")
         }
     }
     

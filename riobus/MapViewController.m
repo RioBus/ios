@@ -264,7 +264,12 @@
     self.searchBar.text = busLineCute;
     self.searchedDirection = nil;
     self.hasUpdatedMapPosition = NO;
-    self.searchedBusLine = self.trackedBusLines[busLine];
+    if (self.trackedBusLines[busLine]) {
+        self.searchedBusLine = self.trackedBusLines[busLine];
+    }
+    else {
+        self.searchedBusLine = [[BusLine alloc] initWithName:busLine andDescription:nil];
+    }
     [self.busLineBar appearWithBusLine:self.searchedBusLine];
     
     // Draw itineraries
@@ -280,12 +285,11 @@
 - (void)loadAndDrawItineraryForBusLine:(NSString * __nonnull)busLine {
     [SVProgressHUD show];
     
-    [BusDataStore loadBusLineItineraryForLineNumber:busLine withCompletionHandler:^(NSArray<CLLocation *> *itinerarySpots, NSError *error) {
-        [SVProgressHUD popActivity];
+    [RioBusAPIClient getItineraryForLine:busLine completionHandler:^(NSArray<CLLocation *> * _Nullable itinerarySpots, NSError * _Nullable error) {
+        [SVProgressHUD dismiss];
         
-        if (!error) {
+        if (!error && itinerarySpots) {
             [self.mapView drawItineraryWithSpots:itinerarySpots];
-            
             return;
         }
         

@@ -15,62 +15,6 @@ static const float cacheVersion = 3.0;
     }
 }
 
-+ (NSOperation *)loadBusLineItineraryForLineNumber:(NSString *)lineNumber withCompletionHandler:(void (^)(NSArray<CLLocation *> *, NSError *))handler {
-    AFHTTPRequestOperation *operation;
-    // Avoid URL injection
-    NSString *webSafeNumber = [lineNumber stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    
-    NSMutableDictionary* buses = [[[NSUserDefaults standardUserDefaults] objectForKey:@"bus_itineraries"] mutableCopy];
-    if (!buses) {
-        buses = [[NSMutableDictionary alloc] init];
-    }
-    
-    // Search for cached bus line information
-    __block NSString *jsonData = buses[webSafeNumber];
-    if (!jsonData) {
-        NSLog(@"Itinerary for line %@ is not on cache.", webSafeNumber);
-        NSString *strUrl = [NSString stringWithFormat:@"%@/v3/itinerary/%@", host, webSafeNumber];
-        NSLog(@"URL = %@" , strUrl);
-        
-        // Prepare request
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:strUrl]];
-        operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
-        
-        // Fetch URL
-        [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, NSData* responseObject) {
-            jsonData = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-            
-            if (![jsonData isEqualToString:@""]) {
-                buses[webSafeNumber] = jsonData;
-                [[NSUserDefaults standardUserDefaults] setObject:buses forKey:@"bus_itineraries"];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-                
-                NSLog(@"Itinerary for line %@ now cached.", webSafeNumber);
-            }
-            else {
-                NSLog(@"Itinerary for line %@ returned empty.", webSafeNumber);
-            }
-            
-            [self processBusLineItinerary:lineNumber withJsonData:jsonData withCompletionHandler:handler];
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            // Send data to callback on main thread to avoid issues updating the UI
-            NSLog(@"ERROR: Itinerary request to server failed. %@", error.localizedDescription);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                handler(nil, error);
-            });
-        }];
-        
-        [operation start];
-    }
-    else {
-        NSLog(@"Itinerary for line %@ found on cache.", webSafeNumber);
-        
-        [BusDataStore processBusLineItinerary:lineNumber withJsonData:jsonData withCompletionHandler:handler];
-    }
-    
-    return operation;
-}
-
 + (void)processBusLineItinerary:(NSString *)lineNumber withJsonData:(NSString *)jsonData withCompletionHandler:(void (^)(NSArray<CLLocation *> *itinerarySpots, NSError *error))handler {
     if (jsonData) {
         NSData *itineraryJsonData = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
