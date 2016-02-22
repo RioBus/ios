@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "0700"
-   version = "1.7">
+   version = "1.8">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -41,12 +41,22 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A35072F51B2D021200F91A2F"
                BuildableName = "RioBus UI Tests.xctest"
                BlueprintName = "RioBus UI Tests"
+               ReferencedContainer = "container:riobus.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A302F3AE1C7A986500FB3A5C"
+               BuildableName = "RioBus Tests Swift.xctest"
+               BlueprintName = "RioBus Tests Swift"
                ReferencedContainer = "container:riobus.xcodeproj">
             </BuildableReference>
          </TestableReference>

@@ -1,9 +1,8 @@
-#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <Google/Analytics.h>
-#import <PSTAlertController.h>
-#import <SVProgressHUD.h>
+#import <GoogleMaps/GMSCoordinateBounds.h>
+#import <PSTAlertController/PSTAlertController.h>
+#import <SVProgressHUD/SVProgressHUD.h>
 #import "AboutViewController.h"
-#import "BusDataStore.h"
 #import "BusSuggestionsTable.h"
 #import "MapViewController.h"
 #import "riobus-Swift.h"
@@ -16,14 +15,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.lastRequests = [[NSMutableArray alloc] init];
-    
-    [BusDataStore updateUsersCacheIfNecessary];
+        
     [self updateTrackedBusLines];
     
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
-        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse) {
         self.mapView.myLocationEnabled = YES;
     }
     
@@ -86,7 +81,6 @@
         CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
         switch (authorizationStatus) {
             case kCLAuthorizationStatusAuthorizedWhenInUse:
-            case kCLAuthorizationStatusAuthorized:
                 [self.locationManager startUpdatingLocation];
                 break;
             case kCLAuthorizationStatusNotDetermined:
@@ -189,26 +183,12 @@
 }
 
 
-#pragma mark - Controller methods
-
-- (void)cancelPendingRequests {
-    if (self.lastRequests) {
-        for (NSOperation *request in self.lastRequests) {
-            [request cancel];
-        }
-    }
-    
-    [self.lastRequests removeAllObjects];
-}
-
-
 #pragma mark - Loading of itinerary, bus data and map markers
 
 - (void)clearSearchAndMap {
     [self.mapView clear];
     [self.busLineBar hide];
     [self.updateTimer invalidate];
-    [self cancelPendingRequests];
     [SVProgressHUD dismiss];
     self.searchBar.text = @"";
     self.searchedDirection = nil;
@@ -222,10 +202,11 @@
 - (void)updateTrackedBusLines {
     [SVProgressHUD showWithStatus:@"Atualizando linhas"];
     
-    [BusDataStore loadTrackedBusLinesWithCompletionHandler:^(NSDictionary *trackedBusLines, NSError *error) {
+    [RioBusAPIClient getTrackedBusLines:^(NSDictionary<NSString *,BusLine *> * _Nullable trackedLines, NSError * _Nullable error) {
         [SVProgressHUD dismiss];
         if (error && error.code != NSURLErrorCancelled) {
-            if ([AFNetworkReachabilityManager sharedManager].isReachable) {
+            
+            if (AppDelegate.isConnectedToNetwork) {
                 [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
                 
                 [self.tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Erros"
@@ -240,10 +221,9 @@
             return;
         }
         
-        NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", (long)trackedBusLines.count);
-        self.trackedBusLines = trackedBusLines;
-        
-        [PreferencesStore.sharedInstance updateTrackedLinesWithDictionary:trackedBusLines];
+        NSLog(@"Bus lines loaded. Total of %lu bus lines being tracked.", (long)trackedLines.count);
+        self.trackedBusLines = trackedLines;
+        PreferencesStore.sharedInstance.trackedLines = trackedLines;
         [[NSNotificationCenter defaultCenter] postNotificationName:@"RioBusDidUpdateTrackedLines" object:self];
     }];
 }
@@ -266,7 +246,12 @@
     self.searchBar.text = busLineCute;
     self.searchedDirection = nil;
     self.hasUpdatedMapPosition = NO;
-    self.searchedBusLine = [[BusLine alloc] initWithName:busLine andDescription:self.trackedBusLines[busLine]];
+    if (self.trackedBusLines[busLine]) {
+        self.searchedBusLine = self.trackedBusLines[busLine];
+    }
+    else {
+        self.searchedBusLine = [[BusLine alloc] initWithName:busLine andDescription:nil];
+    }
     [self.busLineBar appearWithBusLine:self.searchedBusLine];
     
     // Draw itineraries
@@ -280,14 +265,24 @@
 }
 
 - (void)loadAndDrawItineraryForBusLine:(NSString * __nonnull)busLine {
-    [SVProgressHUD show];
+    NSArray<CLLocation *> *cachedItinerarySpots = [ItineraryCache getItineraryForLine:busLine];
+    if (cachedItinerarySpots) {
+        NSLog(@"Itinerary for line %@ was found on cache.", busLine);
+        [self.mapView drawItineraryWithSpots:cachedItinerarySpots];
+        return;
+    }
     
-    [BusDataStore loadBusLineItineraryForLineNumber:busLine withCompletionHandler:^(NSArray<CLLocation *> *itinerarySpots, NSError *error) {
-        [SVProgressHUD popActivity];
+    NSLog(@"Itinerary for line %@ not found on cache. Downloading...", busLine);
+    
+    [SVProgressHUD show];
+    [RioBusAPIClient getItineraryForLine:busLine completionHandler:^(NSArray<CLLocation *> * _Nullable itinerarySpots, NSError * _Nullable error) {
+        [SVProgressHUD dismiss];
         
-        if (!error) {
+        if (!error && itinerarySpots) {
             [self.mapView drawItineraryWithSpots:itinerarySpots];
-            
+            if (![ItineraryCache saveItineraryForLine:busLine itinerarySpots:itinerarySpots]) {
+                NSLog(@"Unable to save itinerary on cache for line %@", busLine);
+            }
             return;
         }
         
@@ -306,16 +301,14 @@
     }
     
     [self.updateTimer invalidate];
-    [self cancelPendingRequests];
     
-    // Load bus data for searched line
-    NSOperation *request = [BusDataStore loadBusDataForLineNumber:self.searchedBusLine.name withCompletionHandler:^(NSArray *busesData, NSError *error) {
+    [RioBusAPIClient getBusesForLine:self.searchedBusLine.name completionHandler:^(NSArray<BusData *> * _Nullable buses, NSError * _Nullable error) {
         if (error) {
             [self.busLineBar hide];
             [SVProgressHUD dismiss];
             
             if (error.code != NSURLErrorCancelled) {
-                if ([AFNetworkReachabilityManager sharedManager].isReachable) {
+                if (AppDelegate.isConnectedToNetwork) {
                     [PSTAlertController presentOkAlertWithTitle:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_TITLE", nil) andMessage:NSLocalizedString(@"LINES_UPDATE_ERROR_ALERT_MESSAGE", nil)];
                     
                     [self clearSearchAndMap];
@@ -340,8 +333,8 @@
             self.busesData = nil;
         }
         else {
-            if (busesData.count > 0) {
-                self.busesData = busesData;
+            if (buses.count > 0) {
+                self.busesData = buses;
                 [self updateBusMarkers];
                 [SVProgressHUD popActivity];
                 
@@ -369,8 +362,6 @@
             }
         }
     }];
-    
-    [self.lastRequests addObject:request];
 }
 
 - (void)updateBusMarkers {
@@ -378,12 +369,12 @@
     self.mapBounds = [[GMSCoordinateBounds alloc] init];
     
     for (BusData *busData in self.busesData) {
-        NSString *lineName = self.trackedBusLines[busData.lineNumber] ? self.trackedBusLines[busData.lineNumber] : @"";
+        NSString *lineDescription = self.trackedBusLines[busData.lineNumber] ? self.trackedBusLines[busData.lineNumber].lineDescription : @"";
         
         // If the bus matches the selected direction, add it to the map
         if (!self.searchedDirection || [busData.destination isEqualToString:self.searchedDirection]) {
             
-            [self.mapView addOrUpdateMarkerWithBusData:busData lineName:lineName];
+            [self.mapView addOrUpdateMarkerWithBusData:busData lineDescription:lineDescription];
             
             self.mapBounds = [self.mapBounds includingCoordinate:busData.location];
         }
@@ -430,7 +421,7 @@
         
         self.mapView.myLocationEnabled = NO;
     }
-    else if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorized) {
+    else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
         [self.locationManager startUpdatingLocation];
         self.mapView.myLocationEnabled = YES;
     }

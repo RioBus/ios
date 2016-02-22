@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5DF0DFE6163BF542BBE309B4 /* Pods_riobus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A20B5CEACEEE5FB2BF9D10 /* Pods_riobus.framework */; };
 		639261511A06A88400B9A53C /* BusSuggestionsTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 639261501A06A88400B9A53C /* BusSuggestionsTable.m */; };
 		681A7F45196722530006C335 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F44196722530006C335 /* Foundation.framework */; };
 		681A7F49196722530006C335 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F48196722530006C335 /* UIKit.framework */; };
 		681A7F4F196722530006C335 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 681A7F4D196722530006C335 /* InfoPlist.strings */; };
-		681A7F51196722530006C335 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F50196722530006C335 /* main.m */; };
-		681A7F55196722540006C335 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F54196722540006C335 /* AppDelegate.m */; };
 		681A7F5D196722540006C335 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 681A7F5C196722540006C335 /* Images.xcassets */; };
 		681A7F64196722540006C335 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F63196722540006C335 /* XCTest.framework */; };
 		681A7F65196722540006C335 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F44196722530006C335 /* Foundation.framework */; };
@@ -20,10 +19,16 @@
 		681A7F7C196727C60006C335 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F7B196727C60006C335 /* MapViewController.m */; };
 		681A7F7E19672ACF0006C335 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F7D19672ACF0006C335 /* CoreLocation.framework */; };
 		681A7F9E196824890006C335 /* BusData.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F9D196824890006C335 /* BusData.m */; };
-		681A7FA1196824FC0006C335 /* BusDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA0196824FC0006C335 /* BusDataStore.m */; };
 		681A7FA819684A6C0006C335 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA719684A6C0006C335 /* AboutViewController.m */; };
+		A302F3A51C7A97D800FB3A5C /* RioBusAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3A41C7A97D800FB3A5C /* RioBusAPIClient.swift */; };
+		A302F3BA1C7A989300FB3A5C /* RioBusAPIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3B91C7A989300FB3A5C /* RioBusAPIClientTests.swift */; };
+		A302F3BD1C7AAB5D00FB3A5C /* String+webSafeString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3BC1C7AAB5D00FB3A5C /* String+webSafeString.swift */; };
+		A302F3BF1C7ABC1C00FB3A5C /* NSDate+timeAgo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3BE1C7ABC1C00FB3A5C /* NSDate+timeAgo.swift */; };
+		A302F3C11C7ABC4D00FB3A5C /* NSDateTimeAgo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A302F3C01C7ABC4D00FB3A5C /* NSDateTimeAgo.bundle */; };
+		A302F3C31C7ACEB100FB3A5C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3C21C7ACEB100FB3A5C /* AppDelegate.swift */; };
+		A302F3C61C7B62FE00FB3A5C /* ItineraryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3C51C7B62FE00FB3A5C /* ItineraryCache.swift */; };
+		A302F3C81C7B645000FB3A5C /* ItineraryCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3C71C7B645000FB3A5C /* ItineraryCacheTests.swift */; };
 		A31D90EE1AFA950E00AD3B35 /* BusDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */; };
-		A31D90F51AFAADE100AD3B35 /* BusDataStoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */; };
 		A34B99E51B7BCBF90090A311 /* BusLineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A34B99E41B7BCBF90090A311 /* BusLineTests.m */; };
 		A35072F91B2D021200F91A2F /* RioBusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35072F81B2D021200F91A2F /* RioBusUITests.swift */; };
 		A352EB331B729DCD00A5969B /* BusLine.m in Sources */ = {isa = PBXBuildFile; fileRef = A352EB321B729DCD00A5969B /* BusLine.m */; };
@@ -53,11 +58,17 @@
 		A3D3E8071C77F6870094BBAC /* PreferencesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */; };
 		A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */; };
 		A3FAE4041BDDCA98002DD53F /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */; };
-		F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D9CA8F077F246CFBA653042 /* libPods-riobus.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		681A7F67196722540006C335 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 681A7F39196722530006C335 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 681A7F40196722530006C335;
+			remoteInfo = riobus;
+		};
+		A302F3B41C7A986500FB3A5C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 681A7F39196722530006C335 /* Project object */;
 			proxyType = 1;
@@ -90,10 +101,7 @@
 		681A7F46196722530006C335 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		681A7F48196722530006C335 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		681A7F4C196722530006C335 /* riobus-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "riobus-Info.plist"; sourceTree = "<group>"; };
-		681A7F50196722530006C335 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		681A7F52196722540006C335 /* riobus-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "riobus-Prefix.pch"; sourceTree = "<group>"; };
-		681A7F53196722540006C335 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		681A7F54196722540006C335 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; wrapsLines = 1; };
 		681A7F5C196722540006C335 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		681A7F62196722540006C335 /* RioBus Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RioBus Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		681A7F63196722540006C335 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -103,13 +111,20 @@
 		681A7F7D19672ACF0006C335 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		681A7F9C196824890006C335 /* BusData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusData.h; sourceTree = "<group>"; };
 		681A7F9D196824890006C335 /* BusData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusData.m; sourceTree = "<group>"; };
-		681A7F9F196824FC0006C335 /* BusDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusDataStore.h; sourceTree = "<group>"; };
-		681A7FA0196824FC0006C335 /* BusDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataStore.m; sourceTree = "<group>"; };
 		681A7FA619684A6C0006C335 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		681A7FA719684A6C0006C335 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
-		8D9CA8F077F246CFBA653042 /* libPods-riobus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-riobus.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DCA7F22B554FFDC0AAD93F6 /* Pods-RioBus Tests Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RioBus Tests Swift.release.xcconfig"; path = "Pods/Target Support Files/Pods-RioBus Tests Swift/Pods-RioBus Tests Swift.release.xcconfig"; sourceTree = "<group>"; };
+		A302F3A41C7A97D800FB3A5C /* RioBusAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RioBusAPIClient.swift; sourceTree = "<group>"; };
+		A302F3AF1C7A986500FB3A5C /* RioBus Tests Swift.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RioBus Tests Swift.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A302F3B31C7A986500FB3A5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A302F3B91C7A989300FB3A5C /* RioBusAPIClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RioBusAPIClientTests.swift; sourceTree = "<group>"; };
+		A302F3BC1C7AAB5D00FB3A5C /* String+webSafeString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+webSafeString.swift"; sourceTree = "<group>"; };
+		A302F3BE1C7ABC1C00FB3A5C /* NSDate+timeAgo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+timeAgo.swift"; sourceTree = "<group>"; };
+		A302F3C01C7ABC4D00FB3A5C /* NSDateTimeAgo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NSDateTimeAgo.bundle; sourceTree = "<group>"; };
+		A302F3C21C7ACEB100FB3A5C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A302F3C51C7B62FE00FB3A5C /* ItineraryCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItineraryCache.swift; sourceTree = "<group>"; };
+		A302F3C71C7B645000FB3A5C /* ItineraryCacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItineraryCacheTests.swift; sourceTree = "<group>"; };
 		A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataTests.m; sourceTree = "<group>"; };
-		A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataStoreTests.m; sourceTree = "<group>"; };
 		A34B99E41B7BCBF90090A311 /* BusLineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusLineTests.m; sourceTree = "<group>"; };
 		A35072F61B2D021200F91A2F /* RioBus UI Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RioBus UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35072F81B2D021200F91A2F /* RioBusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RioBusUITests.swift; sourceTree = "<group>"; };
@@ -153,7 +168,9 @@
 		A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PSTAlertController+okAlert.swift"; sourceTree = "<group>"; };
 		A3EE10171B34927F0092BE99 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		B9C7BFE582F1206F0538D668 /* Pods_RioBus_Tests_Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RioBus_Tests_Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.debug.xcconfig"; sourceTree = "<group>"; };
+		F9A20B5CEACEEE5FB2BF9D10 /* Pods_riobus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_riobus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,7 +190,7 @@
 				681A7F7E19672ACF0006C335 /* CoreLocation.framework in Frameworks */,
 				681A7F49196722530006C335 /* UIKit.framework in Frameworks */,
 				681A7F45196722530006C335 /* Foundation.framework in Frameworks */,
-				F37CD79044D44A93BB494B9A /* libPods-riobus.a in Frameworks */,
+				5DF0DFE6163BF542BBE309B4 /* Pods_riobus.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +201,13 @@
 				681A7F64196722540006C335 /* XCTest.framework in Frameworks */,
 				681A7F66196722540006C335 /* UIKit.framework in Frameworks */,
 				681A7F65196722540006C335 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A302F3AC1C7A986500FB3A5C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +233,7 @@
 			children = (
 				681A7F4A196722530006C335 /* RioBus */,
 				681A7F69196722540006C335 /* RioBus Tests */,
+				A302F3B01C7A986500FB3A5C /* RioBus Tests Swift */,
 				A35072F71B2D021200F91A2F /* RioBus UI Tests */,
 				A38B3C3A1C3DE56300FAA6A9 /* RioBus Snapshots */,
 				681A7F43196722530006C335 /* Frameworks */,
@@ -224,6 +249,7 @@
 				681A7F62196722540006C335 /* RioBus Tests.xctest */,
 				A35072F61B2D021200F91A2F /* RioBus UI Tests.xctest */,
 				A38B3C391C3DE56300FAA6A9 /* RioBus Snapshots.xctest */,
+				A302F3AF1C7A986500FB3A5C /* RioBus Tests Swift.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -246,7 +272,8 @@
 				681A7F46196722530006C335 /* CoreGraphics.framework */,
 				681A7F48196722530006C335 /* UIKit.framework */,
 				681A7F63196722540006C335 /* XCTest.framework */,
-				8D9CA8F077F246CFBA653042 /* libPods-riobus.a */,
+				F9A20B5CEACEEE5FB2BF9D10 /* Pods_riobus.framework */,
+				B9C7BFE582F1206F0538D668 /* Pods_RioBus_Tests_Swift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -254,20 +281,20 @@
 		681A7F4A196722530006C335 /* RioBus */ = {
 			isa = PBXGroup;
 			children = (
-				A3B925A51B291C6F00BEFC9F /* Extensions */,
-				681A7F9B196824560006C335 /* Model */,
+				A302F3A61C7A97E300FB3A5C /* API */,
 				A3D3E8001C77DFA00094BBAC /* About */,
 				A3D3E7FE1C77DF740094BBAC /* Bus Table */,
+				A3B925A51B291C6F00BEFC9F /* Extensions */,
 				A3D3E7FF1C77DF890094BBAC /* Map */,
+				681A7F9B196824560006C335 /* Model */,
+				A302F3C41C7AD72C00FB3A5C /* Preferences */,
 				A3D3E8011C77DFAE0094BBAC /* Reports */,
-				681A7F53196722540006C335 /* AppDelegate.h */,
-				681A7F54196722540006C335 /* AppDelegate.m */,
+				A302F3C21C7ACEB100FB3A5C /* AppDelegate.swift */,
 				681A7F5C196722540006C335 /* Images.xcassets */,
 				A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */,
 				A390E4011C6A9C54005981EC /* Localizable.strings */,
 				A390E3F71C6A9961005981EC /* Main.storyboard */,
 				681A7F4B196722530006C335 /* Supporting Files */,
-				A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */,
 			);
 			name = RioBus;
 			path = riobus;
@@ -279,9 +306,9 @@
 				681A7F4C196722530006C335 /* riobus-Info.plist */,
 				A35E6D7A1BBA3151005DB3BA /* GoogleService-Info.plist */,
 				681A7F4D196722530006C335 /* InfoPlist.strings */,
-				681A7F50196722530006C335 /* main.m */,
 				681A7F52196722540006C335 /* riobus-Prefix.pch */,
 				A3B925A01B290DDF00BEFC9F /* riobus-Bridging-Header.h */,
+				A302F3C01C7ABC4D00FB3A5C /* NSDateTimeAgo.bundle */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -290,7 +317,6 @@
 			isa = PBXGroup;
 			children = (
 				A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */,
-				A31D90F41AFAADE100AD3B35 /* BusDataStoreTests.m */,
 				A34B99E41B7BCBF90090A311 /* BusLineTests.m */,
 				681A7F6A196722540006C335 /* Supporting Files */,
 			);
@@ -311,12 +337,37 @@
 			children = (
 				681A7F9C196824890006C335 /* BusData.h */,
 				681A7F9D196824890006C335 /* BusData.m */,
-				681A7F9F196824FC0006C335 /* BusDataStore.h */,
-				681A7FA0196824FC0006C335 /* BusDataStore.m */,
 				A352EB311B729DCD00A5969B /* BusLine.h */,
 				A352EB321B729DCD00A5969B /* BusLine.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		A302F3A61C7A97E300FB3A5C /* API */ = {
+			isa = PBXGroup;
+			children = (
+				A302F3A41C7A97D800FB3A5C /* RioBusAPIClient.swift */,
+				A302F3C51C7B62FE00FB3A5C /* ItineraryCache.swift */,
+			);
+			name = API;
+			sourceTree = "<group>";
+		};
+		A302F3B01C7A986500FB3A5C /* RioBus Tests Swift */ = {
+			isa = PBXGroup;
+			children = (
+				A302F3B91C7A989300FB3A5C /* RioBusAPIClientTests.swift */,
+				A302F3C71C7B645000FB3A5C /* ItineraryCacheTests.swift */,
+				A302F3B31C7A986500FB3A5C /* Info.plist */,
+			);
+			path = "RioBus Tests Swift";
+			sourceTree = "<group>";
+		};
+		A302F3C41C7AD72C00FB3A5C /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				A3D3E8061C77F6870094BBAC /* PreferencesStore.swift */,
+			);
+			name = Preferences;
 			sourceTree = "<group>";
 		};
 		A35072F71B2D021200F91A2F /* RioBus UI Tests */ = {
@@ -344,6 +395,8 @@
 				A3B925A11B290DE000BEFC9F /* UIButton+backgroundColor.swift */,
 				A3B925A31B29166800BEFC9F /* UIColor+RioBus.swift */,
 				A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */,
+				A302F3BC1C7AAB5D00FB3A5C /* String+webSafeString.swift */,
+				A302F3BE1C7ABC1C00FB3A5C /* NSDate+timeAgo.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -397,6 +450,7 @@
 			children = (
 				E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */,
 				27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */,
+				6DCA7F22B554FFDC0AAD93F6 /* Pods-RioBus Tests Swift.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -412,9 +466,8 @@
 				681A7F3D196722530006C335 /* Sources */,
 				681A7F3E196722530006C335 /* Frameworks */,
 				681A7F3F196722530006C335 /* Resources */,
-				F53865278DE24F58A1EE981B /* Copy Pods Resources */,
 				A3B9259F1B27F25000BEFC9F /* Convert TODO's and FIXME's to warnings */,
-				DB5BD78A7CF5A636DACA9F74 /* I */,
+				F53865278DE24F58A1EE981B /* Copy Pods Resources */,
 				6DBA71C93463D35D600B0491 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -442,6 +495,24 @@
 			name = "RioBus Tests";
 			productName = riobusTests;
 			productReference = 681A7F62196722540006C335 /* RioBus Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A302F3AE1C7A986500FB3A5C /* RioBus Tests Swift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A302F3B61C7A986500FB3A5C /* Build configuration list for PBXNativeTarget "RioBus Tests Swift" */;
+			buildPhases = (
+				A302F3AB1C7A986500FB3A5C /* Sources */,
+				A302F3AC1C7A986500FB3A5C /* Frameworks */,
+				A302F3AD1C7A986500FB3A5C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A302F3B51C7A986500FB3A5C /* PBXTargetDependency */,
+			);
+			name = "RioBus Tests Swift";
+			productName = "RioBus Tests Swift";
+			productReference = A302F3AF1C7A986500FB3A5C /* RioBus Tests Swift.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		A35072F51B2D021200F91A2F /* RioBus UI Tests */ = {
@@ -501,6 +572,10 @@
 					681A7F61196722540006C335 = {
 						TestTargetID = 681A7F40196722530006C335;
 					};
+					A302F3AE1C7A986500FB3A5C = {
+						CreatedOnToolsVersion = 7.2.1;
+						TestTargetID = 681A7F40196722530006C335;
+					};
 					A35072F51B2D021200F91A2F = {
 						CreatedOnToolsVersion = 7.0;
 						TestTargetID = 681A7F40196722530006C335;
@@ -529,6 +604,7 @@
 				681A7F61196722540006C335 /* RioBus Tests */,
 				A35072F51B2D021200F91A2F /* RioBus UI Tests */,
 				A38B3C381C3DE56300FAA6A9 /* RioBus Snapshots */,
+				A302F3AE1C7A986500FB3A5C /* RioBus Tests Swift */,
 			);
 		};
 /* End PBXProject section */
@@ -544,12 +620,20 @@
 				A390E3FF1C6A9C54005981EC /* Localizable.strings in Resources */,
 				681A7F5D196722540006C335 /* Images.xcassets in Resources */,
 				681A7F4F196722530006C335 /* InfoPlist.strings in Resources */,
+				A302F3C11C7ABC4D00FB3A5C /* NSDateTimeAgo.bundle in Resources */,
 				A390E3F51C6A9961005981EC /* Main.storyboard in Resources */,
 				A39BA2E41C6AD9D70063DDD1 /* AboutText.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		681A7F60196722540006C335 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A302F3AD1C7A986500FB3A5C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -617,21 +701,6 @@
 			shellPath = /bin/sh;
 			shellScript = "KEYWORDS=\"TODO:|FIXME:|DevTeam:|XXX:\"\nfind \"${SRCROOT}/riobus\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($KEYWORDS).*\\$\" | perl -p -e \"s/($KEYWORDS)/ warning: \\$1/\"\n";
 		};
-		DB5BD78A7CF5A636DACA9F74 /* I */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = I;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-riobus/Pods-riobus-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		F53865278DE24F58A1EE981B /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -657,17 +726,19 @@
 				A3D3D6951B500E4200D9A83C /* ReportProblemViewController.m in Sources */,
 				A3D3E8071C77F6870094BBAC /* PreferencesStore.swift in Sources */,
 				A37A3CEF1B1CD61E006A397C /* BusLineBar.m in Sources */,
+				A302F3C61C7B62FE00FB3A5C /* ItineraryCache.swift in Sources */,
 				681A7F9E196824890006C335 /* BusData.m in Sources */,
 				A39BA2E91C6B09C00063DDD1 /* MapView.swift in Sources */,
+				A302F3A51C7A97D800FB3A5C /* RioBusAPIClient.swift in Sources */,
 				681A7F7C196727C60006C335 /* MapViewController.m in Sources */,
+				A302F3BF1C7ABC1C00FB3A5C /* NSDate+timeAgo.swift in Sources */,
+				A302F3C31C7ACEB100FB3A5C /* AppDelegate.swift in Sources */,
 				A352EB331B729DCD00A5969B /* BusLine.m in Sources */,
+				A302F3BD1C7AAB5D00FB3A5C /* String+webSafeString.swift in Sources */,
 				A3B925A41B29166800BEFC9F /* UIColor+RioBus.swift in Sources */,
-				681A7F55196722540006C335 /* AppDelegate.m in Sources */,
 				A3EE10161B34830E0092BE99 /* PSTAlertController+okAlert.swift in Sources */,
-				681A7F51196722530006C335 /* main.m in Sources */,
 				A3C19DC61B5452D70085B897 /* ReportDetailViewController.m in Sources */,
 				639261511A06A88400B9A53C /* BusSuggestionsTable.m in Sources */,
-				681A7FA1196824FC0006C335 /* BusDataStore.m in Sources */,
 				A3B925A21B290DE000BEFC9F /* UIButton+backgroundColor.swift in Sources */,
 				A3D3E8051C77E0570094BBAC /* BusLineCell.swift in Sources */,
 				681A7FA819684A6C0006C335 /* AboutViewController.m in Sources */,
@@ -679,8 +750,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				A31D90EE1AFA950E00AD3B35 /* BusDataTests.m in Sources */,
-				A31D90F51AFAADE100AD3B35 /* BusDataStoreTests.m in Sources */,
 				A34B99E51B7BCBF90090A311 /* BusLineTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A302F3AB1C7A986500FB3A5C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A302F3C81C7B645000FB3A5C /* ItineraryCacheTests.swift in Sources */,
+				A302F3BA1C7A989300FB3A5C /* RioBusAPIClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -708,6 +787,11 @@
 			isa = PBXTargetDependency;
 			target = 681A7F40196722530006C335 /* riobus */;
 			targetProxy = 681A7F67196722540006C335 /* PBXContainerItemProxy */;
+		};
+		A302F3B51C7A986500FB3A5C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 681A7F40196722530006C335 /* riobus */;
+			targetProxy = A302F3B41C7A986500FB3A5C /* PBXContainerItemProxy */;
 		};
 		A35072FC1B2D021200F91A2F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -795,7 +879,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
@@ -828,7 +912,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -938,6 +1022,46 @@
 			};
 			name = Release;
 		};
+		A302F3B71C7A986500FB3A5C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "RioBus Tests Swift/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.meriw.RioBus-Tests-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/riobus.app/riobus";
+			};
+			name = Debug;
+		};
+		A302F3B81C7A986500FB3A5C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "RioBus Tests Swift/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.meriw.RioBus-Tests-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/riobus.app/riobus";
+			};
+			name = Release;
+		};
 		A35072FD1B2D021200F91A2F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1042,6 +1166,15 @@
 			buildConfigurations = (
 				681A7F77196722540006C335 /* Debug */,
 				681A7F78196722540006C335 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A302F3B61C7A986500FB3A5C /* Build configuration list for PBXNativeTarget "RioBus Tests Swift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A302F3B71C7A986500FB3A5C /* Debug */,
+				A302F3B81C7A986500FB3A5C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -28,9 +28,7 @@ class BusLineCell: UITableViewCell {
         imageView?.addGestureRecognizer(starTappedGestureRecognizer)
         imageView?.isAccessibilityElement = true
         imageView?.accessibilityTraits = UIAccessibilityTraitButton
-        if #available(iOS 8.0, *) {
-            accessibilityElements = [textLabel!, imageView!]
-        }
+        accessibilityElements = [textLabel!, imageView!]
     }
     
     required init?(coder aDecoder: NSCoder) {
