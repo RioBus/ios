@@ -57,7 +57,7 @@ class MapView: UIView {
             marker.title = busData.order
         }
         marker.icon = MapView.markerIconAccordingToDate(busData.lastUpdate)
-        marker.snippet = String(format: NSLocalizedString("BUS_DETAIL_MARKER_SNIPPET", comment: ""), busData.lineNumber, lineName, busData.velocity, busData.lastUpdate.timeAgo().lowercaseString)
+        marker.snippet = String(format: NSLocalizedString("BUS_DETAIL_MARKER_SNIPPET", comment: ""), busData.lineNumber, lineName, busData.velocity, busData.lastUpdate.timeAgo.lowercaseString)
         marker.position = busData.location
     }
     

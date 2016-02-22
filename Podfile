@@ -5,7 +5,6 @@ target 'riobus' do
     pod 'Alamofire', '~> 3.0'
     pod 'Google/Analytics', '~> 1.0.0'
     pod 'GoogleMaps', '~> 1.10'
-    pod 'NSDate+TimeAgo', '~> 1.0'
     pod 'Parse'
     pod 'PSTAlertController', '~> 1.1'
     pod 'SimulatorStatusMagic', :configurations => ['Debug']

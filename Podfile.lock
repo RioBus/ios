@@ -36,7 +36,6 @@ PODS:
   - GoogleSymbolUtilities (1.0.3)
   - GoogleUtilities (1.1.0):
     - GoogleSymbolUtilities (~> 1.0.0)
-  - NSDate+TimeAgo (1.0.3)
   - Parse (1.12.0):
     - Bolts/Tasks (~> 1.5)
   - PSTAlertController (1.2.0)
@@ -48,7 +47,6 @@ DEPENDENCIES:
   - Alamofire (~> 3.0)
   - Google/Analytics (~> 1.0.0)
   - GoogleMaps (~> 1.10)
-  - NSDate+TimeAgo (~> 1.0)
   - Parse
   - PSTAlertController (~> 1.1)
   - SimulatorStatusMagic
@@ -64,7 +62,6 @@ SPEC CHECKSUMS:
   GoogleNetworkingUtilities: 292992ab31b7b4ba32809a0e8b40e324cdfb2c0c
   GoogleSymbolUtilities: 82ad9f93d3615244b3f4ce440f5ab2515e8b4f56
   GoogleUtilities: 8ed9134debe11719097881711464752900668f10
-  NSDate+TimeAgo: 416f55d2696d3744c313091c5a9280d47f8238fe
   Parse: de2c52a9a1421b91ae7594ab8ce191afd184f19b
   PSTAlertController: 9b802dfbda54fee2683bfd6dda7023a6de895d5b
   SimulatorStatusMagic: 46c90a12f73abeda6d7c16876e1e0998b6ca5f4f
