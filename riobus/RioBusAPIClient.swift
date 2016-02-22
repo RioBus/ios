@@ -11,7 +11,8 @@ class RioBusAPIClient {
     static let BASE_URL = "http://rest.riob.us/v3"
     
     class func getBusesForLine(lineName: String, completionHandler: (buses: [BusData]?, error: ErrorType?) -> Void) {
-        Alamofire.request(.GET, "\(BASE_URL)/search/\(lineName)").responseJSON { response in
+        let webSafeLineName = lineName.webSafeString() as String!
+        Alamofire.request(.GET, "\(BASE_URL)/search/\(webSafeLineName)").responseJSON { response in
             if let busesJSON = response.result.value as? [[String: AnyObject]] {
                 var buses = [BusData]()
                 
@@ -34,7 +35,8 @@ class RioBusAPIClient {
     }
     
     class func getItineraryForLine(lineName: String, completionHandler: (itinerarySpots: [CLLocation]?, error: ErrorType?) -> Void) {
-        Alamofire.request(.GET, "\(BASE_URL)/itinerary/\(lineName)").responseJSON { response in
+        let webSafeLineName = lineName.webSafeString() as String!
+        Alamofire.request(.GET, "\(BASE_URL)/itinerary/\(webSafeLineName)").responseJSON { response in
             if let lineDetailsJSON = response.result.value as? [String: AnyObject] {
                 if let spotsJSON = lineDetailsJSON["spots"] as? [[String: AnyObject]] {
                     var spots = [CLLocation]()
@@ -55,8 +57,8 @@ class RioBusAPIClient {
                     completionHandler(itinerarySpots: nil, error: error)
                 } else {
                     completionHandler(itinerarySpots: nil, error: RioBusAPIError.InvalidResponse)
-                }            }
+                }
+            }
         }
-
     }
 }
