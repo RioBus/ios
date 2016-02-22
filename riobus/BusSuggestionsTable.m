@@ -1,5 +1,5 @@
 #import <Parse/Parse.h>
-#import <PSTAlertController.h>
+#import <PSTAlertController/PSTAlertController.h>
 #import "BusLine.h"
 #import "BusSuggestionsTable.h"
 #import "riobus-Swift.h"

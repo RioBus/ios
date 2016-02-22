@@ -1,7 +1,8 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <Google/Analytics.h>
-#import <PSTAlertController.h>
-#import <SVProgressHUD.h>
+#import <GoogleMaps/GMSCoordinateBounds.h>
+#import <PSTAlertController/PSTAlertController.h>
+#import <SVProgressHUD/SVProgressHUD.h>
 #import "AboutViewController.h"
 #import "BusDataStore.h"
 #import "BusSuggestionsTable.h"

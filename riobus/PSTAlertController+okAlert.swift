@@ -1,4 +1,5 @@
 import Foundation
+import PSTAlertController
 
 extension PSTAlertController {
     class func presentOkAlertWithTitle(title: String, andMessage message: String) -> PSTAlertController {

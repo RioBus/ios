@@ -46,7 +46,7 @@ DEPENDENCIES:
   - AFNetworking (~> 2.5)
   - Google/Analytics (~> 1.0.0)
   - GoogleMaps (~> 1.10)
-  - NSDate+TimeAgo
+  - NSDate+TimeAgo (~> 1.0)
   - Parse
   - PSTAlertController (~> 1.1)
   - SimulatorStatusMagic
