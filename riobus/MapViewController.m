@@ -23,8 +23,7 @@
     [BusDataStore updateUsersCacheIfNecessary];
     [self updateTrackedBusLines];
     
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse ||
-        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized) {
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse) {
         self.mapView.myLocationEnabled = YES;
     }
     
@@ -87,7 +86,6 @@
         CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
         switch (authorizationStatus) {
             case kCLAuthorizationStatusAuthorizedWhenInUse:
-            case kCLAuthorizationStatusAuthorized:
                 [self.locationManager startUpdatingLocation];
                 break;
             case kCLAuthorizationStatusNotDetermined:
@@ -431,7 +429,7 @@
         
         self.mapView.myLocationEnabled = NO;
     }
-    else if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusAuthorized) {
+    else if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
         [self.locationManager startUpdatingLocation];
         self.mapView.myLocationEnabled = YES;
     }

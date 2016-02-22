@@ -36,7 +36,7 @@
     NSLog(@"Google Analytics running in Dry Run mode. Data will not be sent to Analytics.");
     [[SDStatusBarManager sharedInstance] enableOverrides];
 #endif
-
+    
 #ifdef SNAPSHOT
     // If the app is running on Snapshot mode, clear previous Simulator preferences and load static preferences set
     [PreferencesStore.sharedInstance clearPreferences];
@@ -46,16 +46,11 @@
 #endif
     
     // Register for Push Notifications
-    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        UIUserNotificationType userNotificationTypes = UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
-        [application registerUserNotificationSettings:settings];
-        [application registerForRemoteNotifications];
-    }
-    else {
-        UIRemoteNotificationType userNotificationTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound;
-        [application registerForRemoteNotificationTypes:userNotificationTypes];
-    }
+    UIUserNotificationType userNotificationTypes = UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+    
     
     application.applicationIconBadgeNumber = 0;
     
