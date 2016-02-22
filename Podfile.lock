@@ -20,6 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - Alamofire (3.2.0)
   - Bolts/Tasks (1.6.0)
   - Google/Analytics (1.0.7):
     - Google/Core
@@ -44,6 +45,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking (~> 2.5)
+  - Alamofire (~> 3.0)
   - Google/Analytics (~> 1.0.0)
   - GoogleMaps (~> 1.10)
   - NSDate+TimeAgo (~> 1.0)
@@ -54,6 +56,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  Alamofire: 4da478599fccddff361205c8929333d7fe18dceb
   Bolts: f52a250053bb517ca874523c3913776359ab3def
   Google: 875f5a8ade86dd02e36586e4a54814843938c7f6
   GoogleAnalytics: 9be1afdb8deeac4bb5f13ca7f7d3b9db2a1f43dc
