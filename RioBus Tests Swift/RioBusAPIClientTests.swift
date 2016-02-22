@@ -13,7 +13,7 @@ class RioBusAPIClientTests: XCTestCase {
         super.tearDown()
     }
     
-    func testGetBusesForLineWithValidLine() {
+    func testGetBusesWithValidLine() {
         let expectation = expectationWithDescription("getBusesForLine")
         
         RioBusAPIClient.getBusesForLine("485") { (buses, error) -> Void in
@@ -31,7 +31,7 @@ class RioBusAPIClientTests: XCTestCase {
         }
     }
     
-    func testGetBusesForLineWithInvalidLine() {
+    func testGetBusesWithInvalidLine() {
         let expectation = expectationWithDescription("getBusesForLine")
         
         RioBusAPIClient.getBusesForLine("AAAAA") { (buses, error) -> Void in
@@ -49,7 +49,7 @@ class RioBusAPIClientTests: XCTestCase {
         }
     }
     
-    func testGetItineraryForLineWithValidLine() {
+    func testGetItineraryWithValidLine() {
         let expectation = expectationWithDescription("getItineraryForLine")
         
         RioBusAPIClient.getItineraryForLine("485") { (itinerarySpots, error) -> Void in
