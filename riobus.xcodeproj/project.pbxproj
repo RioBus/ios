@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5DF0DFE6163BF542BBE309B4 /* Pods_riobus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A20B5CEACEEE5FB2BF9D10 /* Pods_riobus.framework */; };
 		639261511A06A88400B9A53C /* BusSuggestionsTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 639261501A06A88400B9A53C /* BusSuggestionsTable.m */; };
 		681A7F45196722530006C335 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F44196722530006C335 /* Foundation.framework */; };
 		681A7F49196722530006C335 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F48196722530006C335 /* UIKit.framework */; };
@@ -20,6 +19,7 @@
 		681A7F7E19672ACF0006C335 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 681A7F7D19672ACF0006C335 /* CoreLocation.framework */; };
 		681A7F9E196824890006C335 /* BusData.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7F9D196824890006C335 /* BusData.m */; };
 		681A7FA819684A6C0006C335 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 681A7FA719684A6C0006C335 /* AboutViewController.m */; };
+		6DD71EE23D62C2F8708F909C /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40ADCDEA6A5F15C7B3C65EED /* Pods.framework */; };
 		A302F3A51C7A97D800FB3A5C /* RioBusAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3A41C7A97D800FB3A5C /* RioBusAPIClient.swift */; };
 		A302F3BA1C7A989300FB3A5C /* RioBusAPIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3B91C7A989300FB3A5C /* RioBusAPIClientTests.swift */; };
 		A302F3BD1C7AAB5D00FB3A5C /* String+webSafeString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3BC1C7AAB5D00FB3A5C /* String+webSafeString.swift */; };
@@ -30,6 +30,7 @@
 		A302F3C81C7B645000FB3A5C /* ItineraryCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A302F3C71C7B645000FB3A5C /* ItineraryCacheTests.swift */; };
 		A31D90EE1AFA950E00AD3B35 /* BusDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */; };
 		A34B99E51B7BCBF90090A311 /* BusLineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A34B99E41B7BCBF90090A311 /* BusLineTests.m */; };
+		A34CEC511C99389D006FC41E /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A34CEC501C99389D006FC41E /* Settings.bundle */; };
 		A35072F91B2D021200F91A2F /* RioBusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35072F81B2D021200F91A2F /* RioBusUITests.swift */; };
 		A352EB331B729DCD00A5969B /* BusLine.m in Sources */ = {isa = PBXBuildFile; fileRef = A352EB321B729DCD00A5969B /* BusLine.m */; };
 		A35E6D7B1BBA3151005DB3BA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A35E6D7A1BBA3151005DB3BA /* GoogleService-Info.plist */; };
@@ -92,7 +93,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.release.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.release.xcconfig"; sourceTree = "<group>"; };
+		40ADCDEA6A5F15C7B3C65EED /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6331A56B1A08516E006BBFB5 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		6392614F1A06A88400B9A53C /* BusSuggestionsTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusSuggestionsTable.h; sourceTree = "<group>"; };
 		639261501A06A88400B9A53C /* BusSuggestionsTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusSuggestionsTable.m; sourceTree = "<group>"; };
@@ -113,7 +114,6 @@
 		681A7F9D196824890006C335 /* BusData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusData.m; sourceTree = "<group>"; };
 		681A7FA619684A6C0006C335 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		681A7FA719684A6C0006C335 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
-		6DCA7F22B554FFDC0AAD93F6 /* Pods-RioBus Tests Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RioBus Tests Swift.release.xcconfig"; path = "Pods/Target Support Files/Pods-RioBus Tests Swift/Pods-RioBus Tests Swift.release.xcconfig"; sourceTree = "<group>"; };
 		A302F3A41C7A97D800FB3A5C /* RioBusAPIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RioBusAPIClient.swift; sourceTree = "<group>"; };
 		A302F3AF1C7A986500FB3A5C /* RioBus Tests Swift.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RioBus Tests Swift.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A302F3B31C7A986500FB3A5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -126,6 +126,8 @@
 		A302F3C71C7B645000FB3A5C /* ItineraryCacheTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItineraryCacheTests.swift; sourceTree = "<group>"; };
 		A31D90ED1AFA950E00AD3B35 /* BusDataTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusDataTests.m; sourceTree = "<group>"; };
 		A34B99E41B7BCBF90090A311 /* BusLineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusLineTests.m; sourceTree = "<group>"; };
+		A34CEC4E1C993871006FC41E /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		A34CEC501C99389D006FC41E /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		A35072F61B2D021200F91A2F /* RioBus UI Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RioBus UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A35072F81B2D021200F91A2F /* RioBusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RioBusUITests.swift; sourceTree = "<group>"; };
 		A35072FA1B2D021200F91A2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -168,8 +170,9 @@
 		A3EE10151B34830E0092BE99 /* PSTAlertController+okAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PSTAlertController+okAlert.swift"; sourceTree = "<group>"; };
 		A3EE10171B34927F0092BE99 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3FAE4031BDDCA98002DD53F /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		ACD2F45095E7DA995D3D4DCB /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		B9C7BFE582F1206F0538D668 /* Pods_RioBus_Tests_Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RioBus_Tests_Swift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-riobus.debug.xcconfig"; path = "Pods/Target Support Files/Pods-riobus/Pods-riobus.debug.xcconfig"; sourceTree = "<group>"; };
+		DD8C6D30434D7F0362FAD352 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		F9A20B5CEACEEE5FB2BF9D10 /* Pods_riobus.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_riobus.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -190,7 +193,7 @@
 				681A7F7E19672ACF0006C335 /* CoreLocation.framework in Frameworks */,
 				681A7F49196722530006C335 /* UIKit.framework in Frameworks */,
 				681A7F45196722530006C335 /* Foundation.framework in Frameworks */,
-				5DF0DFE6163BF542BBE309B4 /* Pods_riobus.framework in Frameworks */,
+				6DD71EE23D62C2F8708F909C /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +242,7 @@
 				681A7F43196722530006C335 /* Frameworks */,
 				681A7F42196722530006C335 /* Products */,
 				BEC75922FA062B67848E72FA /* Pods */,
+				A34CEC501C99389D006FC41E /* Settings.bundle */,
 			);
 			sourceTree = "<group>";
 		};
@@ -274,6 +278,7 @@
 				681A7F63196722540006C335 /* XCTest.framework */,
 				F9A20B5CEACEEE5FB2BF9D10 /* Pods_riobus.framework */,
 				B9C7BFE582F1206F0538D668 /* Pods_RioBus_Tests_Swift.framework */,
+				40ADCDEA6A5F15C7B3C65EED /* Pods.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -448,9 +453,9 @@
 		BEC75922FA062B67848E72FA /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */,
-				27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */,
-				6DCA7F22B554FFDC0AAD93F6 /* Pods-RioBus Tests Swift.release.xcconfig */,
+				A34CEC4E1C993871006FC41E /* Settings.bundle */,
+				DD8C6D30434D7F0362FAD352 /* Pods.debug.xcconfig */,
+				ACD2F45095E7DA995D3D4DCB /* Pods.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -622,6 +627,7 @@
 				681A7F4F196722530006C335 /* InfoPlist.strings in Resources */,
 				A302F3C11C7ABC4D00FB3A5C /* NSDateTimeAgo.bundle in Resources */,
 				A390E3F51C6A9961005981EC /* Main.storyboard in Resources */,
+				A34CEC511C99389D006FC41E /* Settings.bundle in Resources */,
 				A39BA2E41C6AD9D70063DDD1 /* AboutText.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -684,7 +690,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-riobus/Pods-riobus-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A3B9259F1B27F25000BEFC9F /* Convert TODO's and FIXME's to warnings */ = {
@@ -713,7 +719,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-riobus/Pods-riobus-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -920,7 +926,7 @@
 		};
 		681A7F74196722540006C335 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */;
+			baseConfigurationReference = DD8C6D30434D7F0362FAD352 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -949,7 +955,7 @@
 		};
 		681A7F75196722540006C335 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 27B0ADDDF3B112D6CAB79E66 /* Pods-riobus.release.xcconfig */;
+			baseConfigurationReference = ACD2F45095E7DA995D3D4DCB /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1024,7 +1030,7 @@
 		};
 		A302F3B71C7A986500FB3A5C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E5DAC26DBD3C5E8382FCAE95 /* Pods-riobus.debug.xcconfig */;
+			baseConfigurationReference = DD8C6D30434D7F0362FAD352 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -1045,6 +1051,7 @@
 		};
 		A302F3B81C7A986500FB3A5C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ACD2F45095E7DA995D3D4DCB /* Pods.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_WARN_UNREACHABLE_CODE = YES;
