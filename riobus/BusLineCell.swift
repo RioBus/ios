@@ -22,7 +22,7 @@ class BusLineCell: UITableViewCell {
         detailTextLabel?.textColor = .lightGrayColor()
         detailTextLabel?.font = .systemFontOfSize(15)
         
-        starTappedGestureRecognizer.addTarget(self, action: "didTapStar:")
+        starTappedGestureRecognizer.addTarget(self, action: #selector(self.didTapStar))
         starTappedGestureRecognizer.numberOfTapsRequired = 1
         imageView?.userInteractionEnabled = true
         imageView?.addGestureRecognizer(starTappedGestureRecognizer)
@@ -49,10 +49,9 @@ class BusLineCell: UITableViewCell {
             tintColor = UIColor(white: 0.9, alpha: 1)
             imageView?.image = UIImage(named: "Star")?.imageWithRenderingMode(.AlwaysTemplate)
         }
-        
     }
     
-    func didTapStar(sender: UITapGestureRecognizer) {
+    func didTapStar() {
         if isFavorite {
             delegate?.removeFromFavorites(busLine!)
         } else {
