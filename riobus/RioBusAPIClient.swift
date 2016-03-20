@@ -8,7 +8,12 @@ class RioBusAPIClient: NSObject {
     
     private override init() { }
     
+    #if DEBUG
+    private static let BASE_URL = "http://dev.riob.us:8080/v3"
+    #else
     private static let BASE_URL = "http://rest.riob.us/v3"
+    #endif
+    
     static let ErrorDomain = "us.riob.error.APIError" // FIXME: get rid of NSError!
     
     class func getBusesForLine(lineName: String, completionHandler: (buses: [BusData]?, error: NSError?) -> Void) {
