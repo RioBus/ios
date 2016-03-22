@@ -19,7 +19,7 @@ class PreferencesStore: NSObject {
                 var lines = [String: BusLine](minimumCapacity: trackedLinesDictionaries.count)
 
                 for (name, description) in trackedLinesDictionaries {
-                    let line = BusLine(name: name, andDescription: description as! String)
+                    let line = BusLine(name: name, andDescription: description as? String)
                     lines[name] = line
                 }
                 
@@ -31,7 +31,11 @@ class PreferencesStore: NSObject {
         set(newLines) {
             var lines = [String: String](minimumCapacity: newLines.count)
             for (name, busLine) in newLines {
-                lines[name] = busLine.lineDescription
+                if let lineDescription = busLine.lineDescription {
+                    lines[name] = lineDescription
+                } else {
+                    lines[name] = ""
+                }
             }
             userDefaults.setObject(lines, forKey: "tracked_bus_lines")
         }
